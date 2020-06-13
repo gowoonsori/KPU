@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         // 타이틀 바 수정구현
         setTitle("KBO 리그");
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.kbo2020);
+        getSupportActionBar().setIcon(R.drawable.kbo_2020_logo);
 
         // 리스트 뷰 선언 및 구현
         final String[] mid = {"리그 소개", "구단 소개", "경기 일정 및 결과"};

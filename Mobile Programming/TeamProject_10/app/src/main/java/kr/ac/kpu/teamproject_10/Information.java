@@ -19,7 +19,7 @@ public class Information extends AppCompatActivity {
         setTitle("애플리케이션 정보");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.kbo2020);
+        getSupportActionBar().setIcon(R.drawable.kbo_2020_logo);
 
         final String[] mid = {"앱 출처 정보 : 버전 1.4\n(구글플레이 스토어에서 업데이트 확인하기)"};
         ListView list_inf = (ListView) findViewById(R.id.listView_inf);

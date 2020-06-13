@@ -1,16 +1,12 @@
 package kr.ac.kpu.teamproject_10;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,7 +27,7 @@ public class IntroduceKBOActivity extends AppCompatActivity {
         setTitle("리그 소개");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.kbo2020);
+        getSupportActionBar().setIcon(R.drawable.kbo_2020_logo);
 
         /*버튼 event listener*/
         news_bt=(ImageButton)findViewById(R.id.newsBt);

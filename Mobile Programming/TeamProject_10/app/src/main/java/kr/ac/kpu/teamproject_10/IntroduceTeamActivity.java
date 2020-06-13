@@ -1,11 +1,8 @@
 package kr.ac.kpu.teamproject_10;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -51,7 +48,7 @@ public class IntroduceTeamActivity extends AppCompatActivity {
         setTitle("구단 소개");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.kbo2020);
+        getSupportActionBar().setIcon(R.drawable.kbo_2020_logo);
 
         SharedPreferences setting = getSharedPreferences(PREFS,0);
         for(int i=0; i<10; i++) {
@@ -118,7 +115,7 @@ public class IntroduceTeamActivity extends AppCompatActivity {
         intent.putExtra("title", titles[position]);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), images[position]);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         intent.putExtra("image", byteArray);
         intent.putExtra("number",number[position]);

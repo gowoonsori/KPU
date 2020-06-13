@@ -31,7 +31,6 @@ public class GameBoardActivity extends AppCompatActivity {
     CalendarView calendarView;
     int selectYear,selectMonth,selectDay;
 
-
     /*팀 순위 보기 (Alert Dialog)를 위한 변수*/
     Button rankingBt;
     View rankingView;
@@ -55,7 +54,7 @@ public class GameBoardActivity extends AppCompatActivity {
         setTitle("경기 일정 및 결과");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.kbo2020);
+        getSupportActionBar().setIcon(R.drawable.kbo_2020_logo);
 
         scv=findViewById(R.id.ScrollV);
         noschedule=findViewById(R.id.noScheduleTv);
@@ -111,10 +110,8 @@ public class GameBoardActivity extends AppCompatActivity {
         setSceduleView(year,month,day);   //경기일정을 db에서 읽어와 스크롤 뷰 안에 set
 
 
-
         //캘린더 뷰 이벤트 리스너
         calendarView=(CalendarView)findViewById(R.id.Cv);
-
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {

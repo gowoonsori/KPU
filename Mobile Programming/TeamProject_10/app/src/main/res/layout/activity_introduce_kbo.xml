@@ -43,7 +43,7 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/circlebutton"
                 android:layout_weight="4"
-                android:src="@drawable/news_icon"
+                android:src="@drawable/button_news"
                 android:padding="20dp"
                 android:scaleType="fitCenter"/>
             <TextView
@@ -70,7 +70,7 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/circlebutton"
                 android:layout_weight="4"
-                android:src="@drawable/youtube_icon"
+                android:src="@drawable/button_youtube"
                 android:padding="20dp"
                 android:scaleType="fitCenter"/>
             <TextView
@@ -97,7 +97,7 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/circlebutton"
                 android:layout_weight="4"
-                android:src="@drawable/homepage_icon"
+                android:src="@drawable/button_homepage"
                 android:padding="20dp"
                 android:scaleType="fitCenter"/>
             <TextView

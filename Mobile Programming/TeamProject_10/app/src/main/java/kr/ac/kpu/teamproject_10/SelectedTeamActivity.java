@@ -5,17 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 public class SelectedTeamActivity extends AppCompatActivity {
     ImageView ivImage, rightBtn, leftBtn;
     TextView textView, text_01, text_02, text_03, text_04, text_05, rating_text;
@@ -25,6 +24,11 @@ public class SelectedTeamActivity extends AppCompatActivity {
     ViewFlipper view;
     RatingBar ratingBar;
     float num;
+
+    // 구단 별 타이틀 바
+    String[] titles = {"두산 베어스", "키움 히어로즈", "SK 와이번스",
+            "LG 트윈스", "NC 다이노스", "KT 위즈", "KIA 타이거즈",
+            "삼성 라이온즈", "한화 이글스", "롯데 자이언츠"};
 
     //구단 홈페이지
     String []homepage= {
@@ -83,12 +87,25 @@ public class SelectedTeamActivity extends AppCompatActivity {
             {R.drawable.photo_giants1,R.drawable.photo_giants2,R.drawable.photo_giants3,R.drawable.photo_giants4,R.drawable.photo_giants5}
     };
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_team);
-        setTitle("구단 소개");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.kbo_2020_logo);
+
         ivImage = findViewById(R.id.imageView);
         textView = findViewById(R.id.textView);
         text_01 = findViewById(R.id.text_01);
@@ -203,6 +220,7 @@ public class SelectedTeamActivity extends AppCompatActivity {
     private void check_str(String str) {
         switch (str){
             case "두산 베어스" :
+                setTitle("두산 베어스");
                 info[0] = address[0];
                 info[1] = home[0];
                 info[2] = homepage[0];
@@ -216,6 +234,7 @@ public class SelectedTeamActivity extends AppCompatActivity {
                 linear05.setBackgroundResource(image[0][4]);
                 break;
             case "키움 히어로즈" :
+                setTitle("키움 히어로즈");
                 info[0] = address[1];
                 info[1] = home[1];
                 info[2] = homepage[1];
@@ -230,6 +249,7 @@ public class SelectedTeamActivity extends AppCompatActivity {
 
                 break;
             case "SK 와이번스" :
+                setTitle("SK 와이번스");
                 info[0] = address[2];
                 info[1] = home[2];
                 info[2] = homepage[2];
@@ -244,6 +264,7 @@ public class SelectedTeamActivity extends AppCompatActivity {
 
                 break;
             case "LG 트윈스" :
+                setTitle("LG 트윈스");
                 info[0] = address[3];
                 info[1] = home[3];
                 info[2] = homepage[3];
@@ -258,6 +279,7 @@ public class SelectedTeamActivity extends AppCompatActivity {
 
                 break;
             case "NC 다이노스" :
+                setTitle("NC 다이노스");
                 info[0] = address[4];
                 info[1] = home[4];
                 info[2] = homepage[4];
@@ -271,6 +293,7 @@ public class SelectedTeamActivity extends AppCompatActivity {
                 linear05.setBackgroundResource(image[4][4]);
                 break;
             case "KT 위즈" :
+                setTitle("KT 위즈");
                 info[0] = address[5];
                 info[1] = home[5];
                 info[2] = homepage[5];
@@ -284,6 +307,7 @@ public class SelectedTeamActivity extends AppCompatActivity {
                 linear05.setBackgroundResource(image[5][4]);
                 break;
             case "KIA 타이거즈" :
+                setTitle("KIA 타이거즈");
                 info[0] = address[6];
                 info[1] = home[6];
                 info[2] = homepage[6];
@@ -298,6 +322,7 @@ public class SelectedTeamActivity extends AppCompatActivity {
 
                 break;
             case "삼성 라이온즈" :
+                setTitle("삼성 라이온즈");
                 info[0] = address[7];
                 info[1] = home[7];
                 info[2] = homepage[7];
@@ -312,6 +337,7 @@ public class SelectedTeamActivity extends AppCompatActivity {
 
                 break;
             case "한화 이글스" :
+                setTitle("한화 이글스");
                 info[0] = address[8];
                 info[1] = home[8];
                 info[2] = homepage[8];
@@ -326,6 +352,7 @@ public class SelectedTeamActivity extends AppCompatActivity {
 
                 break;
             case "롯데 자이언츠" :
+                setTitle("롯데 자이언츠");
                 info[0] = address[9];
                 info[1] = home[9];
                 info[2] = homepage[9];

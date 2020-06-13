@@ -3,4 +3,15 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="bears">#131230 </color>
+    <color name="heroes">#820024 </color>
+    <color name="wyverns">#FF0000 </color>
+    <color name="twins">#C0C0C0 </color>0
+    <color name="dinos">#315288 </color>
+    <color name="wiz">#000000 </color>
+    <color name="tigers">#C70125 </color>
+    <color name="lions">#074CA1 </color>
+    <color name="eagles">#FF6600 </color>
+    <color name="giants">#002955 </color>
 </resources>
