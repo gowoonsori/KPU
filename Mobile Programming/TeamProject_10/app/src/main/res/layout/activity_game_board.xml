@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,8 +9,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <CalendarView
-            android:id="@+id/Cv"
+        <CalendarView android:id="@+id/Cv"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
@@ -22,8 +19,7 @@
         android:layout_weight="0.5"
         android:orientation="vertical">
 
-        <ScrollView
-            android:id="@+id/ScrollV"
+        <ScrollView android:id="@+id/ScrollV"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:visibility="gone">
@@ -45,36 +41,30 @@
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/match1_iv2"
+                        <ImageView android:id="@+id/match1_iv2"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="3" />
-                        <TextView
-                            android:id="@+id/match1_club1"
+                        <TextView android:id="@+id/match1_club1"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center" />
                     </LinearLayout>
-                    <TextView
-                        android:id="@+id/match1_score_tv1"
+
+                    <TextView android:id="@+id/match1_score_tv1"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textSize="30dp" />
-
-                    <TextView
-                        android:id="@+id/match1_stadium_tv"
+                    <TextView android:id="@+id/match1_stadium_tv"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:gravity="center"
                         android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/match1_score_tv2"
+                    <TextView android:id="@+id/match1_score_tv2"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
@@ -87,14 +77,11 @@
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/match1_iv1"
+                        <ImageView android:id="@+id/match1_iv1"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="3" />
-
-                        <TextView
-                            android:id="@+id/match1_club2"
+                        <TextView android:id="@+id/match1_club2"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
@@ -114,52 +101,47 @@
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/match2_iv1"
+                        <ImageView android:id="@+id/match2_iv1"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="3" />
-                        <TextView
-                            android:id="@+id/match2_club1"
+                        <TextView android:id="@+id/match2_club1"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center" />
                     </LinearLayout>
-                    <TextView
-                        android:id="@+id/match2_score_tv1"
+
+                    <TextView android:id="@+id/match2_score_tv1"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textSize="30dp" />
-                    <TextView
-                        android:id="@+id/match2_stadium_tv"
+                    <TextView android:id="@+id/match2_stadium_tv"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:gravity="center"
                         android:textSize="20dp" />
-                    <TextView
-                        android:id="@+id/match2_score_tv2"
+                    <TextView android:id="@+id/match2_score_tv2"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textSize="30dp" />
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/match2_iv2"
+                        <ImageView android:id="@+id/match2_iv2"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="3" />
-                        <TextView
-                            android:id="@+id/match2_club2"
+                        <TextView android:id="@+id/match2_club2"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
@@ -179,52 +161,47 @@
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/match3_iv1"
+                        <ImageView android:id="@+id/match3_iv1"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="3" />
-                        <TextView
-                            android:id="@+id/match3_club1"
+                        <TextView android:id="@+id/match3_club1"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center" />
                     </LinearLayout>
-                    <TextView
-                        android:id="@+id/match3_score_tv1"
+
+                    <TextView android:id="@+id/match3_score_tv1"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textSize="30dp" />
-                    <TextView
-                        android:id="@+id/match3_stadium_tv"
+                    <TextView android:id="@+id/match3_stadium_tv"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:gravity="center"
                         android:textSize="20dp" />
-                    <TextView
-                        android:id="@+id/match3_score_tv2"
+                    <TextView android:id="@+id/match3_score_tv2"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textSize="30dp" />
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/match3_iv2"
+                        <ImageView android:id="@+id/match3_iv2"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="3" />
-                        <TextView
-                            android:id="@+id/match3_club2"
+                        <TextView android:id="@+id/match3_club2"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
@@ -244,34 +221,31 @@
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/match4_iv1"
+                        <ImageView android:id="@+id/match4_iv1"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="3" />
-                        <TextView
-                            android:id="@+id/match4_club1"
+                        <TextView android:id="@+id/match4_club1"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center" />
                     </LinearLayout>
-                    <TextView
-                        android:id="@+id/match4_score_tv1"
+
+                    <TextView android:id="@+id/match4_score_tv1"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textSize="30dp" />
-                    <TextView
-                        android:id="@+id/match4_stadium_tv"
+
+                    <TextView android:id="@+id/match4_stadium_tv"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:gravity="center"
                         android:textSize="20dp" />
-                    <TextView
-                        android:id="@+id/match4_score_tv2"
+                    <TextView android:id="@+id/match4_score_tv2"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
@@ -283,13 +257,11 @@
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/match4_iv2"
+                        <ImageView android:id="@+id/match4_iv2"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="3" />
-                        <TextView
-                            android:id="@+id/match4_club2"
+                        <TextView android:id="@+id/match4_club2"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
@@ -309,35 +281,30 @@
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/match5_iv1"
+                        <ImageView android:id="@+id/match5_iv1"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="3" />
-                        <TextView
-                            android:id="@+id/match5_club1"
+                        <TextView android:id="@+id/match5_club1"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center" />
                     </LinearLayout>
-                    <TextView
-                        android:id="@+id/match5_score_tv1"
+
+                    <TextView android:id="@+id/match5_score_tv1"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textSize="30dp" />
-                    <TextView
-                        android:id="@+id/match5_stadium_tv"
+                    <TextView android:id="@+id/match5_stadium_tv"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:gravity="center"
                         android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/match5_score_tv2"
+                    <TextView android:id="@+id/match5_score_tv2"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
@@ -350,14 +317,11 @@
                         android:layout_weight="3"
                         android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/match5_iv2"
+                        <ImageView android:id="@+id/match5_iv2"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="3" />
-
-                        <TextView
-                            android:id="@+id/match5_club2"
+                        <TextView android:id="@+id/match5_club2"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
@@ -366,9 +330,7 @@
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
-
-        <TextView
-            android:id="@+id/noScheduleTv"
+        <TextView android:id="@+id/noScheduleTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -376,14 +338,13 @@
             android:text="오늘은 경기가 없는 날 입니다."
             android:visibility="visible" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.1"
         android:padding="5dp">
-        <Button
-            android:id="@+id/teamRankingBt"
+
+        <Button android:id="@+id/teamRankingBt"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColor="#FFFFFF"
@@ -393,6 +354,4 @@
             android:shadowRadius="5"
             android:text="팀 순위 보기"/>
     </LinearLayout>
-
-
 </LinearLayout>

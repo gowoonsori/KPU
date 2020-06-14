@@ -24,8 +24,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:textSize="25dp"
+            android:textColor="#00498c"
             android:textStyle="bold"
-            android:textColor="#000000"
             android:gravity="center"/>
     </LinearLayout>
     <LinearLayout
@@ -232,11 +232,13 @@
                 android:id="@+id/rating"
                 android:numStars="5"
                 android:stepSize="0.5"
+                android:theme="@style/RatingBar"
                 android:isIndicator="false"
                 style="@style/Widget.AppCompat.RatingBar.Indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
             <TextView
+                android:text=" 0.0"
                 android:id="@+id/rating_text"
                 android:gravity="center"
                 android:textStyle="bold"
@@ -264,11 +266,19 @@
             <Button
                 android:id="@+id/btn_ok"
                 android:text="확인"
+                android:layout_margin="15dp"
+                android:textColor="#00498c"
+                android:textStyle="bold"
+                android:background="@drawable/emptybutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <Button
                 android:id="@+id/btn_cancel"
                 android:text="취소"
+                android:layout_margin="15dp"
+                android:textColor="#00498c"
+                android:textStyle="bold"
+                android:background="@drawable/emptybutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

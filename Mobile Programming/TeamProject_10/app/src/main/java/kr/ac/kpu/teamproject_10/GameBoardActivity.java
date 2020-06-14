@@ -1,5 +1,4 @@
 package kr.ac.kpu.teamproject_10;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,27 +12,21 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.Calendar;
-
 public class GameBoardActivity extends AppCompatActivity {
-
     /*DB생성,조회를 위한 변수*/
     private final String dbName="GameDB";
-    SQLiteDatabase sqlDB;
-    scheduleDB myScheduleDB;
+    SQLiteDatabase sqlDB; scheduleDB myScheduleDB;
 
     /*CalendrView를 위한 변수*/
     CalendarView calendarView;
     int selectYear,selectMonth,selectDay;
 
     /*팀 순위 보기 (Alert Dialog)를 위한 변수*/
-    Button rankingBt;
-    View rankingView;
+    Button rankingBt; View rankingView;
 
     /*db로부터 경기일정을 load해 view해줄 변수*/
     ImageView[][] imV=new ImageView[5][2];
@@ -42,19 +35,25 @@ public class GameBoardActivity extends AppCompatActivity {
     TextView[] Stadium=new TextView[5];
 
     /*경기있는 날/없는 날 에 따라 다른 view를 보여주기 위함*/
-    ScrollView scv;
-    TextView noschedule;
+    ScrollView scv; TextView noschedule;
 
+    @Override // 툴바 뒤로가기 기능
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home: // toolbar의 back키 눌렀을 때 동작
+                finish(); return true; // 이전 액티비티로 회귀
+        } return super.onOptionsItemSelected(item);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_board);
 
-        // 타이틀 바 수정구현
+        // 타이틀 바 설정(텍스트, 아이콘), 툴바 설정 | 색상은 styles.xml에서 작성
         setTitle("경기 일정 및 결과");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.kbo_2020_logo);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 툴바
 
         scv=findViewById(R.id.ScrollV);
         noschedule=findViewById(R.id.noScheduleTv);
@@ -100,7 +99,6 @@ public class GameBoardActivity extends AppCompatActivity {
 
         /*DB 연결하기 위한 변수*/
         myScheduleDB = new scheduleDB(this);
-
         /*오늘 날짜의 경기일정을 보여줌*/
         Calendar cal = Calendar.getInstance();
         int year =cal.get(Calendar.YEAR);
@@ -108,7 +106,6 @@ public class GameBoardActivity extends AppCompatActivity {
         int day = cal.get(Calendar.DATE);
 
         setSceduleView(year,month,day);   //경기일정을 db에서 읽어와 스크롤 뷰 안에 set
-
 
         //캘린더 뷰 이벤트 리스너
         calendarView=(CalendarView)findViewById(R.id.Cv);
@@ -125,7 +122,6 @@ public class GameBoardActivity extends AppCompatActivity {
                 setSceduleView(selectYear,selectMonth,selectDay);
             }
         });
-
         /*팀 순위 보기 버튼 이벤트*/
         rankingBt=(Button)findViewById(R.id.teamRankingBt);
         rankingBt.setOnClickListener(new View.OnClickListener() {
@@ -140,36 +136,22 @@ public class GameBoardActivity extends AppCompatActivity {
             }
         });
     }
-
-    /*뒤로가기(메인화면) 버튼 이벤트*/
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /*db로부터 해당 날짜의 경기일정을 읽어와 set해주는 함수*/
     public void setSceduleView(int year,int month,int day){
         /*날짜가 int값이며, db에는 day,month이 두자리수로 표기되어있는데 해당 값은 10의 미만자리면 한자리수 표기
         이기때문에 10보다 작게 되면 두자리수로 표현
-        ex) db에는 2020/06/01 로 저장이 되어있는데 year/month/day는 2020/6/1 이기 때문에 0을 붙여준다.
-         */
+        ex) db에는 2020/06/01 로 저장이 되어있는데 year/month/day는 2020/6/1 이기 때문에 0을 붙여준다. */
         String sDay;
         if(day<10)sDay="0"+Integer.toString(day);
         else sDay=Integer.toString(day);
         String sMonth="0"+Integer.toString(month);
 
-        /* DB Read*/
+        /*DB Read*/
         sqlDB=myScheduleDB.getReadableDatabase();
         Cursor cursor;
         cursor = sqlDB.rawQuery("SELECT * FROM ScheduleDB WHERE date = '"+Integer.toString(year)+"/"+sMonth+"/"+sDay+"';",null);
 
         int i=0; //TextView배열참조를 위한 변수
-
         /*커서가 끝날때 까지 값을 읽어와 set*/
         while(cursor.moveToNext()){
             /*ScrollView Visible로 바꾸고 TextView를 Gone으로 바꾼다.*/
@@ -190,82 +172,59 @@ public class GameBoardActivity extends AppCompatActivity {
         cursor.close();
         sqlDB.close();
     }
-
     /*해당 이름의 구단명에 맞는 사진을 ImageView에 set*/
     public void setImageView(String clubName,int i,int j){
-        if(clubName.equals("두산")){
+        if(clubName.equals("두산"))
             imV[i][j].setImageResource(R.drawable.logo_bears);
-        }
-        else if(clubName.equals("KIA")){
+        else if(clubName.equals("KIA"))
             imV[i][j].setImageResource(R.drawable.logo_tigers);
-        }
-        else if(clubName.equals("한화")){
+        else if(clubName.equals("한화"))
             imV[i][j].setImageResource(R.drawable.logo_eagles);
-        }
-        else if(clubName.equals("SK")){
+        else if(clubName.equals("SK"))
             imV[i][j].setImageResource(R.drawable.logo_wyverns);
-        }
-        else if(clubName.equals("KT")){
+        else if(clubName.equals("KT"))
             imV[i][j].setImageResource(R.drawable.logo_wiz);
-        }
-        else if(clubName.equals("삼성")){
+        else if(clubName.equals("삼성"))
             imV[i][j].setImageResource(R.drawable.logo_lions);
-        }
-        else if(clubName.equals("NC")){
+        else if(clubName.equals("NC"))
             imV[i][j].setImageResource(R.drawable.logo_dinos);
-        }
-        else if(clubName.equals("키움")){
+        else if(clubName.equals("키움"))
             imV[i][j].setImageResource(R.drawable.logo_heroes);
-        }
-        else if(clubName.equals("롯데")){
+        else if(clubName.equals("롯데"))
             imV[i][j].setImageResource(R.drawable.logo_giants);
-        }
-        else if(clubName.equals("LG")){
+        else if(clubName.equals("LG"))
             imV[i][j].setImageResource(R.drawable.logo_twins);
-        }
     }
-
     /*경기 일정 초기화 함수*/
     public void scheduleInit(){
         scv.setVisibility(View.GONE);
         noschedule.setVisibility(View.VISIBLE);
         /*TextView color 초기화*/
-        for(int i=0;i<5;i++){
-            for(int j=0;j<2;j++){
+        for(int i=0;i<5;i++)
+            for(int j=0;j<2;j++)
                 Score[i][j].setTextColor(Color.parseColor("#4A4A4A"));
-            }
-        }
     }
-
     /*db에서 읽어온 점수가 NULL 즉 아직 경기를 치루지 않았다면 표시에는 공백으로 보이게 하고
-    경기를 치뤘다면 점수를 계산하여 이긴팀의 점수는 빨간색으로 set
-     */
+    경기를 치뤘다면 점수를 계산하여 이긴팀의 점수는 빨간색으로 set */
     public void setScoreStyle(String score,int i,int j){
-
-        if(score.equals("NULL")){
+        if(score.equals("NULL"))
             Score[i][j].setText(" ");
-        }
         else if(j==1){
-            if(Integer.parseInt(Score[i][0].getText().toString())>Integer.parseInt(Score[i][1].getText().toString())){
+            if(Integer.parseInt(Score[i][0].getText().toString())>Integer.parseInt(Score[i][1].getText().toString()))
                 Score[i][0].setTextColor(Color.parseColor("#FF0000"));
-            }
-            else if(Integer.parseInt(Score[i][0].getText().toString())<Integer.parseInt(Score[i][1].getText().toString())){
+            else if(Integer.parseInt(Score[i][0].getText().toString())<Integer.parseInt(Score[i][1].getText().toString()))
                 Score[i][1].setTextColor(Color.parseColor("#FF0000"));
-            }
         }
     }
-
     /*DB생성 클래스*/
     public class scheduleDB extends SQLiteOpenHelper {
         public scheduleDB(Context context){
             super(context,dbName,null,1);
         }
-
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL("CREATE TABLE gameScheduleDB ( date TEXT,club1 TEXT,score1 TEXT,score2 TEXT,club2 TEXT,stadium TEXT);");
         }
-
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVerson) {
             db.execSQL("DROP TABLE IF EXISTS gameScheduleDB");

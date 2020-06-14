@@ -4,10 +4,11 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
+    <color name="appbg">#F3F3F3 </color>
     <color name="bears">#131230 </color>
     <color name="heroes">#820024 </color>
     <color name="wyverns">#FF0000 </color>
-    <color name="twins">#C0C0C0 </color>0
+    <color name="twins">#C0C0C0 </color>
     <color name="dinos">#315288 </color>
     <color name="wiz">#000000 </color>
     <color name="tigers">#C70125 </color>
