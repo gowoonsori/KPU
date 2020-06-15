@@ -9,8 +9,8 @@
 #include <unistd.h>
 #include <time.h>
 
-#define MAX_NUMBER 10000    //약수를 구할 수
-#define MAX_THREADS 10000  //최대 프로세스 개수
+#define MAX_NUMBER 10000000    //약수를 구할 수
+#define MAX_THREADS 64  //최대 프로세스 개수
 #define CLK_TCK sysconf(_SC_CLK_TCK)
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;  //동기화를 위한 mutex
@@ -29,7 +29,7 @@ int main( int argc, char** argv )
     /*Time setup*/
     time_t t0;
     struct tms mytms;
-    clock_t t1, t2;
+    clock_t t1, t2,t3;
 
     /*측정 시작*/
     if( (t1 = times( &mytms )) == -1 )
@@ -49,14 +49,13 @@ int main( int argc, char** argv )
     }
 
     /*모든 스레드가 종료될때 까지 join*/
-    for( int i = 0; i < n_Threads; i++ )
+   for( int i = 0; i < n_Threads; i++ )
     {
         pthread_join( tid[i], NULL );
     }
-
+ 
     /*측정 종료*/
-    if( (t2 = times( &mytms )) == -1 )
-    {
+    if( (t2 = times( &mytms )) == -1 ){
         perror( "times 2" );
         exit( 1 );
     }
@@ -67,14 +66,12 @@ int main( int argc, char** argv )
     printf( "Real time : %.5f sec\n", (double)(t2 - t1) / CLK_TCK );
     printf( "User time : %.5f sec\n", (double)mytms.tms_utime / CLK_TCK );
     printf( "System time : %.5f sec\n", (double)mytms.tms_stime / CLK_TCK );
-
+    
     return 0;
 }
 
 void* thread_func( void* arg )
 {
-
-    /*약수를 구할 수만큼 1부터 roof*/
     while(loopValue<=MAX_NUMBER){
 
         pthread_mutex_lock( (&mutex) );

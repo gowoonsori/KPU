@@ -16,8 +16,8 @@
 #define BUF_SIZE 32 //공유 메모리 사이즈
 #define SHM_KEY 0x1234 //공유 메모리 식별 key
 
-#define MAX_NUMBER 10000    //약수를 구할 수
-#define MAX_PROCESS 10000  //최대 프로세스 개수
+#define MAX_NUMBER 10000000    //약수를 구할 수
+#define MAX_PROCESS 64  //최대 프로세스 개수
 #define CLK_TCK sysconf(_SC_CLK_TCK)
 
 int main( int argc, char** argv )
@@ -83,10 +83,11 @@ int main( int argc, char** argv )
             }
             exit( 0 );
         }
-        int status;
-        pid_t pid;
-        pid = wait( &status ); //자식프로세스가 끝날때까지 wait
+        
     }
+    int status;
+    pid_t pid;
+    pid = wait( &status ); //자식프로세스가 끝날때까지 wait
 
     /*측정 종료*/
     if( (t2 = times( &mytms )) == -1 )
@@ -97,10 +98,9 @@ int main( int argc, char** argv )
     fprintf( stdout, "%d 의  약 수 의  개 수 : %d \n", MAX_NUMBER, shmaddr[0] );
 
     printf( "Real time : %.5f sec\n", (double)(t2 - t1) / CLK_TCK );
-    printf( "User time : %.5f sec\n", (double)mytms.tms_utime / CLK_TCK );
-    printf( "System time : %.5f sec\n", (double)mytms.tms_stime / CLK_TCK );
-
-    /* 측정한 시간 printf */
+    printf( "User time : %.5f sec\n", (double)mytms.tms_utime / CLK_TCK + (double)mytms.tms_cutime / CLK_TCK );
+    printf( "System time : %.5f sec\n", (double)mytms.tms_stime / CLK_TCK + (double)mytms.tms_cstime / CLK_TCK );
+    
     shmdt( shmaddr );
     shmctl( shmid, IPC_RMID, 0 );
 
@@ -124,6 +124,10 @@ int main( int argc, char** argv )
 자식 프로세스가 끝났음에도 변경 상태를 회수해 가지 않아서 프로세스 슬롯을 차지하게 됨. (좀비 프로세스)
 그래서 종료 되었음에도 자원을 소비하여 fork 시에 resource 관련 에러가 생김.
 따라서, 자식 프로세스가 exit(0)으로 종료되자마자 회수하여 이를 방지함.
-
 참고 내역 : https://stackoverflow.com/questions/28140355/c-fork-resource-temporarily-unavailable-on-tcp-server
+utime, stime의 경우에 해당 프로세스의 user time, system time을 측정함.
+따라서, 여기서는 부모 프로세스의 시간만 측정하므로 정작 작업들을 수행하면서 컨텍스트 스위칭이 일어나는 자식 프로세스의 시간은 측정하지 못함.
+이에 따라, tms_cutime, tms_cstime으로 자식 프로세스의 시간도 더하여 출력해줌.
+참고 내역 : https://www.joinc.co.kr/w/man/2/times
+           http://ehpub.co.kr/%EB%A6%AC%EB%88%85%EC%8A%A4-%EC%8B%9C%EC%8A%A4%ED%85%9C-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-8-6-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EC%88%98%ED%96%89-%EC%8B%9C%EA%B0%84-%EA%B5%AC/
 */
