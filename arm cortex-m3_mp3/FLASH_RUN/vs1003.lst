@@ -1,0 +1,4506 @@
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 4
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"vs1003.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.delay_ms,"ax",%progbits
+  16              		.align	1
+  17              		.global	delay_ms
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	delay_ms:
+  25              	.LVL0:
+  26              	.LFB29:
+  27              		.file 1 "vs1003.c"
+   1:vs1003.c      **** /********************************************************************************/
+   2:vs1003.c      **** /* vs1003.c                                                                     */
+   3:vs1003.c      **** /* STM32F103VET6                                                                */
+   4:vs1003.c      **** /* (Lee ChangWoo HL2IRW  hl2irw@kpu.ac.kr 011-726-6860)                 	*/
+   5:vs1003.c      **** /* stm32f103ve_mp3								*/
+   6:vs1003.c      **** /********************************************************************************/
+   7:vs1003.c      **** #include "hwdefs.h"
+   8:vs1003.c      **** 
+   9:vs1003.c      **** #define VS_WRITE_COMMAND 		0x02
+  10:vs1003.c      **** #define VS_READ_COMMAND 		0x03
+  11:vs1003.c      **** 
+  12:vs1003.c      **** #define SPI_MODE        		0x00
+  13:vs1003.c      **** #define SPI_STATUS      		0x01
+  14:vs1003.c      **** #define SPI_BASS        		0x02
+  15:vs1003.c      **** #define SPI_CLOCKF      		0x03
+  16:vs1003.c      **** #define SPI_DECODE_TIME 		0x04
+  17:vs1003.c      **** #define SPI_AUDATA      		0x05
+  18:vs1003.c      **** #define SPI_WRAM        		0x06
+  19:vs1003.c      **** #define SPI_WRAMADDR    		0x07
+  20:vs1003.c      **** #define SPI_HDAT0       		0x08
+  21:vs1003.c      **** #define SPI_HDAT1       		0x09
+  22:vs1003.c      **** #define SPI_AIADDR      		0x0a
+  23:vs1003.c      **** #define SPI_VOL         		0x0b
+  24:vs1003.c      **** #define SPI_AICTRL0     		0x0c
+  25:vs1003.c      **** #define SPI_AICTRL1     		0x0d
+  26:vs1003.c      **** #define SPI_AICTRL2     		0x0e
+  27:vs1003.c      **** #define SPI_AICTRL3     		0x0f
+  28:vs1003.c      **** #define SM_DIFF         		0x01
+  29:vs1003.c      **** #define SM_JUMP         		0x02
+  30:vs1003.c      **** #define SM_RESET        		0x04
+  31:vs1003.c      **** #define SM_OUTOFWAV     		0x08
+  32:vs1003.c      **** #define SM_PDOWN        		0x10
+  33:vs1003.c      **** #define SM_TESTS        		0x20
+  34:vs1003.c      **** #define SM_STREAM       		0x40
+  35:vs1003.c      **** #define SM_PLUSV        		0x80
+  36:vs1003.c      **** #define SM_DACT         		0x100
+  37:vs1003.c      **** #define SM_SDIORD       		0x200
+  38:vs1003.c      **** #define SM_SDISHARE     		0x400
+  39:vs1003.c      **** #define SM_SDINEW       		0x800
+  40:vs1003.c      **** #define SM_ADPCM        		0x1000
+  41:vs1003.c      **** #define SM_ADPCM_HP     		0x2000
+  42:vs1003.c      **** #define MP3_CCS_SET(x)  		GPIOC->ODR = (GPIOC->ODR & ~MP3_CMD_CS) | (x ? MP3_CMD_CS : 0)
+  43:vs1003.c      **** #define MP3_DCS_SET(x)  		GPIOC->ODR = (GPIOC->ODR & ~MP3_DATA_CS) | (x ? MP3_DATA_CS : 0)
+  44:vs1003.c      **** 
+  45:vs1003.c      **** const unsigned char atab [943] = {		/* Register addresses */
+  46:vs1003.c      ****       7, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  47:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 6, 6, 6, 6, 6, 6,
+  48:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  49:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  50:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  51:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  52:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  53:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  54:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  55:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  56:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  57:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  58:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  59:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  60:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  61:vs1003.c      ****       7, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  62:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  63:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  64:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  65:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  66:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  67:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  68:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  69:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  70:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  71:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  72:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  73:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  74:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  75:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  76:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  77:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  78:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  79:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  80:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  81:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  82:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  83:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  84:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  85:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  86:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  87:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  88:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  89:vs1003.c      ****       6, 7, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  90:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 6, 6, 6, 6, 6, 6,
+  91:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  92:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  93:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  94:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  95:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 6,
+  96:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  97:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  98:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+  99:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+ 100:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+ 101:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+ 102:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+ 103:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7,
+ 104:vs1003.c      ****       6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 10
+ 105:vs1003.c      **** };
+ 106:vs1003.c      **** 
+ 107:vs1003.c      **** 
+ 108:vs1003.c      **** const unsigned short dtab [943] = { 		/* Data to write */
+ 109:vs1003.c      ****       0x8050, 0x3613, 0x0024, 0x3e00, 0x3801, 0x0000, 0x16d7, 0xf400,
+ 110:vs1003.c      ****       0x55c0, 0x0000, 0x0a17, 0xf400, 0x57c0, 0x0006, 0x5017, 0xb080,
+ 111:vs1003.c      ****       0x0024, 0x3f00, 0x0024, 0x2000, 0x0000, 0x36f0, 0x1801, 0x2800,
+ 112:vs1003.c      ****       0x31c0, 0x805c, 0x3e12, 0xb817, 0x3e12, 0x3815, 0x3e05, 0xb814,
+ 113:vs1003.c      ****       0x3615, 0x0024, 0x0000, 0x800a, 0x3e10, 0x3801, 0x0006, 0x0000,
+ 114:vs1003.c      ****       0x3e10, 0xb803, 0x0000, 0x0303, 0x3e11, 0x3805, 0x3e11, 0xb807,
+ 115:vs1003.c      ****       0x3e14, 0x3812, 0xb884, 0x130c, 0x3410, 0x4024, 0x4112, 0x10d0,
+ 116:vs1003.c      ****       0x4010, 0x008c, 0x4010, 0x0024, 0xf400, 0x4012, 0x3000, 0x3840,
+ 117:vs1003.c      ****       0x3009, 0x3801, 0x0000, 0x0041, 0xfe02, 0x0024, 0x2900, 0x8440,
+ 118:vs1003.c      ****       0x48b2, 0x0024, 0x36f3, 0x0844, 0x6306, 0x8845, 0xae3a, 0x8840,
+ 119:vs1003.c      ****       0xbf8e, 0x8b41, 0xac32, 0xa846, 0xffc8, 0xabc7, 0x3e01, 0x7800,
+ 120:vs1003.c      ****       0xf400, 0x4480, 0x6090, 0x0024, 0x6090, 0x0024, 0xf400, 0x4015,
+ 121:vs1003.c      ****       0x3009, 0x3446, 0x3009, 0x37c7, 0x3009, 0x1800, 0x3009, 0x3844,
+ 122:vs1003.c      ****       0x48b3, 0xe1e0, 0x4882, 0x4040, 0xfeca, 0x0024, 0x5ac2, 0x0024,
+ 123:vs1003.c      ****       0x5a52, 0x0024, 0x4cc2, 0x0024, 0x48ba, 0x4040, 0x4eea, 0x4801,
+ 124:vs1003.c      ****       0x4eca, 0x9800, 0xff80, 0x1bc1, 0xf1eb, 0xe3e2, 0xf1ea, 0x184c,
+ 125:vs1003.c      ****       0x4c8b, 0xe5e4, 0x48be, 0x9804, 0x488e, 0x41c6, 0xfe82, 0x0024,
+ 126:vs1003.c      ****       0x5a8e, 0x0024, 0x525e, 0x1b85, 0x4ffe, 0x0024, 0x48b6, 0x41c6,
+ 127:vs1003.c      ****       0x4dd6, 0x48c7, 0x4df6, 0x0024, 0xf1d6, 0x0024, 0xf1d6, 0x0024,
+ 128:vs1003.c      ****       0x4eda, 0x0024, 0x0000, 0x0fc3, 0x2900, 0x8440, 0x4e82, 0x0024,
+ 129:vs1003.c      ****       0x4084, 0x130c, 0x0006, 0x0100, 0x3440, 0x4024, 0x4010, 0x0024,
+ 130:vs1003.c      ****       0xf400, 0x4012, 0x3200, 0x4024, 0xb132, 0x0024, 0x4214, 0x0024,
+ 131:vs1003.c      ****       0xf224, 0x0024, 0x6230, 0x0024, 0x0001, 0x0001, 0x2800, 0x2b49,
+ 132:vs1003.c      ****       0x0000, 0x0024, 0xf400, 0x40c2, 0x3200, 0x0024, 0xff82, 0x0024,
+ 133:vs1003.c      ****       0x48b2, 0x0024, 0xb130, 0x0024, 0x6202, 0x0024, 0x003f, 0xf001,
+ 134:vs1003.c      ****       0x2800, 0x2e51, 0x0000, 0x1046, 0xfe64, 0x0024, 0x48be, 0x0024,
+ 135:vs1003.c      ****       0x2800, 0x2f40, 0x3a01, 0x8024, 0x3200, 0x0024, 0xb010, 0x0024,
+ 136:vs1003.c      ****       0xc020, 0x0024, 0x3a00, 0x0024, 0x36f4, 0x1812, 0x36f1, 0x9807,
+ 137:vs1003.c      ****       0x36f1, 0x1805, 0x36f0, 0x9803, 0x36f0, 0x1801, 0x3405, 0x9014,
+ 138:vs1003.c      ****       0x36f3, 0x0024, 0x36f2, 0x1815, 0x2000, 0x0000, 0x36f2, 0x9817,
+ 139:vs1003.c      ****       0x80c7, 0x3e12, 0xb817, 0x3e12, 0x3815, 0x3e05, 0xb814, 0x3625,
+ 140:vs1003.c      ****       0x0024, 0x0000, 0x800a, 0x3e10, 0x7802, 0x3e10, 0xf804, 0x3e11,
+ 141:vs1003.c      ****       0x7810, 0x3e14, 0x7813, 0x0006, 0x0051, 0x3e13, 0xf80e, 0x3e13,
+ 142:vs1003.c      ****       0x4024, 0x3009, 0x3840, 0x3009, 0x3852, 0x2919, 0x64c0, 0x0006,
+ 143:vs1003.c      ****       0x06d0, 0x3100, 0x5bd2, 0x0006, 0x55d1, 0x3009, 0x1800, 0x3009,
+ 144:vs1003.c      ****       0x0402, 0x6126, 0x0024, 0x0006, 0x00d1, 0x2800, 0x4d05, 0xb882,
+ 145:vs1003.c      ****       0x0024, 0x0006, 0x0011, 0x3009, 0x3850, 0x0006, 0x0010, 0x3009,
+ 146:vs1003.c      ****       0x3800, 0x291d, 0x5800, 0x0000, 0x1800, 0x0006, 0x0010, 0xb882,
+ 147:vs1003.c      ****       0x0024, 0x291d, 0x5b00, 0x0000, 0x1700, 0x0000, 0x0301, 0x3900,
+ 148:vs1003.c      ****       0x5bc0, 0x0006, 0x55d1, 0x3009, 0x1bd0, 0x3009, 0x0404, 0x0006,
+ 149:vs1003.c      ****       0x0051, 0x2800, 0x3d00, 0x3901, 0x0024, 0x4448, 0x0401, 0x4192,
+ 150:vs1003.c      ****       0x0024, 0x6498, 0x2401, 0x001f, 0x4001, 0x6412, 0x0024, 0x0006,
+ 151:vs1003.c      ****       0x0011, 0x2800, 0x3c51, 0x0000, 0x058e, 0x2400, 0x4c0e, 0x0000,
+ 152:vs1003.c      ****       0x0013, 0x0006, 0x0051, 0x0006, 0x1a03, 0x3100, 0x4024, 0xf212,
+ 153:vs1003.c      ****       0x44c4, 0x4346, 0x0024, 0xf400, 0x40d5, 0x3500, 0x8024, 0x612a,
+ 154:vs1003.c      ****       0x0024, 0x0000, 0x0024, 0x2800, 0x4c51, 0x0000, 0x0024, 0x3613,
+ 155:vs1003.c      ****       0x0024, 0x3100, 0x3800, 0x291d, 0x8000, 0xf200, 0x0024, 0x003f,
+ 156:vs1003.c      ****       0xfec2, 0x4082, 0x4411, 0x3113, 0x1bc0, 0xa122, 0x0024, 0x0000,
+ 157:vs1003.c      ****       0x2002, 0x6124, 0x2401, 0x0000, 0x1002, 0x2800, 0x4608, 0x0000,
+ 158:vs1003.c      ****       0x0024, 0x003f, 0xf802, 0x3100, 0x4024, 0xb124, 0x0024, 0x2800,
+ 159:vs1003.c      ****       0x4bc0, 0x3900, 0x8024, 0x6124, 0x0024, 0x0000, 0x0802, 0x2800,
+ 160:vs1003.c      ****       0x4848, 0x0000, 0x0024, 0x003f, 0xfe02, 0x3100, 0x4024, 0xb124,
+ 161:vs1003.c      ****       0x0024, 0x2800, 0x4bc0, 0x3900, 0x8024, 0x6124, 0x0024, 0x0000,
+ 162:vs1003.c      ****       0x0402, 0x2800, 0x4a88, 0x0000, 0x0024, 0x003f, 0xff02, 0x3100,
+ 163:vs1003.c      ****       0x4024, 0xb124, 0x0024, 0x2800, 0x4bc0, 0x3900, 0x8024, 0x6124,
+ 164:vs1003.c      ****       0x0401, 0x003f, 0xff82, 0x2800, 0x4bc8, 0xb124, 0x0024, 0x3900,
+ 165:vs1003.c      ****       0x8024, 0xb882, 0x8c4c, 0x3830, 0x4024, 0x0006, 0x0091, 0x3904,
+ 166:vs1003.c      ****       0xd84c, 0x0006, 0x00d1, 0x0000, 0x0013, 0x3100, 0x904c, 0x4202,
+ 167:vs1003.c      ****       0x9bcc, 0x39f0, 0x4024, 0x3100, 0x4024, 0x3c00, 0x4024, 0xf400,
+ 168:vs1003.c      ****       0x44c1, 0x34f0, 0x8024, 0x6126, 0x0024, 0x0006, 0x06d0, 0x2800,
+ 169:vs1003.c      ****       0x5dd8, 0x4294, 0x0024, 0x2400, 0x5d82, 0x0000, 0x0024, 0xf400,
+ 170:vs1003.c      ****       0x4411, 0x3123, 0x0024, 0x3100, 0x8024, 0x4202, 0x0024, 0x4182,
+ 171:vs1003.c      ****       0x2401, 0x0000, 0x2002, 0x2800, 0x5d89, 0x0000, 0x0024, 0x3013,
+ 172:vs1003.c      ****       0x184c, 0x30f0, 0x7852, 0x6124, 0xb850, 0x0006, 0x0001, 0x2800,
+ 173:vs1003.c      ****       0x5588, 0x4088, 0x44c2, 0x4224, 0x0024, 0x4122, 0x0024, 0x4122,
+ 174:vs1003.c      ****       0x0024, 0xf400, 0x4051, 0x2900, 0x7440, 0x0000, 0x56c8, 0x4224,
+ 175:vs1003.c      ****       0x0024, 0x4122, 0x0024, 0x4122, 0x0024, 0x2900, 0x69c0, 0xf400,
+ 176:vs1003.c      ****       0x4051, 0x0004, 0x0002, 0x3009, 0x1bd0, 0x3023, 0x1bd2, 0x30e0,
+ 177:vs1003.c      ****       0x4024, 0x6124, 0x0024, 0x0000, 0x4002, 0x2800, 0x5988, 0x0000,
+ 178:vs1003.c      ****       0x0024, 0x0000, 0x0001, 0x3820, 0x4024, 0x30e0, 0x4024, 0x6124,
+ 179:vs1003.c      ****       0x0001, 0x003f, 0xff42, 0x2800, 0x5d88, 0x4182, 0x0024, 0x0000,
+ 180:vs1003.c      ****       0x0024, 0x2800, 0x5d95, 0x0000, 0x0024, 0x3613, 0x0024, 0x3e14,
+ 181:vs1003.c      ****       0xc024, 0x2900, 0x1700, 0x3e14, 0x0024, 0x36e3, 0x008c, 0x30e0,
+ 182:vs1003.c      ****       0x4024, 0xfe22, 0x4411, 0x48b6, 0x048c, 0x3900, 0x8024, 0x3033,
+ 183:vs1003.c      ****       0x0c4c, 0x0006, 0x0011, 0x6892, 0x04c2, 0xa122, 0x0402, 0x6126,
+ 184:vs1003.c      ****       0x0024, 0x0006, 0x0093, 0x2800, 0x6701, 0x0000, 0x0024, 0xb882,
+ 185:vs1003.c      ****       0x184c, 0x3413, 0x3812, 0x0006, 0x00d2, 0x3a00, 0x5bd2, 0x3300,
+ 186:vs1003.c      ****       0x4024, 0x0000, 0x0013, 0x3c00, 0x4024, 0xf400, 0x44c1, 0x34f0,
+ 187:vs1003.c      ****       0x8024, 0x6126, 0x0024, 0x0006, 0x0111, 0x2800, 0x6718, 0x4294,
+ 188:vs1003.c      ****       0x0024, 0x2400, 0x66c2, 0x0000, 0x0024, 0x0003, 0xf001, 0x3101,
+ 189:vs1003.c      ****       0x0024, 0xb412, 0x0024, 0x0028, 0x0001, 0x2800, 0x66c5, 0x6144,
+ 190:vs1003.c      ****       0x0024, 0x0004, 0x0002, 0x2800, 0x6681, 0x4422, 0x0024, 0x0000,
+ 191:vs1003.c      ****       0x1002, 0x6422, 0x0024, 0x2800, 0x66c0, 0x3900, 0x4024, 0x3900,
+ 192:vs1003.c      ****       0x4024, 0x3113, 0x0c4c, 0x36f3, 0x4024, 0x36f3, 0xd80e, 0x36f4,
+ 193:vs1003.c      ****       0x5813, 0x36f1, 0x5810, 0x36f0, 0xd804, 0x36f0, 0x5802, 0x3405,
+ 194:vs1003.c      ****       0x9014, 0x36f3, 0x0024, 0x36f2, 0x1815, 0x2000, 0x0000, 0x36f2,
+ 195:vs1003.c      ****       0x9817, 0x1868, 0x0032, 0x004f, 0x007e, 0x00c8, 0x013d, 0x01f8,
+ 196:vs1003.c      ****       0x0320, 0x04f6, 0x07e0, 0x0c80, 0x13d8, 0x1f7f, 0x3200, 0x4f5f,
+ 197:vs1003.c      ****       0x61a8, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+ 198:vs1003.c      ****       0x0000, 0x81a7, 0x3e12, 0xb814, 0x0000, 0x800a, 0x3e10, 0x3801,
+ 199:vs1003.c      ****       0x3e10, 0xb803, 0x3e11, 0x7806, 0x3e11, 0xf813, 0x3e13, 0xf80e,
+ 200:vs1003.c      ****       0x3e13, 0x4024, 0x3e04, 0x7810, 0x449a, 0x0040, 0x0001, 0x0003,
+ 201:vs1003.c      ****       0x2800, 0x7304, 0x4036, 0x03c1, 0x0003, 0xffc2, 0xb326, 0x0024,
+ 202:vs1003.c      ****       0x0018, 0x0042, 0x4326, 0x4495, 0x4024, 0x40d2, 0x0000, 0x0180,
+ 203:vs1003.c      ****       0xa100, 0x4090, 0x0010, 0x0fc2, 0x4204, 0x0024, 0xbc82, 0x4091,
+ 204:vs1003.c      ****       0x459a, 0x0024, 0x0000, 0x0054, 0x2800, 0x7204, 0xbd86, 0x4093,
+ 205:vs1003.c      ****       0x2400, 0x71c5, 0xfe01, 0x5e0c, 0x5c43, 0x5f2d, 0x5e46, 0x020c,
+ 206:vs1003.c      ****       0x5c56, 0x8a0c, 0x5e53, 0x5e0c, 0x5c43, 0x5f2d, 0x5e46, 0x020c,
+ 207:vs1003.c      ****       0x5c56, 0x8a0c, 0x5e52, 0x0024, 0x4cb2, 0x4405, 0x0018, 0x0044,
+ 208:vs1003.c      ****       0x654a, 0x0024, 0x2800, 0x8000, 0x36f4, 0x5810, 0x81d1, 0x3e12,
+ 209:vs1003.c      ****       0xb814, 0x0000, 0x800a, 0x3e10, 0x3801, 0x3e10, 0xb803, 0x3e11,
+ 210:vs1003.c      ****       0x7806, 0x3e11, 0xf813, 0x3e13, 0xf80e, 0x3e13, 0x4024, 0x3e04,
+ 211:vs1003.c      ****       0x7810, 0x449a, 0x0040, 0x0000, 0x0803, 0x2800, 0x7ec4, 0x30f0,
+ 212:vs1003.c      ****       0x4024, 0x0fff, 0xfec2, 0xa020, 0x0024, 0x0fff, 0xff02, 0xa122,
+ 213:vs1003.c      ****       0x0024, 0x4036, 0x0024, 0x0000, 0x1fc2, 0xb326, 0x0024, 0x0010,
+ 214:vs1003.c      ****       0x4002, 0x4326, 0x4495, 0x4024, 0x40d2, 0x0000, 0x0180, 0xa100,
+ 215:vs1003.c      ****       0x4090, 0x0010, 0x0042, 0x4204, 0x0024, 0xbc82, 0x4091, 0x459a,
+ 216:vs1003.c      ****       0x0024, 0x0000, 0x0054, 0x2800, 0x7dc4, 0xbd86, 0x4093, 0x2400,
+ 217:vs1003.c      ****       0x7d85, 0xfe01, 0x5e0c, 0x5c43, 0x5f2d, 0x5e46, 0x0024, 0x5c56,
+ 218:vs1003.c      ****       0x0024, 0x5e53, 0x5e0c, 0x5c43, 0x5f2d, 0x5e46, 0x0024, 0x5c56,
+ 219:vs1003.c      ****       0x0024, 0x5e52, 0x0024, 0x4cb2, 0x4405, 0x0010, 0x4004, 0x654a,
+ 220:vs1003.c      ****       0x9810, 0x0000, 0x0144, 0xa54a, 0x1bd1, 0x0006, 0x0013, 0x3301,
+ 221:vs1003.c      ****       0xc444, 0x687e, 0x2005, 0xad76, 0x8445, 0x4ed6, 0x8784, 0x36f3,
+ 222:vs1003.c      ****       0x64c2, 0xac72, 0x8785, 0x4ec2, 0xa443, 0x3009, 0x2440, 0x3009,
+ 223:vs1003.c      ****       0x2741, 0x36f3, 0xd80e, 0x36f1, 0xd813, 0x36f1, 0x5806, 0x36f0,
+ 224:vs1003.c      ****       0x9803, 0x36f0, 0x1801, 0x2000, 0x0000, 0x36f2, 0x9814, 0x8211,
+ 225:vs1003.c      ****       0x4c82, 0x0024, 0x0000, 0x0024, 0x2000, 0x0005, 0xf5c2, 0x0024,
+ 226:vs1003.c      ****       0x0000, 0x0980, 0x2000, 0x0000, 0x6010, 0x0024, 0x0050
+ 227:vs1003.c      **** };
+ 228:vs1003.c      **** 
+ 229:vs1003.c      **** 
+ 230:vs1003.c      **** 
+ 231:vs1003.c      **** unsigned short regvalue = 0;
+ 232:vs1003.c      **** unsigned char vs1003_ram [5] = {0,0,0,0,250};
+ 233:vs1003.c      **** const unsigned short bitrate [2][16] =
+ 234:vs1003.c      **** {
+ 235:vs1003.c      ****       {0,8,16,24,32,40,48,56,64,80,96,112,128,144,160,0},
+ 236:vs1003.c      ****       {0,32,40,48,56,64,80,96,112,128,160,192,224,256,320,0}
+ 237:vs1003.c      **** };
+ 238:vs1003.c      **** extern unsigned short f_kbps;
+ 239:vs1003.c      **** 
+ 240:vs1003.c      **** 
+ 241:vs1003.c      **** void delay_ms (unsigned short nms)
+ 242:vs1003.c      **** {
+  28              		.loc 1 242 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+ 243:vs1003.c      ****       wait_ms(nms);
+  33              		.loc 1 243 7 view .LVU1
+  34 0000 FFF7FEBF 		b	wait_ms
+  35              	.LVL1:
+  36              		.loc 1 243 7 is_stmt 0 view .LVU2
+  37              		.cfi_endproc
+  38              	.LFE29:
+  40              		.section	.text.mp3_reset,"ax",%progbits
+  41              		.align	1
+  42              		.global	mp3_reset
+  43              		.syntax unified
+  44              		.thumb
+  45              		.thumb_func
+  46              		.fpu softvfp
+  48              	mp3_reset:
+  49              	.LFB32:
+ 244:vs1003.c      **** }
+ 245:vs1003.c      **** 
+ 246:vs1003.c      **** 
+ 247:vs1003.c      **** void vs1003_reset_decode_time(void)
+ 248:vs1003.c      **** {
+ 249:vs1003.c      ****       vs1003_cmd_write(SPI_DECODE_TIME,0x0000);
+ 250:vs1003.c      ****       vs1003_cmd_write(SPI_DECODE_TIME,0x0000);
+ 251:vs1003.c      **** }
+ 252:vs1003.c      **** 
+ 253:vs1003.c      **** 
+ 254:vs1003.c      **** void vs1003_soft_reset (void)
+ 255:vs1003.c      **** {
+ 256:vs1003.c      ****       unsigned char retry;
+ 257:vs1003.c      ****       while ((GPIOC->IDR & MP3_DREQ) == 0);
+ 258:vs1003.c      ****       SPI_read_write_byte(0xff);
+ 259:vs1003.c      ****       retry = 0;
+ 260:vs1003.c      ****       while (vs1003_reg_read(0) != 0x0804) {
+ 261:vs1003.c      **** 	    vs1003_cmd_write(SPI_MODE,0x0804);
+ 262:vs1003.c      **** 	    delay_ms(2);
+ 263:vs1003.c      **** 	    retry++;
+ 264:vs1003.c      **** 	    if(retry > 100) break;
+ 265:vs1003.c      ****       }
+ 266:vs1003.c      ****       while ((GPIOC->IDR & MP3_DREQ) == 0);
+ 267:vs1003.c      ****       retry = 0;
+ 268:vs1003.c      ****       while (vs1003_reg_read(SPI_CLOCKF) != 0x9800) {
+ 269:vs1003.c      **** 	    vs1003_cmd_write(SPI_CLOCKF,0x9800);
+ 270:vs1003.c      **** 	    retry++;
+ 271:vs1003.c      **** 	    if (retry > 100) break;
+ 272:vs1003.c      ****       }
+ 273:vs1003.c      ****       retry = 0;
+ 274:vs1003.c      ****       while (vs1003_reg_read(SPI_AUDATA) != 0xBB81) {
+ 275:vs1003.c      **** 	    vs1003_cmd_write(SPI_AUDATA,0xBB81);
+ 276:vs1003.c      **** 	    retry++;
+ 277:vs1003.c      **** 	    if (retry > 100) break;
+ 278:vs1003.c      ****       }
+ 279:vs1003.c      ****       vs1003_cmd_write(11,0x2020);
+ 280:vs1003.c      ****       vs1003_reset_decode_time();
+ 281:vs1003.c      ****       MP3_DCS_SET(0);
+ 282:vs1003.c      ****       SPI_read_write_byte(0xFF);
+ 283:vs1003.c      ****       SPI_read_write_byte(0xFF);
+ 284:vs1003.c      ****       SPI_read_write_byte(0xFF);
+ 285:vs1003.c      ****       SPI_read_write_byte(0xFF);
+ 286:vs1003.c      ****       MP3_DCS_SET(1);
+ 287:vs1003.c      ****       delay_ms(20);
+ 288:vs1003.c      **** }
+ 289:vs1003.c      **** 
+ 290:vs1003.c      **** void mp3_reset (void)
+ 291:vs1003.c      **** {
+  50              		.loc 1 291 1 is_stmt 1 view -0
+  51              		.cfi_startproc
+  52              		@ args = 0, pretend = 0, frame = 0
+  53              		@ frame_needed = 0, uses_anonymous_args = 0
+ 292:vs1003.c      ****       delay_ms(20);
+  54              		.loc 1 292 7 view .LVU4
+  55              	.LVL2:
+  56              	.LBB22:
+  57              	.LBI22:
+ 241:vs1003.c      **** {
+  58              		.loc 1 241 6 view .LVU5
+  59              	.LBB23:
+ 243:vs1003.c      **** }
+  60              		.loc 1 243 7 view .LVU6
+  61              	.LBE23:
+  62              	.LBE22:
+ 291:vs1003.c      ****       delay_ms(20);
+  63              		.loc 1 291 1 is_stmt 0 view .LVU7
+  64 0000 08B5     		push	{r3, lr}
+  65              		.cfi_def_cfa_offset 8
+  66              		.cfi_offset 3, -8
+  67              		.cfi_offset 14, -4
+  68              	.LBB25:
+  69              	.LBB24:
+ 243:vs1003.c      **** }
+  70              		.loc 1 243 7 view .LVU8
+  71 0002 1420     		movs	r0, #20
+  72 0004 FFF7FEFF 		bl	wait_ms
+  73              	.LVL3:
+ 243:vs1003.c      **** }
+  74              		.loc 1 243 7 view .LVU9
+  75              	.LBE24:
+  76              	.LBE25:
+ 293:vs1003.c      ****       SPI_read_write_byte(0xFF);
+  77              		.loc 1 293 7 is_stmt 1 view .LVU10
+  78 0008 FF20     		movs	r0, #255
+  79 000a FFF7FEFF 		bl	SPI_read_write_byte
+  80              	.LVL4:
+ 294:vs1003.c      ****       MP3_DCS_SET(1);
+  81              		.loc 1 294 7 view .LVU11
+  82 000e 084B     		ldr	r3, .L6
+  83 0010 DA68     		ldr	r2, [r3, #12]
+  84 0012 42F40062 		orr	r2, r2, #2048
+  85 0016 DA60     		str	r2, [r3, #12]
+ 295:vs1003.c      ****       MP3_CCS_SET(1);
+  86              		.loc 1 295 7 view .LVU12
+  87 0018 DA68     		ldr	r2, [r3, #12]
+  88 001a 42F48062 		orr	r2, r2, #1024
+  89 001e DA60     		str	r2, [r3, #12]
+ 296:vs1003.c      ****       while ((GPIOC->IDR & MP3_DREQ) == 0);
+  90              		.loc 1 296 7 view .LVU13
+  91              	.L3:
+  92              		.loc 1 296 43 discriminator 1 view .LVU14
+  93              		.loc 1 296 13 discriminator 1 view .LVU15
+  94              		.loc 1 296 20 is_stmt 0 discriminator 1 view .LVU16
+  95 0020 9A68     		ldr	r2, [r3, #8]
+  96              		.loc 1 296 13 discriminator 1 view .LVU17
+  97 0022 1207     		lsls	r2, r2, #28
+  98 0024 FCD5     		bpl	.L3
+ 297:vs1003.c      ****       delay_ms(20);
+  99              		.loc 1 297 7 is_stmt 1 view .LVU18
+ 100              	.LVL5:
+ 101              	.LBB26:
+ 102              	.LBI26:
+ 241:vs1003.c      **** {
+ 103              		.loc 1 241 6 view .LVU19
+ 104              	.LBB27:
+ 243:vs1003.c      **** }
+ 105              		.loc 1 243 7 view .LVU20
+ 106              	.LBE27:
+ 107              	.LBE26:
+ 298:vs1003.c      **** }
+ 108              		.loc 1 298 1 is_stmt 0 view .LVU21
+ 109 0026 BDE80840 		pop	{r3, lr}
+ 110              		.cfi_restore 14
+ 111              		.cfi_restore 3
+ 112              		.cfi_def_cfa_offset 0
+ 113              	.LBB29:
+ 114              	.LBB28:
+ 243:vs1003.c      **** }
+ 115              		.loc 1 243 7 view .LVU22
+ 116 002a 1420     		movs	r0, #20
+ 117 002c FFF7FEBF 		b	wait_ms
+ 118              	.LVL6:
+ 119              	.L7:
+ 120              		.align	2
+ 121              	.L6:
+ 122 0030 00100140 		.word	1073811456
+ 123              	.LBE28:
+ 124              	.LBE29:
+ 125              		.cfi_endproc
+ 126              	.LFE32:
+ 128              		.section	.text.vs1003_cmd_write,"ax",%progbits
+ 129              		.align	1
+ 130              		.global	vs1003_cmd_write
+ 131              		.syntax unified
+ 132              		.thumb
+ 133              		.thumb_func
+ 134              		.fpu softvfp
+ 136              	vs1003_cmd_write:
+ 137              	.LVL7:
+ 138              	.LFB35:
+ 299:vs1003.c      **** 
+ 300:vs1003.c      **** 
+ 301:vs1003.c      **** void vs1003_sine_test (void)
+ 302:vs1003.c      **** {
+ 303:vs1003.c      ****       vs1003_cmd_write(0x0b,0x2020);
+ 304:vs1003.c      ****       vs1003_cmd_write(SPI_MODE,0x0820);
+ 305:vs1003.c      ****       while ((GPIOC->IDR & MP3_DREQ) == 0);
+ 306:vs1003.c      ****       MP3_DCS_SET(0);
+ 307:vs1003.c      ****       SPI_read_write_byte(0x53);
+ 308:vs1003.c      ****       SPI_read_write_byte(0xef);
+ 309:vs1003.c      ****       SPI_read_write_byte(0x6e);
+ 310:vs1003.c      ****       SPI_read_write_byte(0x24);
+ 311:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 312:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 313:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 314:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 315:vs1003.c      ****       delay_ms(100);
+ 316:vs1003.c      ****       MP3_DCS_SET(1);
+ 317:vs1003.c      ****       MP3_DCS_SET(0);
+ 318:vs1003.c      ****       SPI_read_write_byte(0x45);
+ 319:vs1003.c      ****       SPI_read_write_byte(0x78);
+ 320:vs1003.c      ****       SPI_read_write_byte(0x69);
+ 321:vs1003.c      ****       SPI_read_write_byte(0x74);
+ 322:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 323:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 324:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 325:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 326:vs1003.c      ****       delay_ms(100);
+ 327:vs1003.c      ****       MP3_DCS_SET(1);
+ 328:vs1003.c      ****       MP3_DCS_SET(0);
+ 329:vs1003.c      ****       SPI_read_write_byte(0x53);
+ 330:vs1003.c      ****       SPI_read_write_byte(0xef);
+ 331:vs1003.c      ****       SPI_read_write_byte(0x6e);
+ 332:vs1003.c      ****       SPI_read_write_byte(0x44);
+ 333:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 334:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 335:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 336:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 337:vs1003.c      ****       delay_ms(100);
+ 338:vs1003.c      ****       MP3_DCS_SET(1);
+ 339:vs1003.c      ****       MP3_DCS_SET(0);
+ 340:vs1003.c      ****       SPI_read_write_byte(0x45);
+ 341:vs1003.c      ****       SPI_read_write_byte(0x78);
+ 342:vs1003.c      ****       SPI_read_write_byte(0x69);
+ 343:vs1003.c      ****       SPI_read_write_byte(0x74);
+ 344:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 345:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 346:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 347:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 348:vs1003.c      ****       delay_ms(100);
+ 349:vs1003.c      ****       MP3_DCS_SET(1);
+ 350:vs1003.c      **** }
+ 351:vs1003.c      **** 
+ 352:vs1003.c      **** 
+ 353:vs1003.c      **** void vs1003_ram_test (void)
+ 354:vs1003.c      **** {
+ 355:vs1003.c      ****       mp3_reset();
+ 356:vs1003.c      ****       vs1003_cmd_write(SPI_MODE,0x0820);
+ 357:vs1003.c      ****       while ((GPIOC->IDR & MP3_DREQ) == 0);
+ 358:vs1003.c      ****       MP3_DCS_SET(0);
+ 359:vs1003.c      ****       SPI_read_write_byte(0x4d);
+ 360:vs1003.c      ****       SPI_read_write_byte(0xea);
+ 361:vs1003.c      ****       SPI_read_write_byte(0x6d);
+ 362:vs1003.c      ****       SPI_read_write_byte(0x54);
+ 363:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 364:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 365:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 366:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 367:vs1003.c      ****       delay_ms(50);
+ 368:vs1003.c      ****       MP3_DCS_SET(1);
+ 369:vs1003.c      ****       regvalue = vs1003_reg_read(SPI_HDAT0);
+ 370:vs1003.c      **** }
+ 371:vs1003.c      **** 
+ 372:vs1003.c      **** 
+ 373:vs1003.c      **** void vs1003_cmd_write (unsigned char address,unsigned short data)
+ 374:vs1003.c      **** {
+ 139              		.loc 1 374 1 is_stmt 1 view -0
+ 140              		.cfi_startproc
+ 141              		@ args = 0, pretend = 0, frame = 0
+ 142              		@ frame_needed = 0, uses_anonymous_args = 0
+ 375:vs1003.c      ****       while((GPIOC->IDR & MP3_DREQ) == 0);
+ 143              		.loc 1 375 7 view .LVU24
+ 374:vs1003.c      ****       while((GPIOC->IDR & MP3_DREQ) == 0);
+ 144              		.loc 1 374 1 is_stmt 0 view .LVU25
+ 145 0000 70B5     		push	{r4, r5, r6, lr}
+ 146              		.cfi_def_cfa_offset 16
+ 147              		.cfi_offset 4, -16
+ 148              		.cfi_offset 5, -12
+ 149              		.cfi_offset 6, -8
+ 150              		.cfi_offset 14, -4
+ 374:vs1003.c      ****       while((GPIOC->IDR & MP3_DREQ) == 0);
+ 151              		.loc 1 374 1 view .LVU26
+ 152 0002 0646     		mov	r6, r0
+ 153 0004 0D46     		mov	r5, r1
+ 154              		.loc 1 375 19 view .LVU27
+ 155 0006 124C     		ldr	r4, .L12
+ 156              	.L9:
+ 157              		.loc 1 375 42 is_stmt 1 discriminator 1 view .LVU28
+ 158              		.loc 1 375 12 discriminator 1 view .LVU29
+ 159              		.loc 1 375 19 is_stmt 0 discriminator 1 view .LVU30
+ 160 0008 A368     		ldr	r3, [r4, #8]
+ 161              		.loc 1 375 12 discriminator 1 view .LVU31
+ 162 000a 1B07     		lsls	r3, r3, #28
+ 163 000c FCD5     		bpl	.L9
+ 376:vs1003.c      ****       SPI_set_speed(0);
+ 164              		.loc 1 376 7 is_stmt 1 view .LVU32
+ 165 000e 0020     		movs	r0, #0
+ 166              	.LVL8:
+ 167              		.loc 1 376 7 is_stmt 0 view .LVU33
+ 168 0010 FFF7FEFF 		bl	SPI_set_speed
+ 169              	.LVL9:
+ 377:vs1003.c      ****       MP3_DCS_SET(1);
+ 170              		.loc 1 377 7 is_stmt 1 view .LVU34
+ 171 0014 E368     		ldr	r3, [r4, #12]
+ 378:vs1003.c      ****       MP3_CCS_SET(0);
+ 379:vs1003.c      ****       SPI_read_write_byte(VS_WRITE_COMMAND);
+ 172              		.loc 1 379 7 is_stmt 0 view .LVU35
+ 173 0016 0220     		movs	r0, #2
+ 377:vs1003.c      ****       MP3_DCS_SET(1);
+ 174              		.loc 1 377 7 view .LVU36
+ 175 0018 43F40063 		orr	r3, r3, #2048
+ 176 001c E360     		str	r3, [r4, #12]
+ 378:vs1003.c      ****       MP3_CCS_SET(0);
+ 177              		.loc 1 378 7 is_stmt 1 view .LVU37
+ 178 001e E368     		ldr	r3, [r4, #12]
+ 179 0020 23F48063 		bic	r3, r3, #1024
+ 180 0024 E360     		str	r3, [r4, #12]
+ 181              		.loc 1 379 7 view .LVU38
+ 182 0026 FFF7FEFF 		bl	SPI_read_write_byte
+ 183              	.LVL10:
+ 380:vs1003.c      ****       SPI_read_write_byte(address);
+ 184              		.loc 1 380 7 view .LVU39
+ 185 002a 3046     		mov	r0, r6
+ 186 002c FFF7FEFF 		bl	SPI_read_write_byte
+ 187              	.LVL11:
+ 381:vs1003.c      ****       SPI_read_write_byte(data >> 8);
+ 188              		.loc 1 381 7 view .LVU40
+ 189 0030 280A     		lsrs	r0, r5, #8
+ 190 0032 FFF7FEFF 		bl	SPI_read_write_byte
+ 191              	.LVL12:
+ 382:vs1003.c      ****       SPI_read_write_byte(data);
+ 192              		.loc 1 382 7 view .LVU41
+ 193 0036 E8B2     		uxtb	r0, r5
+ 194 0038 FFF7FEFF 		bl	SPI_read_write_byte
+ 195              	.LVL13:
+ 383:vs1003.c      ****       MP3_CCS_SET(1);
+ 196              		.loc 1 383 7 view .LVU42
+ 197 003c E368     		ldr	r3, [r4, #12]
+ 384:vs1003.c      ****       SPI_set_speed(1);
+ 198              		.loc 1 384 7 is_stmt 0 view .LVU43
+ 199 003e 0120     		movs	r0, #1
+ 383:vs1003.c      ****       MP3_CCS_SET(1);
+ 200              		.loc 1 383 7 view .LVU44
+ 201 0040 43F48063 		orr	r3, r3, #1024
+ 202 0044 E360     		str	r3, [r4, #12]
+ 203              		.loc 1 384 7 is_stmt 1 view .LVU45
+ 385:vs1003.c      **** }
+ 204              		.loc 1 385 1 is_stmt 0 view .LVU46
+ 205 0046 BDE87040 		pop	{r4, r5, r6, lr}
+ 206              		.cfi_restore 14
+ 207              		.cfi_restore 6
+ 208              		.cfi_restore 5
+ 209              		.cfi_restore 4
+ 210              		.cfi_def_cfa_offset 0
+ 384:vs1003.c      ****       SPI_set_speed(1);
+ 211              		.loc 1 384 7 view .LVU47
+ 212 004a FFF7FEBF 		b	SPI_set_speed
+ 213              	.LVL14:
+ 214              	.L13:
+ 215 004e 00BF     		.align	2
+ 216              	.L12:
+ 217 0050 00100140 		.word	1073811456
+ 218              		.cfi_endproc
+ 219              	.LFE35:
+ 221              		.section	.text.vs1003_reset_decode_time,"ax",%progbits
+ 222              		.align	1
+ 223              		.global	vs1003_reset_decode_time
+ 224              		.syntax unified
+ 225              		.thumb
+ 226              		.thumb_func
+ 227              		.fpu softvfp
+ 229              	vs1003_reset_decode_time:
+ 230              	.LFB30:
+ 248:vs1003.c      ****       vs1003_cmd_write(SPI_DECODE_TIME,0x0000);
+ 231              		.loc 1 248 1 is_stmt 1 view -0
+ 232              		.cfi_startproc
+ 233              		@ args = 0, pretend = 0, frame = 0
+ 234              		@ frame_needed = 0, uses_anonymous_args = 0
+ 249:vs1003.c      ****       vs1003_cmd_write(SPI_DECODE_TIME,0x0000);
+ 235              		.loc 1 249 7 view .LVU49
+ 248:vs1003.c      ****       vs1003_cmd_write(SPI_DECODE_TIME,0x0000);
+ 236              		.loc 1 248 1 is_stmt 0 view .LVU50
+ 237 0000 08B5     		push	{r3, lr}
+ 238              		.cfi_def_cfa_offset 8
+ 239              		.cfi_offset 3, -8
+ 240              		.cfi_offset 14, -4
+ 249:vs1003.c      ****       vs1003_cmd_write(SPI_DECODE_TIME,0x0000);
+ 241              		.loc 1 249 7 view .LVU51
+ 242 0002 0021     		movs	r1, #0
+ 243 0004 0420     		movs	r0, #4
+ 244 0006 FFF7FEFF 		bl	vs1003_cmd_write
+ 245              	.LVL15:
+ 250:vs1003.c      **** }
+ 246              		.loc 1 250 7 is_stmt 1 view .LVU52
+ 251:vs1003.c      **** 
+ 247              		.loc 1 251 1 is_stmt 0 view .LVU53
+ 248 000a BDE80840 		pop	{r3, lr}
+ 249              		.cfi_restore 14
+ 250              		.cfi_restore 3
+ 251              		.cfi_def_cfa_offset 0
+ 250:vs1003.c      **** }
+ 252              		.loc 1 250 7 view .LVU54
+ 253 000e 0021     		movs	r1, #0
+ 254 0010 0420     		movs	r0, #4
+ 255 0012 FFF7FEBF 		b	vs1003_cmd_write
+ 256              	.LVL16:
+ 257              		.cfi_endproc
+ 258              	.LFE30:
+ 260              		.section	.text.vs1003_sine_test,"ax",%progbits
+ 261              		.align	1
+ 262              		.global	vs1003_sine_test
+ 263              		.syntax unified
+ 264              		.thumb
+ 265              		.thumb_func
+ 266              		.fpu softvfp
+ 268              	vs1003_sine_test:
+ 269              	.LFB33:
+ 302:vs1003.c      ****       vs1003_cmd_write(0x0b,0x2020);
+ 270              		.loc 1 302 1 is_stmt 1 view -0
+ 271              		.cfi_startproc
+ 272              		@ args = 0, pretend = 0, frame = 0
+ 273              		@ frame_needed = 0, uses_anonymous_args = 0
+ 303:vs1003.c      ****       vs1003_cmd_write(SPI_MODE,0x0820);
+ 274              		.loc 1 303 7 view .LVU56
+ 302:vs1003.c      ****       vs1003_cmd_write(0x0b,0x2020);
+ 275              		.loc 1 302 1 is_stmt 0 view .LVU57
+ 276 0000 10B5     		push	{r4, lr}
+ 277              		.cfi_def_cfa_offset 8
+ 278              		.cfi_offset 4, -8
+ 279              		.cfi_offset 14, -4
+ 303:vs1003.c      ****       vs1003_cmd_write(SPI_MODE,0x0820);
+ 280              		.loc 1 303 7 view .LVU58
+ 281 0002 42F22001 		movw	r1, #8224
+ 282 0006 0B20     		movs	r0, #11
+ 283 0008 FFF7FEFF 		bl	vs1003_cmd_write
+ 284              	.LVL17:
+ 304:vs1003.c      ****       while ((GPIOC->IDR & MP3_DREQ) == 0);
+ 285              		.loc 1 304 7 is_stmt 1 view .LVU59
+ 286 000c 4FF40261 		mov	r1, #2080
+ 287 0010 0020     		movs	r0, #0
+ 288 0012 FFF7FEFF 		bl	vs1003_cmd_write
+ 289              	.LVL18:
+ 305:vs1003.c      ****       MP3_DCS_SET(0);
+ 290              		.loc 1 305 7 view .LVU60
+ 305:vs1003.c      ****       MP3_DCS_SET(0);
+ 291              		.loc 1 305 20 is_stmt 0 view .LVU61
+ 292 0016 484C     		ldr	r4, .L19
+ 293              	.L16:
+ 305:vs1003.c      ****       MP3_DCS_SET(0);
+ 294              		.loc 1 305 43 is_stmt 1 discriminator 1 view .LVU62
+ 305:vs1003.c      ****       MP3_DCS_SET(0);
+ 295              		.loc 1 305 13 discriminator 1 view .LVU63
+ 305:vs1003.c      ****       MP3_DCS_SET(0);
+ 296              		.loc 1 305 20 is_stmt 0 discriminator 1 view .LVU64
+ 297 0018 A368     		ldr	r3, [r4, #8]
+ 305:vs1003.c      ****       MP3_DCS_SET(0);
+ 298              		.loc 1 305 13 discriminator 1 view .LVU65
+ 299 001a 1B07     		lsls	r3, r3, #28
+ 300 001c FCD5     		bpl	.L16
+ 306:vs1003.c      ****       SPI_read_write_byte(0x53);
+ 301              		.loc 1 306 7 is_stmt 1 view .LVU66
+ 302 001e E368     		ldr	r3, [r4, #12]
+ 307:vs1003.c      ****       SPI_read_write_byte(0xef);
+ 303              		.loc 1 307 7 is_stmt 0 view .LVU67
+ 304 0020 5320     		movs	r0, #83
+ 306:vs1003.c      ****       SPI_read_write_byte(0x53);
+ 305              		.loc 1 306 7 view .LVU68
+ 306 0022 23F40063 		bic	r3, r3, #2048
+ 307 0026 E360     		str	r3, [r4, #12]
+ 307:vs1003.c      ****       SPI_read_write_byte(0xef);
+ 308              		.loc 1 307 7 is_stmt 1 view .LVU69
+ 309 0028 FFF7FEFF 		bl	SPI_read_write_byte
+ 310              	.LVL19:
+ 308:vs1003.c      ****       SPI_read_write_byte(0x6e);
+ 311              		.loc 1 308 7 view .LVU70
+ 312 002c EF20     		movs	r0, #239
+ 313 002e FFF7FEFF 		bl	SPI_read_write_byte
+ 314              	.LVL20:
+ 309:vs1003.c      ****       SPI_read_write_byte(0x24);
+ 315              		.loc 1 309 7 view .LVU71
+ 316 0032 6E20     		movs	r0, #110
+ 317 0034 FFF7FEFF 		bl	SPI_read_write_byte
+ 318              	.LVL21:
+ 310:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 319              		.loc 1 310 7 view .LVU72
+ 320 0038 2420     		movs	r0, #36
+ 321 003a FFF7FEFF 		bl	SPI_read_write_byte
+ 322              	.LVL22:
+ 311:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 323              		.loc 1 311 7 view .LVU73
+ 324 003e 0020     		movs	r0, #0
+ 325 0040 FFF7FEFF 		bl	SPI_read_write_byte
+ 326              	.LVL23:
+ 312:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 327              		.loc 1 312 7 view .LVU74
+ 328 0044 0020     		movs	r0, #0
+ 329 0046 FFF7FEFF 		bl	SPI_read_write_byte
+ 330              	.LVL24:
+ 313:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 331              		.loc 1 313 7 view .LVU75
+ 332 004a 0020     		movs	r0, #0
+ 333 004c FFF7FEFF 		bl	SPI_read_write_byte
+ 334              	.LVL25:
+ 314:vs1003.c      ****       delay_ms(100);
+ 335              		.loc 1 314 7 view .LVU76
+ 336 0050 0020     		movs	r0, #0
+ 337 0052 FFF7FEFF 		bl	SPI_read_write_byte
+ 338              	.LVL26:
+ 315:vs1003.c      ****       MP3_DCS_SET(1);
+ 339              		.loc 1 315 7 view .LVU77
+ 340              	.LBB30:
+ 341              	.LBI30:
+ 241:vs1003.c      **** {
+ 342              		.loc 1 241 6 view .LVU78
+ 343              	.LBB31:
+ 243:vs1003.c      **** }
+ 344              		.loc 1 243 7 view .LVU79
+ 345 0056 6420     		movs	r0, #100
+ 346 0058 FFF7FEFF 		bl	wait_ms
+ 347              	.LVL27:
+ 243:vs1003.c      **** }
+ 348              		.loc 1 243 7 is_stmt 0 view .LVU80
+ 349              	.LBE31:
+ 350              	.LBE30:
+ 316:vs1003.c      ****       MP3_DCS_SET(0);
+ 351              		.loc 1 316 7 is_stmt 1 view .LVU81
+ 352 005c E368     		ldr	r3, [r4, #12]
+ 318:vs1003.c      ****       SPI_read_write_byte(0x78);
+ 353              		.loc 1 318 7 is_stmt 0 view .LVU82
+ 354 005e 4520     		movs	r0, #69
+ 316:vs1003.c      ****       MP3_DCS_SET(0);
+ 355              		.loc 1 316 7 view .LVU83
+ 356 0060 43F40063 		orr	r3, r3, #2048
+ 357 0064 E360     		str	r3, [r4, #12]
+ 317:vs1003.c      ****       SPI_read_write_byte(0x45);
+ 358              		.loc 1 317 7 is_stmt 1 view .LVU84
+ 359 0066 E368     		ldr	r3, [r4, #12]
+ 360 0068 23F40063 		bic	r3, r3, #2048
+ 361 006c E360     		str	r3, [r4, #12]
+ 318:vs1003.c      ****       SPI_read_write_byte(0x78);
+ 362              		.loc 1 318 7 view .LVU85
+ 363 006e FFF7FEFF 		bl	SPI_read_write_byte
+ 364              	.LVL28:
+ 319:vs1003.c      ****       SPI_read_write_byte(0x69);
+ 365              		.loc 1 319 7 view .LVU86
+ 366 0072 7820     		movs	r0, #120
+ 367 0074 FFF7FEFF 		bl	SPI_read_write_byte
+ 368              	.LVL29:
+ 320:vs1003.c      ****       SPI_read_write_byte(0x74);
+ 369              		.loc 1 320 7 view .LVU87
+ 370 0078 6920     		movs	r0, #105
+ 371 007a FFF7FEFF 		bl	SPI_read_write_byte
+ 372              	.LVL30:
+ 321:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 373              		.loc 1 321 7 view .LVU88
+ 374 007e 7420     		movs	r0, #116
+ 375 0080 FFF7FEFF 		bl	SPI_read_write_byte
+ 376              	.LVL31:
+ 322:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 377              		.loc 1 322 7 view .LVU89
+ 378 0084 0020     		movs	r0, #0
+ 379 0086 FFF7FEFF 		bl	SPI_read_write_byte
+ 380              	.LVL32:
+ 323:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 381              		.loc 1 323 7 view .LVU90
+ 382 008a 0020     		movs	r0, #0
+ 383 008c FFF7FEFF 		bl	SPI_read_write_byte
+ 384              	.LVL33:
+ 324:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 385              		.loc 1 324 7 view .LVU91
+ 386 0090 0020     		movs	r0, #0
+ 387 0092 FFF7FEFF 		bl	SPI_read_write_byte
+ 388              	.LVL34:
+ 325:vs1003.c      ****       delay_ms(100);
+ 389              		.loc 1 325 7 view .LVU92
+ 390 0096 0020     		movs	r0, #0
+ 391 0098 FFF7FEFF 		bl	SPI_read_write_byte
+ 392              	.LVL35:
+ 326:vs1003.c      ****       MP3_DCS_SET(1);
+ 393              		.loc 1 326 7 view .LVU93
+ 394              	.LBB32:
+ 395              	.LBI32:
+ 241:vs1003.c      **** {
+ 396              		.loc 1 241 6 view .LVU94
+ 397              	.LBB33:
+ 243:vs1003.c      **** }
+ 398              		.loc 1 243 7 view .LVU95
+ 399 009c 6420     		movs	r0, #100
+ 400 009e FFF7FEFF 		bl	wait_ms
+ 401              	.LVL36:
+ 243:vs1003.c      **** }
+ 402              		.loc 1 243 7 is_stmt 0 view .LVU96
+ 403              	.LBE33:
+ 404              	.LBE32:
+ 327:vs1003.c      ****       MP3_DCS_SET(0);
+ 405              		.loc 1 327 7 is_stmt 1 view .LVU97
+ 406 00a2 E368     		ldr	r3, [r4, #12]
+ 329:vs1003.c      ****       SPI_read_write_byte(0xef);
+ 407              		.loc 1 329 7 is_stmt 0 view .LVU98
+ 408 00a4 5320     		movs	r0, #83
+ 327:vs1003.c      ****       MP3_DCS_SET(0);
+ 409              		.loc 1 327 7 view .LVU99
+ 410 00a6 43F40063 		orr	r3, r3, #2048
+ 411 00aa E360     		str	r3, [r4, #12]
+ 328:vs1003.c      ****       SPI_read_write_byte(0x53);
+ 412              		.loc 1 328 7 is_stmt 1 view .LVU100
+ 413 00ac E368     		ldr	r3, [r4, #12]
+ 414 00ae 23F40063 		bic	r3, r3, #2048
+ 415 00b2 E360     		str	r3, [r4, #12]
+ 329:vs1003.c      ****       SPI_read_write_byte(0xef);
+ 416              		.loc 1 329 7 view .LVU101
+ 417 00b4 FFF7FEFF 		bl	SPI_read_write_byte
+ 418              	.LVL37:
+ 330:vs1003.c      ****       SPI_read_write_byte(0x6e);
+ 419              		.loc 1 330 7 view .LVU102
+ 420 00b8 EF20     		movs	r0, #239
+ 421 00ba FFF7FEFF 		bl	SPI_read_write_byte
+ 422              	.LVL38:
+ 331:vs1003.c      ****       SPI_read_write_byte(0x44);
+ 423              		.loc 1 331 7 view .LVU103
+ 424 00be 6E20     		movs	r0, #110
+ 425 00c0 FFF7FEFF 		bl	SPI_read_write_byte
+ 426              	.LVL39:
+ 332:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 427              		.loc 1 332 7 view .LVU104
+ 428 00c4 4420     		movs	r0, #68
+ 429 00c6 FFF7FEFF 		bl	SPI_read_write_byte
+ 430              	.LVL40:
+ 333:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 431              		.loc 1 333 7 view .LVU105
+ 432 00ca 0020     		movs	r0, #0
+ 433 00cc FFF7FEFF 		bl	SPI_read_write_byte
+ 434              	.LVL41:
+ 334:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 435              		.loc 1 334 7 view .LVU106
+ 436 00d0 0020     		movs	r0, #0
+ 437 00d2 FFF7FEFF 		bl	SPI_read_write_byte
+ 438              	.LVL42:
+ 335:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 439              		.loc 1 335 7 view .LVU107
+ 440 00d6 0020     		movs	r0, #0
+ 441 00d8 FFF7FEFF 		bl	SPI_read_write_byte
+ 442              	.LVL43:
+ 336:vs1003.c      ****       delay_ms(100);
+ 443              		.loc 1 336 7 view .LVU108
+ 444 00dc 0020     		movs	r0, #0
+ 445 00de FFF7FEFF 		bl	SPI_read_write_byte
+ 446              	.LVL44:
+ 337:vs1003.c      ****       MP3_DCS_SET(1);
+ 447              		.loc 1 337 7 view .LVU109
+ 448              	.LBB34:
+ 449              	.LBI34:
+ 241:vs1003.c      **** {
+ 450              		.loc 1 241 6 view .LVU110
+ 451              	.LBB35:
+ 243:vs1003.c      **** }
+ 452              		.loc 1 243 7 view .LVU111
+ 453 00e2 6420     		movs	r0, #100
+ 454 00e4 FFF7FEFF 		bl	wait_ms
+ 455              	.LVL45:
+ 243:vs1003.c      **** }
+ 456              		.loc 1 243 7 is_stmt 0 view .LVU112
+ 457              	.LBE35:
+ 458              	.LBE34:
+ 338:vs1003.c      ****       MP3_DCS_SET(0);
+ 459              		.loc 1 338 7 is_stmt 1 view .LVU113
+ 460 00e8 E368     		ldr	r3, [r4, #12]
+ 340:vs1003.c      ****       SPI_read_write_byte(0x78);
+ 461              		.loc 1 340 7 is_stmt 0 view .LVU114
+ 462 00ea 4520     		movs	r0, #69
+ 338:vs1003.c      ****       MP3_DCS_SET(0);
+ 463              		.loc 1 338 7 view .LVU115
+ 464 00ec 43F40063 		orr	r3, r3, #2048
+ 465 00f0 E360     		str	r3, [r4, #12]
+ 339:vs1003.c      ****       SPI_read_write_byte(0x45);
+ 466              		.loc 1 339 7 is_stmt 1 view .LVU116
+ 467 00f2 E368     		ldr	r3, [r4, #12]
+ 468 00f4 23F40063 		bic	r3, r3, #2048
+ 469 00f8 E360     		str	r3, [r4, #12]
+ 340:vs1003.c      ****       SPI_read_write_byte(0x78);
+ 470              		.loc 1 340 7 view .LVU117
+ 471 00fa FFF7FEFF 		bl	SPI_read_write_byte
+ 472              	.LVL46:
+ 341:vs1003.c      ****       SPI_read_write_byte(0x69);
+ 473              		.loc 1 341 7 view .LVU118
+ 474 00fe 7820     		movs	r0, #120
+ 475 0100 FFF7FEFF 		bl	SPI_read_write_byte
+ 476              	.LVL47:
+ 342:vs1003.c      ****       SPI_read_write_byte(0x74);
+ 477              		.loc 1 342 7 view .LVU119
+ 478 0104 6920     		movs	r0, #105
+ 479 0106 FFF7FEFF 		bl	SPI_read_write_byte
+ 480              	.LVL48:
+ 343:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 481              		.loc 1 343 7 view .LVU120
+ 482 010a 7420     		movs	r0, #116
+ 483 010c FFF7FEFF 		bl	SPI_read_write_byte
+ 484              	.LVL49:
+ 344:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 485              		.loc 1 344 7 view .LVU121
+ 486 0110 0020     		movs	r0, #0
+ 487 0112 FFF7FEFF 		bl	SPI_read_write_byte
+ 488              	.LVL50:
+ 345:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 489              		.loc 1 345 7 view .LVU122
+ 490 0116 0020     		movs	r0, #0
+ 491 0118 FFF7FEFF 		bl	SPI_read_write_byte
+ 492              	.LVL51:
+ 346:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 493              		.loc 1 346 7 view .LVU123
+ 494 011c 0020     		movs	r0, #0
+ 495 011e FFF7FEFF 		bl	SPI_read_write_byte
+ 496              	.LVL52:
+ 347:vs1003.c      ****       delay_ms(100);
+ 497              		.loc 1 347 7 view .LVU124
+ 498 0122 0020     		movs	r0, #0
+ 499 0124 FFF7FEFF 		bl	SPI_read_write_byte
+ 500              	.LVL53:
+ 348:vs1003.c      ****       MP3_DCS_SET(1);
+ 501              		.loc 1 348 7 view .LVU125
+ 502              	.LBB36:
+ 503              	.LBI36:
+ 241:vs1003.c      **** {
+ 504              		.loc 1 241 6 view .LVU126
+ 505              	.LBB37:
+ 243:vs1003.c      **** }
+ 506              		.loc 1 243 7 view .LVU127
+ 507 0128 6420     		movs	r0, #100
+ 508 012a FFF7FEFF 		bl	wait_ms
+ 509              	.LVL54:
+ 243:vs1003.c      **** }
+ 510              		.loc 1 243 7 is_stmt 0 view .LVU128
+ 511              	.LBE37:
+ 512              	.LBE36:
+ 349:vs1003.c      **** }
+ 513              		.loc 1 349 7 is_stmt 1 view .LVU129
+ 514 012e E368     		ldr	r3, [r4, #12]
+ 515 0130 43F40063 		orr	r3, r3, #2048
+ 516 0134 E360     		str	r3, [r4, #12]
+ 350:vs1003.c      **** 
+ 517              		.loc 1 350 1 is_stmt 0 view .LVU130
+ 518 0136 10BD     		pop	{r4, pc}
+ 519              	.L20:
+ 520              		.align	2
+ 521              	.L19:
+ 522 0138 00100140 		.word	1073811456
+ 523              		.cfi_endproc
+ 524              	.LFE33:
+ 526              		.section	.text.vs1003_reg_read,"ax",%progbits
+ 527              		.align	1
+ 528              		.global	vs1003_reg_read
+ 529              		.syntax unified
+ 530              		.thumb
+ 531              		.thumb_func
+ 532              		.fpu softvfp
+ 534              	vs1003_reg_read:
+ 535              	.LVL55:
+ 536              	.LFB36:
+ 386:vs1003.c      **** 
+ 387:vs1003.c      **** 
+ 388:vs1003.c      **** unsigned short vs1003_reg_read (unsigned char address)
+ 389:vs1003.c      **** {
+ 537              		.loc 1 389 1 is_stmt 1 view -0
+ 538              		.cfi_startproc
+ 539              		@ args = 0, pretend = 0, frame = 0
+ 540              		@ frame_needed = 0, uses_anonymous_args = 0
+ 390:vs1003.c      ****       unsigned short temp = 0;
+ 541              		.loc 1 390 7 view .LVU132
+ 391:vs1003.c      ****       while((GPIOC->IDR & MP3_DREQ) == 0);
+ 542              		.loc 1 391 7 view .LVU133
+ 389:vs1003.c      ****       unsigned short temp = 0;
+ 543              		.loc 1 389 1 is_stmt 0 view .LVU134
+ 544 0000 38B5     		push	{r3, r4, r5, lr}
+ 545              		.cfi_def_cfa_offset 16
+ 546              		.cfi_offset 3, -16
+ 547              		.cfi_offset 4, -12
+ 548              		.cfi_offset 5, -8
+ 549              		.cfi_offset 14, -4
+ 389:vs1003.c      ****       unsigned short temp = 0;
+ 550              		.loc 1 389 1 view .LVU135
+ 551 0002 0446     		mov	r4, r0
+ 552              		.loc 1 391 19 view .LVU136
+ 553 0004 144D     		ldr	r5, .L25
+ 554              	.L22:
+ 555              		.loc 1 391 42 is_stmt 1 discriminator 1 view .LVU137
+ 556              		.loc 1 391 12 discriminator 1 view .LVU138
+ 557              		.loc 1 391 19 is_stmt 0 discriminator 1 view .LVU139
+ 558 0006 AB68     		ldr	r3, [r5, #8]
+ 559              		.loc 1 391 12 discriminator 1 view .LVU140
+ 560 0008 1B07     		lsls	r3, r3, #28
+ 561 000a FCD5     		bpl	.L22
+ 392:vs1003.c      ****       SPI_set_speed(0);
+ 562              		.loc 1 392 7 is_stmt 1 view .LVU141
+ 563 000c 0020     		movs	r0, #0
+ 564              	.LVL56:
+ 565              		.loc 1 392 7 is_stmt 0 view .LVU142
+ 566 000e FFF7FEFF 		bl	SPI_set_speed
+ 567              	.LVL57:
+ 393:vs1003.c      ****       MP3_DCS_SET(1);
+ 568              		.loc 1 393 7 is_stmt 1 view .LVU143
+ 569 0012 EB68     		ldr	r3, [r5, #12]
+ 394:vs1003.c      ****       MP3_CCS_SET(0);
+ 395:vs1003.c      ****       SPI_read_write_byte(VS_READ_COMMAND);
+ 570              		.loc 1 395 7 is_stmt 0 view .LVU144
+ 571 0014 0320     		movs	r0, #3
+ 393:vs1003.c      ****       MP3_DCS_SET(1);
+ 572              		.loc 1 393 7 view .LVU145
+ 573 0016 43F40063 		orr	r3, r3, #2048
+ 574 001a EB60     		str	r3, [r5, #12]
+ 394:vs1003.c      ****       MP3_CCS_SET(0);
+ 575              		.loc 1 394 7 is_stmt 1 view .LVU146
+ 576 001c EB68     		ldr	r3, [r5, #12]
+ 577 001e 23F48063 		bic	r3, r3, #1024
+ 578 0022 EB60     		str	r3, [r5, #12]
+ 579              		.loc 1 395 7 view .LVU147
+ 580 0024 FFF7FEFF 		bl	SPI_read_write_byte
+ 581              	.LVL58:
+ 396:vs1003.c      ****       SPI_read_write_byte(address);
+ 582              		.loc 1 396 7 view .LVU148
+ 583 0028 2046     		mov	r0, r4
+ 584 002a FFF7FEFF 		bl	SPI_read_write_byte
+ 585              	.LVL59:
+ 397:vs1003.c      ****       temp = SPI_read_write_byte(0xff);
+ 586              		.loc 1 397 7 view .LVU149
+ 587              		.loc 1 397 14 is_stmt 0 view .LVU150
+ 588 002e FF20     		movs	r0, #255
+ 589 0030 FFF7FEFF 		bl	SPI_read_write_byte
+ 590              	.LVL60:
+ 398:vs1003.c      ****       temp = temp << 8;
+ 591              		.loc 1 398 7 is_stmt 1 view .LVU151
+ 592              		.loc 1 398 12 is_stmt 0 view .LVU152
+ 593 0034 0402     		lsls	r4, r0, #8
+ 399:vs1003.c      ****       temp |= SPI_read_write_byte(0xff);
+ 594              		.loc 1 399 15 view .LVU153
+ 595 0036 FF20     		movs	r0, #255
+ 596              	.LVL61:
+ 597              		.loc 1 399 15 view .LVU154
+ 598 0038 FFF7FEFF 		bl	SPI_read_write_byte
+ 599              	.LVL62:
+ 400:vs1003.c      ****       MP3_CCS_SET(1);
+ 600              		.loc 1 400 7 view .LVU155
+ 601 003c EB68     		ldr	r3, [r5, #12]
+ 398:vs1003.c      ****       temp = temp << 8;
+ 602              		.loc 1 398 12 view .LVU156
+ 603 003e 04F47F44 		and	r4, r4, #65280
+ 604              	.LVL63:
+ 399:vs1003.c      ****       temp |= SPI_read_write_byte(0xff);
+ 605              		.loc 1 399 7 is_stmt 1 view .LVU157
+ 606              		.loc 1 400 7 is_stmt 0 view .LVU158
+ 607 0042 43F48063 		orr	r3, r3, #1024
+ 399:vs1003.c      ****       temp |= SPI_read_write_byte(0xff);
+ 608              		.loc 1 399 12 view .LVU159
+ 609 0046 0443     		orrs	r4, r4, r0
+ 610              	.LVL64:
+ 399:vs1003.c      ****       temp |= SPI_read_write_byte(0xff);
+ 611              		.loc 1 399 12 view .LVU160
+ 612 0048 A4B2     		uxth	r4, r4
+ 613              	.LVL65:
+ 614              		.loc 1 400 7 is_stmt 1 view .LVU161
+ 401:vs1003.c      ****       SPI_set_speed(1);
+ 615              		.loc 1 401 7 is_stmt 0 view .LVU162
+ 616 004a 0120     		movs	r0, #1
+ 400:vs1003.c      ****       MP3_CCS_SET(1);
+ 617              		.loc 1 400 7 view .LVU163
+ 618 004c EB60     		str	r3, [r5, #12]
+ 619              		.loc 1 401 7 is_stmt 1 view .LVU164
+ 620 004e FFF7FEFF 		bl	SPI_set_speed
+ 621              	.LVL66:
+ 402:vs1003.c      ****       return temp;
+ 622              		.loc 1 402 7 view .LVU165
+ 403:vs1003.c      **** }
+ 623              		.loc 1 403 1 is_stmt 0 view .LVU166
+ 624 0052 2046     		mov	r0, r4
+ 625 0054 38BD     		pop	{r3, r4, r5, pc}
+ 626              	.LVL67:
+ 627              	.L26:
+ 628              		.loc 1 403 1 view .LVU167
+ 629 0056 00BF     		.align	2
+ 630              	.L25:
+ 631 0058 00100140 		.word	1073811456
+ 632              		.cfi_endproc
+ 633              	.LFE36:
+ 635              		.section	.text.vs1003_soft_reset,"ax",%progbits
+ 636              		.align	1
+ 637              		.global	vs1003_soft_reset
+ 638              		.syntax unified
+ 639              		.thumb
+ 640              		.thumb_func
+ 641              		.fpu softvfp
+ 643              	vs1003_soft_reset:
+ 644              	.LFB31:
+ 255:vs1003.c      ****       unsigned char retry;
+ 645              		.loc 1 255 1 is_stmt 1 view -0
+ 646              		.cfi_startproc
+ 647              		@ args = 0, pretend = 0, frame = 0
+ 648              		@ frame_needed = 0, uses_anonymous_args = 0
+ 256:vs1003.c      ****       while ((GPIOC->IDR & MP3_DREQ) == 0);
+ 649              		.loc 1 256 7 view .LVU169
+ 257:vs1003.c      ****       SPI_read_write_byte(0xff);
+ 650              		.loc 1 257 7 view .LVU170
+ 257:vs1003.c      ****       SPI_read_write_byte(0xff);
+ 651              		.loc 1 257 20 is_stmt 0 view .LVU171
+ 652 0000 304B     		ldr	r3, .L46
+ 255:vs1003.c      ****       unsigned char retry;
+ 653              		.loc 1 255 1 view .LVU172
+ 654 0002 70B5     		push	{r4, r5, r6, lr}
+ 655              		.cfi_def_cfa_offset 16
+ 656              		.cfi_offset 4, -16
+ 657              		.cfi_offset 5, -12
+ 658              		.cfi_offset 6, -8
+ 659              		.cfi_offset 14, -4
+ 660 0004 1C46     		mov	r4, r3
+ 661              	.L28:
+ 257:vs1003.c      ****       SPI_read_write_byte(0xff);
+ 662              		.loc 1 257 43 is_stmt 1 discriminator 1 view .LVU173
+ 257:vs1003.c      ****       SPI_read_write_byte(0xff);
+ 663              		.loc 1 257 13 discriminator 1 view .LVU174
+ 257:vs1003.c      ****       SPI_read_write_byte(0xff);
+ 664              		.loc 1 257 20 is_stmt 0 discriminator 1 view .LVU175
+ 665 0006 9A68     		ldr	r2, [r3, #8]
+ 257:vs1003.c      ****       SPI_read_write_byte(0xff);
+ 666              		.loc 1 257 13 discriminator 1 view .LVU176
+ 667 0008 1207     		lsls	r2, r2, #28
+ 668 000a FCD5     		bpl	.L28
+ 258:vs1003.c      ****       retry = 0;
+ 669              		.loc 1 258 7 is_stmt 1 view .LVU177
+ 670 000c FF20     		movs	r0, #255
+ 671 000e FFF7FEFF 		bl	SPI_read_write_byte
+ 672              	.LVL68:
+ 259:vs1003.c      ****       while (vs1003_reg_read(0) != 0x0804) {
+ 673              		.loc 1 259 7 view .LVU178
+ 260:vs1003.c      **** 	    vs1003_cmd_write(SPI_MODE,0x0804);
+ 674              		.loc 1 260 7 view .LVU179
+ 260:vs1003.c      **** 	    vs1003_cmd_write(SPI_MODE,0x0804);
+ 675              		.loc 1 260 13 is_stmt 0 view .LVU180
+ 676 0012 6525     		movs	r5, #101
+ 677 0014 40F60406 		movw	r6, #2052
+ 678              	.LVL69:
+ 679              	.L29:
+ 260:vs1003.c      **** 	    vs1003_cmd_write(SPI_MODE,0x0804);
+ 680              		.loc 1 260 13 is_stmt 1 view .LVU181
+ 260:vs1003.c      **** 	    vs1003_cmd_write(SPI_MODE,0x0804);
+ 681              		.loc 1 260 14 is_stmt 0 view .LVU182
+ 682 0018 0020     		movs	r0, #0
+ 683 001a FFF7FEFF 		bl	vs1003_reg_read
+ 684              	.LVL70:
+ 260:vs1003.c      **** 	    vs1003_cmd_write(SPI_MODE,0x0804);
+ 685              		.loc 1 260 13 view .LVU183
+ 686 001e B042     		cmp	r0, r6
+ 687 0020 0BD0     		beq	.L30
+ 261:vs1003.c      **** 	    delay_ms(2);
+ 688              		.loc 1 261 6 is_stmt 1 view .LVU184
+ 689 0022 40F60401 		movw	r1, #2052
+ 690 0026 0020     		movs	r0, #0
+ 691 0028 FFF7FEFF 		bl	vs1003_cmd_write
+ 692              	.LVL71:
+ 262:vs1003.c      **** 	    retry++;
+ 693              		.loc 1 262 6 view .LVU185
+ 694              	.LBB38:
+ 695              	.LBI38:
+ 241:vs1003.c      **** {
+ 696              		.loc 1 241 6 view .LVU186
+ 697              	.LBB39:
+ 243:vs1003.c      **** }
+ 698              		.loc 1 243 7 view .LVU187
+ 699 002c 013D     		subs	r5, r5, #1
+ 700              	.LVL72:
+ 243:vs1003.c      **** }
+ 701              		.loc 1 243 7 is_stmt 0 view .LVU188
+ 702 002e 0220     		movs	r0, #2
+ 703 0030 FFF7FEFF 		bl	wait_ms
+ 704              	.LVL73:
+ 243:vs1003.c      **** }
+ 705              		.loc 1 243 7 view .LVU189
+ 706              	.LBE39:
+ 707              	.LBE38:
+ 263:vs1003.c      **** 	    if(retry > 100) break;
+ 708              		.loc 1 263 6 is_stmt 1 view .LVU190
+ 264:vs1003.c      ****       }
+ 709              		.loc 1 264 6 view .LVU191
+ 264:vs1003.c      ****       }
+ 710              		.loc 1 264 8 is_stmt 0 view .LVU192
+ 711 0034 15F0FF05 		ands	r5, r5, #255
+ 712 0038 EED1     		bne	.L29
+ 713              	.L30:
+ 266:vs1003.c      ****       retry = 0;
+ 714              		.loc 1 266 43 is_stmt 1 discriminator 1 view .LVU193
+ 266:vs1003.c      ****       retry = 0;
+ 715              		.loc 1 266 13 discriminator 1 view .LVU194
+ 266:vs1003.c      ****       retry = 0;
+ 716              		.loc 1 266 20 is_stmt 0 discriminator 1 view .LVU195
+ 717 003a A368     		ldr	r3, [r4, #8]
+ 266:vs1003.c      ****       retry = 0;
+ 718              		.loc 1 266 13 discriminator 1 view .LVU196
+ 719 003c 1B07     		lsls	r3, r3, #28
+ 720 003e FCD5     		bpl	.L30
+ 721 0040 6525     		movs	r5, #101
+ 722              	.L33:
+ 723              	.LVL74:
+ 268:vs1003.c      **** 	    vs1003_cmd_write(SPI_CLOCKF,0x9800);
+ 724              		.loc 1 268 13 is_stmt 1 view .LVU197
+ 268:vs1003.c      **** 	    vs1003_cmd_write(SPI_CLOCKF,0x9800);
+ 725              		.loc 1 268 14 is_stmt 0 view .LVU198
+ 726 0042 0320     		movs	r0, #3
+ 727 0044 FFF7FEFF 		bl	vs1003_reg_read
+ 728              	.LVL75:
+ 268:vs1003.c      **** 	    vs1003_cmd_write(SPI_CLOCKF,0x9800);
+ 729              		.loc 1 268 13 view .LVU199
+ 730 0048 B0F5184F 		cmp	r0, #38912
+ 731 004c 08D0     		beq	.L36
+ 269:vs1003.c      **** 	    retry++;
+ 732              		.loc 1 269 6 is_stmt 1 view .LVU200
+ 733 004e 4FF41841 		mov	r1, #38912
+ 734 0052 0320     		movs	r0, #3
+ 735 0054 013D     		subs	r5, r5, #1
+ 736              	.LVL76:
+ 269:vs1003.c      **** 	    retry++;
+ 737              		.loc 1 269 6 is_stmt 0 view .LVU201
+ 738 0056 FFF7FEFF 		bl	vs1003_cmd_write
+ 739              	.LVL77:
+ 270:vs1003.c      **** 	    if (retry > 100) break;
+ 740              		.loc 1 270 6 is_stmt 1 view .LVU202
+ 271:vs1003.c      ****       }
+ 741              		.loc 1 271 6 view .LVU203
+ 271:vs1003.c      ****       }
+ 742              		.loc 1 271 9 is_stmt 0 view .LVU204
+ 743 005a 15F0FF05 		ands	r5, r5, #255
+ 744 005e F0D1     		bne	.L33
+ 745              	.L36:
+ 746 0060 6525     		movs	r5, #101
+ 274:vs1003.c      **** 	    vs1003_cmd_write(SPI_AUDATA,0xBB81);
+ 747              		.loc 1 274 13 view .LVU205
+ 748 0062 4BF68136 		movw	r6, #48001
+ 749              	.L34:
+ 750              	.LVL78:
+ 274:vs1003.c      **** 	    vs1003_cmd_write(SPI_AUDATA,0xBB81);
+ 751              		.loc 1 274 13 is_stmt 1 view .LVU206
+ 274:vs1003.c      **** 	    vs1003_cmd_write(SPI_AUDATA,0xBB81);
+ 752              		.loc 1 274 14 is_stmt 0 view .LVU207
+ 753 0066 0520     		movs	r0, #5
+ 754 0068 FFF7FEFF 		bl	vs1003_reg_read
+ 755              	.LVL79:
+ 274:vs1003.c      **** 	    vs1003_cmd_write(SPI_AUDATA,0xBB81);
+ 756              		.loc 1 274 13 view .LVU208
+ 757 006c B042     		cmp	r0, r6
+ 758 006e 08D0     		beq	.L38
+ 275:vs1003.c      **** 	    retry++;
+ 759              		.loc 1 275 6 is_stmt 1 view .LVU209
+ 760 0070 4BF68131 		movw	r1, #48001
+ 761 0074 0520     		movs	r0, #5
+ 762 0076 013D     		subs	r5, r5, #1
+ 763              	.LVL80:
+ 275:vs1003.c      **** 	    retry++;
+ 764              		.loc 1 275 6 is_stmt 0 view .LVU210
+ 765 0078 FFF7FEFF 		bl	vs1003_cmd_write
+ 766              	.LVL81:
+ 276:vs1003.c      **** 	    if (retry > 100) break;
+ 767              		.loc 1 276 6 is_stmt 1 view .LVU211
+ 277:vs1003.c      ****       }
+ 768              		.loc 1 277 6 view .LVU212
+ 277:vs1003.c      ****       }
+ 769              		.loc 1 277 9 is_stmt 0 view .LVU213
+ 770 007c 15F0FF05 		ands	r5, r5, #255
+ 771 0080 F1D1     		bne	.L34
+ 772              	.L38:
+ 279:vs1003.c      ****       vs1003_reset_decode_time();
+ 773              		.loc 1 279 7 is_stmt 1 view .LVU214
+ 774 0082 42F22001 		movw	r1, #8224
+ 775 0086 0B20     		movs	r0, #11
+ 776 0088 FFF7FEFF 		bl	vs1003_cmd_write
+ 777              	.LVL82:
+ 280:vs1003.c      ****       MP3_DCS_SET(0);
+ 778              		.loc 1 280 7 view .LVU215
+ 779 008c FFF7FEFF 		bl	vs1003_reset_decode_time
+ 780              	.LVL83:
+ 281:vs1003.c      ****       SPI_read_write_byte(0xFF);
+ 781              		.loc 1 281 7 view .LVU216
+ 782 0090 E368     		ldr	r3, [r4, #12]
+ 282:vs1003.c      ****       SPI_read_write_byte(0xFF);
+ 783              		.loc 1 282 7 is_stmt 0 view .LVU217
+ 784 0092 FF20     		movs	r0, #255
+ 281:vs1003.c      ****       SPI_read_write_byte(0xFF);
+ 785              		.loc 1 281 7 view .LVU218
+ 786 0094 23F40063 		bic	r3, r3, #2048
+ 787 0098 E360     		str	r3, [r4, #12]
+ 282:vs1003.c      ****       SPI_read_write_byte(0xFF);
+ 788              		.loc 1 282 7 is_stmt 1 view .LVU219
+ 789 009a FFF7FEFF 		bl	SPI_read_write_byte
+ 790              	.LVL84:
+ 283:vs1003.c      ****       SPI_read_write_byte(0xFF);
+ 791              		.loc 1 283 7 view .LVU220
+ 792 009e FF20     		movs	r0, #255
+ 793 00a0 FFF7FEFF 		bl	SPI_read_write_byte
+ 794              	.LVL85:
+ 284:vs1003.c      ****       SPI_read_write_byte(0xFF);
+ 795              		.loc 1 284 7 view .LVU221
+ 796 00a4 FF20     		movs	r0, #255
+ 797 00a6 FFF7FEFF 		bl	SPI_read_write_byte
+ 798              	.LVL86:
+ 285:vs1003.c      ****       MP3_DCS_SET(1);
+ 799              		.loc 1 285 7 view .LVU222
+ 800 00aa FF20     		movs	r0, #255
+ 801 00ac FFF7FEFF 		bl	SPI_read_write_byte
+ 802              	.LVL87:
+ 286:vs1003.c      ****       delay_ms(20);
+ 803              		.loc 1 286 7 view .LVU223
+ 804 00b0 E368     		ldr	r3, [r4, #12]
+ 805              	.LBB40:
+ 806              	.LBB41:
+ 243:vs1003.c      **** }
+ 807              		.loc 1 243 7 is_stmt 0 view .LVU224
+ 808 00b2 1420     		movs	r0, #20
+ 809              	.LBE41:
+ 810              	.LBE40:
+ 286:vs1003.c      ****       delay_ms(20);
+ 811              		.loc 1 286 7 view .LVU225
+ 812 00b4 43F40063 		orr	r3, r3, #2048
+ 813 00b8 E360     		str	r3, [r4, #12]
+ 287:vs1003.c      **** }
+ 814              		.loc 1 287 7 is_stmt 1 view .LVU226
+ 815              	.LVL88:
+ 816              	.LBB44:
+ 817              	.LBI40:
+ 241:vs1003.c      **** {
+ 818              		.loc 1 241 6 view .LVU227
+ 819              	.LBB42:
+ 243:vs1003.c      **** }
+ 820              		.loc 1 243 7 view .LVU228
+ 821              	.LBE42:
+ 822              	.LBE44:
+ 288:vs1003.c      **** 
+ 823              		.loc 1 288 1 is_stmt 0 view .LVU229
+ 824 00ba BDE87040 		pop	{r4, r5, r6, lr}
+ 825              		.cfi_restore 14
+ 826              		.cfi_restore 6
+ 827              		.cfi_restore 5
+ 828              		.cfi_restore 4
+ 829              		.cfi_def_cfa_offset 0
+ 830              	.LBB45:
+ 831              	.LBB43:
+ 243:vs1003.c      **** }
+ 832              		.loc 1 243 7 view .LVU230
+ 833 00be FFF7FEBF 		b	wait_ms
+ 834              	.LVL89:
+ 835              	.L47:
+ 836 00c2 00BF     		.align	2
+ 837              	.L46:
+ 838 00c4 00100140 		.word	1073811456
+ 839              	.LBE43:
+ 840              	.LBE45:
+ 841              		.cfi_endproc
+ 842              	.LFE31:
+ 844              		.section	.text.vs1003_ram_test,"ax",%progbits
+ 845              		.align	1
+ 846              		.global	vs1003_ram_test
+ 847              		.syntax unified
+ 848              		.thumb
+ 849              		.thumb_func
+ 850              		.fpu softvfp
+ 852              	vs1003_ram_test:
+ 853              	.LFB34:
+ 354:vs1003.c      ****       mp3_reset();
+ 854              		.loc 1 354 1 is_stmt 1 view -0
+ 855              		.cfi_startproc
+ 856              		@ args = 0, pretend = 0, frame = 0
+ 857              		@ frame_needed = 0, uses_anonymous_args = 0
+ 355:vs1003.c      ****       vs1003_cmd_write(SPI_MODE,0x0820);
+ 858              		.loc 1 355 7 view .LVU232
+ 354:vs1003.c      ****       mp3_reset();
+ 859              		.loc 1 354 1 is_stmt 0 view .LVU233
+ 860 0000 10B5     		push	{r4, lr}
+ 861              		.cfi_def_cfa_offset 8
+ 862              		.cfi_offset 4, -8
+ 863              		.cfi_offset 14, -4
+ 355:vs1003.c      ****       vs1003_cmd_write(SPI_MODE,0x0820);
+ 864              		.loc 1 355 7 view .LVU234
+ 865 0002 FFF7FEFF 		bl	mp3_reset
+ 866              	.LVL90:
+ 356:vs1003.c      ****       while ((GPIOC->IDR & MP3_DREQ) == 0);
+ 867              		.loc 1 356 7 is_stmt 1 view .LVU235
+ 868 0006 4FF40261 		mov	r1, #2080
+ 869 000a 0020     		movs	r0, #0
+ 870 000c FFF7FEFF 		bl	vs1003_cmd_write
+ 871              	.LVL91:
+ 357:vs1003.c      ****       MP3_DCS_SET(0);
+ 872              		.loc 1 357 7 view .LVU236
+ 357:vs1003.c      ****       MP3_DCS_SET(0);
+ 873              		.loc 1 357 20 is_stmt 0 view .LVU237
+ 874 0010 164C     		ldr	r4, .L52
+ 875              	.L49:
+ 357:vs1003.c      ****       MP3_DCS_SET(0);
+ 876              		.loc 1 357 43 is_stmt 1 discriminator 1 view .LVU238
+ 357:vs1003.c      ****       MP3_DCS_SET(0);
+ 877              		.loc 1 357 13 discriminator 1 view .LVU239
+ 357:vs1003.c      ****       MP3_DCS_SET(0);
+ 878              		.loc 1 357 20 is_stmt 0 discriminator 1 view .LVU240
+ 879 0012 A368     		ldr	r3, [r4, #8]
+ 357:vs1003.c      ****       MP3_DCS_SET(0);
+ 880              		.loc 1 357 13 discriminator 1 view .LVU241
+ 881 0014 1B07     		lsls	r3, r3, #28
+ 882 0016 FCD5     		bpl	.L49
+ 358:vs1003.c      ****       SPI_read_write_byte(0x4d);
+ 883              		.loc 1 358 7 is_stmt 1 view .LVU242
+ 884 0018 E368     		ldr	r3, [r4, #12]
+ 359:vs1003.c      ****       SPI_read_write_byte(0xea);
+ 885              		.loc 1 359 7 is_stmt 0 view .LVU243
+ 886 001a 4D20     		movs	r0, #77
+ 358:vs1003.c      ****       SPI_read_write_byte(0x4d);
+ 887              		.loc 1 358 7 view .LVU244
+ 888 001c 23F40063 		bic	r3, r3, #2048
+ 889 0020 E360     		str	r3, [r4, #12]
+ 359:vs1003.c      ****       SPI_read_write_byte(0xea);
+ 890              		.loc 1 359 7 is_stmt 1 view .LVU245
+ 891 0022 FFF7FEFF 		bl	SPI_read_write_byte
+ 892              	.LVL92:
+ 360:vs1003.c      ****       SPI_read_write_byte(0x6d);
+ 893              		.loc 1 360 7 view .LVU246
+ 894 0026 EA20     		movs	r0, #234
+ 895 0028 FFF7FEFF 		bl	SPI_read_write_byte
+ 896              	.LVL93:
+ 361:vs1003.c      ****       SPI_read_write_byte(0x54);
+ 897              		.loc 1 361 7 view .LVU247
+ 898 002c 6D20     		movs	r0, #109
+ 899 002e FFF7FEFF 		bl	SPI_read_write_byte
+ 900              	.LVL94:
+ 362:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 901              		.loc 1 362 7 view .LVU248
+ 902 0032 5420     		movs	r0, #84
+ 903 0034 FFF7FEFF 		bl	SPI_read_write_byte
+ 904              	.LVL95:
+ 363:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 905              		.loc 1 363 7 view .LVU249
+ 906 0038 0020     		movs	r0, #0
+ 907 003a FFF7FEFF 		bl	SPI_read_write_byte
+ 908              	.LVL96:
+ 364:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 909              		.loc 1 364 7 view .LVU250
+ 910 003e 0020     		movs	r0, #0
+ 911 0040 FFF7FEFF 		bl	SPI_read_write_byte
+ 912              	.LVL97:
+ 365:vs1003.c      ****       SPI_read_write_byte(0x00);
+ 913              		.loc 1 365 7 view .LVU251
+ 914 0044 0020     		movs	r0, #0
+ 915 0046 FFF7FEFF 		bl	SPI_read_write_byte
+ 916              	.LVL98:
+ 366:vs1003.c      ****       delay_ms(50);
+ 917              		.loc 1 366 7 view .LVU252
+ 918 004a 0020     		movs	r0, #0
+ 919 004c FFF7FEFF 		bl	SPI_read_write_byte
+ 920              	.LVL99:
+ 367:vs1003.c      ****       MP3_DCS_SET(1);
+ 921              		.loc 1 367 7 view .LVU253
+ 922              	.LBB46:
+ 923              	.LBI46:
+ 241:vs1003.c      **** {
+ 924              		.loc 1 241 6 view .LVU254
+ 925              	.LBB47:
+ 243:vs1003.c      **** }
+ 926              		.loc 1 243 7 view .LVU255
+ 927 0050 3220     		movs	r0, #50
+ 928 0052 FFF7FEFF 		bl	wait_ms
+ 929              	.LVL100:
+ 243:vs1003.c      **** }
+ 930              		.loc 1 243 7 is_stmt 0 view .LVU256
+ 931              	.LBE47:
+ 932              	.LBE46:
+ 368:vs1003.c      ****       regvalue = vs1003_reg_read(SPI_HDAT0);
+ 933              		.loc 1 368 7 is_stmt 1 view .LVU257
+ 934 0056 E368     		ldr	r3, [r4, #12]
+ 369:vs1003.c      **** }
+ 935              		.loc 1 369 18 is_stmt 0 view .LVU258
+ 936 0058 0820     		movs	r0, #8
+ 368:vs1003.c      ****       regvalue = vs1003_reg_read(SPI_HDAT0);
+ 937              		.loc 1 368 7 view .LVU259
+ 938 005a 43F40063 		orr	r3, r3, #2048
+ 939 005e E360     		str	r3, [r4, #12]
+ 369:vs1003.c      **** }
+ 940              		.loc 1 369 7 is_stmt 1 view .LVU260
+ 369:vs1003.c      **** }
+ 941              		.loc 1 369 18 is_stmt 0 view .LVU261
+ 942 0060 FFF7FEFF 		bl	vs1003_reg_read
+ 943              	.LVL101:
+ 369:vs1003.c      **** }
+ 944              		.loc 1 369 16 view .LVU262
+ 945 0064 024B     		ldr	r3, .L52+4
+ 946 0066 1880     		strh	r0, [r3]	@ movhi
+ 370:vs1003.c      **** 
+ 947              		.loc 1 370 1 view .LVU263
+ 948 0068 10BD     		pop	{r4, pc}
+ 949              	.L53:
+ 950 006a 00BF     		.align	2
+ 951              	.L52:
+ 952 006c 00100140 		.word	1073811456
+ 953 0070 00000000 		.word	.LANCHOR0
+ 954              		.cfi_endproc
+ 955              	.LFE34:
+ 957              		.section	.text.get_head_info,"ax",%progbits
+ 958              		.align	1
+ 959              		.global	get_head_info
+ 960              		.syntax unified
+ 961              		.thumb
+ 962              		.thumb_func
+ 963              		.fpu softvfp
+ 965              	get_head_info:
+ 966              	.LFB37:
+ 404:vs1003.c      **** 
+ 405:vs1003.c      **** 
+ 406:vs1003.c      **** unsigned short get_head_info (void)
+ 407:vs1003.c      **** {
+ 967              		.loc 1 407 1 is_stmt 1 view -0
+ 968              		.cfi_startproc
+ 969              		@ args = 0, pretend = 0, frame = 0
+ 970              		@ frame_needed = 0, uses_anonymous_args = 0
+ 408:vs1003.c      ****       unsigned int HEAD0;
+ 971              		.loc 1 408 7 view .LVU265
+ 409:vs1003.c      ****       unsigned int HEAD1;
+ 972              		.loc 1 409 7 view .LVU266
+ 410:vs1003.c      ****       HEAD0 = vs1003_reg_read(SPI_HDAT0);
+ 973              		.loc 1 410 7 view .LVU267
+ 407:vs1003.c      ****       unsigned int HEAD0;
+ 974              		.loc 1 407 1 is_stmt 0 view .LVU268
+ 975 0000 10B5     		push	{r4, lr}
+ 976              		.cfi_def_cfa_offset 8
+ 977              		.cfi_offset 4, -8
+ 978              		.cfi_offset 14, -4
+ 979              		.loc 1 410 15 view .LVU269
+ 980 0002 0820     		movs	r0, #8
+ 981 0004 FFF7FEFF 		bl	vs1003_reg_read
+ 982              	.LVL102:
+ 983 0008 0446     		mov	r4, r0
+ 984              	.LVL103:
+ 411:vs1003.c      ****       HEAD1 = vs1003_reg_read(SPI_HDAT1);
+ 985              		.loc 1 411 7 is_stmt 1 view .LVU270
+ 986              		.loc 1 411 15 is_stmt 0 view .LVU271
+ 987 000a 0920     		movs	r0, #9
+ 988              	.LVL104:
+ 989              		.loc 1 411 15 view .LVU272
+ 990 000c FFF7FEFF 		bl	vs1003_reg_read
+ 991              	.LVL105:
+ 412:vs1003.c      ****       switch (HEAD1) {
+ 992              		.loc 1 412 7 is_stmt 1 view .LVU273
+ 993 0010 45F24D73 		movw	r3, #22349
+ 994 0014 9842     		cmp	r0, r3
+ 995 0016 09D0     		beq	.L55
+ 996 0018 47F26563 		movw	r3, #30309
+ 997 001c 9842     		cmp	r0, r3
+ 998 001e 20D0     		beq	.L58
+ 999 0020 44F65453 		movw	r3, #19796
+ 1000 0024 9842     		cmp	r0, r3
+ 1001 0026 10D1     		bne	.L60
+ 1002 0028 0120     		movs	r0, #1
+ 1003              	.LVL106:
+ 1004              		.loc 1 412 7 is_stmt 0 view .LVU274
+ 1005 002a 0DE0     		b	.L56
+ 1006              	.LVL107:
+ 1007              	.L55:
+ 413:vs1003.c      ****          case 0x7665:
+ 414:vs1003.c      ****            return 0;
+ 415:vs1003.c      ****          case 0x4D54:
+ 416:vs1003.c      ****            return 1;
+ 417:vs1003.c      ****          case 0x574D:
+ 418:vs1003.c      ****          {
+ 419:vs1003.c      ****            HEAD1 = HEAD0 * 2 / 25;
+ 1008              		.loc 1 419 12 is_stmt 1 view .LVU275
+ 1009              		.loc 1 419 18 is_stmt 0 view .LVU276
+ 1010 002c 1920     		movs	r0, #25
+ 1011              	.LVL108:
+ 1012              		.loc 1 419 26 view .LVU277
+ 1013 002e 6400     		lsls	r4, r4, #1
+ 1014              	.LVL109:
+ 1015              		.loc 1 419 18 view .LVU278
+ 1016 0030 B4FBF0F4 		udiv	r4, r4, r0
+ 1017              	.LVL110:
+ 420:vs1003.c      ****            if ((HEAD1 % 10) > 5) return HEAD1 / 10 + 1;else return HEAD1 / 10;
+ 1018              		.loc 1 420 12 is_stmt 1 view .LVU279
+ 1019 0034 0A22     		movs	r2, #10
+ 1020 0036 B4FBF2F3 		udiv	r3, r4, r2
+ 1021              		.loc 1 420 23 is_stmt 0 view .LVU280
+ 1022 003a 02FB1344 		mls	r4, r2, r3, r4
+ 1023              	.LVL111:
+ 1024              		.loc 1 420 15 view .LVU281
+ 1025 003e 052C     		cmp	r4, #5
+ 1026 0040 98B2     		uxth	r0, r3
+ 1027 0042 01D9     		bls	.L56
+ 1028              		.loc 1 420 34 is_stmt 1 discriminator 1 view .LVU282
+ 1029              		.loc 1 420 52 is_stmt 0 discriminator 1 view .LVU283
+ 1030 0044 0130     		adds	r0, r0, #1
+ 1031 0046 80B2     		uxth	r0, r0
+ 1032              	.L56:
+ 421:vs1003.c      ****          }
+ 422:vs1003.c      ****          default:
+ 423:vs1003.c      ****          {
+ 424:vs1003.c      ****            HEAD1 >>= 3;
+ 425:vs1003.c      ****            HEAD1 = HEAD1 & 0x03;
+ 426:vs1003.c      ****            if (HEAD1 == 3) HEAD1 = 1;else HEAD1 = 0;
+ 427:vs1003.c      ****            return bitrate[HEAD1][HEAD0 >> 12];
+ 428:vs1003.c      ****          }
+ 429:vs1003.c      ****       }
+ 430:vs1003.c      **** }
+ 1033              		.loc 1 430 1 view .LVU284
+ 1034 0048 10BD     		pop	{r4, pc}
+ 1035              	.LVL112:
+ 1036              	.L60:
+ 424:vs1003.c      ****            HEAD1 = HEAD1 & 0x03;
+ 1037              		.loc 1 424 12 is_stmt 1 view .LVU285
+ 425:vs1003.c      ****            if (HEAD1 == 3) HEAD1 = 1;else HEAD1 = 0;
+ 1038              		.loc 1 425 12 view .LVU286
+ 426:vs1003.c      ****            return bitrate[HEAD1][HEAD0 >> 12];
+ 1039              		.loc 1 426 12 view .LVU287
+ 427:vs1003.c      ****          }
+ 1040              		.loc 1 427 12 view .LVU288
+ 425:vs1003.c      ****            if (HEAD1 == 3) HEAD1 = 1;else HEAD1 = 0;
+ 1041              		.loc 1 425 18 is_stmt 0 view .LVU289
+ 1042 004a C0F3C103 		ubfx	r3, r0, #3, #2
+ 426:vs1003.c      ****            return bitrate[HEAD1][HEAD0 >> 12];
+ 1043              		.loc 1 426 15 view .LVU290
+ 1044 004e DA1E     		subs	r2, r3, #3
+ 1045 0050 5342     		rsbs	r3, r2, #0
+ 1046 0052 5341     		adcs	r3, r3, r2
+ 427:vs1003.c      ****          }
+ 1047              		.loc 1 427 33 view .LVU291
+ 1048 0054 1B01     		lsls	r3, r3, #4
+ 1049 0056 03EB1430 		add	r0, r3, r4, lsr #12
+ 1050              	.LVL113:
+ 427:vs1003.c      ****          }
+ 1051              		.loc 1 427 33 view .LVU292
+ 1052 005a 034B     		ldr	r3, .L61
+ 1053 005c 33F81000 		ldrh	r0, [r3, r0, lsl #1]
+ 1054 0060 F2E7     		b	.L56
+ 1055              	.LVL114:
+ 1056              	.L58:
+ 414:vs1003.c      ****          case 0x4D54:
+ 1057              		.loc 1 414 19 view .LVU293
+ 1058 0062 0020     		movs	r0, #0
+ 1059              	.LVL115:
+ 414:vs1003.c      ****          case 0x4D54:
+ 1060              		.loc 1 414 19 view .LVU294
+ 1061 0064 F0E7     		b	.L56
+ 1062              	.L62:
+ 1063 0066 00BF     		.align	2
+ 1064              	.L61:
+ 1065 0068 00000000 		.word	.LANCHOR1
+ 1066              		.cfi_endproc
+ 1067              	.LFE37:
+ 1069              		.section	.rodata.vs1003_get_mp3info.str1.1,"aMS",%progbits,1
+ 1070              	.LC0:
+ 1071 0000 53616D70 		.ascii	"Sample_Rate 11KHz  \000"
+ 1071      6C655F52 
+ 1071      61746520 
+ 1071      31314B48 
+ 1071      7A202000 
+ 1072              	.LC1:
+ 1073 0014 53616D70 		.ascii	"Sample_Rate 12KHz  \000"
+ 1073      6C655F52 
+ 1073      61746520 
+ 1073      31324B48 
+ 1073      7A202000 
+ 1074              	.LC2:
+ 1075 0028 53616D70 		.ascii	"Sample_Rate  8KHz  \000"
+ 1075      6C655F52 
+ 1075      61746520 
+ 1075      20384B48 
+ 1075      7A202000 
+ 1076              	.LC3:
+ 1077 003c 53616D70 		.ascii	"Sample_Rate 22KHz  \000"
+ 1077      6C655F52 
+ 1077      61746520 
+ 1077      32324B48 
+ 1077      7A202000 
+ 1078              	.LC4:
+ 1079 0050 53616D70 		.ascii	"Sample_Rate 24KHz  \000"
+ 1079      6C655F52 
+ 1079      61746520 
+ 1079      32344B48 
+ 1079      7A202000 
+ 1080              	.LC5:
+ 1081 0064 53616D70 		.ascii	"Sample_Rate 16KHz  \000"
+ 1081      6C655F52 
+ 1081      61746520 
+ 1081      31364B48 
+ 1081      7A202000 
+ 1082              	.LC6:
+ 1083 0078 53616D70 		.ascii	"Sample_Rate 44KHz  \000"
+ 1083      6C655F52 
+ 1083      61746520 
+ 1083      34344B48 
+ 1083      7A202000 
+ 1084              	.LC7:
+ 1085 008c 53616D70 		.ascii	"Sample_Rate 48KHz  \000"
+ 1085      6C655F52 
+ 1085      61746520 
+ 1085      34384B48 
+ 1085      7A202000 
+ 1086              	.LC8:
+ 1087 00a0 53616D70 		.ascii	"Sample_Rate 32KHz  \000"
+ 1087      6C655F52 
+ 1087      61746520 
+ 1087      33324B48 
+ 1087      7A202000 
+ 1088              	.LC9:
+ 1089 00b4 4269745F 		.ascii	"Bit_Rate 40Kbps \000"
+ 1089      52617465 
+ 1089      2034304B 
+ 1089      62707320 
+ 1089      00
+ 1090              	.LC10:
+ 1091 00c5 4269745F 		.ascii	"Bit_Rate 48Kbps \000"
+ 1091      52617465 
+ 1091      2034384B 
+ 1091      62707320 
+ 1091      00
+ 1092              	.LC11:
+ 1093 00d6 4269745F 		.ascii	"Bit_Rate 56Kbps \000"
+ 1093      52617465 
+ 1093      2035364B 
+ 1093      62707320 
+ 1093      00
+ 1094              	.LC12:
+ 1095 00e7 4269745F 		.ascii	"Bit_Rate 64Kbps \000"
+ 1095      52617465 
+ 1095      2036344B 
+ 1095      62707320 
+ 1095      00
+ 1096              	.LC13:
+ 1097 00f8 4269745F 		.ascii	"Bit_Rate 80Kbps \000"
+ 1097      52617465 
+ 1097      2038304B 
+ 1097      62707320 
+ 1097      00
+ 1098              	.LC14:
+ 1099 0109 4269745F 		.ascii	"Bit_Rate 96Kbps \000"
+ 1099      52617465 
+ 1099      2039364B 
+ 1099      62707320 
+ 1099      00
+ 1100              	.LC15:
+ 1101 011a 4269745F 		.ascii	"Bit_Rate 112Kbps \000"
+ 1101      52617465 
+ 1101      20313132 
+ 1101      4B627073 
+ 1101      2000
+ 1102              	.LC16:
+ 1103 012c 4269745F 		.ascii	"Bit_Rate 128Kbps \000"
+ 1103      52617465 
+ 1103      20313238 
+ 1103      4B627073 
+ 1103      2000
+ 1104              	.LC17:
+ 1105 013e 4269745F 		.ascii	"Bit_Rate 160Kbps \000"
+ 1105      52617465 
+ 1105      20313630 
+ 1105      4B627073 
+ 1105      2000
+ 1106              	.LC18:
+ 1107 0150 4269745F 		.ascii	"Bit_Rate 192Kbps \000"
+ 1107      52617465 
+ 1107      20313932 
+ 1107      4B627073 
+ 1107      2000
+ 1108              	.LC19:
+ 1109 0162 4269745F 		.ascii	"Bit_Rate 224Kbps \000"
+ 1109      52617465 
+ 1109      20323234 
+ 1109      4B627073 
+ 1109      2000
+ 1110              	.LC20:
+ 1111 0174 4269745F 		.ascii	"Bit_Rate 256Kbps \000"
+ 1111      52617465 
+ 1111      20323536 
+ 1111      4B627073 
+ 1111      2000
+ 1112              	.LC21:
+ 1113 0186 4269745F 		.ascii	"Bit_Rate 320Kbps \000"
+ 1113      52617465 
+ 1113      20333230 
+ 1113      4B627073 
+ 1113      2000
+ 1114              	.LC22:
+ 1115 0198 4269745F 		.ascii	"Bit_Rate 8Kbps \000"
+ 1115      52617465 
+ 1115      20384B62 
+ 1115      70732000 
+ 1116              	.LC23:
+ 1117 01a8 4269745F 		.ascii	"Bit_Rate 16Kbps \000"
+ 1117      52617465 
+ 1117      2031364B 
+ 1117      62707320 
+ 1117      00
+ 1118              	.LC24:
+ 1119 01b9 4269745F 		.ascii	"Bit_Rate 24Kbps \000"
+ 1119      52617465 
+ 1119      2032344B 
+ 1119      62707320 
+ 1119      00
+ 1120              	.LC25:
+ 1121 01ca 4269745F 		.ascii	"Bit_Rate 144Kbps \000"
+ 1121      52617465 
+ 1121      20313434 
+ 1121      4B627073 
+ 1121      2000
+ 1122              		.section	.text.vs1003_get_mp3info,"ax",%progbits
+ 1123              		.align	1
+ 1124              		.global	vs1003_get_mp3info
+ 1125              		.syntax unified
+ 1126              		.thumb
+ 1127              		.thumb_func
+ 1128              		.fpu softvfp
+ 1130              	vs1003_get_mp3info:
+ 1131              	.LFB38:
+ 431:vs1003.c      **** 
+ 432:vs1003.c      **** 
+ 433:vs1003.c      **** void vs1003_get_mp3info (void)
+ 434:vs1003.c      **** {
+ 1132              		.loc 1 434 1 is_stmt 1 view -0
+ 1133              		.cfi_startproc
+ 1134              		@ args = 0, pretend = 0, frame = 0
+ 1135              		@ frame_needed = 0, uses_anonymous_args = 0
+ 435:vs1003.c      ****       unsigned short temp = 0;
+ 1136              		.loc 1 435 7 view .LVU296
+ 1137              	.LVL116:
+ 436:vs1003.c      ****       unsigned char mp3_id,sample_rate,bit_rate;
+ 1138              		.loc 1 436 7 view .LVU297
+ 437:vs1003.c      ****       temp = vs1003_reg_read(SPI_HDAT1);
+ 1139              		.loc 1 437 7 view .LVU298
+ 434:vs1003.c      ****       unsigned short temp = 0;
+ 1140              		.loc 1 434 1 is_stmt 0 view .LVU299
+ 1141 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1142              		.cfi_def_cfa_offset 24
+ 1143              		.cfi_offset 3, -24
+ 1144              		.cfi_offset 4, -20
+ 1145              		.cfi_offset 5, -16
+ 1146              		.cfi_offset 6, -12
+ 1147              		.cfi_offset 7, -8
+ 1148              		.cfi_offset 14, -4
+ 1149              		.loc 1 437 14 view .LVU300
+ 1150 0002 0920     		movs	r0, #9
+ 1151 0004 FFF7FEFF 		bl	vs1003_reg_read
+ 1152              	.LVL117:
+ 438:vs1003.c      ****       mp3_id = (unsigned char)((temp & 0x0018) >> 3);
+ 1153              		.loc 1 438 7 is_stmt 1 view .LVU301
+ 1154              		.loc 1 438 16 is_stmt 0 view .LVU302
+ 1155 0008 C0F3C707 		ubfx	r7, r0, #3, #8
+ 1156              	.LVL118:
+ 439:vs1003.c      ****       temp = vs1003_reg_read(SPI_HDAT0);
+ 1157              		.loc 1 439 7 is_stmt 1 view .LVU303
+ 1158              		.loc 1 439 14 is_stmt 0 view .LVU304
+ 1159 000c 0820     		movs	r0, #8
+ 1160              	.LVL119:
+ 1161              		.loc 1 439 14 view .LVU305
+ 1162 000e FFF7FEFF 		bl	vs1003_reg_read
+ 1163              	.LVL120:
+ 1164 0012 0546     		mov	r5, r0
+ 1165              	.LVL121:
+ 440:vs1003.c      ****       sample_rate = (unsigned char)((temp & 0x0C00) >> 10);
+ 1166              		.loc 1 440 7 is_stmt 1 view .LVU306
+ 1167              		.loc 1 440 19 is_stmt 0 view .LVU307
+ 1168 0014 C0F38126 		ubfx	r6, r0, #10, #2
+ 1169              	.LVL122:
+ 441:vs1003.c      ****       bit_rate = (unsigned char)((temp & 0xF000) >> 12);
+ 1170              		.loc 1 441 7 is_stmt 1 view .LVU308
+ 442:vs1003.c      ****       f_kbps = get_head_info();
+ 1171              		.loc 1 442 7 view .LVU309
+ 1172              		.loc 1 442 16 is_stmt 0 view .LVU310
+ 1173 0018 FFF7FEFF 		bl	get_head_info
+ 1174              	.LVL123:
+ 1175              		.loc 1 442 14 view .LVU311
+ 1176 001c 8E4C     		ldr	r4, .L130
+ 443:vs1003.c      ****       if (mp3_id == 0 || mp3_id == 1) {
+ 1177              		.loc 1 443 10 view .LVU312
+ 1178 001e BB07     		lsls	r3, r7, #30
+ 442:vs1003.c      ****       f_kbps = get_head_info();
+ 1179              		.loc 1 442 14 view .LVU313
+ 1180 0020 2080     		strh	r0, [r4]	@ movhi
+ 1181              		.loc 1 443 7 is_stmt 1 view .LVU314
+ 1182              		.loc 1 443 10 is_stmt 0 view .LVU315
+ 1183 0022 0ED4     		bmi	.L64
+ 444:vs1003.c      ****          switch (sample_rate) {
+ 1184              		.loc 1 444 10 is_stmt 1 view .LVU316
+ 1185 0024 012E     		cmp	r6, #1
+ 1186 0026 08D0     		beq	.L65
+ 1187 0028 022E     		cmp	r6, #2
+ 1188 002a 08D0     		beq	.L66
+ 445:vs1003.c      ****             default:
+ 446:vs1003.c      ****             case 0:
+ 447:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 11KHz  ");
+ 1189              		.loc 1 447 15 view .LVU317
+ 1190 002c 8B4A     		ldr	r2, .L130+4
+ 1191              	.L109:
+ 1192 002e 0421     		movs	r1, #4
+ 1193 0030 0220     		movs	r0, #2
+ 1194              	.L110:
+ 448:vs1003.c      ****               break;
+ 449:vs1003.c      ****             case 1:
+ 450:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 12KHz  ");
+ 451:vs1003.c      ****               break;
+ 452:vs1003.c      ****             case 2:
+ 453:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate  8KHz  ");
+ 454:vs1003.c      ****               break;
+ 455:vs1003.c      ****          }
+ 456:vs1003.c      ****       } else if (mp3_id == 2) {
+ 457:vs1003.c      ****          switch(sample_rate) {
+ 458:vs1003.c      ****             default:
+ 459:vs1003.c      ****             case 0:
+ 460:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 22KHz  ");
+ 461:vs1003.c      ****               break;
+ 462:vs1003.c      ****             case 1:
+ 463:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 24KHz  ");
+ 464:vs1003.c      ****               break;
+ 465:vs1003.c      ****             case 2:
+ 466:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 16KHz  ");
+ 467:vs1003.c      ****               break;
+ 468:vs1003.c      ****          }
+ 469:vs1003.c      ****       } else if (mp3_id == 3) {
+ 470:vs1003.c      ****          switch(sample_rate) {
+ 471:vs1003.c      ****             default:
+ 472:vs1003.c      ****             case 0:
+ 473:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 44KHz  ");
+ 474:vs1003.c      ****               break;
+ 475:vs1003.c      ****             case 1:
+ 476:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 48KHz  ");
+ 477:vs1003.c      ****               break;
+ 478:vs1003.c      ****             case 2:
+ 479:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 32KHz  ");
+ 480:vs1003.c      ****               break;
+ 481:vs1003.c      ****          }
+ 482:vs1003.c      ****          switch (bit_rate) {
+ 483:vs1003.c      ****             case 2:
+ 484:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 40Kbps ");
+ 485:vs1003.c      ****               if (f_kbps == 0) f_kbps = 40;
+ 486:vs1003.c      ****               break;
+ 487:vs1003.c      ****             case 3:
+ 488:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 48Kbps ");
+ 489:vs1003.c      ****               if (f_kbps == 0) f_kbps = 48;
+ 490:vs1003.c      ****               break;
+ 491:vs1003.c      ****             case 4:
+ 492:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 56Kbps ");
+ 493:vs1003.c      ****               if (f_kbps == 0) f_kbps = 56;
+ 494:vs1003.c      ****               break;
+ 495:vs1003.c      ****             case 5:
+ 496:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 64Kbps ");
+ 497:vs1003.c      ****               if (f_kbps == 0) f_kbps = 64;
+ 498:vs1003.c      ****               break;
+ 499:vs1003.c      ****             case 6:
+ 500:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 80Kbps ");
+ 501:vs1003.c      ****               if (f_kbps == 0) f_kbps = 80;
+ 502:vs1003.c      ****               break;
+ 503:vs1003.c      ****             case 7:
+ 504:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 96Kbps ");
+ 505:vs1003.c      ****               if (f_kbps == 0) f_kbps = 96;
+ 506:vs1003.c      ****               break;
+ 507:vs1003.c      ****             case 8:
+ 508:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 112Kbps ");
+ 509:vs1003.c      ****               if (f_kbps == 0) f_kbps = 112;
+ 510:vs1003.c      ****               break;
+ 511:vs1003.c      ****             case 9:
+ 512:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 128Kbps ");
+ 513:vs1003.c      ****               if (f_kbps == 0) f_kbps = 128;
+ 514:vs1003.c      ****               break;
+ 515:vs1003.c      ****             case 10:
+ 516:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 160Kbps ");
+ 517:vs1003.c      ****               if (f_kbps == 0) f_kbps = 160;
+ 518:vs1003.c      ****               break;
+ 519:vs1003.c      ****             case 11:
+ 520:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 192Kbps ");
+ 521:vs1003.c      ****               if (f_kbps == 0) f_kbps = 192;
+ 522:vs1003.c      ****               break;
+ 523:vs1003.c      ****             case 12:
+ 524:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 224Kbps ");
+ 525:vs1003.c      ****               if (f_kbps == 0) f_kbps = 224;
+ 526:vs1003.c      ****               break;
+ 527:vs1003.c      ****             case 13:
+ 528:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 256Kbps ");
+ 529:vs1003.c      ****               if (f_kbps == 0) f_kbps = 256;
+ 530:vs1003.c      ****               break;
+ 531:vs1003.c      ****             case 14:
+ 532:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 320Kbps ");
+ 533:vs1003.c      ****               if (f_kbps == 0) f_kbps = 320;
+ 534:vs1003.c      ****               break;
+ 535:vs1003.c      ****          }
+ 536:vs1003.c      ****       } else if (mp3_id == 0 || mp3_id == 1 || mp3_id == 2) {
+ 537:vs1003.c      ****          switch (bit_rate) {
+ 538:vs1003.c      ****              case 1:
+ 539:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 8Kbps ");
+ 540:vs1003.c      ****                if (f_kbps == 0) f_kbps = 8;
+ 541:vs1003.c      ****                break;
+ 542:vs1003.c      ****              case 2:
+ 543:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 16Kbps ");
+ 544:vs1003.c      ****                if (f_kbps == 0) f_kbps = 16;
+ 545:vs1003.c      ****                break;
+ 546:vs1003.c      ****              case 3:
+ 547:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 24Kbps ");
+ 548:vs1003.c      ****                if (f_kbps == 0) f_kbps = 24;
+ 549:vs1003.c      ****                break;
+ 550:vs1003.c      ****              case 5:
+ 551:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 40Kbps ");
+ 552:vs1003.c      ****                if (f_kbps == 0) f_kbps = 40;
+ 553:vs1003.c      ****                break;
+ 554:vs1003.c      ****              case 6:
+ 555:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 48Kbps ");
+ 556:vs1003.c      ****                if (f_kbps == 0) f_kbps = 48;
+ 557:vs1003.c      ****                break;
+ 558:vs1003.c      ****              case 7:
+ 559:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 56Kbps ");
+ 560:vs1003.c      ****                if (f_kbps == 0) f_kbps = 56;
+ 561:vs1003.c      ****                break;
+ 562:vs1003.c      ****              case 8:
+ 563:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 64Kbps ");
+ 564:vs1003.c      ****                if (f_kbps == 0) f_kbps = 64;
+ 565:vs1003.c      ****                break;
+ 566:vs1003.c      ****              case 9:
+ 567:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 80Kbps ");
+ 568:vs1003.c      ****                if (f_kbps == 0) f_kbps = 80;
+ 569:vs1003.c      ****                break;
+ 570:vs1003.c      ****              case 10:
+ 571:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 96Kbps ");
+ 572:vs1003.c      ****                if (f_kbps == 0) f_kbps = 96;
+ 573:vs1003.c      ****                break;
+ 574:vs1003.c      ****              case 11:
+ 575:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 112Kbps ");
+ 576:vs1003.c      ****                if (f_kbps == 0) f_kbps = 112;
+ 577:vs1003.c      ****                break;
+ 578:vs1003.c      ****              case 12:
+ 579:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 128Kbps ");
+ 580:vs1003.c      ****                if (f_kbps == 0) f_kbps = 128;
+ 581:vs1003.c      ****                break;
+ 582:vs1003.c      ****              case 13:
+ 583:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 144Kbps ");
+ 584:vs1003.c      ****                if (f_kbps == 0) f_kbps = 144;
+ 585:vs1003.c      ****                break;
+ 586:vs1003.c      ****              case 14:
+ 587:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 160Kbps ");
+ 588:vs1003.c      ****                if (f_kbps == 0) f_kbps = 160;
+ 589:vs1003.c      ****                break;
+ 590:vs1003.c      ****          }
+ 591:vs1003.c      ****       }
+ 592:vs1003.c      **** }
+ 1195              		.loc 1 592 1 is_stmt 0 view .LVU318
+ 1196 0032 BDE8F840 		pop	{r3, r4, r5, r6, r7, lr}
+ 1197              		.cfi_remember_state
+ 1198              		.cfi_restore 14
+ 1199              		.cfi_restore 7
+ 1200              		.cfi_restore 6
+ 1201              		.cfi_restore 5
+ 1202              		.cfi_restore 4
+ 1203              		.cfi_restore 3
+ 1204              		.cfi_def_cfa_offset 0
+ 1205              	.LVL124:
+ 447:vs1003.c      ****               break;
+ 1206              		.loc 1 447 15 view .LVU319
+ 1207 0036 FFF7FEBF 		b	lcd_printf
+ 1208              	.LVL125:
+ 1209              	.L65:
+ 1210              		.cfi_restore_state
+ 450:vs1003.c      ****               break;
+ 1211              		.loc 1 450 15 is_stmt 1 view .LVU320
+ 1212 003a 894A     		ldr	r2, .L130+8
+ 1213 003c F7E7     		b	.L109
+ 1214              	.L66:
+ 453:vs1003.c      ****               break;
+ 1215              		.loc 1 453 15 view .LVU321
+ 1216 003e 894A     		ldr	r2, .L130+12
+ 1217 0040 F5E7     		b	.L109
+ 1218              	.L64:
+ 438:vs1003.c      ****       temp = vs1003_reg_read(SPI_HDAT0);
+ 1219              		.loc 1 438 14 is_stmt 0 view .LVU322
+ 1220 0042 07F00300 		and	r0, r7, #3
+ 456:vs1003.c      ****          switch(sample_rate) {
+ 1221              		.loc 1 456 14 is_stmt 1 view .LVU323
+ 456:vs1003.c      ****          switch(sample_rate) {
+ 1222              		.loc 1 456 17 is_stmt 0 view .LVU324
+ 1223 0046 0228     		cmp	r0, #2
+ 1224 0048 0AD1     		bne	.L67
+ 457:vs1003.c      ****             default:
+ 1225              		.loc 1 457 10 is_stmt 1 view .LVU325
+ 1226 004a 012E     		cmp	r6, #1
+ 1227 004c 04D0     		beq	.L68
+ 1228 004e 022E     		cmp	r6, #2
+ 1229 0050 04D0     		beq	.L69
+ 460:vs1003.c      ****               break;
+ 1230              		.loc 1 460 15 view .LVU326
+ 1231 0052 854A     		ldr	r2, .L130+16
+ 1232              	.L111:
+ 463:vs1003.c      ****               break;
+ 1233              		.loc 1 463 15 is_stmt 0 view .LVU327
+ 1234 0054 0421     		movs	r1, #4
+ 1235 0056 ECE7     		b	.L110
+ 1236              	.L68:
+ 463:vs1003.c      ****               break;
+ 1237              		.loc 1 463 15 is_stmt 1 view .LVU328
+ 1238 0058 844A     		ldr	r2, .L130+20
+ 1239 005a FBE7     		b	.L111
+ 1240              	.L69:
+ 466:vs1003.c      ****               break;
+ 1241              		.loc 1 466 15 view .LVU329
+ 1242 005c 844A     		ldr	r2, .L130+24
+ 1243 005e E6E7     		b	.L109
+ 1244              	.L67:
+ 469:vs1003.c      ****          switch(sample_rate) {
+ 1245              		.loc 1 469 17 is_stmt 0 view .LVU330
+ 1246 0060 0328     		cmp	r0, #3
+ 441:vs1003.c      ****       f_kbps = get_head_info();
+ 1247              		.loc 1 441 16 view .LVU331
+ 1248 0062 C5F30735 		ubfx	r5, r5, #12, #8
+ 1249              	.LVL126:
+ 469:vs1003.c      ****          switch(sample_rate) {
+ 1250              		.loc 1 469 14 is_stmt 1 view .LVU332
+ 469:vs1003.c      ****          switch(sample_rate) {
+ 1251              		.loc 1 469 17 is_stmt 0 view .LVU333
+ 1252 0066 4AD1     		bne	.L70
+ 470:vs1003.c      ****             default:
+ 1253              		.loc 1 470 10 is_stmt 1 view .LVU334
+ 1254 0068 012E     		cmp	r6, #1
+ 1255 006a 18D0     		beq	.L71
+ 1256 006c 022E     		cmp	r6, #2
+ 1257 006e 18D0     		beq	.L72
+ 473:vs1003.c      ****               break;
+ 1258              		.loc 1 473 15 view .LVU335
+ 1259 0070 804A     		ldr	r2, .L130+28
+ 1260              	.L112:
+ 476:vs1003.c      ****               break;
+ 1261              		.loc 1 476 15 is_stmt 0 view .LVU336
+ 1262 0072 0421     		movs	r1, #4
+ 1263 0074 0220     		movs	r0, #2
+ 1264              	.L106:
+ 1265 0076 023D     		subs	r5, r5, #2
+ 479:vs1003.c      ****               break;
+ 1266              		.loc 1 479 15 view .LVU337
+ 1267 0078 FFF7FEFF 		bl	lcd_printf
+ 1268              	.LVL127:
+ 480:vs1003.c      ****          }
+ 1269              		.loc 1 480 15 is_stmt 1 view .LVU338
+ 482:vs1003.c      ****             case 2:
+ 1270              		.loc 1 482 10 view .LVU339
+ 1271 007c 0C2D     		cmp	r5, #12
+ 1272 007e 1DD8     		bhi	.L63
+ 1273 0080 DFE815F0 		tbh	[pc, r5, lsl #1]
+ 1274              	.L76:
+ 1275 0084 7E00     		.2byte	(.L102-.L76)/2
+ 1276 0086 8800     		.2byte	(.L101-.L76)/2
+ 1277 0088 9200     		.2byte	(.L100-.L76)/2
+ 1278 008a 9C00     		.2byte	(.L99-.L76)/2
+ 1279 008c A700     		.2byte	(.L98-.L76)/2
+ 1280 008e B200     		.2byte	(.L97-.L76)/2
+ 1281 0090 BD00     		.2byte	(.L96-.L76)/2
+ 1282 0092 C800     		.2byte	(.L95-.L76)/2
+ 1283 0094 DE00     		.2byte	(.L92-.L76)/2
+ 1284 0096 1300     		.2byte	(.L79-.L76)/2
+ 1285 0098 1D00     		.2byte	(.L78-.L76)/2
+ 1286 009a 2700     		.2byte	(.L77-.L76)/2
+ 1287 009c 3200     		.2byte	(.L75-.L76)/2
+ 1288              		.p2align 1
+ 1289              	.L71:
+ 476:vs1003.c      ****               break;
+ 1290              		.loc 1 476 15 view .LVU340
+ 1291 009e 764A     		ldr	r2, .L130+32
+ 1292 00a0 E7E7     		b	.L112
+ 1293              	.L72:
+ 479:vs1003.c      ****               break;
+ 1294              		.loc 1 479 15 view .LVU341
+ 1295 00a2 0421     		movs	r1, #4
+ 1296 00a4 3046     		mov	r0, r6
+ 1297 00a6 754A     		ldr	r2, .L130+36
+ 1298 00a8 E5E7     		b	.L106
+ 1299              	.L79:
+ 520:vs1003.c      ****               if (f_kbps == 0) f_kbps = 192;
+ 1300              		.loc 1 520 15 view .LVU342
+ 1301 00aa 0521     		movs	r1, #5
+ 1302 00ac 0220     		movs	r0, #2
+ 1303 00ae 744A     		ldr	r2, .L130+40
+ 1304 00b0 FFF7FEFF 		bl	lcd_printf
+ 1305              	.LVL128:
+ 521:vs1003.c      ****               break;
+ 1306              		.loc 1 521 15 view .LVU343
+ 521:vs1003.c      ****               break;
+ 1307              		.loc 1 521 18 is_stmt 0 view .LVU344
+ 1308 00b4 2388     		ldrh	r3, [r4]
+ 1309 00b6 0BB9     		cbnz	r3, .L63
+ 521:vs1003.c      ****               break;
+ 1310              		.loc 1 521 32 is_stmt 1 discriminator 1 view .LVU345
+ 521:vs1003.c      ****               break;
+ 1311              		.loc 1 521 39 is_stmt 0 discriminator 1 view .LVU346
+ 1312 00b8 C023     		movs	r3, #192
+ 1313              	.L107:
+ 588:vs1003.c      ****                break;
+ 1314              		.loc 1 588 40 discriminator 1 view .LVU347
+ 1315 00ba 2380     		strh	r3, [r4]	@ movhi
+ 1316              	.L63:
+ 1317              		.loc 1 592 1 view .LVU348
+ 1318 00bc F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1319              	.LVL129:
+ 1320              	.L78:
+ 524:vs1003.c      ****               if (f_kbps == 0) f_kbps = 224;
+ 1321              		.loc 1 524 15 is_stmt 1 view .LVU349
+ 1322 00be 0521     		movs	r1, #5
+ 1323 00c0 0220     		movs	r0, #2
+ 1324 00c2 704A     		ldr	r2, .L130+44
+ 1325 00c4 FFF7FEFF 		bl	lcd_printf
+ 1326              	.LVL130:
+ 525:vs1003.c      ****               break;
+ 1327              		.loc 1 525 15 view .LVU350
+ 525:vs1003.c      ****               break;
+ 1328              		.loc 1 525 18 is_stmt 0 view .LVU351
+ 1329 00c8 2388     		ldrh	r3, [r4]
+ 1330 00ca 002B     		cmp	r3, #0
+ 1331 00cc F6D1     		bne	.L63
+ 525:vs1003.c      ****               break;
+ 1332              		.loc 1 525 32 is_stmt 1 discriminator 1 view .LVU352
+ 525:vs1003.c      ****               break;
+ 1333              		.loc 1 525 39 is_stmt 0 discriminator 1 view .LVU353
+ 1334 00ce E023     		movs	r3, #224
+ 1335 00d0 F3E7     		b	.L107
+ 1336              	.L77:
+ 528:vs1003.c      ****               if (f_kbps == 0) f_kbps = 256;
+ 1337              		.loc 1 528 15 is_stmt 1 view .LVU354
+ 1338 00d2 0521     		movs	r1, #5
+ 1339 00d4 0220     		movs	r0, #2
+ 1340 00d6 6C4A     		ldr	r2, .L130+48
+ 1341 00d8 FFF7FEFF 		bl	lcd_printf
+ 1342              	.LVL131:
+ 529:vs1003.c      ****               break;
+ 1343              		.loc 1 529 15 view .LVU355
+ 529:vs1003.c      ****               break;
+ 1344              		.loc 1 529 18 is_stmt 0 view .LVU356
+ 1345 00dc 2388     		ldrh	r3, [r4]
+ 1346 00de 002B     		cmp	r3, #0
+ 1347 00e0 ECD1     		bne	.L63
+ 529:vs1003.c      ****               break;
+ 1348              		.loc 1 529 32 is_stmt 1 discriminator 1 view .LVU357
+ 529:vs1003.c      ****               break;
+ 1349              		.loc 1 529 39 is_stmt 0 discriminator 1 view .LVU358
+ 1350 00e2 4FF48073 		mov	r3, #256
+ 1351 00e6 E8E7     		b	.L107
+ 1352              	.L75:
+ 532:vs1003.c      ****               if (f_kbps == 0) f_kbps = 320;
+ 1353              		.loc 1 532 15 is_stmt 1 view .LVU359
+ 1354 00e8 0521     		movs	r1, #5
+ 1355 00ea 0220     		movs	r0, #2
+ 1356 00ec 674A     		ldr	r2, .L130+52
+ 1357 00ee FFF7FEFF 		bl	lcd_printf
+ 1358              	.LVL132:
+ 533:vs1003.c      ****               break;
+ 1359              		.loc 1 533 15 view .LVU360
+ 533:vs1003.c      ****               break;
+ 1360              		.loc 1 533 18 is_stmt 0 view .LVU361
+ 1361 00f2 2388     		ldrh	r3, [r4]
+ 1362 00f4 002B     		cmp	r3, #0
+ 1363 00f6 E1D1     		bne	.L63
+ 533:vs1003.c      ****               break;
+ 1364              		.loc 1 533 32 is_stmt 1 discriminator 1 view .LVU362
+ 533:vs1003.c      ****               break;
+ 1365              		.loc 1 533 39 is_stmt 0 discriminator 1 view .LVU363
+ 1366 00f8 4FF4A073 		mov	r3, #320
+ 1367 00fc DDE7     		b	.L107
+ 1368              	.L70:
+ 536:vs1003.c      ****          switch (bit_rate) {
+ 1369              		.loc 1 536 14 is_stmt 1 view .LVU364
+ 537:vs1003.c      ****              case 1:
+ 1370              		.loc 1 537 10 view .LVU365
+ 1371 00fe 013D     		subs	r5, r5, #1
+ 1372 0100 0D2D     		cmp	r5, #13
+ 1373 0102 DBD8     		bhi	.L63
+ 1374 0104 01A3     		adr	r3, .L93
+ 1375 0106 53F825F0 		ldr	pc, [r3, r5, lsl #2]
+ 1376 010a 00BF     		.p2align 2
+ 1377              	.L93:
+ 1378 010c 45010000 		.word	.L105+1
+ 1379 0110 59010000 		.word	.L104+1
+ 1380 0114 6D010000 		.word	.L103+1
+ 1381 0118 BD000000 		.word	.L63+1
+ 1382 011c 81010000 		.word	.L102+1
+ 1383 0120 95010000 		.word	.L101+1
+ 1384 0124 A9010000 		.word	.L100+1
+ 1385 0128 BD010000 		.word	.L99+1
+ 1386 012c D3010000 		.word	.L98+1
+ 1387 0130 E9010000 		.word	.L97+1
+ 1388 0134 FF010000 		.word	.L96+1
+ 1389 0138 15020000 		.word	.L95+1
+ 1390 013c 2B020000 		.word	.L94+1
+ 1391 0140 41020000 		.word	.L92+1
+ 1392              		.p2align 1
+ 1393              	.L105:
+ 539:vs1003.c      ****                if (f_kbps == 0) f_kbps = 8;
+ 1394              		.loc 1 539 16 view .LVU366
+ 1395 0144 0521     		movs	r1, #5
+ 1396 0146 0220     		movs	r0, #2
+ 1397 0148 514A     		ldr	r2, .L130+56
+ 1398 014a FFF7FEFF 		bl	lcd_printf
+ 1399              	.LVL133:
+ 540:vs1003.c      ****                break;
+ 1400              		.loc 1 540 16 view .LVU367
+ 540:vs1003.c      ****                break;
+ 1401              		.loc 1 540 19 is_stmt 0 view .LVU368
+ 1402 014e 2388     		ldrh	r3, [r4]
+ 1403 0150 002B     		cmp	r3, #0
+ 1404 0152 B3D1     		bne	.L63
+ 540:vs1003.c      ****                break;
+ 1405              		.loc 1 540 33 is_stmt 1 discriminator 1 view .LVU369
+ 540:vs1003.c      ****                break;
+ 1406              		.loc 1 540 40 is_stmt 0 discriminator 1 view .LVU370
+ 1407 0154 0823     		movs	r3, #8
+ 1408 0156 B0E7     		b	.L107
+ 1409              	.L104:
+ 543:vs1003.c      ****                if (f_kbps == 0) f_kbps = 16;
+ 1410              		.loc 1 543 16 is_stmt 1 view .LVU371
+ 1411 0158 0521     		movs	r1, #5
+ 1412 015a 0220     		movs	r0, #2
+ 1413 015c 4D4A     		ldr	r2, .L130+60
+ 1414 015e FFF7FEFF 		bl	lcd_printf
+ 1415              	.LVL134:
+ 544:vs1003.c      ****                break;
+ 1416              		.loc 1 544 16 view .LVU372
+ 544:vs1003.c      ****                break;
+ 1417              		.loc 1 544 19 is_stmt 0 view .LVU373
+ 1418 0162 2388     		ldrh	r3, [r4]
+ 1419 0164 002B     		cmp	r3, #0
+ 1420 0166 A9D1     		bne	.L63
+ 544:vs1003.c      ****                break;
+ 1421              		.loc 1 544 33 is_stmt 1 discriminator 1 view .LVU374
+ 544:vs1003.c      ****                break;
+ 1422              		.loc 1 544 40 is_stmt 0 discriminator 1 view .LVU375
+ 1423 0168 1023     		movs	r3, #16
+ 1424 016a A6E7     		b	.L107
+ 1425              	.L103:
+ 547:vs1003.c      ****                if (f_kbps == 0) f_kbps = 24;
+ 1426              		.loc 1 547 16 is_stmt 1 view .LVU376
+ 1427 016c 0521     		movs	r1, #5
+ 1428 016e 0220     		movs	r0, #2
+ 1429 0170 494A     		ldr	r2, .L130+64
+ 1430 0172 FFF7FEFF 		bl	lcd_printf
+ 1431              	.LVL135:
+ 548:vs1003.c      ****                break;
+ 1432              		.loc 1 548 16 view .LVU377
+ 548:vs1003.c      ****                break;
+ 1433              		.loc 1 548 19 is_stmt 0 view .LVU378
+ 1434 0176 2388     		ldrh	r3, [r4]
+ 1435 0178 002B     		cmp	r3, #0
+ 1436 017a 9FD1     		bne	.L63
+ 548:vs1003.c      ****                break;
+ 1437              		.loc 1 548 33 is_stmt 1 discriminator 1 view .LVU379
+ 548:vs1003.c      ****                break;
+ 1438              		.loc 1 548 40 is_stmt 0 discriminator 1 view .LVU380
+ 1439 017c 1823     		movs	r3, #24
+ 1440 017e 9CE7     		b	.L107
+ 1441              	.L102:
+ 551:vs1003.c      ****                if (f_kbps == 0) f_kbps = 40;
+ 1442              		.loc 1 551 16 is_stmt 1 view .LVU381
+ 1443 0180 0521     		movs	r1, #5
+ 1444 0182 0220     		movs	r0, #2
+ 1445 0184 454A     		ldr	r2, .L130+68
+ 1446 0186 FFF7FEFF 		bl	lcd_printf
+ 1447              	.LVL136:
+ 552:vs1003.c      ****                break;
+ 1448              		.loc 1 552 16 view .LVU382
+ 552:vs1003.c      ****                break;
+ 1449              		.loc 1 552 19 is_stmt 0 view .LVU383
+ 1450 018a 2388     		ldrh	r3, [r4]
+ 1451 018c 002B     		cmp	r3, #0
+ 1452 018e 95D1     		bne	.L63
+ 552:vs1003.c      ****                break;
+ 1453              		.loc 1 552 33 is_stmt 1 discriminator 1 view .LVU384
+ 552:vs1003.c      ****                break;
+ 1454              		.loc 1 552 40 is_stmt 0 discriminator 1 view .LVU385
+ 1455 0190 2823     		movs	r3, #40
+ 1456 0192 92E7     		b	.L107
+ 1457              	.L101:
+ 555:vs1003.c      ****                if (f_kbps == 0) f_kbps = 48;
+ 1458              		.loc 1 555 16 is_stmt 1 view .LVU386
+ 1459 0194 0521     		movs	r1, #5
+ 1460 0196 0220     		movs	r0, #2
+ 1461 0198 414A     		ldr	r2, .L130+72
+ 1462 019a FFF7FEFF 		bl	lcd_printf
+ 1463              	.LVL137:
+ 556:vs1003.c      ****                break;
+ 1464              		.loc 1 556 16 view .LVU387
+ 556:vs1003.c      ****                break;
+ 1465              		.loc 1 556 19 is_stmt 0 view .LVU388
+ 1466 019e 2388     		ldrh	r3, [r4]
+ 1467 01a0 002B     		cmp	r3, #0
+ 1468 01a2 8BD1     		bne	.L63
+ 556:vs1003.c      ****                break;
+ 1469              		.loc 1 556 33 is_stmt 1 discriminator 1 view .LVU389
+ 556:vs1003.c      ****                break;
+ 1470              		.loc 1 556 40 is_stmt 0 discriminator 1 view .LVU390
+ 1471 01a4 3023     		movs	r3, #48
+ 1472 01a6 88E7     		b	.L107
+ 1473              	.L100:
+ 559:vs1003.c      ****                if (f_kbps == 0) f_kbps = 56;
+ 1474              		.loc 1 559 16 is_stmt 1 view .LVU391
+ 1475 01a8 0521     		movs	r1, #5
+ 1476 01aa 0220     		movs	r0, #2
+ 1477 01ac 3D4A     		ldr	r2, .L130+76
+ 1478 01ae FFF7FEFF 		bl	lcd_printf
+ 1479              	.LVL138:
+ 560:vs1003.c      ****                break;
+ 1480              		.loc 1 560 16 view .LVU392
+ 560:vs1003.c      ****                break;
+ 1481              		.loc 1 560 19 is_stmt 0 view .LVU393
+ 1482 01b2 2388     		ldrh	r3, [r4]
+ 1483 01b4 002B     		cmp	r3, #0
+ 1484 01b6 81D1     		bne	.L63
+ 560:vs1003.c      ****                break;
+ 1485              		.loc 1 560 33 is_stmt 1 discriminator 1 view .LVU394
+ 560:vs1003.c      ****                break;
+ 1486              		.loc 1 560 40 is_stmt 0 discriminator 1 view .LVU395
+ 1487 01b8 3823     		movs	r3, #56
+ 1488 01ba 7EE7     		b	.L107
+ 1489              	.L99:
+ 563:vs1003.c      ****                if (f_kbps == 0) f_kbps = 64;
+ 1490              		.loc 1 563 16 is_stmt 1 view .LVU396
+ 1491 01bc 0521     		movs	r1, #5
+ 1492 01be 0220     		movs	r0, #2
+ 1493 01c0 394A     		ldr	r2, .L130+80
+ 1494 01c2 FFF7FEFF 		bl	lcd_printf
+ 1495              	.LVL139:
+ 564:vs1003.c      ****                break;
+ 1496              		.loc 1 564 16 view .LVU397
+ 564:vs1003.c      ****                break;
+ 1497              		.loc 1 564 19 is_stmt 0 view .LVU398
+ 1498 01c6 2388     		ldrh	r3, [r4]
+ 1499 01c8 002B     		cmp	r3, #0
+ 1500 01ca 7FF477AF 		bne	.L63
+ 564:vs1003.c      ****                break;
+ 1501              		.loc 1 564 33 is_stmt 1 discriminator 1 view .LVU399
+ 564:vs1003.c      ****                break;
+ 1502              		.loc 1 564 40 is_stmt 0 discriminator 1 view .LVU400
+ 1503 01ce 4023     		movs	r3, #64
+ 1504 01d0 73E7     		b	.L107
+ 1505              	.L98:
+ 567:vs1003.c      ****                if (f_kbps == 0) f_kbps = 80;
+ 1506              		.loc 1 567 16 is_stmt 1 view .LVU401
+ 1507 01d2 0521     		movs	r1, #5
+ 1508 01d4 0220     		movs	r0, #2
+ 1509 01d6 354A     		ldr	r2, .L130+84
+ 1510 01d8 FFF7FEFF 		bl	lcd_printf
+ 1511              	.LVL140:
+ 568:vs1003.c      ****                break;
+ 1512              		.loc 1 568 16 view .LVU402
+ 568:vs1003.c      ****                break;
+ 1513              		.loc 1 568 19 is_stmt 0 view .LVU403
+ 1514 01dc 2388     		ldrh	r3, [r4]
+ 1515 01de 002B     		cmp	r3, #0
+ 1516 01e0 7FF46CAF 		bne	.L63
+ 568:vs1003.c      ****                break;
+ 1517              		.loc 1 568 33 is_stmt 1 discriminator 1 view .LVU404
+ 568:vs1003.c      ****                break;
+ 1518              		.loc 1 568 40 is_stmt 0 discriminator 1 view .LVU405
+ 1519 01e4 5023     		movs	r3, #80
+ 1520 01e6 68E7     		b	.L107
+ 1521              	.L97:
+ 571:vs1003.c      ****                if (f_kbps == 0) f_kbps = 96;
+ 1522              		.loc 1 571 16 is_stmt 1 view .LVU406
+ 1523 01e8 0521     		movs	r1, #5
+ 1524 01ea 0220     		movs	r0, #2
+ 1525 01ec 304A     		ldr	r2, .L130+88
+ 1526 01ee FFF7FEFF 		bl	lcd_printf
+ 1527              	.LVL141:
+ 572:vs1003.c      ****                break;
+ 1528              		.loc 1 572 16 view .LVU407
+ 572:vs1003.c      ****                break;
+ 1529              		.loc 1 572 19 is_stmt 0 view .LVU408
+ 1530 01f2 2388     		ldrh	r3, [r4]
+ 1531 01f4 002B     		cmp	r3, #0
+ 1532 01f6 7FF461AF 		bne	.L63
+ 572:vs1003.c      ****                break;
+ 1533              		.loc 1 572 33 is_stmt 1 discriminator 1 view .LVU409
+ 572:vs1003.c      ****                break;
+ 1534              		.loc 1 572 40 is_stmt 0 discriminator 1 view .LVU410
+ 1535 01fa 6023     		movs	r3, #96
+ 1536 01fc 5DE7     		b	.L107
+ 1537              	.L96:
+ 575:vs1003.c      ****                if (f_kbps == 0) f_kbps = 112;
+ 1538              		.loc 1 575 16 is_stmt 1 view .LVU411
+ 1539 01fe 0521     		movs	r1, #5
+ 1540 0200 0220     		movs	r0, #2
+ 1541 0202 2C4A     		ldr	r2, .L130+92
+ 1542 0204 FFF7FEFF 		bl	lcd_printf
+ 1543              	.LVL142:
+ 576:vs1003.c      ****                break;
+ 1544              		.loc 1 576 16 view .LVU412
+ 576:vs1003.c      ****                break;
+ 1545              		.loc 1 576 19 is_stmt 0 view .LVU413
+ 1546 0208 2388     		ldrh	r3, [r4]
+ 1547 020a 002B     		cmp	r3, #0
+ 1548 020c 7FF456AF 		bne	.L63
+ 576:vs1003.c      ****                break;
+ 1549              		.loc 1 576 33 is_stmt 1 discriminator 1 view .LVU414
+ 576:vs1003.c      ****                break;
+ 1550              		.loc 1 576 40 is_stmt 0 discriminator 1 view .LVU415
+ 1551 0210 7023     		movs	r3, #112
+ 1552 0212 52E7     		b	.L107
+ 1553              	.L95:
+ 579:vs1003.c      ****                if (f_kbps == 0) f_kbps = 128;
+ 1554              		.loc 1 579 16 is_stmt 1 view .LVU416
+ 1555 0214 0521     		movs	r1, #5
+ 1556 0216 0220     		movs	r0, #2
+ 1557 0218 274A     		ldr	r2, .L130+96
+ 1558 021a FFF7FEFF 		bl	lcd_printf
+ 1559              	.LVL143:
+ 580:vs1003.c      ****                break;
+ 1560              		.loc 1 580 16 view .LVU417
+ 580:vs1003.c      ****                break;
+ 1561              		.loc 1 580 19 is_stmt 0 view .LVU418
+ 1562 021e 2388     		ldrh	r3, [r4]
+ 1563 0220 002B     		cmp	r3, #0
+ 1564 0222 7FF44BAF 		bne	.L63
+ 580:vs1003.c      ****                break;
+ 1565              		.loc 1 580 33 is_stmt 1 discriminator 1 view .LVU419
+ 580:vs1003.c      ****                break;
+ 1566              		.loc 1 580 40 is_stmt 0 discriminator 1 view .LVU420
+ 1567 0226 8023     		movs	r3, #128
+ 1568 0228 47E7     		b	.L107
+ 1569              	.L94:
+ 583:vs1003.c      ****                if (f_kbps == 0) f_kbps = 144;
+ 1570              		.loc 1 583 16 is_stmt 1 view .LVU421
+ 1571 022a 0521     		movs	r1, #5
+ 1572 022c 0220     		movs	r0, #2
+ 1573 022e 234A     		ldr	r2, .L130+100
+ 1574 0230 FFF7FEFF 		bl	lcd_printf
+ 1575              	.LVL144:
+ 584:vs1003.c      ****                break;
+ 1576              		.loc 1 584 16 view .LVU422
+ 584:vs1003.c      ****                break;
+ 1577              		.loc 1 584 19 is_stmt 0 view .LVU423
+ 1578 0234 2388     		ldrh	r3, [r4]
+ 1579 0236 002B     		cmp	r3, #0
+ 1580 0238 7FF440AF 		bne	.L63
+ 584:vs1003.c      ****                break;
+ 1581              		.loc 1 584 33 is_stmt 1 discriminator 1 view .LVU424
+ 584:vs1003.c      ****                break;
+ 1582              		.loc 1 584 40 is_stmt 0 discriminator 1 view .LVU425
+ 1583 023c 9023     		movs	r3, #144
+ 1584 023e 3CE7     		b	.L107
+ 1585              	.L92:
+ 587:vs1003.c      ****                if (f_kbps == 0) f_kbps = 160;
+ 1586              		.loc 1 587 16 is_stmt 1 view .LVU426
+ 1587 0240 0521     		movs	r1, #5
+ 1588 0242 0220     		movs	r0, #2
+ 1589 0244 1E4A     		ldr	r2, .L130+104
+ 1590 0246 FFF7FEFF 		bl	lcd_printf
+ 1591              	.LVL145:
+ 588:vs1003.c      ****                break;
+ 1592              		.loc 1 588 16 view .LVU427
+ 588:vs1003.c      ****                break;
+ 1593              		.loc 1 588 19 is_stmt 0 view .LVU428
+ 1594 024a 2388     		ldrh	r3, [r4]
+ 1595 024c 002B     		cmp	r3, #0
+ 1596 024e 7FF435AF 		bne	.L63
+ 588:vs1003.c      ****                break;
+ 1597              		.loc 1 588 33 is_stmt 1 discriminator 1 view .LVU429
+ 588:vs1003.c      ****                break;
+ 1598              		.loc 1 588 40 is_stmt 0 discriminator 1 view .LVU430
+ 1599 0252 A023     		movs	r3, #160
+ 1600 0254 31E7     		b	.L107
+ 1601              	.L131:
+ 1602 0256 00BF     		.align	2
+ 1603              	.L130:
+ 1604 0258 00000000 		.word	f_kbps
+ 1605 025c 00000000 		.word	.LC0
+ 1606 0260 14000000 		.word	.LC1
+ 1607 0264 28000000 		.word	.LC2
+ 1608 0268 3C000000 		.word	.LC3
+ 1609 026c 50000000 		.word	.LC4
+ 1610 0270 64000000 		.word	.LC5
+ 1611 0274 78000000 		.word	.LC6
+ 1612 0278 8C000000 		.word	.LC7
+ 1613 027c A0000000 		.word	.LC8
+ 1614 0280 50010000 		.word	.LC18
+ 1615 0284 62010000 		.word	.LC19
+ 1616 0288 74010000 		.word	.LC20
+ 1617 028c 86010000 		.word	.LC21
+ 1618 0290 98010000 		.word	.LC22
+ 1619 0294 A8010000 		.word	.LC23
+ 1620 0298 B9010000 		.word	.LC24
+ 1621 029c B4000000 		.word	.LC9
+ 1622 02a0 C5000000 		.word	.LC10
+ 1623 02a4 D6000000 		.word	.LC11
+ 1624 02a8 E7000000 		.word	.LC12
+ 1625 02ac F8000000 		.word	.LC13
+ 1626 02b0 09010000 		.word	.LC14
+ 1627 02b4 1A010000 		.word	.LC15
+ 1628 02b8 2C010000 		.word	.LC16
+ 1629 02bc CA010000 		.word	.LC25
+ 1630 02c0 3E010000 		.word	.LC17
+ 1631              		.cfi_endproc
+ 1632              	.LFE38:
+ 1634              		.section	.text.get_decode_time,"ax",%progbits
+ 1635              		.align	1
+ 1636              		.global	get_decode_time
+ 1637              		.syntax unified
+ 1638              		.thumb
+ 1639              		.thumb_func
+ 1640              		.fpu softvfp
+ 1642              	get_decode_time:
+ 1643              	.LFB39:
+ 593:vs1003.c      **** 
+ 594:vs1003.c      **** 
+ 595:vs1003.c      **** unsigned short get_decode_time (void)
+ 596:vs1003.c      **** {
+ 1644              		.loc 1 596 1 is_stmt 1 view -0
+ 1645              		.cfi_startproc
+ 1646              		@ args = 0, pretend = 0, frame = 0
+ 1647              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1648              		@ link register save eliminated.
+ 597:vs1003.c      ****       return vs1003_reg_read(SPI_DECODE_TIME);
+ 1649              		.loc 1 597 7 view .LVU432
+ 1650              		.loc 1 597 14 is_stmt 0 view .LVU433
+ 1651 0000 0420     		movs	r0, #4
+ 1652 0002 FFF7FEBF 		b	vs1003_reg_read
+ 1653              	.LVL146:
+ 1654              		.cfi_endproc
+ 1655              	.LFE39:
+ 1657              		.section	.text.load_patch,"ax",%progbits
+ 1658              		.align	1
+ 1659              		.global	load_patch
+ 1660              		.syntax unified
+ 1661              		.thumb
+ 1662              		.thumb_func
+ 1663              		.fpu softvfp
+ 1665              	load_patch:
+ 1666              	.LFB40:
+ 598:vs1003.c      **** }
+ 599:vs1003.c      **** 
+ 600:vs1003.c      **** 
+ 601:vs1003.c      **** void load_patch (void)
+ 602:vs1003.c      **** {
+ 1667              		.loc 1 602 1 is_stmt 1 view -0
+ 1668              		.cfi_startproc
+ 1669              		@ args = 0, pretend = 0, frame = 0
+ 1670              		@ frame_needed = 0, uses_anonymous_args = 0
+ 603:vs1003.c      ****       unsigned short idx;
+ 1671              		.loc 1 603 7 view .LVU435
+ 604:vs1003.c      ****       for (idx=0;idx<943;idx++) vs1003_cmd_write(atab[idx],dtab[idx]);
+ 1672              		.loc 1 604 7 view .LVU436
+ 1673              	.LVL147:
+ 1674              		.loc 1 604 18 view .LVU437
+ 602:vs1003.c      ****       unsigned short idx;
+ 1675              		.loc 1 602 1 is_stmt 0 view .LVU438
+ 1676 0000 70B5     		push	{r4, r5, r6, lr}
+ 1677              		.cfi_def_cfa_offset 16
+ 1678              		.cfi_offset 4, -16
+ 1679              		.cfi_offset 5, -12
+ 1680              		.cfi_offset 6, -8
+ 1681              		.cfi_offset 14, -4
+ 602:vs1003.c      ****       unsigned short idx;
+ 1682              		.loc 1 602 1 view .LVU439
+ 1683 0002 40F2AF34 		movw	r4, #943
+ 1684 0006 084D     		ldr	r5, .L136
+ 1685 0008 084E     		ldr	r6, .L136+4
+ 1686              	.LVL148:
+ 1687              	.L134:
+ 1688              		.loc 1 604 33 is_stmt 1 discriminator 3 view .LVU440
+ 1689 000a 013C     		subs	r4, r4, #1
+ 1690 000c 36F8021B 		ldrh	r1, [r6], #2
+ 1691 0010 15F8010B 		ldrb	r0, [r5], #1	@ zero_extendqisi2
+ 1692              	.LVL149:
+ 1693              		.loc 1 604 33 is_stmt 0 discriminator 3 view .LVU441
+ 1694 0014 A4B2     		uxth	r4, r4
+ 1695 0016 FFF7FEFF 		bl	vs1003_cmd_write
+ 1696              	.LVL150:
+ 1697              		.loc 1 604 26 is_stmt 1 discriminator 3 view .LVU442
+ 1698              		.loc 1 604 18 discriminator 3 view .LVU443
+ 1699              		.loc 1 604 7 is_stmt 0 discriminator 3 view .LVU444
+ 1700 001a 002C     		cmp	r4, #0
+ 1701 001c F5D1     		bne	.L134
+ 605:vs1003.c      ****       delay_ms(10);
+ 1702              		.loc 1 605 7 is_stmt 1 view .LVU445
+ 1703              	.LVL151:
+ 1704              	.LBB48:
+ 1705              	.LBI48:
+ 241:vs1003.c      **** {
+ 1706              		.loc 1 241 6 view .LVU446
+ 1707              	.LBB49:
+ 243:vs1003.c      **** }
+ 1708              		.loc 1 243 7 view .LVU447
+ 1709 001e 0A20     		movs	r0, #10
+ 1710              	.LBE49:
+ 1711              	.LBE48:
+ 606:vs1003.c      **** }
+ 1712              		.loc 1 606 1 is_stmt 0 view .LVU448
+ 1713 0020 BDE87040 		pop	{r4, r5, r6, lr}
+ 1714              		.cfi_restore 14
+ 1715              		.cfi_restore 6
+ 1716              		.cfi_restore 5
+ 1717              		.cfi_restore 4
+ 1718              		.cfi_def_cfa_offset 0
+ 1719              	.LVL152:
+ 1720              	.LBB51:
+ 1721              	.LBB50:
+ 243:vs1003.c      **** }
+ 1722              		.loc 1 243 7 view .LVU449
+ 1723 0024 FFF7FEBF 		b	wait_ms
+ 1724              	.LVL153:
+ 1725              	.L137:
+ 1726              		.align	2
+ 1727              	.L136:
+ 1728 0028 00000000 		.word	.LANCHOR2
+ 1729 002c 00000000 		.word	.LANCHOR3
+ 1730              	.LBE50:
+ 1731              	.LBE51:
+ 1732              		.cfi_endproc
+ 1733              	.LFE40:
+ 1735              		.section	.text.get_spec,"ax",%progbits
+ 1736              		.align	1
+ 1737              		.global	get_spec
+ 1738              		.syntax unified
+ 1739              		.thumb
+ 1740              		.thumb_func
+ 1741              		.fpu softvfp
+ 1743              	get_spec:
+ 1744              	.LVL154:
+ 1745              	.LFB41:
+ 607:vs1003.c      **** 
+ 608:vs1003.c      **** 
+ 609:vs1003.c      **** void get_spec (unsigned char *p)
+ 610:vs1003.c      **** {
+ 1746              		.loc 1 610 1 is_stmt 1 view -0
+ 1747              		.cfi_startproc
+ 1748              		@ args = 0, pretend = 0, frame = 0
+ 1749              		@ frame_needed = 0, uses_anonymous_args = 0
+ 611:vs1003.c      ****       unsigned char byteIndex = 0;
+ 1750              		.loc 1 611 7 view .LVU451
+ 612:vs1003.c      ****       unsigned char temp;
+ 1751              		.loc 1 612 7 view .LVU452
+ 613:vs1003.c      ****       vs1003_cmd_write(SPI_WRAMADDR,0x1804);
+ 1752              		.loc 1 613 7 view .LVU453
+ 610:vs1003.c      ****       unsigned char byteIndex = 0;
+ 1753              		.loc 1 610 1 is_stmt 0 view .LVU454
+ 1754 0000 38B5     		push	{r3, r4, r5, lr}
+ 1755              		.cfi_def_cfa_offset 16
+ 1756              		.cfi_offset 3, -16
+ 1757              		.cfi_offset 4, -12
+ 1758              		.cfi_offset 5, -8
+ 1759              		.cfi_offset 14, -4
+ 1760              		.loc 1 613 7 view .LVU455
+ 1761 0002 41F60401 		movw	r1, #6148
+ 610:vs1003.c      ****       unsigned char byteIndex = 0;
+ 1762              		.loc 1 610 1 view .LVU456
+ 1763 0006 0446     		mov	r4, r0
+ 1764              		.loc 1 613 7 view .LVU457
+ 1765 0008 0720     		movs	r0, #7
+ 1766              	.LVL155:
+ 1767              		.loc 1 613 7 view .LVU458
+ 1768 000a FFF7FEFF 		bl	vs1003_cmd_write
+ 1769              	.LVL156:
+ 614:vs1003.c      ****       for (byteIndex=0;byteIndex<14;byteIndex++) {
+ 1770              		.loc 1 614 7 is_stmt 1 view .LVU459
+ 1771              		.loc 1 614 24 view .LVU460
+ 1772 000e 04F10E05 		add	r5, r4, #14
+ 1773              	.L139:
+ 615:vs1003.c      **** 	  temp = vs1003_reg_read(SPI_WRAM) & 0x63;
+ 1774              		.loc 1 615 4 discriminator 3 view .LVU461
+ 1775              		.loc 1 615 11 is_stmt 0 discriminator 3 view .LVU462
+ 1776 0012 0620     		movs	r0, #6
+ 1777 0014 FFF7FEFF 		bl	vs1003_reg_read
+ 1778              	.LVL157:
+ 616:vs1003.c      **** 	  *p++ = temp;
+ 1779              		.loc 1 616 4 is_stmt 1 discriminator 3 view .LVU463
+ 615:vs1003.c      **** 	  temp = vs1003_reg_read(SPI_WRAM) & 0x63;
+ 1780              		.loc 1 615 9 is_stmt 0 discriminator 3 view .LVU464
+ 1781 0018 00F06300 		and	r0, r0, #99
+ 1782              	.LVL158:
+ 1783              		.loc 1 616 9 discriminator 3 view .LVU465
+ 1784 001c 04F8010B 		strb	r0, [r4], #1
+ 1785              	.LVL159:
+ 614:vs1003.c      ****       for (byteIndex=0;byteIndex<14;byteIndex++) {
+ 1786              		.loc 1 614 37 is_stmt 1 discriminator 3 view .LVU466
+ 614:vs1003.c      ****       for (byteIndex=0;byteIndex<14;byteIndex++) {
+ 1787              		.loc 1 614 24 discriminator 3 view .LVU467
+ 614:vs1003.c      ****       for (byteIndex=0;byteIndex<14;byteIndex++) {
+ 1788              		.loc 1 614 7 is_stmt 0 discriminator 3 view .LVU468
+ 1789 0020 A542     		cmp	r5, r4
+ 1790 0022 F6D1     		bne	.L139
+ 617:vs1003.c      ****       }
+ 618:vs1003.c      **** }
+ 1791              		.loc 1 618 1 view .LVU469
+ 1792 0024 38BD     		pop	{r3, r4, r5, pc}
+ 1793              		.loc 1 618 1 view .LVU470
+ 1794              		.cfi_endproc
+ 1795              	.LFE41:
+ 1797              		.section	.text.set_vs1003,"ax",%progbits
+ 1798              		.align	1
+ 1799              		.global	set_vs1003
+ 1800              		.syntax unified
+ 1801              		.thumb
+ 1802              		.thumb_func
+ 1803              		.fpu softvfp
+ 1805              	set_vs1003:
+ 1806              	.LFB42:
+ 619:vs1003.c      **** 
+ 620:vs1003.c      **** 
+ 621:vs1003.c      **** void set_vs1003 (void)
+ 622:vs1003.c      **** {
+ 1807              		.loc 1 622 1 is_stmt 1 view -0
+ 1808              		.cfi_startproc
+ 1809              		@ args = 0, pretend = 0, frame = 0
+ 1810              		@ frame_needed = 0, uses_anonymous_args = 0
+ 623:vs1003.c      ****       unsigned char t;
+ 1811              		.loc 1 623 7 view .LVU472
+ 624:vs1003.c      ****       unsigned short bass = 0;
+ 1812              		.loc 1 624 7 view .LVU473
+ 1813              	.LVL160:
+ 625:vs1003.c      ****       unsigned short volt = 0;
+ 1814              		.loc 1 625 7 view .LVU474
+ 626:vs1003.c      ****       unsigned char vset = 0;
+ 1815              		.loc 1 626 7 view .LVU475
+ 627:vs1003.c      ****       vset = 255 - vs1003_ram[4];
+ 1816              		.loc 1 627 7 view .LVU476
+ 628:vs1003.c      ****       volt = vset;
+ 1817              		.loc 1 628 7 view .LVU477
+ 622:vs1003.c      ****       unsigned char t;
+ 1818              		.loc 1 622 1 is_stmt 0 view .LVU478
+ 1819 0000 10B5     		push	{r4, lr}
+ 1820              		.cfi_def_cfa_offset 8
+ 1821              		.cfi_offset 4, -8
+ 1822              		.cfi_offset 14, -4
+ 627:vs1003.c      ****       vset = 255 - vs1003_ram[4];
+ 1823              		.loc 1 627 30 view .LVU479
+ 1824 0002 0D4A     		ldr	r2, .L144
+ 629:vs1003.c      ****       volt <<= 8;
+ 630:vs1003.c      ****       volt += vset;
+ 1825              		.loc 1 630 12 view .LVU480
+ 1826 0004 0423     		movs	r3, #4
+ 627:vs1003.c      ****       volt = vset;
+ 1827              		.loc 1 627 12 view .LVU481
+ 1828 0006 1179     		ldrb	r1, [r2, #4]	@ zero_extendqisi2
+ 1829 0008 C943     		mvns	r1, r1
+ 628:vs1003.c      ****       volt <<= 8;
+ 1830              		.loc 1 628 12 view .LVU482
+ 1831 000a C9B2     		uxtb	r1, r1
+ 1832              	.LVL161:
+ 629:vs1003.c      ****       volt <<= 8;
+ 1833              		.loc 1 629 7 is_stmt 1 view .LVU483
+ 1834              		.loc 1 630 7 view .LVU484
+ 1835              		.loc 1 630 12 is_stmt 0 view .LVU485
+ 1836 000c 01EB0121 		add	r1, r1, r1, lsl #8
+ 1837              	.LVL162:
+ 1838              		.loc 1 630 12 view .LVU486
+ 1839 0010 8CB2     		uxth	r4, r1
+ 1840              	.LVL163:
+ 631:vs1003.c      ****       for (t=0;t<4;t++) {
+ 1841              		.loc 1 631 7 is_stmt 1 view .LVU487
+ 1842              		.loc 1 631 16 view .LVU488
+ 624:vs1003.c      ****       unsigned short volt = 0;
+ 1843              		.loc 1 624 22 is_stmt 0 view .LVU489
+ 1844 0012 0021     		movs	r1, #0
+ 1845              	.LVL164:
+ 1846              	.L142:
+ 632:vs1003.c      ****           bass <<= 4;
+ 1847              		.loc 1 632 11 is_stmt 1 discriminator 3 view .LVU490
+ 633:vs1003.c      ****           bass += vs1003_ram[t];
+ 1848              		.loc 1 633 11 discriminator 3 view .LVU491
+ 1849              		.loc 1 633 29 is_stmt 0 discriminator 3 view .LVU492
+ 1850 0014 12F8010B 		ldrb	r0, [r2], #1	@ zero_extendqisi2
+ 1851              	.LVL165:
+ 1852              		.loc 1 633 29 discriminator 3 view .LVU493
+ 1853 0018 013B     		subs	r3, r3, #1
+ 1854              		.loc 1 633 16 discriminator 3 view .LVU494
+ 1855 001a 00EB0111 		add	r1, r0, r1, lsl #4
+ 1856              	.LVL166:
+ 631:vs1003.c      ****           bass <<= 4;
+ 1857              		.loc 1 631 7 discriminator 3 view .LVU495
+ 1858 001e 13F0FF03 		ands	r3, r3, #255
+ 1859              		.loc 1 633 16 discriminator 3 view .LVU496
+ 1860 0022 89B2     		uxth	r1, r1
+ 1861              	.LVL167:
+ 631:vs1003.c      ****           bass <<= 4;
+ 1862              		.loc 1 631 20 is_stmt 1 discriminator 3 view .LVU497
+ 631:vs1003.c      ****           bass <<= 4;
+ 1863              		.loc 1 631 16 discriminator 3 view .LVU498
+ 631:vs1003.c      ****           bass <<= 4;
+ 1864              		.loc 1 631 7 is_stmt 0 discriminator 3 view .LVU499
+ 1865 0024 F6D1     		bne	.L142
+ 634:vs1003.c      ****       }
+ 635:vs1003.c      ****       vs1003_cmd_write(SPI_BASS,bass);
+ 1866              		.loc 1 635 7 is_stmt 1 view .LVU500
+ 1867 0026 0220     		movs	r0, #2
+ 1868 0028 FFF7FEFF 		bl	vs1003_cmd_write
+ 1869              	.LVL168:
+ 636:vs1003.c      ****       vs1003_cmd_write(SPI_VOL,volt);
+ 1870              		.loc 1 636 7 view .LVU501
+ 1871 002c 2146     		mov	r1, r4
+ 637:vs1003.c      **** }
+ 1872              		.loc 1 637 1 is_stmt 0 view .LVU502
+ 1873 002e BDE81040 		pop	{r4, lr}
+ 1874              		.cfi_restore 14
+ 1875              		.cfi_restore 4
+ 1876              		.cfi_def_cfa_offset 0
+ 1877              	.LVL169:
+ 636:vs1003.c      ****       vs1003_cmd_write(SPI_VOL,volt);
+ 1878              		.loc 1 636 7 view .LVU503
+ 1879 0032 0B20     		movs	r0, #11
+ 1880 0034 FFF7FEBF 		b	vs1003_cmd_write
+ 1881              	.LVL170:
+ 1882              	.L145:
+ 636:vs1003.c      ****       vs1003_cmd_write(SPI_VOL,volt);
+ 1883              		.loc 1 636 7 view .LVU504
+ 1884              		.align	2
+ 1885              	.L144:
+ 1886 0038 00000000 		.word	.LANCHOR4
+ 1887              		.cfi_endproc
+ 1888              	.LFE42:
+ 1890              		.section	.text.vs1003_set_volume,"ax",%progbits
+ 1891              		.align	1
+ 1892              		.global	vs1003_set_volume
+ 1893              		.syntax unified
+ 1894              		.thumb
+ 1895              		.thumb_func
+ 1896              		.fpu softvfp
+ 1898              	vs1003_set_volume:
+ 1899              	.LVL171:
+ 1900              	.LFB43:
+ 638:vs1003.c      **** 
+ 639:vs1003.c      **** 
+ 640:vs1003.c      **** void vs1003_set_volume (unsigned short volume)
+ 641:vs1003.c      **** {
+ 1901              		.loc 1 641 1 is_stmt 1 view -0
+ 1902              		.cfi_startproc
+ 1903              		@ args = 0, pretend = 0, frame = 0
+ 1904              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1905              		@ link register save eliminated.
+ 642:vs1003.c      ****       unsigned short volt = 0;
+ 1906              		.loc 1 642 7 view .LVU506
+ 643:vs1003.c      ****       volt = volume;
+ 1907              		.loc 1 643 7 view .LVU507
+ 644:vs1003.c      ****       volt <<= 8;
+ 1908              		.loc 1 644 7 view .LVU508
+ 645:vs1003.c      ****       volt += volume;
+ 1909              		.loc 1 645 7 view .LVU509
+ 646:vs1003.c      ****       vs1003_cmd_write(SPI_VOL,volt);
+ 1910              		.loc 1 646 7 view .LVU510
+ 645:vs1003.c      ****       volt += volume;
+ 1911              		.loc 1 645 12 is_stmt 0 view .LVU511
+ 1912 0000 00EB0020 		add	r0, r0, r0, lsl #8
+ 1913              	.LVL172:
+ 1914              		.loc 1 646 7 view .LVU512
+ 1915 0004 81B2     		uxth	r1, r0
+ 1916 0006 0B20     		movs	r0, #11
+ 1917 0008 FFF7FEBF 		b	vs1003_cmd_write
+ 1918              	.LVL173:
+ 1919              		.cfi_endproc
+ 1920              	.LFE43:
+ 1922              		.section	.text.vs1003_init,"ax",%progbits
+ 1923              		.align	1
+ 1924              		.global	vs1003_init
+ 1925              		.syntax unified
+ 1926              		.thumb
+ 1927              		.thumb_func
+ 1928              		.fpu softvfp
+ 1930              	vs1003_init:
+ 1931              	.LFB44:
+ 647:vs1003.c      **** }
+ 648:vs1003.c      **** 
+ 649:vs1003.c      **** 
+ 650:vs1003.c      **** void vs1003_init (void)
+ 651:vs1003.c      **** {
+ 1932              		.loc 1 651 1 is_stmt 1 view -0
+ 1933              		.cfi_startproc
+ 1934              		@ args = 0, pretend = 0, frame = 0
+ 1935              		@ frame_needed = 0, uses_anonymous_args = 0
+ 652:vs1003.c      ****       GPIO_Init_Pin(GPIOC,GPIO_Pin_3,GPIO_Speed_50MHz,GPIO_Mode_IPU);
+ 1936              		.loc 1 652 7 view .LVU514
+ 651:vs1003.c      ****       GPIO_Init_Pin(GPIOC,GPIO_Pin_3,GPIO_Speed_50MHz,GPIO_Mode_IPU);
+ 1937              		.loc 1 651 1 is_stmt 0 view .LVU515
+ 1938 0000 10B5     		push	{r4, lr}
+ 1939              		.cfi_def_cfa_offset 8
+ 1940              		.cfi_offset 4, -8
+ 1941              		.cfi_offset 14, -4
+ 1942              		.loc 1 652 7 view .LVU516
+ 1943 0002 0F4C     		ldr	r4, .L148
+ 1944 0004 4823     		movs	r3, #72
+ 1945 0006 0322     		movs	r2, #3
+ 1946 0008 0821     		movs	r1, #8
+ 1947 000a 2046     		mov	r0, r4
+ 1948 000c FFF7FEFF 		bl	GPIO_Init_Pin
+ 1949              	.LVL174:
+ 653:vs1003.c      ****       GPIO_Init_Pin(GPIOC,GPIO_Pin_10,GPIO_Speed_50MHz,GPIO_Mode_Out_PP);
+ 1950              		.loc 1 653 7 is_stmt 1 view .LVU517
+ 1951 0010 1023     		movs	r3, #16
+ 1952 0012 0322     		movs	r2, #3
+ 1953 0014 4FF48061 		mov	r1, #1024
+ 1954 0018 2046     		mov	r0, r4
+ 1955 001a FFF7FEFF 		bl	GPIO_Init_Pin
+ 1956              	.LVL175:
+ 654:vs1003.c      ****       GPIO_Init_Pin(GPIOC,GPIO_Pin_11,GPIO_Speed_50MHz,GPIO_Mode_Out_PP);
+ 1957              		.loc 1 654 7 view .LVU518
+ 1958 001e 1023     		movs	r3, #16
+ 1959 0020 0322     		movs	r2, #3
+ 1960 0022 4FF40061 		mov	r1, #2048
+ 1961 0026 2046     		mov	r0, r4
+ 1962 0028 FFF7FEFF 		bl	GPIO_Init_Pin
+ 1963              	.LVL176:
+ 655:vs1003.c      ****       MP3_DCS_SET(1);
+ 1964              		.loc 1 655 7 view .LVU519
+ 1965 002c E368     		ldr	r3, [r4, #12]
+ 1966 002e 43F40063 		orr	r3, r3, #2048
+ 1967 0032 E360     		str	r3, [r4, #12]
+ 656:vs1003.c      ****       MP3_CCS_SET(1);
+ 1968              		.loc 1 656 7 view .LVU520
+ 1969 0034 E368     		ldr	r3, [r4, #12]
+ 1970 0036 43F48063 		orr	r3, r3, #1024
+ 1971 003a E360     		str	r3, [r4, #12]
+ 657:vs1003.c      **** }
+ 1972              		.loc 1 657 1 is_stmt 0 view .LVU521
+ 1973 003c 10BD     		pop	{r4, pc}
+ 1974              	.L149:
+ 1975 003e 00BF     		.align	2
+ 1976              	.L148:
+ 1977 0040 00100140 		.word	1073811456
+ 1978              		.cfi_endproc
+ 1979              	.LFE44:
+ 1981              		.section	.text.vs1003_data_write,"ax",%progbits
+ 1982              		.align	1
+ 1983              		.global	vs1003_data_write
+ 1984              		.syntax unified
+ 1985              		.thumb
+ 1986              		.thumb_func
+ 1987              		.fpu softvfp
+ 1989              	vs1003_data_write:
+ 1990              	.LVL177:
+ 1991              	.LFB45:
+ 658:vs1003.c      **** 
+ 659:vs1003.c      **** void vs1003_data_write (unsigned char * buff)
+ 660:vs1003.c      **** {
+ 1992              		.loc 1 660 1 is_stmt 1 view -0
+ 1993              		.cfi_startproc
+ 1994              		@ args = 0, pretend = 0, frame = 0
+ 1995              		@ frame_needed = 0, uses_anonymous_args = 0
+ 661:vs1003.c      ****       unsigned char n = 32;
+ 1996              		.loc 1 661 7 view .LVU523
+ 662:vs1003.c      ****       MP3_DCS_SET(0);;
+ 1997              		.loc 1 662 7 view .LVU524
+ 660:vs1003.c      ****       unsigned char n = 32;
+ 1998              		.loc 1 660 1 is_stmt 0 view .LVU525
+ 1999 0000 70B5     		push	{r4, r5, r6, lr}
+ 2000              		.cfi_def_cfa_offset 16
+ 2001              		.cfi_offset 4, -16
+ 2002              		.cfi_offset 5, -12
+ 2003              		.cfi_offset 6, -8
+ 2004              		.cfi_offset 14, -4
+ 660:vs1003.c      ****       unsigned char n = 32;
+ 2005              		.loc 1 660 1 view .LVU526
+ 2006 0002 0546     		mov	r5, r0
+ 2007              		.loc 1 662 7 view .LVU527
+ 2008 0004 0B4C     		ldr	r4, .L153
+ 2009 0006 00F12006 		add	r6, r0, #32
+ 2010 000a E368     		ldr	r3, [r4, #12]
+ 2011 000c 23F40063 		bic	r3, r3, #2048
+ 2012 0010 E360     		str	r3, [r4, #12]
+ 2013              		.loc 1 662 22 is_stmt 1 view .LVU528
+ 663:vs1003.c      ****       while (n--) {
+ 2014              		.loc 1 663 7 view .LVU529
+ 2015              	.LVL178:
+ 2016              	.L151:
+ 2017              		.loc 1 663 13 view .LVU530
+ 2018              		.loc 1 663 13 is_stmt 0 view .LVU531
+ 2019 0012 B542     		cmp	r5, r6
+ 2020 0014 08D1     		bne	.L152
+ 664:vs1003.c      **** 	    SPI_read_write_byte(*buff++);
+ 665:vs1003.c      ****       }
+ 666:vs1003.c      ****       MP3_DCS_SET(1);
+ 2021              		.loc 1 666 7 is_stmt 1 view .LVU532
+ 2022 0016 E368     		ldr	r3, [r4, #12]
+ 2023 0018 43F40063 		orr	r3, r3, #2048
+ 2024 001c E360     		str	r3, [r4, #12]
+ 667:vs1003.c      ****       MP3_CCS_SET(1);
+ 2025              		.loc 1 667 7 view .LVU533
+ 2026 001e E368     		ldr	r3, [r4, #12]
+ 2027 0020 43F48063 		orr	r3, r3, #1024
+ 2028 0024 E360     		str	r3, [r4, #12]
+ 668:vs1003.c      **** }
+ 2029              		.loc 1 668 1 is_stmt 0 view .LVU534
+ 2030 0026 70BD     		pop	{r4, r5, r6, pc}
+ 2031              	.LVL179:
+ 2032              	.L152:
+ 664:vs1003.c      **** 	    SPI_read_write_byte(*buff++);
+ 2033              		.loc 1 664 6 is_stmt 1 view .LVU535
+ 664:vs1003.c      **** 	    SPI_read_write_byte(*buff++);
+ 2034              		.loc 1 664 6 is_stmt 0 view .LVU536
+ 2035 0028 15F8010B 		ldrb	r0, [r5], #1	@ zero_extendqisi2
+ 2036              	.LVL180:
+ 664:vs1003.c      **** 	    SPI_read_write_byte(*buff++);
+ 2037              		.loc 1 664 6 view .LVU537
+ 2038 002c FFF7FEFF 		bl	SPI_read_write_byte
+ 2039              	.LVL181:
+ 2040 0030 EFE7     		b	.L151
+ 2041              	.L154:
+ 2042 0032 00BF     		.align	2
+ 2043              	.L153:
+ 2044 0034 00100140 		.word	1073811456
+ 2045              		.cfi_endproc
+ 2046              	.LFE45:
+ 2048              		.global	bitrate
+ 2049              		.global	vs1003_ram
+ 2050              		.global	regvalue
+ 2051              		.global	dtab
+ 2052              		.global	atab
+ 2053              		.section	.bss.regvalue,"aw",%nobits
+ 2054              		.align	1
+ 2055              		.set	.LANCHOR0,. + 0
+ 2058              	regvalue:
+ 2059 0000 0000     		.space	2
+ 2060              		.section	.data.vs1003_ram,"aw"
+ 2061              		.set	.LANCHOR4,. + 0
+ 2064              	vs1003_ram:
+ 2065 0000 00000000 		.ascii	"\000\000\000\000\372"
+ 2065      FA
+ 2066              		.section	.rodata.atab,"a"
+ 2067              		.set	.LANCHOR2,. + 0
+ 2070              	atab:
+ 2071 0000 07060606 		.ascii	"\007\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2071      06060606 
+ 2071      06060606 
+ 2071      06
+ 2072 000d 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\007"
+ 2072      06060606 
+ 2072      06060606 
+ 2072      07
+ 2073 001a 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2073      06060606 
+ 2073      06060606 
+ 2073      06
+ 2074 0027 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2074      06060606 
+ 2074      06060606 
+ 2074      06
+ 2075 0034 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2075      06060606 
+ 2075      06060606 
+ 2075      06
+ 2076 0041 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2076      06060606 
+ 2076      06060606 
+ 2076      06
+ 2077 004e 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2077      06060606 
+ 2077      06060606 
+ 2077      06
+ 2078 005b 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2078      06060606 
+ 2078      06060606 
+ 2078      06
+ 2079 0068 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2079      06060606 
+ 2079      06060606 
+ 2079      06
+ 2080 0075 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2080      06060606 
+ 2080      06060606 
+ 2080      06
+ 2081 0082 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2081      06060606 
+ 2081      06060606 
+ 2081      06
+ 2082 008f 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2082      06060606 
+ 2082      06060606 
+ 2082      06
+ 2083 009c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2083      06060606 
+ 2083      06060606 
+ 2083      06
+ 2084 00a9 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2084      06060606 
+ 2084      06060606 
+ 2084      06
+ 2085 00b6 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2085      06060606 
+ 2085      06060606 
+ 2085      06
+ 2086 00c3 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2086      06060606 
+ 2086      06060606 
+ 2086      06
+ 2087 00d0 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2087      06060606 
+ 2087      06060606 
+ 2087      06
+ 2088 00dd 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2088      06060606 
+ 2088      06060606 
+ 2088      06
+ 2089 00ea 06060606 		.ascii	"\006\006\006\006\006\006\007\006\006\006\006\006\006"
+ 2089      06060706 
+ 2089      06060606 
+ 2089      06
+ 2090 00f7 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2090      06060606 
+ 2090      06060606 
+ 2090      06
+ 2091 0104 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2091      06060606 
+ 2091      06060606 
+ 2091      06
+ 2092 0111 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2092      06060606 
+ 2092      06060606 
+ 2092      06
+ 2093 011e 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2093      06060606 
+ 2093      06060606 
+ 2093      06
+ 2094 012b 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2094      06060606 
+ 2094      06060606 
+ 2094      06
+ 2095 0138 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2095      06060606 
+ 2095      06060606 
+ 2095      06
+ 2096 0145 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2096      06060606 
+ 2096      06060606 
+ 2096      06
+ 2097 0152 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2097      06060606 
+ 2097      06060606 
+ 2097      06
+ 2098 015f 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2098      06060606 
+ 2098      06060606 
+ 2098      06
+ 2099 016c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2099      06060606 
+ 2099      06060606 
+ 2099      06
+ 2100 0179 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2100      06060606 
+ 2100      06060606 
+ 2100      06
+ 2101 0186 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2101      06060606 
+ 2101      06060606 
+ 2101      06
+ 2102 0193 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2102      06060606 
+ 2102      06060606 
+ 2102      06
+ 2103 01a0 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2103      06060606 
+ 2103      06060606 
+ 2103      06
+ 2104 01ad 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2104      06060606 
+ 2104      06060606 
+ 2104      06
+ 2105 01ba 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2105      06060606 
+ 2105      06060606 
+ 2105      06
+ 2106 01c7 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2106      06060606 
+ 2106      06060606 
+ 2106      06
+ 2107 01d4 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2107      06060606 
+ 2107      06060606 
+ 2107      06
+ 2108 01e1 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2108      06060606 
+ 2108      06060606 
+ 2108      06
+ 2109 01ee 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2109      06060606 
+ 2109      06060606 
+ 2109      06
+ 2110 01fb 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2110      06060606 
+ 2110      06060606 
+ 2110      06
+ 2111 0208 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2111      06060606 
+ 2111      06060606 
+ 2111      06
+ 2112 0215 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2112      06060606 
+ 2112      06060606 
+ 2112      06
+ 2113 0222 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2113      06060606 
+ 2113      06060606 
+ 2113      06
+ 2114 022f 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2114      06060606 
+ 2114      06060606 
+ 2114      06
+ 2115 023c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2115      06060606 
+ 2115      06060606 
+ 2115      06
+ 2116 0249 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2116      06060606 
+ 2116      06060606 
+ 2116      06
+ 2117 0256 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2117      06060606 
+ 2117      06060606 
+ 2117      06
+ 2118 0263 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2118      06060606 
+ 2118      06060606 
+ 2118      06
+ 2119 0270 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2119      06060606 
+ 2119      06060606 
+ 2119      06
+ 2120 027d 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2120      06060606 
+ 2120      06060606 
+ 2120      06
+ 2121 028a 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2121      06060606 
+ 2121      06060606 
+ 2121      06
+ 2122 0297 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2122      06060606 
+ 2122      06060606 
+ 2122      06
+ 2123 02a4 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2123      06060606 
+ 2123      06060606 
+ 2123      06
+ 2124 02b1 07060606 		.ascii	"\007\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2124      06060606 
+ 2124      06060606 
+ 2124      06
+ 2125 02be 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\007\006"
+ 2125      06060606 
+ 2125      06060607 
+ 2125      06
+ 2126 02cb 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2126      06060606 
+ 2126      06060606 
+ 2126      06
+ 2127 02d8 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2127      06060606 
+ 2127      06060606 
+ 2127      06
+ 2128 02e5 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2128      06060606 
+ 2128      06060606 
+ 2128      06
+ 2129 02f2 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2129      06060606 
+ 2129      06060606 
+ 2129      06
+ 2130 02ff 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2130      06060606 
+ 2130      06060606 
+ 2130      06
+ 2131 030c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2131      06060606 
+ 2131      06060606 
+ 2131      06
+ 2132 0319 06060606 		.ascii	"\006\006\006\006\006\007\006\006\006\006\006\006\006"
+ 2132      06070606 
+ 2132      06060606 
+ 2132      06
+ 2133 0326 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2133      06060606 
+ 2133      06060606 
+ 2133      06
+ 2134 0333 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2134      06060606 
+ 2134      06060606 
+ 2134      06
+ 2135 0340 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2135      06060606 
+ 2135      06060606 
+ 2135      06
+ 2136 034d 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2136      06060606 
+ 2136      06060606 
+ 2136      06
+ 2137 035a 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2137      06060606 
+ 2137      06060606 
+ 2137      06
+ 2138 0367 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2138      06060606 
+ 2138      06060606 
+ 2138      06
+ 2139 0374 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2139      06060606 
+ 2139      06060606 
+ 2139      06
+ 2140 0381 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2140      06060606 
+ 2140      06060606 
+ 2140      06
+ 2141 038e 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 2141      06060606 
+ 2141      06060606 
+ 2141      06
+ 2142 039b 06060606 		.ascii	"\006\006\006\006\007\006\006\006\006\006\006\006\006"
+ 2142      07060606 
+ 2142      06060606 
+ 2142      06
+ 2143 03a8 06060606 		.ascii	"\006\006\006\006\006\006\012"
+ 2143      06060A
+ 2144              		.section	.rodata.bitrate,"a"
+ 2145              		.align	1
+ 2146              		.set	.LANCHOR1,. + 0
+ 2149              	bitrate:
+ 2150 0000 0000     		.short	0
+ 2151 0002 0800     		.short	8
+ 2152 0004 1000     		.short	16
+ 2153 0006 1800     		.short	24
+ 2154 0008 2000     		.short	32
+ 2155 000a 2800     		.short	40
+ 2156 000c 3000     		.short	48
+ 2157 000e 3800     		.short	56
+ 2158 0010 4000     		.short	64
+ 2159 0012 5000     		.short	80
+ 2160 0014 6000     		.short	96
+ 2161 0016 7000     		.short	112
+ 2162 0018 8000     		.short	128
+ 2163 001a 9000     		.short	144
+ 2164 001c A000     		.short	160
+ 2165 001e 0000     		.short	0
+ 2166 0020 0000     		.short	0
+ 2167 0022 2000     		.short	32
+ 2168 0024 2800     		.short	40
+ 2169 0026 3000     		.short	48
+ 2170 0028 3800     		.short	56
+ 2171 002a 4000     		.short	64
+ 2172 002c 5000     		.short	80
+ 2173 002e 6000     		.short	96
+ 2174 0030 7000     		.short	112
+ 2175 0032 8000     		.short	128
+ 2176 0034 A000     		.short	160
+ 2177 0036 C000     		.short	192
+ 2178 0038 E000     		.short	224
+ 2179 003a 0001     		.short	256
+ 2180 003c 4001     		.short	320
+ 2181 003e 0000     		.short	0
+ 2182              		.section	.rodata.dtab,"a"
+ 2183              		.align	1
+ 2184              		.set	.LANCHOR3,. + 0
+ 2187              	dtab:
+ 2188 0000 5080     		.short	-32688
+ 2189 0002 1336     		.short	13843
+ 2190 0004 2400     		.short	36
+ 2191 0006 003E     		.short	15872
+ 2192 0008 0138     		.short	14337
+ 2193 000a 0000     		.short	0
+ 2194 000c D716     		.short	5847
+ 2195 000e 00F4     		.short	-3072
+ 2196 0010 C055     		.short	21952
+ 2197 0012 0000     		.short	0
+ 2198 0014 170A     		.short	2583
+ 2199 0016 00F4     		.short	-3072
+ 2200 0018 C057     		.short	22464
+ 2201 001a 0600     		.short	6
+ 2202 001c 1750     		.short	20503
+ 2203 001e 80B0     		.short	-20352
+ 2204 0020 2400     		.short	36
+ 2205 0022 003F     		.short	16128
+ 2206 0024 2400     		.short	36
+ 2207 0026 0020     		.short	8192
+ 2208 0028 0000     		.short	0
+ 2209 002a F036     		.short	14064
+ 2210 002c 0118     		.short	6145
+ 2211 002e 0028     		.short	10240
+ 2212 0030 C031     		.short	12736
+ 2213 0032 5C80     		.short	-32676
+ 2214 0034 123E     		.short	15890
+ 2215 0036 17B8     		.short	-18409
+ 2216 0038 123E     		.short	15890
+ 2217 003a 1538     		.short	14357
+ 2218 003c 053E     		.short	15877
+ 2219 003e 14B8     		.short	-18412
+ 2220 0040 1536     		.short	13845
+ 2221 0042 2400     		.short	36
+ 2222 0044 0000     		.short	0
+ 2223 0046 0A80     		.short	-32758
+ 2224 0048 103E     		.short	15888
+ 2225 004a 0138     		.short	14337
+ 2226 004c 0600     		.short	6
+ 2227 004e 0000     		.short	0
+ 2228 0050 103E     		.short	15888
+ 2229 0052 03B8     		.short	-18429
+ 2230 0054 0000     		.short	0
+ 2231 0056 0303     		.short	771
+ 2232 0058 113E     		.short	15889
+ 2233 005a 0538     		.short	14341
+ 2234 005c 113E     		.short	15889
+ 2235 005e 07B8     		.short	-18425
+ 2236 0060 143E     		.short	15892
+ 2237 0062 1238     		.short	14354
+ 2238 0064 84B8     		.short	-18300
+ 2239 0066 0C13     		.short	4876
+ 2240 0068 1034     		.short	13328
+ 2241 006a 2440     		.short	16420
+ 2242 006c 1241     		.short	16658
+ 2243 006e D010     		.short	4304
+ 2244 0070 1040     		.short	16400
+ 2245 0072 8C00     		.short	140
+ 2246 0074 1040     		.short	16400
+ 2247 0076 2400     		.short	36
+ 2248 0078 00F4     		.short	-3072
+ 2249 007a 1240     		.short	16402
+ 2250 007c 0030     		.short	12288
+ 2251 007e 4038     		.short	14400
+ 2252 0080 0930     		.short	12297
+ 2253 0082 0138     		.short	14337
+ 2254 0084 0000     		.short	0
+ 2255 0086 4100     		.short	65
+ 2256 0088 02FE     		.short	-510
+ 2257 008a 2400     		.short	36
+ 2258 008c 0029     		.short	10496
+ 2259 008e 4084     		.short	-31680
+ 2260 0090 B248     		.short	18610
+ 2261 0092 2400     		.short	36
+ 2262 0094 F336     		.short	14067
+ 2263 0096 4408     		.short	2116
+ 2264 0098 0663     		.short	25350
+ 2265 009a 4588     		.short	-30651
+ 2266 009c 3AAE     		.short	-20934
+ 2267 009e 4088     		.short	-30656
+ 2268 00a0 8EBF     		.short	-16498
+ 2269 00a2 418B     		.short	-29887
+ 2270 00a4 32AC     		.short	-21454
+ 2271 00a6 46A8     		.short	-22458
+ 2272 00a8 C8FF     		.short	-56
+ 2273 00aa C7AB     		.short	-21561
+ 2274 00ac 013E     		.short	15873
+ 2275 00ae 0078     		.short	30720
+ 2276 00b0 00F4     		.short	-3072
+ 2277 00b2 8044     		.short	17536
+ 2278 00b4 9060     		.short	24720
+ 2279 00b6 2400     		.short	36
+ 2280 00b8 9060     		.short	24720
+ 2281 00ba 2400     		.short	36
+ 2282 00bc 00F4     		.short	-3072
+ 2283 00be 1540     		.short	16405
+ 2284 00c0 0930     		.short	12297
+ 2285 00c2 4634     		.short	13382
+ 2286 00c4 0930     		.short	12297
+ 2287 00c6 C737     		.short	14279
+ 2288 00c8 0930     		.short	12297
+ 2289 00ca 0018     		.short	6144
+ 2290 00cc 0930     		.short	12297
+ 2291 00ce 4438     		.short	14404
+ 2292 00d0 B348     		.short	18611
+ 2293 00d2 E0E1     		.short	-7712
+ 2294 00d4 8248     		.short	18562
+ 2295 00d6 4040     		.short	16448
+ 2296 00d8 CAFE     		.short	-310
+ 2297 00da 2400     		.short	36
+ 2298 00dc C25A     		.short	23234
+ 2299 00de 2400     		.short	36
+ 2300 00e0 525A     		.short	23122
+ 2301 00e2 2400     		.short	36
+ 2302 00e4 C24C     		.short	19650
+ 2303 00e6 2400     		.short	36
+ 2304 00e8 BA48     		.short	18618
+ 2305 00ea 4040     		.short	16448
+ 2306 00ec EA4E     		.short	20202
+ 2307 00ee 0148     		.short	18433
+ 2308 00f0 CA4E     		.short	20170
+ 2309 00f2 0098     		.short	-26624
+ 2310 00f4 80FF     		.short	-128
+ 2311 00f6 C11B     		.short	7105
+ 2312 00f8 EBF1     		.short	-3605
+ 2313 00fa E2E3     		.short	-7198
+ 2314 00fc EAF1     		.short	-3606
+ 2315 00fe 4C18     		.short	6220
+ 2316 0100 8B4C     		.short	19595
+ 2317 0102 E4E5     		.short	-6684
+ 2318 0104 BE48     		.short	18622
+ 2319 0106 0498     		.short	-26620
+ 2320 0108 8E48     		.short	18574
+ 2321 010a C641     		.short	16838
+ 2322 010c 82FE     		.short	-382
+ 2323 010e 2400     		.short	36
+ 2324 0110 8E5A     		.short	23182
+ 2325 0112 2400     		.short	36
+ 2326 0114 5E52     		.short	21086
+ 2327 0116 851B     		.short	7045
+ 2328 0118 FE4F     		.short	20478
+ 2329 011a 2400     		.short	36
+ 2330 011c B648     		.short	18614
+ 2331 011e C641     		.short	16838
+ 2332 0120 D64D     		.short	19926
+ 2333 0122 C748     		.short	18631
+ 2334 0124 F64D     		.short	19958
+ 2335 0126 2400     		.short	36
+ 2336 0128 D6F1     		.short	-3626
+ 2337 012a 2400     		.short	36
+ 2338 012c D6F1     		.short	-3626
+ 2339 012e 2400     		.short	36
+ 2340 0130 DA4E     		.short	20186
+ 2341 0132 2400     		.short	36
+ 2342 0134 0000     		.short	0
+ 2343 0136 C30F     		.short	4035
+ 2344 0138 0029     		.short	10496
+ 2345 013a 4084     		.short	-31680
+ 2346 013c 824E     		.short	20098
+ 2347 013e 2400     		.short	36
+ 2348 0140 8440     		.short	16516
+ 2349 0142 0C13     		.short	4876
+ 2350 0144 0600     		.short	6
+ 2351 0146 0001     		.short	256
+ 2352 0148 4034     		.short	13376
+ 2353 014a 2440     		.short	16420
+ 2354 014c 1040     		.short	16400
+ 2355 014e 2400     		.short	36
+ 2356 0150 00F4     		.short	-3072
+ 2357 0152 1240     		.short	16402
+ 2358 0154 0032     		.short	12800
+ 2359 0156 2440     		.short	16420
+ 2360 0158 32B1     		.short	-20174
+ 2361 015a 2400     		.short	36
+ 2362 015c 1442     		.short	16916
+ 2363 015e 2400     		.short	36
+ 2364 0160 24F2     		.short	-3548
+ 2365 0162 2400     		.short	36
+ 2366 0164 3062     		.short	25136
+ 2367 0166 2400     		.short	36
+ 2368 0168 0100     		.short	1
+ 2369 016a 0100     		.short	1
+ 2370 016c 0028     		.short	10240
+ 2371 016e 492B     		.short	11081
+ 2372 0170 0000     		.short	0
+ 2373 0172 2400     		.short	36
+ 2374 0174 00F4     		.short	-3072
+ 2375 0176 C240     		.short	16578
+ 2376 0178 0032     		.short	12800
+ 2377 017a 2400     		.short	36
+ 2378 017c 82FF     		.short	-126
+ 2379 017e 2400     		.short	36
+ 2380 0180 B248     		.short	18610
+ 2381 0182 2400     		.short	36
+ 2382 0184 30B1     		.short	-20176
+ 2383 0186 2400     		.short	36
+ 2384 0188 0262     		.short	25090
+ 2385 018a 2400     		.short	36
+ 2386 018c 3F00     		.short	63
+ 2387 018e 01F0     		.short	-4095
+ 2388 0190 0028     		.short	10240
+ 2389 0192 512E     		.short	11857
+ 2390 0194 0000     		.short	0
+ 2391 0196 4610     		.short	4166
+ 2392 0198 64FE     		.short	-412
+ 2393 019a 2400     		.short	36
+ 2394 019c BE48     		.short	18622
+ 2395 019e 2400     		.short	36
+ 2396 01a0 0028     		.short	10240
+ 2397 01a2 402F     		.short	12096
+ 2398 01a4 013A     		.short	14849
+ 2399 01a6 2480     		.short	-32732
+ 2400 01a8 0032     		.short	12800
+ 2401 01aa 2400     		.short	36
+ 2402 01ac 10B0     		.short	-20464
+ 2403 01ae 2400     		.short	36
+ 2404 01b0 20C0     		.short	-16352
+ 2405 01b2 2400     		.short	36
+ 2406 01b4 003A     		.short	14848
+ 2407 01b6 2400     		.short	36
+ 2408 01b8 F436     		.short	14068
+ 2409 01ba 1218     		.short	6162
+ 2410 01bc F136     		.short	14065
+ 2411 01be 0798     		.short	-26617
+ 2412 01c0 F136     		.short	14065
+ 2413 01c2 0518     		.short	6149
+ 2414 01c4 F036     		.short	14064
+ 2415 01c6 0398     		.short	-26621
+ 2416 01c8 F036     		.short	14064
+ 2417 01ca 0118     		.short	6145
+ 2418 01cc 0534     		.short	13317
+ 2419 01ce 1490     		.short	-28652
+ 2420 01d0 F336     		.short	14067
+ 2421 01d2 2400     		.short	36
+ 2422 01d4 F236     		.short	14066
+ 2423 01d6 1518     		.short	6165
+ 2424 01d8 0020     		.short	8192
+ 2425 01da 0000     		.short	0
+ 2426 01dc F236     		.short	14066
+ 2427 01de 1798     		.short	-26601
+ 2428 01e0 C780     		.short	-32569
+ 2429 01e2 123E     		.short	15890
+ 2430 01e4 17B8     		.short	-18409
+ 2431 01e6 123E     		.short	15890
+ 2432 01e8 1538     		.short	14357
+ 2433 01ea 053E     		.short	15877
+ 2434 01ec 14B8     		.short	-18412
+ 2435 01ee 2536     		.short	13861
+ 2436 01f0 2400     		.short	36
+ 2437 01f2 0000     		.short	0
+ 2438 01f4 0A80     		.short	-32758
+ 2439 01f6 103E     		.short	15888
+ 2440 01f8 0278     		.short	30722
+ 2441 01fa 103E     		.short	15888
+ 2442 01fc 04F8     		.short	-2044
+ 2443 01fe 113E     		.short	15889
+ 2444 0200 1078     		.short	30736
+ 2445 0202 143E     		.short	15892
+ 2446 0204 1378     		.short	30739
+ 2447 0206 0600     		.short	6
+ 2448 0208 5100     		.short	81
+ 2449 020a 133E     		.short	15891
+ 2450 020c 0EF8     		.short	-2034
+ 2451 020e 133E     		.short	15891
+ 2452 0210 2440     		.short	16420
+ 2453 0212 0930     		.short	12297
+ 2454 0214 4038     		.short	14400
+ 2455 0216 0930     		.short	12297
+ 2456 0218 5238     		.short	14418
+ 2457 021a 1929     		.short	10521
+ 2458 021c C064     		.short	25792
+ 2459 021e 0600     		.short	6
+ 2460 0220 D006     		.short	1744
+ 2461 0222 0031     		.short	12544
+ 2462 0224 D25B     		.short	23506
+ 2463 0226 0600     		.short	6
+ 2464 0228 D155     		.short	21969
+ 2465 022a 0930     		.short	12297
+ 2466 022c 0018     		.short	6144
+ 2467 022e 0930     		.short	12297
+ 2468 0230 0204     		.short	1026
+ 2469 0232 2661     		.short	24870
+ 2470 0234 2400     		.short	36
+ 2471 0236 0600     		.short	6
+ 2472 0238 D100     		.short	209
+ 2473 023a 0028     		.short	10240
+ 2474 023c 054D     		.short	19717
+ 2475 023e 82B8     		.short	-18302
+ 2476 0240 2400     		.short	36
+ 2477 0242 0600     		.short	6
+ 2478 0244 1100     		.short	17
+ 2479 0246 0930     		.short	12297
+ 2480 0248 5038     		.short	14416
+ 2481 024a 0600     		.short	6
+ 2482 024c 1000     		.short	16
+ 2483 024e 0930     		.short	12297
+ 2484 0250 0038     		.short	14336
+ 2485 0252 1D29     		.short	10525
+ 2486 0254 0058     		.short	22528
+ 2487 0256 0000     		.short	0
+ 2488 0258 0018     		.short	6144
+ 2489 025a 0600     		.short	6
+ 2490 025c 1000     		.short	16
+ 2491 025e 82B8     		.short	-18302
+ 2492 0260 2400     		.short	36
+ 2493 0262 1D29     		.short	10525
+ 2494 0264 005B     		.short	23296
+ 2495 0266 0000     		.short	0
+ 2496 0268 0017     		.short	5888
+ 2497 026a 0000     		.short	0
+ 2498 026c 0103     		.short	769
+ 2499 026e 0039     		.short	14592
+ 2500 0270 C05B     		.short	23488
+ 2501 0272 0600     		.short	6
+ 2502 0274 D155     		.short	21969
+ 2503 0276 0930     		.short	12297
+ 2504 0278 D01B     		.short	7120
+ 2505 027a 0930     		.short	12297
+ 2506 027c 0404     		.short	1028
+ 2507 027e 0600     		.short	6
+ 2508 0280 5100     		.short	81
+ 2509 0282 0028     		.short	10240
+ 2510 0284 003D     		.short	15616
+ 2511 0286 0139     		.short	14593
+ 2512 0288 2400     		.short	36
+ 2513 028a 4844     		.short	17480
+ 2514 028c 0104     		.short	1025
+ 2515 028e 9241     		.short	16786
+ 2516 0290 2400     		.short	36
+ 2517 0292 9864     		.short	25752
+ 2518 0294 0124     		.short	9217
+ 2519 0296 1F00     		.short	31
+ 2520 0298 0140     		.short	16385
+ 2521 029a 1264     		.short	25618
+ 2522 029c 2400     		.short	36
+ 2523 029e 0600     		.short	6
+ 2524 02a0 1100     		.short	17
+ 2525 02a2 0028     		.short	10240
+ 2526 02a4 513C     		.short	15441
+ 2527 02a6 0000     		.short	0
+ 2528 02a8 8E05     		.short	1422
+ 2529 02aa 0024     		.short	9216
+ 2530 02ac 0E4C     		.short	19470
+ 2531 02ae 0000     		.short	0
+ 2532 02b0 1300     		.short	19
+ 2533 02b2 0600     		.short	6
+ 2534 02b4 5100     		.short	81
+ 2535 02b6 0600     		.short	6
+ 2536 02b8 031A     		.short	6659
+ 2537 02ba 0031     		.short	12544
+ 2538 02bc 2440     		.short	16420
+ 2539 02be 12F2     		.short	-3566
+ 2540 02c0 C444     		.short	17604
+ 2541 02c2 4643     		.short	17222
+ 2542 02c4 2400     		.short	36
+ 2543 02c6 00F4     		.short	-3072
+ 2544 02c8 D540     		.short	16597
+ 2545 02ca 0035     		.short	13568
+ 2546 02cc 2480     		.short	-32732
+ 2547 02ce 2A61     		.short	24874
+ 2548 02d0 2400     		.short	36
+ 2549 02d2 0000     		.short	0
+ 2550 02d4 2400     		.short	36
+ 2551 02d6 0028     		.short	10240
+ 2552 02d8 514C     		.short	19537
+ 2553 02da 0000     		.short	0
+ 2554 02dc 2400     		.short	36
+ 2555 02de 1336     		.short	13843
+ 2556 02e0 2400     		.short	36
+ 2557 02e2 0031     		.short	12544
+ 2558 02e4 0038     		.short	14336
+ 2559 02e6 1D29     		.short	10525
+ 2560 02e8 0080     		.short	-32768
+ 2561 02ea 00F2     		.short	-3584
+ 2562 02ec 2400     		.short	36
+ 2563 02ee 3F00     		.short	63
+ 2564 02f0 C2FE     		.short	-318
+ 2565 02f2 8240     		.short	16514
+ 2566 02f4 1144     		.short	17425
+ 2567 02f6 1331     		.short	12563
+ 2568 02f8 C01B     		.short	7104
+ 2569 02fa 22A1     		.short	-24286
+ 2570 02fc 2400     		.short	36
+ 2571 02fe 0000     		.short	0
+ 2572 0300 0220     		.short	8194
+ 2573 0302 2461     		.short	24868
+ 2574 0304 0124     		.short	9217
+ 2575 0306 0000     		.short	0
+ 2576 0308 0210     		.short	4098
+ 2577 030a 0028     		.short	10240
+ 2578 030c 0846     		.short	17928
+ 2579 030e 0000     		.short	0
+ 2580 0310 2400     		.short	36
+ 2581 0312 3F00     		.short	63
+ 2582 0314 02F8     		.short	-2046
+ 2583 0316 0031     		.short	12544
+ 2584 0318 2440     		.short	16420
+ 2585 031a 24B1     		.short	-20188
+ 2586 031c 2400     		.short	36
+ 2587 031e 0028     		.short	10240
+ 2588 0320 C04B     		.short	19392
+ 2589 0322 0039     		.short	14592
+ 2590 0324 2480     		.short	-32732
+ 2591 0326 2461     		.short	24868
+ 2592 0328 2400     		.short	36
+ 2593 032a 0000     		.short	0
+ 2594 032c 0208     		.short	2050
+ 2595 032e 0028     		.short	10240
+ 2596 0330 4848     		.short	18504
+ 2597 0332 0000     		.short	0
+ 2598 0334 2400     		.short	36
+ 2599 0336 3F00     		.short	63
+ 2600 0338 02FE     		.short	-510
+ 2601 033a 0031     		.short	12544
+ 2602 033c 2440     		.short	16420
+ 2603 033e 24B1     		.short	-20188
+ 2604 0340 2400     		.short	36
+ 2605 0342 0028     		.short	10240
+ 2606 0344 C04B     		.short	19392
+ 2607 0346 0039     		.short	14592
+ 2608 0348 2480     		.short	-32732
+ 2609 034a 2461     		.short	24868
+ 2610 034c 2400     		.short	36
+ 2611 034e 0000     		.short	0
+ 2612 0350 0204     		.short	1026
+ 2613 0352 0028     		.short	10240
+ 2614 0354 884A     		.short	19080
+ 2615 0356 0000     		.short	0
+ 2616 0358 2400     		.short	36
+ 2617 035a 3F00     		.short	63
+ 2618 035c 02FF     		.short	-254
+ 2619 035e 0031     		.short	12544
+ 2620 0360 2440     		.short	16420
+ 2621 0362 24B1     		.short	-20188
+ 2622 0364 2400     		.short	36
+ 2623 0366 0028     		.short	10240
+ 2624 0368 C04B     		.short	19392
+ 2625 036a 0039     		.short	14592
+ 2626 036c 2480     		.short	-32732
+ 2627 036e 2461     		.short	24868
+ 2628 0370 0104     		.short	1025
+ 2629 0372 3F00     		.short	63
+ 2630 0374 82FF     		.short	-126
+ 2631 0376 0028     		.short	10240
+ 2632 0378 C84B     		.short	19400
+ 2633 037a 24B1     		.short	-20188
+ 2634 037c 2400     		.short	36
+ 2635 037e 0039     		.short	14592
+ 2636 0380 2480     		.short	-32732
+ 2637 0382 82B8     		.short	-18302
+ 2638 0384 4C8C     		.short	-29620
+ 2639 0386 3038     		.short	14384
+ 2640 0388 2440     		.short	16420
+ 2641 038a 0600     		.short	6
+ 2642 038c 9100     		.short	145
+ 2643 038e 0439     		.short	14596
+ 2644 0390 4CD8     		.short	-10164
+ 2645 0392 0600     		.short	6
+ 2646 0394 D100     		.short	209
+ 2647 0396 0000     		.short	0
+ 2648 0398 1300     		.short	19
+ 2649 039a 0031     		.short	12544
+ 2650 039c 4C90     		.short	-28596
+ 2651 039e 0242     		.short	16898
+ 2652 03a0 CC9B     		.short	-25652
+ 2653 03a2 F039     		.short	14832
+ 2654 03a4 2440     		.short	16420
+ 2655 03a6 0031     		.short	12544
+ 2656 03a8 2440     		.short	16420
+ 2657 03aa 003C     		.short	15360
+ 2658 03ac 2440     		.short	16420
+ 2659 03ae 00F4     		.short	-3072
+ 2660 03b0 C144     		.short	17601
+ 2661 03b2 F034     		.short	13552
+ 2662 03b4 2480     		.short	-32732
+ 2663 03b6 2661     		.short	24870
+ 2664 03b8 2400     		.short	36
+ 2665 03ba 0600     		.short	6
+ 2666 03bc D006     		.short	1744
+ 2667 03be 0028     		.short	10240
+ 2668 03c0 D85D     		.short	24024
+ 2669 03c2 9442     		.short	17044
+ 2670 03c4 2400     		.short	36
+ 2671 03c6 0024     		.short	9216
+ 2672 03c8 825D     		.short	23938
+ 2673 03ca 0000     		.short	0
+ 2674 03cc 2400     		.short	36
+ 2675 03ce 00F4     		.short	-3072
+ 2676 03d0 1144     		.short	17425
+ 2677 03d2 2331     		.short	12579
+ 2678 03d4 2400     		.short	36
+ 2679 03d6 0031     		.short	12544
+ 2680 03d8 2480     		.short	-32732
+ 2681 03da 0242     		.short	16898
+ 2682 03dc 2400     		.short	36
+ 2683 03de 8241     		.short	16770
+ 2684 03e0 0124     		.short	9217
+ 2685 03e2 0000     		.short	0
+ 2686 03e4 0220     		.short	8194
+ 2687 03e6 0028     		.short	10240
+ 2688 03e8 895D     		.short	23945
+ 2689 03ea 0000     		.short	0
+ 2690 03ec 2400     		.short	36
+ 2691 03ee 1330     		.short	12307
+ 2692 03f0 4C18     		.short	6220
+ 2693 03f2 F030     		.short	12528
+ 2694 03f4 5278     		.short	30802
+ 2695 03f6 2461     		.short	24868
+ 2696 03f8 50B8     		.short	-18352
+ 2697 03fa 0600     		.short	6
+ 2698 03fc 0100     		.short	1
+ 2699 03fe 0028     		.short	10240
+ 2700 0400 8855     		.short	21896
+ 2701 0402 8840     		.short	16520
+ 2702 0404 C244     		.short	17602
+ 2703 0406 2442     		.short	16932
+ 2704 0408 2400     		.short	36
+ 2705 040a 2241     		.short	16674
+ 2706 040c 2400     		.short	36
+ 2707 040e 2241     		.short	16674
+ 2708 0410 2400     		.short	36
+ 2709 0412 00F4     		.short	-3072
+ 2710 0414 5140     		.short	16465
+ 2711 0416 0029     		.short	10496
+ 2712 0418 4074     		.short	29760
+ 2713 041a 0000     		.short	0
+ 2714 041c C856     		.short	22216
+ 2715 041e 2442     		.short	16932
+ 2716 0420 2400     		.short	36
+ 2717 0422 2241     		.short	16674
+ 2718 0424 2400     		.short	36
+ 2719 0426 2241     		.short	16674
+ 2720 0428 2400     		.short	36
+ 2721 042a 0029     		.short	10496
+ 2722 042c C069     		.short	27072
+ 2723 042e 00F4     		.short	-3072
+ 2724 0430 5140     		.short	16465
+ 2725 0432 0400     		.short	4
+ 2726 0434 0200     		.short	2
+ 2727 0436 0930     		.short	12297
+ 2728 0438 D01B     		.short	7120
+ 2729 043a 2330     		.short	12323
+ 2730 043c D21B     		.short	7122
+ 2731 043e E030     		.short	12512
+ 2732 0440 2440     		.short	16420
+ 2733 0442 2461     		.short	24868
+ 2734 0444 2400     		.short	36
+ 2735 0446 0000     		.short	0
+ 2736 0448 0240     		.short	16386
+ 2737 044a 0028     		.short	10240
+ 2738 044c 8859     		.short	22920
+ 2739 044e 0000     		.short	0
+ 2740 0450 2400     		.short	36
+ 2741 0452 0000     		.short	0
+ 2742 0454 0100     		.short	1
+ 2743 0456 2038     		.short	14368
+ 2744 0458 2440     		.short	16420
+ 2745 045a E030     		.short	12512
+ 2746 045c 2440     		.short	16420
+ 2747 045e 2461     		.short	24868
+ 2748 0460 0100     		.short	1
+ 2749 0462 3F00     		.short	63
+ 2750 0464 42FF     		.short	-190
+ 2751 0466 0028     		.short	10240
+ 2752 0468 885D     		.short	23944
+ 2753 046a 8241     		.short	16770
+ 2754 046c 2400     		.short	36
+ 2755 046e 0000     		.short	0
+ 2756 0470 2400     		.short	36
+ 2757 0472 0028     		.short	10240
+ 2758 0474 955D     		.short	23957
+ 2759 0476 0000     		.short	0
+ 2760 0478 2400     		.short	36
+ 2761 047a 1336     		.short	13843
+ 2762 047c 2400     		.short	36
+ 2763 047e 143E     		.short	15892
+ 2764 0480 24C0     		.short	-16348
+ 2765 0482 0029     		.short	10496
+ 2766 0484 0017     		.short	5888
+ 2767 0486 143E     		.short	15892
+ 2768 0488 2400     		.short	36
+ 2769 048a E336     		.short	14051
+ 2770 048c 8C00     		.short	140
+ 2771 048e E030     		.short	12512
+ 2772 0490 2440     		.short	16420
+ 2773 0492 22FE     		.short	-478
+ 2774 0494 1144     		.short	17425
+ 2775 0496 B648     		.short	18614
+ 2776 0498 8C04     		.short	1164
+ 2777 049a 0039     		.short	14592
+ 2778 049c 2480     		.short	-32732
+ 2779 049e 3330     		.short	12339
+ 2780 04a0 4C0C     		.short	3148
+ 2781 04a2 0600     		.short	6
+ 2782 04a4 1100     		.short	17
+ 2783 04a6 9268     		.short	26770
+ 2784 04a8 C204     		.short	1218
+ 2785 04aa 22A1     		.short	-24286
+ 2786 04ac 0204     		.short	1026
+ 2787 04ae 2661     		.short	24870
+ 2788 04b0 2400     		.short	36
+ 2789 04b2 0600     		.short	6
+ 2790 04b4 9300     		.short	147
+ 2791 04b6 0028     		.short	10240
+ 2792 04b8 0167     		.short	26369
+ 2793 04ba 0000     		.short	0
+ 2794 04bc 2400     		.short	36
+ 2795 04be 82B8     		.short	-18302
+ 2796 04c0 4C18     		.short	6220
+ 2797 04c2 1334     		.short	13331
+ 2798 04c4 1238     		.short	14354
+ 2799 04c6 0600     		.short	6
+ 2800 04c8 D200     		.short	210
+ 2801 04ca 003A     		.short	14848
+ 2802 04cc D25B     		.short	23506
+ 2803 04ce 0033     		.short	13056
+ 2804 04d0 2440     		.short	16420
+ 2805 04d2 0000     		.short	0
+ 2806 04d4 1300     		.short	19
+ 2807 04d6 003C     		.short	15360
+ 2808 04d8 2440     		.short	16420
+ 2809 04da 00F4     		.short	-3072
+ 2810 04dc C144     		.short	17601
+ 2811 04de F034     		.short	13552
+ 2812 04e0 2480     		.short	-32732
+ 2813 04e2 2661     		.short	24870
+ 2814 04e4 2400     		.short	36
+ 2815 04e6 0600     		.short	6
+ 2816 04e8 1101     		.short	273
+ 2817 04ea 0028     		.short	10240
+ 2818 04ec 1867     		.short	26392
+ 2819 04ee 9442     		.short	17044
+ 2820 04f0 2400     		.short	36
+ 2821 04f2 0024     		.short	9216
+ 2822 04f4 C266     		.short	26306
+ 2823 04f6 0000     		.short	0
+ 2824 04f8 2400     		.short	36
+ 2825 04fa 0300     		.short	3
+ 2826 04fc 01F0     		.short	-4095
+ 2827 04fe 0131     		.short	12545
+ 2828 0500 2400     		.short	36
+ 2829 0502 12B4     		.short	-19438
+ 2830 0504 2400     		.short	36
+ 2831 0506 2800     		.short	40
+ 2832 0508 0100     		.short	1
+ 2833 050a 0028     		.short	10240
+ 2834 050c C566     		.short	26309
+ 2835 050e 4461     		.short	24900
+ 2836 0510 2400     		.short	36
+ 2837 0512 0400     		.short	4
+ 2838 0514 0200     		.short	2
+ 2839 0516 0028     		.short	10240
+ 2840 0518 8166     		.short	26241
+ 2841 051a 2244     		.short	17442
+ 2842 051c 2400     		.short	36
+ 2843 051e 0000     		.short	0
+ 2844 0520 0210     		.short	4098
+ 2845 0522 2264     		.short	25634
+ 2846 0524 2400     		.short	36
+ 2847 0526 0028     		.short	10240
+ 2848 0528 C066     		.short	26304
+ 2849 052a 0039     		.short	14592
+ 2850 052c 2440     		.short	16420
+ 2851 052e 0039     		.short	14592
+ 2852 0530 2440     		.short	16420
+ 2853 0532 1331     		.short	12563
+ 2854 0534 4C0C     		.short	3148
+ 2855 0536 F336     		.short	14067
+ 2856 0538 2440     		.short	16420
+ 2857 053a F336     		.short	14067
+ 2858 053c 0ED8     		.short	-10226
+ 2859 053e F436     		.short	14068
+ 2860 0540 1358     		.short	22547
+ 2861 0542 F136     		.short	14065
+ 2862 0544 1058     		.short	22544
+ 2863 0546 F036     		.short	14064
+ 2864 0548 04D8     		.short	-10236
+ 2865 054a F036     		.short	14064
+ 2866 054c 0258     		.short	22530
+ 2867 054e 0534     		.short	13317
+ 2868 0550 1490     		.short	-28652
+ 2869 0552 F336     		.short	14067
+ 2870 0554 2400     		.short	36
+ 2871 0556 F236     		.short	14066
+ 2872 0558 1518     		.short	6165
+ 2873 055a 0020     		.short	8192
+ 2874 055c 0000     		.short	0
+ 2875 055e F236     		.short	14066
+ 2876 0560 1798     		.short	-26601
+ 2877 0562 6818     		.short	6248
+ 2878 0564 3200     		.short	50
+ 2879 0566 4F00     		.short	79
+ 2880 0568 7E00     		.short	126
+ 2881 056a C800     		.short	200
+ 2882 056c 3D01     		.short	317
+ 2883 056e F801     		.short	504
+ 2884 0570 2003     		.short	800
+ 2885 0572 F604     		.short	1270
+ 2886 0574 E007     		.short	2016
+ 2887 0576 800C     		.short	3200
+ 2888 0578 D813     		.short	5080
+ 2889 057a 7F1F     		.short	8063
+ 2890 057c 0032     		.short	12800
+ 2891 057e 5F4F     		.short	20319
+ 2892 0580 A861     		.short	25000
+ 2893 0582 0000     		.short	0
+ 2894 0584 0000     		.short	0
+ 2895 0586 0000     		.short	0
+ 2896 0588 0000     		.short	0
+ 2897 058a 0000     		.short	0
+ 2898 058c 0000     		.short	0
+ 2899 058e 0000     		.short	0
+ 2900 0590 0000     		.short	0
+ 2901 0592 A781     		.short	-32345
+ 2902 0594 123E     		.short	15890
+ 2903 0596 14B8     		.short	-18412
+ 2904 0598 0000     		.short	0
+ 2905 059a 0A80     		.short	-32758
+ 2906 059c 103E     		.short	15888
+ 2907 059e 0138     		.short	14337
+ 2908 05a0 103E     		.short	15888
+ 2909 05a2 03B8     		.short	-18429
+ 2910 05a4 113E     		.short	15889
+ 2911 05a6 0678     		.short	30726
+ 2912 05a8 113E     		.short	15889
+ 2913 05aa 13F8     		.short	-2029
+ 2914 05ac 133E     		.short	15891
+ 2915 05ae 0EF8     		.short	-2034
+ 2916 05b0 133E     		.short	15891
+ 2917 05b2 2440     		.short	16420
+ 2918 05b4 043E     		.short	15876
+ 2919 05b6 1078     		.short	30736
+ 2920 05b8 9A44     		.short	17562
+ 2921 05ba 4000     		.short	64
+ 2922 05bc 0100     		.short	1
+ 2923 05be 0300     		.short	3
+ 2924 05c0 0028     		.short	10240
+ 2925 05c2 0473     		.short	29444
+ 2926 05c4 3640     		.short	16438
+ 2927 05c6 C103     		.short	961
+ 2928 05c8 0300     		.short	3
+ 2929 05ca C2FF     		.short	-62
+ 2930 05cc 26B3     		.short	-19674
+ 2931 05ce 2400     		.short	36
+ 2932 05d0 1800     		.short	24
+ 2933 05d2 4200     		.short	66
+ 2934 05d4 2643     		.short	17190
+ 2935 05d6 9544     		.short	17557
+ 2936 05d8 2440     		.short	16420
+ 2937 05da D240     		.short	16594
+ 2938 05dc 0000     		.short	0
+ 2939 05de 8001     		.short	384
+ 2940 05e0 00A1     		.short	-24320
+ 2941 05e2 9040     		.short	16528
+ 2942 05e4 1000     		.short	16
+ 2943 05e6 C20F     		.short	4034
+ 2944 05e8 0442     		.short	16900
+ 2945 05ea 2400     		.short	36
+ 2946 05ec 82BC     		.short	-17278
+ 2947 05ee 9140     		.short	16529
+ 2948 05f0 9A45     		.short	17818
+ 2949 05f2 2400     		.short	36
+ 2950 05f4 0000     		.short	0
+ 2951 05f6 5400     		.short	84
+ 2952 05f8 0028     		.short	10240
+ 2953 05fa 0472     		.short	29188
+ 2954 05fc 86BD     		.short	-17018
+ 2955 05fe 9340     		.short	16531
+ 2956 0600 0024     		.short	9216
+ 2957 0602 C571     		.short	29125
+ 2958 0604 01FE     		.short	-511
+ 2959 0606 0C5E     		.short	24076
+ 2960 0608 435C     		.short	23619
+ 2961 060a 2D5F     		.short	24365
+ 2962 060c 465E     		.short	24134
+ 2963 060e 0C02     		.short	524
+ 2964 0610 565C     		.short	23638
+ 2965 0612 0C8A     		.short	-30196
+ 2966 0614 535E     		.short	24147
+ 2967 0616 0C5E     		.short	24076
+ 2968 0618 435C     		.short	23619
+ 2969 061a 2D5F     		.short	24365
+ 2970 061c 465E     		.short	24134
+ 2971 061e 0C02     		.short	524
+ 2972 0620 565C     		.short	23638
+ 2973 0622 0C8A     		.short	-30196
+ 2974 0624 525E     		.short	24146
+ 2975 0626 2400     		.short	36
+ 2976 0628 B24C     		.short	19634
+ 2977 062a 0544     		.short	17413
+ 2978 062c 1800     		.short	24
+ 2979 062e 4400     		.short	68
+ 2980 0630 4A65     		.short	25930
+ 2981 0632 2400     		.short	36
+ 2982 0634 0028     		.short	10240
+ 2983 0636 0080     		.short	-32768
+ 2984 0638 F436     		.short	14068
+ 2985 063a 1058     		.short	22544
+ 2986 063c D181     		.short	-32303
+ 2987 063e 123E     		.short	15890
+ 2988 0640 14B8     		.short	-18412
+ 2989 0642 0000     		.short	0
+ 2990 0644 0A80     		.short	-32758
+ 2991 0646 103E     		.short	15888
+ 2992 0648 0138     		.short	14337
+ 2993 064a 103E     		.short	15888
+ 2994 064c 03B8     		.short	-18429
+ 2995 064e 113E     		.short	15889
+ 2996 0650 0678     		.short	30726
+ 2997 0652 113E     		.short	15889
+ 2998 0654 13F8     		.short	-2029
+ 2999 0656 133E     		.short	15891
+ 3000 0658 0EF8     		.short	-2034
+ 3001 065a 133E     		.short	15891
+ 3002 065c 2440     		.short	16420
+ 3003 065e 043E     		.short	15876
+ 3004 0660 1078     		.short	30736
+ 3005 0662 9A44     		.short	17562
+ 3006 0664 4000     		.short	64
+ 3007 0666 0000     		.short	0
+ 3008 0668 0308     		.short	2051
+ 3009 066a 0028     		.short	10240
+ 3010 066c C47E     		.short	32452
+ 3011 066e F030     		.short	12528
+ 3012 0670 2440     		.short	16420
+ 3013 0672 FF0F     		.short	4095
+ 3014 0674 C2FE     		.short	-318
+ 3015 0676 20A0     		.short	-24544
+ 3016 0678 2400     		.short	36
+ 3017 067a FF0F     		.short	4095
+ 3018 067c 02FF     		.short	-254
+ 3019 067e 22A1     		.short	-24286
+ 3020 0680 2400     		.short	36
+ 3021 0682 3640     		.short	16438
+ 3022 0684 2400     		.short	36
+ 3023 0686 0000     		.short	0
+ 3024 0688 C21F     		.short	8130
+ 3025 068a 26B3     		.short	-19674
+ 3026 068c 2400     		.short	36
+ 3027 068e 1000     		.short	16
+ 3028 0690 0240     		.short	16386
+ 3029 0692 2643     		.short	17190
+ 3030 0694 9544     		.short	17557
+ 3031 0696 2440     		.short	16420
+ 3032 0698 D240     		.short	16594
+ 3033 069a 0000     		.short	0
+ 3034 069c 8001     		.short	384
+ 3035 069e 00A1     		.short	-24320
+ 3036 06a0 9040     		.short	16528
+ 3037 06a2 1000     		.short	16
+ 3038 06a4 4200     		.short	66
+ 3039 06a6 0442     		.short	16900
+ 3040 06a8 2400     		.short	36
+ 3041 06aa 82BC     		.short	-17278
+ 3042 06ac 9140     		.short	16529
+ 3043 06ae 9A45     		.short	17818
+ 3044 06b0 2400     		.short	36
+ 3045 06b2 0000     		.short	0
+ 3046 06b4 5400     		.short	84
+ 3047 06b6 0028     		.short	10240
+ 3048 06b8 C47D     		.short	32196
+ 3049 06ba 86BD     		.short	-17018
+ 3050 06bc 9340     		.short	16531
+ 3051 06be 0024     		.short	9216
+ 3052 06c0 857D     		.short	32133
+ 3053 06c2 01FE     		.short	-511
+ 3054 06c4 0C5E     		.short	24076
+ 3055 06c6 435C     		.short	23619
+ 3056 06c8 2D5F     		.short	24365
+ 3057 06ca 465E     		.short	24134
+ 3058 06cc 2400     		.short	36
+ 3059 06ce 565C     		.short	23638
+ 3060 06d0 2400     		.short	36
+ 3061 06d2 535E     		.short	24147
+ 3062 06d4 0C5E     		.short	24076
+ 3063 06d6 435C     		.short	23619
+ 3064 06d8 2D5F     		.short	24365
+ 3065 06da 465E     		.short	24134
+ 3066 06dc 2400     		.short	36
+ 3067 06de 565C     		.short	23638
+ 3068 06e0 2400     		.short	36
+ 3069 06e2 525E     		.short	24146
+ 3070 06e4 2400     		.short	36
+ 3071 06e6 B24C     		.short	19634
+ 3072 06e8 0544     		.short	17413
+ 3073 06ea 1000     		.short	16
+ 3074 06ec 0440     		.short	16388
+ 3075 06ee 4A65     		.short	25930
+ 3076 06f0 1098     		.short	-26608
+ 3077 06f2 0000     		.short	0
+ 3078 06f4 4401     		.short	324
+ 3079 06f6 4AA5     		.short	-23222
+ 3080 06f8 D11B     		.short	7121
+ 3081 06fa 0600     		.short	6
+ 3082 06fc 1300     		.short	19
+ 3083 06fe 0133     		.short	13057
+ 3084 0700 44C4     		.short	-15292
+ 3085 0702 7E68     		.short	26750
+ 3086 0704 0520     		.short	8197
+ 3087 0706 76AD     		.short	-21130
+ 3088 0708 4584     		.short	-31675
+ 3089 070a D64E     		.short	20182
+ 3090 070c 8487     		.short	-30844
+ 3091 070e F336     		.short	14067
+ 3092 0710 C264     		.short	25794
+ 3093 0712 72AC     		.short	-21390
+ 3094 0714 8587     		.short	-30843
+ 3095 0716 C24E     		.short	20162
+ 3096 0718 43A4     		.short	-23485
+ 3097 071a 0930     		.short	12297
+ 3098 071c 4024     		.short	9280
+ 3099 071e 0930     		.short	12297
+ 3100 0720 4127     		.short	10049
+ 3101 0722 F336     		.short	14067
+ 3102 0724 0ED8     		.short	-10226
+ 3103 0726 F136     		.short	14065
+ 3104 0728 13D8     		.short	-10221
+ 3105 072a F136     		.short	14065
+ 3106 072c 0658     		.short	22534
+ 3107 072e F036     		.short	14064
+ 3108 0730 0398     		.short	-26621
+ 3109 0732 F036     		.short	14064
+ 3110 0734 0118     		.short	6145
+ 3111 0736 0020     		.short	8192
+ 3112 0738 0000     		.short	0
+ 3113 073a F236     		.short	14066
+ 3114 073c 1498     		.short	-26604
+ 3115 073e 1182     		.short	-32239
+ 3116 0740 824C     		.short	19586
+ 3117 0742 2400     		.short	36
+ 3118 0744 0000     		.short	0
+ 3119 0746 2400     		.short	36
+ 3120 0748 0020     		.short	8192
+ 3121 074a 0500     		.short	5
+ 3122 074c C2F5     		.short	-2622
+ 3123 074e 2400     		.short	36
+ 3124 0750 0000     		.short	0
+ 3125 0752 8009     		.short	2432
+ 3126 0754 0020     		.short	8192
+ 3127 0756 0000     		.short	0
+ 3128 0758 1060     		.short	24592
+ 3129 075a 2400     		.short	36
+ 3130 075c 5000     		.short	80
+ 3131              		.text
+ 3132              	.Letext0:
+ 3133              		.file 2 "c:\\project\\stm32fx_lib\\stm32f1x_iolib\\include\\core.h"
+ 3134              		.file 3 "/project/stm32fx_lib/stm32f1x_iolib/include/cmsis/stm32f1xx.h"
+ 3135              		.file 4 "/project/stm32fx_lib/stm32f1x_iolib/include/gpio.h"
+ 3136              		.file 5 "userdefs.h"
+ 3137              		.file 6 "/project/stm32fx_lib/stm32f1x_iolib/include/fundefs.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 vs1003.c
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:16     .text.delay_ms:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:24     .text.delay_ms:00000000 delay_ms
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:41     .text.mp3_reset:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:48     .text.mp3_reset:00000000 mp3_reset
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:122    .text.mp3_reset:00000030 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:129    .text.vs1003_cmd_write:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:136    .text.vs1003_cmd_write:00000000 vs1003_cmd_write
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:217    .text.vs1003_cmd_write:00000050 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:222    .text.vs1003_reset_decode_time:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:229    .text.vs1003_reset_decode_time:00000000 vs1003_reset_decode_time
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:261    .text.vs1003_sine_test:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:268    .text.vs1003_sine_test:00000000 vs1003_sine_test
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:522    .text.vs1003_sine_test:00000138 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:527    .text.vs1003_reg_read:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:534    .text.vs1003_reg_read:00000000 vs1003_reg_read
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:631    .text.vs1003_reg_read:00000058 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:636    .text.vs1003_soft_reset:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:643    .text.vs1003_soft_reset:00000000 vs1003_soft_reset
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:838    .text.vs1003_soft_reset:000000c4 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:845    .text.vs1003_ram_test:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:852    .text.vs1003_ram_test:00000000 vs1003_ram_test
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:952    .text.vs1003_ram_test:0000006c $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:958    .text.get_head_info:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:965    .text.get_head_info:00000000 get_head_info
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1065   .text.get_head_info:00000068 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1123   .text.vs1003_get_mp3info:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1130   .text.vs1003_get_mp3info:00000000 vs1003_get_mp3info
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1275   .text.vs1003_get_mp3info:00000084 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1288   .text.vs1003_get_mp3info:0000009e $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1378   .text.vs1003_get_mp3info:0000010c $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1392   .text.vs1003_get_mp3info:00000144 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1604   .text.vs1003_get_mp3info:00000258 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1635   .text.get_decode_time:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1642   .text.get_decode_time:00000000 get_decode_time
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1658   .text.load_patch:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1665   .text.load_patch:00000000 load_patch
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1728   .text.load_patch:00000028 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1736   .text.get_spec:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1743   .text.get_spec:00000000 get_spec
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1798   .text.set_vs1003:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1805   .text.set_vs1003:00000000 set_vs1003
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1886   .text.set_vs1003:00000038 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1891   .text.vs1003_set_volume:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1898   .text.vs1003_set_volume:00000000 vs1003_set_volume
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1923   .text.vs1003_init:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1930   .text.vs1003_init:00000000 vs1003_init
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1977   .text.vs1003_init:00000040 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1982   .text.vs1003_data_write:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1989   .text.vs1003_data_write:00000000 vs1003_data_write
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2044   .text.vs1003_data_write:00000034 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2149   .rodata.bitrate:00000000 bitrate
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2064   .data.vs1003_ram:00000000 vs1003_ram
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2058   .bss.regvalue:00000000 regvalue
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2187   .rodata.dtab:00000000 dtab
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2070   .rodata.atab:00000000 atab
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2054   .bss.regvalue:00000000 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2145   .rodata.bitrate:00000000 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2183   .rodata.dtab:00000000 $d
+
+UNDEFINED SYMBOLS
+wait_ms
+SPI_read_write_byte
+SPI_set_speed
+lcd_printf
+f_kbps
+GPIO_Init_Pin

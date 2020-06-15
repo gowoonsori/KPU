@@ -1,0 +1,3173 @@
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 4
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"ads7843.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.pen_interrupt_set.part.0,"ax",%progbits
+  16              		.align	1
+  17              		.arch armv7-m
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	pen_interrupt_set.part.0:
+  24              	.LFB45:
+  25              		.file 1 "ads7843.c"
+   1:ads7843.c     **** /********************************************************************************/
+   2:ads7843.c     **** /* ads7843.c                                                                    */
+   3:ads7843.c     **** /* STM32F103VET6                                                                */
+   4:ads7843.c     **** /* (Lee ChangWoo HL2IRW  hl2irw@kpu.ac.kr 011-726-6860)                 	*/
+   5:ads7843.c     **** /* stm32f103ve_mp3								*/
+   6:ads7843.c     **** /********************************************************************************/
+   7:ads7843.c     **** #include <stdint.h>
+   8:ads7843.c     **** #include <stdio.h>
+   9:ads7843.c     **** #include <stdarg.h>
+  10:ads7843.c     **** #include <stdlib.h>
+  11:ads7843.c     **** #include <string.h>
+  12:ads7843.c     **** #include <math.h>
+  13:ads7843.c     **** #include "hwdefs.h"
+  14:ads7843.c     **** 
+  15:ads7843.c     **** 
+  16:ads7843.c     **** #define KEY_DOWN		0x01
+  17:ads7843.c     **** #define KEY_UP			0x00
+  18:ads7843.c     **** 
+  19:ads7843.c     **** 
+  20:ads7843.c     **** typedef struct
+  21:ads7843.c     **** {
+  22:ads7843.c     **** 	unsigned short x0;
+  23:ads7843.c     **** 	unsigned short y0;
+  24:ads7843.c     **** 	unsigned short x;
+  25:ads7843.c     **** 	unsigned short y;
+  26:ads7843.c     **** 	unsigned short xfac;
+  27:ads7843.c     **** 	unsigned short yfac;
+  28:ads7843.c     **** 	short xoff;
+  29:ads7843.c     **** 	short yoff;
+  30:ads7843.c     **** } pen_holder;
+  31:ads7843.c     **** 
+  32:ads7843.c     **** 
+  33:ads7843.c     **** #define PEN  			PC_INPUT(4)	//PC4 INT
+  34:ads7843.c     **** #define DOUT 			PA_INPUT(6)	//PA6  MISO
+  35:ads7843.c     **** #define TDIN 			PA_OUTPUT(7)	//PA7  MOSI
+  36:ads7843.c     **** #define TCLK 			PA_OUTPUT(5)	//PA5  SCLK
+  37:ads7843.c     **** #define TCS  			PC_OUTPUT(6)	//PC6  CS
+  38:ads7843.c     **** #define USER			PA_INPUT(8)	//PA8  USER SW
+  39:ads7843.c     **** 
+  40:ads7843.c     **** 
+  41:ads7843.c     **** #define CMD_RDY			0x90
+  42:ads7843.c     **** #define CMD_RDX			0xD0
+  43:ads7843.c     **** #define READ_TIMES		15
+  44:ads7843.c     **** #define LOST_VAL		5
+  45:ads7843.c     **** #define ERR_RANGE		50
+  46:ads7843.c     **** 
+  47:ads7843.c     **** pen_holder pen_point;
+  48:ads7843.c     **** volatile unsigned char pen_status,pen_enable,pen_count;
+  49:ads7843.c     **** extern unsigned short foreground_color,background_color;
+  50:ads7843.c     **** extern volatile unsigned short tick,jiffes;
+  51:ads7843.c     **** 
+  52:ads7843.c     **** 
+  53:ads7843.c     **** 
+  54:ads7843.c     **** void ads7843_write_byte (unsigned char num)
+  55:ads7843.c     **** {
+  56:ads7843.c     ****       unsigned char count = 0;
+  57:ads7843.c     ****       for (count=0;count<8;count++) {
+  58:ads7843.c     **** 	  if (num & 0x80) TDIN = 1;else TDIN = 0;
+  59:ads7843.c     **** 	  num <<= 1;
+  60:ads7843.c     **** 	  TCLK = 0;
+  61:ads7843.c     **** 	  TCLK = 1;
+  62:ads7843.c     ****       }
+  63:ads7843.c     ****       TDIN = 1;
+  64:ads7843.c     **** }
+  65:ads7843.c     **** 
+  66:ads7843.c     **** 
+  67:ads7843.c     **** unsigned short ads7843_read_adc (unsigned char cmd)
+  68:ads7843.c     **** {
+  69:ads7843.c     ****       unsigned char i;
+  70:ads7843.c     ****       unsigned char count = 0;
+  71:ads7843.c     ****       unsigned short num = 0;
+  72:ads7843.c     ****       TCLK = 0;
+  73:ads7843.c     ****       TCS = 0;
+  74:ads7843.c     ****       ads7843_write_byte(cmd);
+  75:ads7843.c     ****       for (i=100;i>0;i--);
+  76:ads7843.c     ****       TCLK = 1;
+  77:ads7843.c     ****       TCLK = 0;
+  78:ads7843.c     ****       for (count=0;count<16;count++) {
+  79:ads7843.c     **** 	  num <<= 1;
+  80:ads7843.c     **** 	  TCLK = 0;
+  81:ads7843.c     **** 	  TCLK = 1;
+  82:ads7843.c     **** 	  if (DOUT) num++;
+  83:ads7843.c     ****       }
+  84:ads7843.c     ****       num >>= 4;
+  85:ads7843.c     ****       TCS = 1;
+  86:ads7843.c     ****       return(num);
+  87:ads7843.c     **** }
+  88:ads7843.c     **** 
+  89:ads7843.c     **** 
+  90:ads7843.c     **** unsigned short ads7843_read_xy (unsigned char xy)
+  91:ads7843.c     **** {
+  92:ads7843.c     ****       unsigned short i, j;
+  93:ads7843.c     ****       unsigned short buf[READ_TIMES];
+  94:ads7843.c     ****       unsigned short sum = 0;
+  95:ads7843.c     ****       unsigned short temp;
+  96:ads7843.c     ****       for (i=0;i<READ_TIMES;i++) {
+  97:ads7843.c     **** 	  buf[i] = ads7843_read_adc(xy);
+  98:ads7843.c     ****       }
+  99:ads7843.c     ****       for (i=0;i<READ_TIMES-1; i++) {
+ 100:ads7843.c     **** 	  for (j=i+1;j<READ_TIMES;j++) {
+ 101:ads7843.c     **** 	      if (buf[i] > buf[j]) {
+ 102:ads7843.c     **** 		 temp = buf[i];
+ 103:ads7843.c     **** 		 buf[i] = buf[j];
+ 104:ads7843.c     **** 	 	 buf[j] = temp;
+ 105:ads7843.c     **** 	      }
+ 106:ads7843.c     **** 	  }
+ 107:ads7843.c     ****       }
+ 108:ads7843.c     ****       sum = 0;
+ 109:ads7843.c     ****       for (i=LOST_VAL;i<READ_TIMES-LOST_VAL;i++) sum += buf[i];
+ 110:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 111:ads7843.c     ****       return temp;
+ 112:ads7843.c     **** }
+ 113:ads7843.c     **** 
+ 114:ads7843.c     **** 
+ 115:ads7843.c     **** unsigned char read_ads7843 (unsigned short *x,unsigned short *y)
+ 116:ads7843.c     **** {
+ 117:ads7843.c     ****       unsigned short xtemp,ytemp;
+ 118:ads7843.c     ****       xtemp = ads7843_read_xy(CMD_RDX);
+ 119:ads7843.c     ****       ytemp = ads7843_read_xy(CMD_RDY);
+ 120:ads7843.c     ****       if ((xtemp < 100) || (ytemp < 100)) return 0;
+ 121:ads7843.c     ****       *x = xtemp;
+ 122:ads7843.c     ****       *y = ytemp;
+ 123:ads7843.c     ****       return 1;
+ 124:ads7843.c     **** }
+ 125:ads7843.c     **** 
+ 126:ads7843.c     **** 
+ 127:ads7843.c     **** unsigned char read_ads7843_2(unsigned short *x,unsigned short *y)
+ 128:ads7843.c     **** {
+ 129:ads7843.c     ****       unsigned short x1,y1;
+ 130:ads7843.c     ****       unsigned short x2,y2;
+ 131:ads7843.c     ****       unsigned char flag;
+ 132:ads7843.c     ****       flag = read_ads7843(&x1,&y1);
+ 133:ads7843.c     ****       if (flag == 0) return(0);
+ 134:ads7843.c     ****       flag = read_ads7843(&x2,&y2);
+ 135:ads7843.c     ****       if (flag == 0) return(0);
+ 136:ads7843.c     ****       if ((((x2 <= x1) && (x1 < x2 + ERR_RANGE)) || ((x1 <= x2) && (x2 < x1 + ERR_RANGE))) && (((y2
+ 137:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 138:ads7843.c     ****          *y = (y1 + y2) / 2;
+ 139:ads7843.c     ****          return 1;
+ 140:ads7843.c     ****       } else return 0;
+ 141:ads7843.c     **** }
+ 142:ads7843.c     **** 
+ 143:ads7843.c     **** 
+ 144:ads7843.c     **** void pen_interrupt_set (unsigned char enable)
+  26              		.loc 1 144 6 view -0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              		@ link register save eliminated.
+  31              	.LVL0:
+ 145:ads7843.c     **** {
+ 146:ads7843.c     ****       if (enable) EXTI->IMR |= (1 << 4);else EXTI->IMR &= ~(1 << 4);
+  32              		.loc 1 146 19 view .LVU1
+  33              		.loc 1 146 29 is_stmt 0 view .LVU2
+  34 0000 024A     		ldr	r2, .L2
+  35 0002 1368     		ldr	r3, [r2]
+  36 0004 43F01003 		orr	r3, r3, #16
+  37 0008 1360     		str	r3, [r2]
+ 147:ads7843.c     **** }
+  38              		.loc 1 147 1 view .LVU3
+  39 000a 7047     		bx	lr
+  40              	.L3:
+  41              		.align	2
+  42              	.L2:
+  43 000c 00040140 		.word	1073808384
+  44              		.cfi_endproc
+  45              	.LFE45:
+  47              		.section	.text.ads7843_write_byte,"ax",%progbits
+  48              		.align	1
+  49              		.global	ads7843_write_byte
+  50              		.syntax unified
+  51              		.thumb
+  52              		.thumb_func
+  53              		.fpu softvfp
+  55              	ads7843_write_byte:
+  56              	.LVL1:
+  57              	.LFB32:
+  55:ads7843.c     ****       unsigned char count = 0;
+  58              		.loc 1 55 1 is_stmt 1 view -0
+  59              		.cfi_startproc
+  60              		@ args = 0, pretend = 0, frame = 0
+  61              		@ frame_needed = 0, uses_anonymous_args = 0
+  56:ads7843.c     ****       for (count=0;count<8;count++) {
+  62              		.loc 1 56 7 view .LVU5
+  57:ads7843.c     **** 	  if (num & 0x80) TDIN = 1;else TDIN = 0;
+  63              		.loc 1 57 7 view .LVU6
+  57:ads7843.c     **** 	  if (num & 0x80) TDIN = 1;else TDIN = 0;
+  64              		.loc 1 57 20 view .LVU7
+  55:ads7843.c     ****       unsigned char count = 0;
+  65              		.loc 1 55 1 is_stmt 0 view .LVU8
+  66 0000 70B5     		push	{r4, r5, r6, lr}
+  67              		.cfi_def_cfa_offset 16
+  68              		.cfi_offset 4, -16
+  69              		.cfi_offset 5, -12
+  70              		.cfi_offset 6, -8
+  71              		.cfi_offset 14, -4
+  58:ads7843.c     **** 	  num <<= 1;
+  72              		.loc 1 58 39 view .LVU9
+  73 0002 0025     		movs	r5, #0
+  55:ads7843.c     ****       unsigned char count = 0;
+  74              		.loc 1 55 1 view .LVU10
+  75 0004 0823     		movs	r3, #8
+  58:ads7843.c     **** 	  num <<= 1;
+  76              		.loc 1 58 25 view .LVU11
+  77 0006 0121     		movs	r1, #1
+  60:ads7843.c     **** 	  TCLK = 1;
+  78              		.loc 1 60 9 view .LVU12
+  79 0008 2E46     		mov	r6, r5
+  80 000a 094A     		ldr	r2, .L9
+  81 000c 094C     		ldr	r4, .L9+4
+  82              	.LVL2:
+  83              	.L7:
+  58:ads7843.c     **** 	  num <<= 1;
+  84              		.loc 1 58 4 is_stmt 1 view .LVU13
+  58:ads7843.c     **** 	  num <<= 1;
+  85              		.loc 1 58 7 is_stmt 0 view .LVU14
+  86 000e 10F0800F 		tst	r0, #128
+  58:ads7843.c     **** 	  num <<= 1;
+  87              		.loc 1 58 20 is_stmt 1 view .LVU15
+  88 0012 03F1FF33 		add	r3, r3, #-1
+  89              	.LVL3:
+  58:ads7843.c     **** 	  num <<= 1;
+  90              		.loc 1 58 25 is_stmt 0 view .LVU16
+  91 0016 14BF     		ite	ne
+  92 0018 1160     		strne	r1, [r2]
+  58:ads7843.c     **** 	  num <<= 1;
+  93              		.loc 1 58 34 is_stmt 1 view .LVU17
+  58:ads7843.c     **** 	  num <<= 1;
+  94              		.loc 1 58 39 is_stmt 0 view .LVU18
+  95 001a 1560     		streq	r5, [r2]
+  59:ads7843.c     **** 	  TCLK = 0;
+  96              		.loc 1 59 4 is_stmt 1 view .LVU19
+  59:ads7843.c     **** 	  TCLK = 0;
+  97              		.loc 1 59 8 is_stmt 0 view .LVU20
+  98 001c 4000     		lsls	r0, r0, #1
+  99              	.LVL4:
+  57:ads7843.c     **** 	  if (num & 0x80) TDIN = 1;else TDIN = 0;
+ 100              		.loc 1 57 7 view .LVU21
+ 101 001e 13F0FF03 		ands	r3, r3, #255
+  60:ads7843.c     **** 	  TCLK = 1;
+ 102              		.loc 1 60 9 view .LVU22
+ 103 0022 2660     		str	r6, [r4]
+  59:ads7843.c     **** 	  TCLK = 0;
+ 104              		.loc 1 59 8 view .LVU23
+ 105 0024 C0B2     		uxtb	r0, r0
+ 106              	.LVL5:
+  60:ads7843.c     **** 	  TCLK = 1;
+ 107              		.loc 1 60 4 is_stmt 1 view .LVU24
+  61:ads7843.c     ****       }
+ 108              		.loc 1 61 4 view .LVU25
+  61:ads7843.c     ****       }
+ 109              		.loc 1 61 9 is_stmt 0 view .LVU26
+ 110 0026 2160     		str	r1, [r4]
+  57:ads7843.c     **** 	  if (num & 0x80) TDIN = 1;else TDIN = 0;
+ 111              		.loc 1 57 28 is_stmt 1 view .LVU27
+  57:ads7843.c     **** 	  if (num & 0x80) TDIN = 1;else TDIN = 0;
+ 112              		.loc 1 57 20 view .LVU28
+  57:ads7843.c     **** 	  if (num & 0x80) TDIN = 1;else TDIN = 0;
+ 113              		.loc 1 57 7 is_stmt 0 view .LVU29
+ 114 0028 F1D1     		bne	.L7
+  63:ads7843.c     **** }
+ 115              		.loc 1 63 7 is_stmt 1 view .LVU30
+  63:ads7843.c     **** }
+ 116              		.loc 1 63 12 is_stmt 0 view .LVU31
+ 117 002a 1160     		str	r1, [r2]
+  64:ads7843.c     **** 
+ 118              		.loc 1 64 1 view .LVU32
+ 119 002c 70BD     		pop	{r4, r5, r6, pc}
+ 120              	.L10:
+ 121 002e 00BF     		.align	2
+ 122              	.L9:
+ 123 0030 9C012142 		.word	1109459356
+ 124 0034 94012142 		.word	1109459348
+ 125              		.cfi_endproc
+ 126              	.LFE32:
+ 128              		.section	.text.ads7843_read_adc,"ax",%progbits
+ 129              		.align	1
+ 130              		.global	ads7843_read_adc
+ 131              		.syntax unified
+ 132              		.thumb
+ 133              		.thumb_func
+ 134              		.fpu softvfp
+ 136              	ads7843_read_adc:
+ 137              	.LVL6:
+ 138              	.LFB33:
+  68:ads7843.c     ****       unsigned char i;
+ 139              		.loc 1 68 1 is_stmt 1 view -0
+ 140              		.cfi_startproc
+ 141              		@ args = 0, pretend = 0, frame = 0
+ 142              		@ frame_needed = 0, uses_anonymous_args = 0
+  69:ads7843.c     ****       unsigned char count = 0;
+ 143              		.loc 1 69 7 view .LVU34
+  70:ads7843.c     ****       unsigned short num = 0;
+ 144              		.loc 1 70 7 view .LVU35
+  71:ads7843.c     ****       TCLK = 0;
+ 145              		.loc 1 71 7 view .LVU36
+  72:ads7843.c     ****       TCS = 0;
+ 146              		.loc 1 72 7 view .LVU37
+  68:ads7843.c     ****       unsigned char i;
+ 147              		.loc 1 68 1 is_stmt 0 view .LVU38
+ 148 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 149              		.cfi_def_cfa_offset 24
+ 150              		.cfi_offset 3, -24
+ 151              		.cfi_offset 4, -20
+ 152              		.cfi_offset 5, -16
+ 153              		.cfi_offset 6, -12
+ 154              		.cfi_offset 7, -8
+ 155              		.cfi_offset 14, -4
+  72:ads7843.c     ****       TCS = 0;
+ 156              		.loc 1 72 12 view .LVU39
+ 157 0002 0024     		movs	r4, #0
+ 158 0004 0E4D     		ldr	r5, .L18
+  73:ads7843.c     ****       ads7843_write_byte(cmd);
+ 159              		.loc 1 73 11 view .LVU40
+ 160 0006 0F4E     		ldr	r6, .L18+4
+  72:ads7843.c     ****       TCS = 0;
+ 161              		.loc 1 72 12 view .LVU41
+ 162 0008 2C60     		str	r4, [r5]
+  73:ads7843.c     ****       ads7843_write_byte(cmd);
+ 163              		.loc 1 73 7 is_stmt 1 view .LVU42
+  73:ads7843.c     ****       ads7843_write_byte(cmd);
+ 164              		.loc 1 73 11 is_stmt 0 view .LVU43
+ 165 000a 3460     		str	r4, [r6]
+  74:ads7843.c     ****       for (i=100;i>0;i--);
+ 166              		.loc 1 74 7 is_stmt 1 view .LVU44
+ 167 000c FFF7FEFF 		bl	ads7843_write_byte
+ 168              	.LVL7:
+  75:ads7843.c     ****       TCLK = 1;
+ 169              		.loc 1 75 7 view .LVU45
+  75:ads7843.c     ****       TCLK = 1;
+ 170              		.loc 1 75 18 view .LVU46
+  76:ads7843.c     ****       TCLK = 0;
+ 171              		.loc 1 76 7 view .LVU47
+  76:ads7843.c     ****       TCLK = 0;
+ 172              		.loc 1 76 12 is_stmt 0 view .LVU48
+ 173 0010 0122     		movs	r2, #1
+  77:ads7843.c     ****       for (count=0;count<16;count++) {
+ 174              		.loc 1 77 12 view .LVU49
+ 175 0012 1023     		movs	r3, #16
+  71:ads7843.c     ****       TCLK = 0;
+ 176              		.loc 1 71 22 view .LVU50
+ 177 0014 2046     		mov	r0, r4
+  80:ads7843.c     **** 	  TCLK = 1;
+ 178              		.loc 1 80 9 view .LVU51
+ 179 0016 2146     		mov	r1, r4
+  76:ads7843.c     ****       TCLK = 0;
+ 180              		.loc 1 76 12 view .LVU52
+ 181 0018 2A60     		str	r2, [r5]
+  77:ads7843.c     ****       for (count=0;count<16;count++) {
+ 182              		.loc 1 77 7 is_stmt 1 view .LVU53
+  77:ads7843.c     ****       for (count=0;count<16;count++) {
+ 183              		.loc 1 77 12 is_stmt 0 view .LVU54
+ 184 001a 2C60     		str	r4, [r5]
+  78:ads7843.c     **** 	  num <<= 1;
+ 185              		.loc 1 78 7 is_stmt 1 view .LVU55
+  78:ads7843.c     **** 	  num <<= 1;
+ 186              		.loc 1 78 20 view .LVU56
+  82:ads7843.c     ****       }
+ 187              		.loc 1 82 8 is_stmt 0 view .LVU57
+ 188 001c 0A4C     		ldr	r4, .L18+8
+ 189              	.LVL8:
+ 190              	.L13:
+  79:ads7843.c     **** 	  TCLK = 0;
+ 191              		.loc 1 79 4 is_stmt 1 view .LVU58
+  80:ads7843.c     **** 	  TCLK = 1;
+ 192              		.loc 1 80 9 is_stmt 0 view .LVU59
+ 193 001e 2960     		str	r1, [r5]
+  81:ads7843.c     **** 	  if (DOUT) num++;
+ 194              		.loc 1 81 9 view .LVU60
+ 195 0020 2A60     		str	r2, [r5]
+  82:ads7843.c     ****       }
+ 196              		.loc 1 82 8 view .LVU61
+ 197 0022 2768     		ldr	r7, [r4]
+  79:ads7843.c     **** 	  TCLK = 0;
+ 198              		.loc 1 79 8 view .LVU62
+ 199 0024 4000     		lsls	r0, r0, #1
+ 200              	.LVL9:
+  79:ads7843.c     **** 	  TCLK = 0;
+ 201              		.loc 1 79 8 view .LVU63
+ 202 0026 80B2     		uxth	r0, r0
+ 203              	.LVL10:
+  80:ads7843.c     **** 	  TCLK = 1;
+ 204              		.loc 1 80 4 is_stmt 1 view .LVU64
+  81:ads7843.c     **** 	  if (DOUT) num++;
+ 205              		.loc 1 81 4 view .LVU65
+  82:ads7843.c     ****       }
+ 206              		.loc 1 82 4 view .LVU66
+  82:ads7843.c     ****       }
+ 207              		.loc 1 82 7 is_stmt 0 view .LVU67
+ 208 0028 0FB1     		cbz	r7, .L12
+  82:ads7843.c     ****       }
+ 209              		.loc 1 82 14 is_stmt 1 discriminator 1 view .LVU68
+  82:ads7843.c     ****       }
+ 210              		.loc 1 82 17 is_stmt 0 discriminator 1 view .LVU69
+ 211 002a 0130     		adds	r0, r0, #1
+ 212              	.LVL11:
+  82:ads7843.c     ****       }
+ 213              		.loc 1 82 17 discriminator 1 view .LVU70
+ 214 002c 80B2     		uxth	r0, r0
+ 215              	.LVL12:
+ 216              	.L12:
+  78:ads7843.c     **** 	  num <<= 1;
+ 217              		.loc 1 78 29 is_stmt 1 discriminator 2 view .LVU71
+  78:ads7843.c     **** 	  num <<= 1;
+ 218              		.loc 1 78 20 discriminator 2 view .LVU72
+ 219 002e 013B     		subs	r3, r3, #1
+ 220              	.LVL13:
+  78:ads7843.c     **** 	  num <<= 1;
+ 221              		.loc 1 78 7 is_stmt 0 discriminator 2 view .LVU73
+ 222 0030 13F0FF03 		ands	r3, r3, #255
+ 223 0034 F3D1     		bne	.L13
+  84:ads7843.c     ****       TCS = 1;
+ 224              		.loc 1 84 7 is_stmt 1 view .LVU74
+ 225              	.LVL14:
+  85:ads7843.c     ****       return(num);
+ 226              		.loc 1 85 7 view .LVU75
+  85:ads7843.c     ****       return(num);
+ 227              		.loc 1 85 11 is_stmt 0 view .LVU76
+ 228 0036 0123     		movs	r3, #1
+  87:ads7843.c     **** 
+ 229              		.loc 1 87 1 view .LVU77
+ 230 0038 0009     		lsrs	r0, r0, #4
+ 231              	.LVL15:
+  85:ads7843.c     ****       return(num);
+ 232              		.loc 1 85 11 view .LVU78
+ 233 003a 3360     		str	r3, [r6]
+  86:ads7843.c     **** }
+ 234              		.loc 1 86 7 is_stmt 1 view .LVU79
+  87:ads7843.c     **** 
+ 235              		.loc 1 87 1 is_stmt 0 view .LVU80
+ 236 003c F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 237              	.L19:
+ 238 003e 00BF     		.align	2
+ 239              	.L18:
+ 240 0040 94012142 		.word	1109459348
+ 241 0044 98012242 		.word	1109524888
+ 242 0048 18012142 		.word	1109459224
+ 243              		.cfi_endproc
+ 244              	.LFE33:
+ 246              		.section	.text.ads7843_read_xy,"ax",%progbits
+ 247              		.align	1
+ 248              		.global	ads7843_read_xy
+ 249              		.syntax unified
+ 250              		.thumb
+ 251              		.thumb_func
+ 252              		.fpu softvfp
+ 254              	ads7843_read_xy:
+ 255              	.LVL16:
+ 256              	.LFB34:
+  91:ads7843.c     ****       unsigned short i, j;
+ 257              		.loc 1 91 1 is_stmt 1 view -0
+ 258              		.cfi_startproc
+ 259              		@ args = 0, pretend = 0, frame = 32
+ 260              		@ frame_needed = 0, uses_anonymous_args = 0
+  92:ads7843.c     ****       unsigned short buf[READ_TIMES];
+ 261              		.loc 1 92 7 view .LVU82
+  93:ads7843.c     ****       unsigned short sum = 0;
+ 262              		.loc 1 93 7 view .LVU83
+  94:ads7843.c     ****       unsigned short temp;
+ 263              		.loc 1 94 7 view .LVU84
+  95:ads7843.c     ****       for (i=0;i<READ_TIMES;i++) {
+ 264              		.loc 1 95 7 view .LVU85
+  96:ads7843.c     **** 	  buf[i] = ads7843_read_adc(xy);
+ 265              		.loc 1 96 7 view .LVU86
+  96:ads7843.c     **** 	  buf[i] = ads7843_read_adc(xy);
+ 266              		.loc 1 96 16 view .LVU87
+  91:ads7843.c     ****       unsigned short i, j;
+ 267              		.loc 1 91 1 is_stmt 0 view .LVU88
+ 268 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 269              		.cfi_def_cfa_offset 24
+ 270              		.cfi_offset 4, -24
+ 271              		.cfi_offset 5, -20
+ 272              		.cfi_offset 6, -16
+ 273              		.cfi_offset 7, -12
+ 274              		.cfi_offset 8, -8
+ 275              		.cfi_offset 14, -4
+ 276 0004 88B0     		sub	sp, sp, #32
+ 277              		.cfi_def_cfa_offset 56
+ 278 0006 6C46     		mov	r4, sp
+  91:ads7843.c     ****       unsigned short i, j;
+ 279              		.loc 1 91 1 view .LVU89
+ 280 0008 0646     		mov	r6, r0
+ 281 000a A046     		mov	r8, r4
+ 282 000c 0F25     		movs	r5, #15
+ 283 000e 2746     		mov	r7, r4
+ 284              	.LVL17:
+ 285              	.L21:
+  97:ads7843.c     ****       }
+ 286              		.loc 1 97 4 is_stmt 1 discriminator 3 view .LVU90
+  97:ads7843.c     ****       }
+ 287              		.loc 1 97 13 is_stmt 0 discriminator 3 view .LVU91
+ 288 0010 3046     		mov	r0, r6
+ 289 0012 FFF7FEFF 		bl	ads7843_read_adc
+ 290              	.LVL18:
+ 291 0016 013D     		subs	r5, r5, #1
+ 292              	.LVL19:
+  97:ads7843.c     ****       }
+ 293              		.loc 1 97 13 discriminator 3 view .LVU92
+ 294 0018 ADB2     		uxth	r5, r5
+  97:ads7843.c     ****       }
+ 295              		.loc 1 97 11 discriminator 3 view .LVU93
+ 296 001a 28F8020B 		strh	r0, [r8], #2	@ movhi
+  96:ads7843.c     **** 	  buf[i] = ads7843_read_adc(xy);
+ 297              		.loc 1 96 29 is_stmt 1 discriminator 3 view .LVU94
+  96:ads7843.c     **** 	  buf[i] = ads7843_read_adc(xy);
+ 298              		.loc 1 96 16 discriminator 3 view .LVU95
+  96:ads7843.c     **** 	  buf[i] = ads7843_read_adc(xy);
+ 299              		.loc 1 96 7 is_stmt 0 discriminator 3 view .LVU96
+ 300 001e 002D     		cmp	r5, #0
+ 301 0020 F6D1     		bne	.L21
+ 302 0022 0122     		movs	r2, #1
+ 303              	.L24:
+ 304              	.LVL20:
+ 100:ads7843.c     **** 	      if (buf[i] > buf[j]) {
+ 305              		.loc 1 100 4 is_stmt 1 view .LVU97
+ 100:ads7843.c     **** 	      if (buf[i] > buf[j]) {
+ 306              		.loc 1 100 15 view .LVU98
+ 307 0024 1346     		mov	r3, r2
+ 308              	.LVL21:
+ 309              	.L23:
+ 101:ads7843.c     **** 		 temp = buf[i];
+ 310              		.loc 1 101 8 view .LVU99
+ 101:ads7843.c     **** 		 temp = buf[i];
+ 311              		.loc 1 101 15 is_stmt 0 view .LVU100
+ 312 0026 2188     		ldrh	r1, [r4]
+ 101:ads7843.c     **** 		 temp = buf[i];
+ 313              		.loc 1 101 24 view .LVU101
+ 314 0028 37F81300 		ldrh	r0, [r7, r3, lsl #1]
+ 101:ads7843.c     **** 		 temp = buf[i];
+ 315              		.loc 1 101 11 view .LVU102
+ 316 002c 8142     		cmp	r1, r0
+ 102:ads7843.c     **** 		 buf[i] = buf[j];
+ 317              		.loc 1 102 4 is_stmt 1 view .LVU103
+ 318              	.LVL22:
+ 103:ads7843.c     **** 	 	 buf[j] = temp;
+ 319              		.loc 1 103 4 view .LVU104
+ 103:ads7843.c     **** 	 	 buf[j] = temp;
+ 320              		.loc 1 103 11 is_stmt 0 view .LVU105
+ 321 002e 84BF     		itt	hi
+ 322 0030 2080     		strhhi	r0, [r4]	@ movhi
+ 104:ads7843.c     **** 	      }
+ 323              		.loc 1 104 5 is_stmt 1 view .LVU106
+ 104:ads7843.c     **** 	      }
+ 324              		.loc 1 104 12 is_stmt 0 view .LVU107
+ 325 0032 27F81310 		strhhi	r1, [r7, r3, lsl #1]	@ movhi
+ 100:ads7843.c     **** 	      if (buf[i] > buf[j]) {
+ 326              		.loc 1 100 28 is_stmt 1 view .LVU108
+ 327              	.LVL23:
+ 100:ads7843.c     **** 	      if (buf[i] > buf[j]) {
+ 328              		.loc 1 100 15 view .LVU109
+ 329 0036 0133     		adds	r3, r3, #1
+ 330              	.LVL24:
+ 100:ads7843.c     **** 	      if (buf[i] > buf[j]) {
+ 331              		.loc 1 100 4 is_stmt 0 view .LVU110
+ 332 0038 99B2     		uxth	r1, r3
+ 333              	.LVL25:
+ 100:ads7843.c     **** 	      if (buf[i] > buf[j]) {
+ 334              		.loc 1 100 4 view .LVU111
+ 335 003a 0F29     		cmp	r1, #15
+ 336 003c F3D1     		bne	.L23
+ 337              	.LVL26:
+  99:ads7843.c     **** 	  for (j=i+1;j<READ_TIMES;j++) {
+ 338              		.loc 1 99 16 is_stmt 1 discriminator 1 view .LVU112
+ 339 003e 0132     		adds	r2, r2, #1
+ 340              	.LVL27:
+  99:ads7843.c     **** 	  for (j=i+1;j<READ_TIMES;j++) {
+ 341              		.loc 1 99 7 is_stmt 0 discriminator 1 view .LVU113
+ 342 0040 0F2A     		cmp	r2, #15
+ 343 0042 04F10204 		add	r4, r4, #2
+ 344 0046 EDD1     		bne	.L24
+ 345              	.LVL28:
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 346              		.loc 1 109 50 is_stmt 1 view .LVU114
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 347              		.loc 1 109 45 view .LVU115
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 348              		.loc 1 109 23 view .LVU116
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 349              		.loc 1 109 50 view .LVU117
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 350              		.loc 1 109 54 is_stmt 0 view .LVU118
+ 351 0048 BDF80A30 		ldrh	r3, [sp, #10]
+ 352 004c BDF80C20 		ldrh	r2, [sp, #12]
+ 353 0050 BDF80E00 		ldrh	r0, [sp, #14]
+ 354 0054 1344     		add	r3, r3, r2
+ 355              	.LVL29:
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 356              		.loc 1 109 45 is_stmt 1 view .LVU119
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 357              		.loc 1 109 23 view .LVU120
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 358              		.loc 1 109 50 view .LVU121
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 359              		.loc 1 109 54 is_stmt 0 view .LVU122
+ 360 0056 0344     		add	r3, r3, r0
+ 361              	.LVL30:
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 362              		.loc 1 109 45 is_stmt 1 view .LVU123
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 363              		.loc 1 109 23 view .LVU124
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 364              		.loc 1 109 50 view .LVU125
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 365              		.loc 1 109 54 is_stmt 0 view .LVU126
+ 366 0058 BDF81000 		ldrh	r0, [sp, #16]
+ 367 005c 0344     		add	r3, r3, r0
+ 368              	.LVL31:
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 369              		.loc 1 109 45 is_stmt 1 view .LVU127
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 370              		.loc 1 109 23 view .LVU128
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 371              		.loc 1 109 50 view .LVU129
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 372              		.loc 1 109 45 view .LVU130
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 373              		.loc 1 109 23 view .LVU131
+ 110:ads7843.c     ****       return temp;
+ 374              		.loc 1 110 7 view .LVU132
+ 109:ads7843.c     ****       temp = sum / (READ_TIMES - 2 * LOST_VAL);
+ 375              		.loc 1 109 54 is_stmt 0 view .LVU133
+ 376 005e BDF81200 		ldrh	r0, [sp, #18]
+ 377 0062 0344     		add	r3, r3, r0
+ 378              	.LVL32:
+ 112:ads7843.c     **** 
+ 379              		.loc 1 112 1 view .LVU134
+ 380 0064 0520     		movs	r0, #5
+ 110:ads7843.c     ****       return temp;
+ 381              		.loc 1 110 12 view .LVU135
+ 382 0066 9BB2     		uxth	r3, r3
+ 383              	.LVL33:
+ 111:ads7843.c     **** }
+ 384              		.loc 1 111 7 is_stmt 1 view .LVU136
+ 112:ads7843.c     **** 
+ 385              		.loc 1 112 1 is_stmt 0 view .LVU137
+ 386 0068 B3FBF0F0 		udiv	r0, r3, r0
+ 387              	.LVL34:
+ 112:ads7843.c     **** 
+ 388              		.loc 1 112 1 view .LVU138
+ 389 006c 08B0     		add	sp, sp, #32
+ 390              		.cfi_def_cfa_offset 24
+ 391              		@ sp needed
+ 392 006e BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 112:ads7843.c     **** 
+ 393              		.loc 1 112 1 view .LVU139
+ 394              		.cfi_endproc
+ 395              	.LFE34:
+ 397              		.section	.text.read_ads7843,"ax",%progbits
+ 398              		.align	1
+ 399              		.global	read_ads7843
+ 400              		.syntax unified
+ 401              		.thumb
+ 402              		.thumb_func
+ 403              		.fpu softvfp
+ 405              	read_ads7843:
+ 406              	.LVL35:
+ 407              	.LFB35:
+ 116:ads7843.c     ****       unsigned short xtemp,ytemp;
+ 408              		.loc 1 116 1 is_stmt 1 view -0
+ 409              		.cfi_startproc
+ 410              		@ args = 0, pretend = 0, frame = 0
+ 411              		@ frame_needed = 0, uses_anonymous_args = 0
+ 117:ads7843.c     ****       xtemp = ads7843_read_xy(CMD_RDX);
+ 412              		.loc 1 117 7 view .LVU141
+ 118:ads7843.c     ****       ytemp = ads7843_read_xy(CMD_RDY);
+ 413              		.loc 1 118 7 view .LVU142
+ 116:ads7843.c     ****       unsigned short xtemp,ytemp;
+ 414              		.loc 1 116 1 is_stmt 0 view .LVU143
+ 415 0000 70B5     		push	{r4, r5, r6, lr}
+ 416              		.cfi_def_cfa_offset 16
+ 417              		.cfi_offset 4, -16
+ 418              		.cfi_offset 5, -12
+ 419              		.cfi_offset 6, -8
+ 420              		.cfi_offset 14, -4
+ 116:ads7843.c     ****       unsigned short xtemp,ytemp;
+ 421              		.loc 1 116 1 view .LVU144
+ 422 0002 0646     		mov	r6, r0
+ 118:ads7843.c     ****       ytemp = ads7843_read_xy(CMD_RDY);
+ 423              		.loc 1 118 15 view .LVU145
+ 424 0004 D020     		movs	r0, #208
+ 425              	.LVL36:
+ 116:ads7843.c     ****       unsigned short xtemp,ytemp;
+ 426              		.loc 1 116 1 view .LVU146
+ 427 0006 0D46     		mov	r5, r1
+ 118:ads7843.c     ****       ytemp = ads7843_read_xy(CMD_RDY);
+ 428              		.loc 1 118 15 view .LVU147
+ 429 0008 FFF7FEFF 		bl	ads7843_read_xy
+ 430              	.LVL37:
+ 118:ads7843.c     ****       ytemp = ads7843_read_xy(CMD_RDY);
+ 431              		.loc 1 118 15 view .LVU148
+ 432 000c 0446     		mov	r4, r0
+ 433              	.LVL38:
+ 119:ads7843.c     ****       if ((xtemp < 100) || (ytemp < 100)) return 0;
+ 434              		.loc 1 119 7 is_stmt 1 view .LVU149
+ 119:ads7843.c     ****       if ((xtemp < 100) || (ytemp < 100)) return 0;
+ 435              		.loc 1 119 15 is_stmt 0 view .LVU150
+ 436 000e 9020     		movs	r0, #144
+ 437 0010 FFF7FEFF 		bl	ads7843_read_xy
+ 438              	.LVL39:
+ 120:ads7843.c     ****       *x = xtemp;
+ 439              		.loc 1 120 7 is_stmt 1 view .LVU151
+ 120:ads7843.c     ****       *x = xtemp;
+ 440              		.loc 1 120 10 is_stmt 0 view .LVU152
+ 441 0014 632C     		cmp	r4, #99
+ 442 0016 05D9     		bls	.L31
+ 120:ads7843.c     ****       *x = xtemp;
+ 443              		.loc 1 120 25 discriminator 2 view .LVU153
+ 444 0018 6328     		cmp	r0, #99
+ 445 001a 03D9     		bls	.L31
+ 121:ads7843.c     ****       *y = ytemp;
+ 446              		.loc 1 121 7 is_stmt 1 view .LVU154
+ 121:ads7843.c     ****       *y = ytemp;
+ 447              		.loc 1 121 10 is_stmt 0 view .LVU155
+ 448 001c 3480     		strh	r4, [r6]	@ movhi
+ 122:ads7843.c     ****       return 1;
+ 449              		.loc 1 122 7 is_stmt 1 view .LVU156
+ 122:ads7843.c     ****       return 1;
+ 450              		.loc 1 122 10 is_stmt 0 view .LVU157
+ 451 001e 2880     		strh	r0, [r5]	@ movhi
+ 123:ads7843.c     **** }
+ 452              		.loc 1 123 7 is_stmt 1 view .LVU158
+ 123:ads7843.c     **** }
+ 453              		.loc 1 123 14 is_stmt 0 view .LVU159
+ 454 0020 0120     		movs	r0, #1
+ 455              	.LVL40:
+ 456              	.L29:
+ 124:ads7843.c     **** 
+ 457              		.loc 1 124 1 view .LVU160
+ 458 0022 70BD     		pop	{r4, r5, r6, pc}
+ 459              	.LVL41:
+ 460              	.L31:
+ 120:ads7843.c     ****       *x = xtemp;
+ 461              		.loc 1 120 50 view .LVU161
+ 462 0024 0020     		movs	r0, #0
+ 463              	.LVL42:
+ 120:ads7843.c     ****       *x = xtemp;
+ 464              		.loc 1 120 50 view .LVU162
+ 465 0026 FCE7     		b	.L29
+ 466              		.cfi_endproc
+ 467              	.LFE35:
+ 469              		.section	.text.read_ads7843_2,"ax",%progbits
+ 470              		.align	1
+ 471              		.global	read_ads7843_2
+ 472              		.syntax unified
+ 473              		.thumb
+ 474              		.thumb_func
+ 475              		.fpu softvfp
+ 477              	read_ads7843_2:
+ 478              	.LVL43:
+ 479              	.LFB36:
+ 128:ads7843.c     ****       unsigned short x1,y1;
+ 480              		.loc 1 128 1 is_stmt 1 view -0
+ 481              		.cfi_startproc
+ 482              		@ args = 0, pretend = 0, frame = 8
+ 483              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129:ads7843.c     ****       unsigned short x2,y2;
+ 484              		.loc 1 129 7 view .LVU164
+ 130:ads7843.c     ****       unsigned char flag;
+ 485              		.loc 1 130 7 view .LVU165
+ 131:ads7843.c     ****       flag = read_ads7843(&x1,&y1);
+ 486              		.loc 1 131 7 view .LVU166
+ 132:ads7843.c     ****       if (flag == 0) return(0);
+ 487              		.loc 1 132 7 view .LVU167
+ 128:ads7843.c     ****       unsigned short x1,y1;
+ 488              		.loc 1 128 1 is_stmt 0 view .LVU168
+ 489 0000 73B5     		push	{r0, r1, r4, r5, r6, lr}
+ 490              		.cfi_def_cfa_offset 24
+ 491              		.cfi_offset 4, -16
+ 492              		.cfi_offset 5, -12
+ 493              		.cfi_offset 6, -8
+ 494              		.cfi_offset 14, -4
+ 128:ads7843.c     ****       unsigned short x1,y1;
+ 495              		.loc 1 128 1 view .LVU169
+ 496 0002 0646     		mov	r6, r0
+ 497 0004 0D46     		mov	r5, r1
+ 132:ads7843.c     ****       if (flag == 0) return(0);
+ 498              		.loc 1 132 14 view .LVU170
+ 499 0006 6846     		mov	r0, sp
+ 500              	.LVL44:
+ 132:ads7843.c     ****       if (flag == 0) return(0);
+ 501              		.loc 1 132 14 view .LVU171
+ 502 0008 0DF10201 		add	r1, sp, #2
+ 503              	.LVL45:
+ 132:ads7843.c     ****       if (flag == 0) return(0);
+ 504              		.loc 1 132 14 view .LVU172
+ 505 000c FFF7FEFF 		bl	read_ads7843
+ 506              	.LVL46:
+ 133:ads7843.c     ****       flag = read_ads7843(&x2,&y2);
+ 507              		.loc 1 133 7 is_stmt 1 view .LVU173
+ 133:ads7843.c     ****       flag = read_ads7843(&x2,&y2);
+ 508              		.loc 1 133 10 is_stmt 0 view .LVU174
+ 509 0010 10B9     		cbnz	r0, .L33
+ 510              	.LVL47:
+ 511              	.L35:
+ 133:ads7843.c     ****       flag = read_ads7843(&x2,&y2);
+ 512              		.loc 1 133 28 view .LVU175
+ 513 0012 0020     		movs	r0, #0
+ 514              	.L34:
+ 141:ads7843.c     **** 
+ 515              		.loc 1 141 1 view .LVU176
+ 516 0014 02B0     		add	sp, sp, #8
+ 517              		.cfi_remember_state
+ 518              		.cfi_def_cfa_offset 16
+ 519              		@ sp needed
+ 520 0016 70BD     		pop	{r4, r5, r6, pc}
+ 521              	.LVL48:
+ 522              	.L33:
+ 523              		.cfi_restore_state
+ 134:ads7843.c     ****       if (flag == 0) return(0);
+ 524              		.loc 1 134 7 is_stmt 1 view .LVU177
+ 134:ads7843.c     ****       if (flag == 0) return(0);
+ 525              		.loc 1 134 14 is_stmt 0 view .LVU178
+ 526 0018 0DF10601 		add	r1, sp, #6
+ 527 001c 01A8     		add	r0, sp, #4
+ 528              	.LVL49:
+ 134:ads7843.c     ****       if (flag == 0) return(0);
+ 529              		.loc 1 134 14 view .LVU179
+ 530 001e FFF7FEFF 		bl	read_ads7843
+ 531              	.LVL50:
+ 135:ads7843.c     ****       if ((((x2 <= x1) && (x1 < x2 + ERR_RANGE)) || ((x1 <= x2) && (x2 < x1 + ERR_RANGE))) && (((y2
+ 532              		.loc 1 135 7 is_stmt 1 view .LVU180
+ 135:ads7843.c     ****       if ((((x2 <= x1) && (x1 < x2 + ERR_RANGE)) || ((x1 <= x2) && (x2 < x1 + ERR_RANGE))) && (((y2
+ 533              		.loc 1 135 10 is_stmt 0 view .LVU181
+ 534 0022 0028     		cmp	r0, #0
+ 535 0024 F5D0     		beq	.L35
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 536              		.loc 1 136 7 is_stmt 1 view .LVU182
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 537              		.loc 1 136 17 is_stmt 0 view .LVU183
+ 538 0026 BDF80410 		ldrh	r1, [sp, #4]
+ 539 002a BDF80020 		ldrh	r2, [sp]
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 540              		.loc 1 136 10 view .LVU184
+ 541 002e 9142     		cmp	r1, r2
+ 542 0030 05D8     		bhi	.L36
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 543              		.loc 1 136 31 discriminator 1 view .LVU185
+ 544 0032 01F13103 		add	r3, r1, #49
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 545              		.loc 1 136 24 discriminator 1 view .LVU186
+ 546 0036 9342     		cmp	r3, r2
+ 547 0038 05DA     		bge	.L37
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 548              		.loc 1 136 50 discriminator 4 view .LVU187
+ 549 003a 9142     		cmp	r1, r2
+ 550 003c E9D1     		bne	.L35
+ 551              	.L36:
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 552              		.loc 1 136 72 discriminator 5 view .LVU188
+ 553 003e 02F13103 		add	r3, r2, #49
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 554              		.loc 1 136 65 discriminator 5 view .LVU189
+ 555 0042 8B42     		cmp	r3, r1
+ 556 0044 E5DB     		blt	.L35
+ 557              	.L37:
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 558              		.loc 1 136 101 discriminator 6 view .LVU190
+ 559 0046 BDF80640 		ldrh	r4, [sp, #6]
+ 560 004a BDF80230 		ldrh	r3, [sp, #2]
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 561              		.loc 1 136 92 discriminator 6 view .LVU191
+ 562 004e 9C42     		cmp	r4, r3
+ 563 0050 05D8     		bhi	.L38
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 564              		.loc 1 136 115 discriminator 7 view .LVU192
+ 565 0052 04F13100 		add	r0, r4, #49
+ 566              	.LVL51:
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 567              		.loc 1 136 108 discriminator 7 view .LVU193
+ 568 0056 9842     		cmp	r0, r3
+ 569 0058 05DA     		bge	.L39
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 570              		.loc 1 136 134 discriminator 9 view .LVU194
+ 571 005a 9C42     		cmp	r4, r3
+ 572 005c D9D1     		bne	.L35
+ 573              	.L38:
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 574              		.loc 1 136 156 discriminator 10 view .LVU195
+ 575 005e 03F13100 		add	r0, r3, #49
+ 136:ads7843.c     ****          *x = (x1 + x2) / 2;
+ 576              		.loc 1 136 149 discriminator 10 view .LVU196
+ 577 0062 A042     		cmp	r0, r4
+ 578 0064 D5DB     		blt	.L35
+ 579              	.L39:
+ 137:ads7843.c     ****          *y = (y1 + y2) / 2;
+ 580              		.loc 1 137 10 is_stmt 1 view .LVU197
+ 137:ads7843.c     ****          *y = (y1 + y2) / 2;
+ 581              		.loc 1 137 19 is_stmt 0 view .LVU198
+ 582 0066 0A44     		add	r2, r2, r1
+ 138:ads7843.c     ****          return 1;
+ 583              		.loc 1 138 19 view .LVU199
+ 584 0068 2344     		add	r3, r3, r4
+ 137:ads7843.c     ****          *y = (y1 + y2) / 2;
+ 585              		.loc 1 137 25 view .LVU200
+ 586 006a 5210     		asrs	r2, r2, #1
+ 138:ads7843.c     ****          return 1;
+ 587              		.loc 1 138 25 view .LVU201
+ 588 006c 5B10     		asrs	r3, r3, #1
+ 137:ads7843.c     ****          *y = (y1 + y2) / 2;
+ 589              		.loc 1 137 13 view .LVU202
+ 590 006e 3280     		strh	r2, [r6]	@ movhi
+ 138:ads7843.c     ****          return 1;
+ 591              		.loc 1 138 10 is_stmt 1 view .LVU203
+ 139:ads7843.c     ****       } else return 0;
+ 592              		.loc 1 139 17 is_stmt 0 view .LVU204
+ 593 0070 0120     		movs	r0, #1
+ 138:ads7843.c     ****          return 1;
+ 594              		.loc 1 138 13 view .LVU205
+ 595 0072 2B80     		strh	r3, [r5]	@ movhi
+ 139:ads7843.c     ****       } else return 0;
+ 596              		.loc 1 139 10 is_stmt 1 view .LVU206
+ 139:ads7843.c     ****       } else return 0;
+ 597              		.loc 1 139 17 is_stmt 0 view .LVU207
+ 598 0074 CEE7     		b	.L34
+ 599              		.cfi_endproc
+ 600              	.LFE36:
+ 602              		.section	.text.pen_interrupt_set,"ax",%progbits
+ 603              		.align	1
+ 604              		.global	pen_interrupt_set
+ 605              		.syntax unified
+ 606              		.thumb
+ 607              		.thumb_func
+ 608              		.fpu softvfp
+ 610              	pen_interrupt_set:
+ 611              	.LVL52:
+ 612              	.LFB37:
+ 145:ads7843.c     ****       if (enable) EXTI->IMR |= (1 << 4);else EXTI->IMR &= ~(1 << 4);
+ 613              		.loc 1 145 1 is_stmt 1 view -0
+ 614              		.cfi_startproc
+ 615              		@ args = 0, pretend = 0, frame = 0
+ 616              		@ frame_needed = 0, uses_anonymous_args = 0
+ 617              		@ link register save eliminated.
+ 146:ads7843.c     **** }
+ 618              		.loc 1 146 7 view .LVU209
+ 146:ads7843.c     **** }
+ 619              		.loc 1 146 10 is_stmt 0 view .LVU210
+ 620 0000 08B1     		cbz	r0, .L44
+ 621 0002 FFF7FEBF 		b	pen_interrupt_set.part.0
+ 622              	.LVL53:
+ 623              	.L44:
+ 146:ads7843.c     **** }
+ 624              		.loc 1 146 46 is_stmt 1 discriminator 2 view .LVU211
+ 146:ads7843.c     **** }
+ 625              		.loc 1 146 56 is_stmt 0 discriminator 2 view .LVU212
+ 626 0006 034A     		ldr	r2, .L45
+ 627 0008 1368     		ldr	r3, [r2]
+ 628 000a 23F01003 		bic	r3, r3, #16
+ 629 000e 1360     		str	r3, [r2]
+ 630              		.loc 1 147 1 discriminator 2 view .LVU213
+ 631 0010 7047     		bx	lr
+ 632              	.L46:
+ 633 0012 00BF     		.align	2
+ 634              	.L45:
+ 635 0014 00040140 		.word	1073808384
+ 636              		.cfi_endproc
+ 637              	.LFE37:
+ 639              		.section	.text.read_tp_once,"ax",%progbits
+ 640              		.align	1
+ 641              		.global	read_tp_once
+ 642              		.syntax unified
+ 643              		.thumb
+ 644              		.thumb_func
+ 645              		.fpu softvfp
+ 647              	read_tp_once:
+ 648              	.LFB38:
+ 148:ads7843.c     **** 
+ 149:ads7843.c     **** 
+ 150:ads7843.c     **** unsigned char read_tp_once (void)
+ 151:ads7843.c     **** {
+ 649              		.loc 1 151 1 is_stmt 1 view -0
+ 650              		.cfi_startproc
+ 651              		@ args = 0, pretend = 0, frame = 0
+ 652              		@ frame_needed = 0, uses_anonymous_args = 0
+ 152:ads7843.c     ****       int idx = 0,flag;
+ 653              		.loc 1 152 7 view .LVU215
+ 654              	.LVL54:
+ 153:ads7843.c     ****       pen_status = KEY_UP;
+ 655              		.loc 1 153 7 view .LVU216
+ 151:ads7843.c     ****       int idx = 0,flag;
+ 656              		.loc 1 151 1 is_stmt 0 view .LVU217
+ 657 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 658              		.cfi_def_cfa_offset 24
+ 659              		.cfi_offset 3, -24
+ 660              		.cfi_offset 4, -20
+ 661              		.cfi_offset 5, -16
+ 662              		.cfi_offset 6, -12
+ 663              		.cfi_offset 7, -8
+ 664              		.cfi_offset 14, -4
+ 665              		.loc 1 153 18 view .LVU218
+ 666 0002 0024     		movs	r4, #0
+ 667 0004 134B     		ldr	r3, .L52
+ 154:ads7843.c     ****       pen_interrupt_set(0);
+ 668              		.loc 1 154 7 view .LVU219
+ 669 0006 2046     		mov	r0, r4
+ 153:ads7843.c     ****       pen_status = KEY_UP;
+ 670              		.loc 1 153 18 view .LVU220
+ 671 0008 1C70     		strb	r4, [r3]
+ 672              		.loc 1 154 7 is_stmt 1 view .LVU221
+ 673 000a FFF7FEFF 		bl	pen_interrupt_set
+ 674              	.LVL55:
+ 155:ads7843.c     ****       flag = 1;
+ 675              		.loc 1 155 7 view .LVU222
+ 156:ads7843.c     ****       wait_ms(5);
+ 676              		.loc 1 156 7 view .LVU223
+ 677 000e 0520     		movs	r0, #5
+ 678 0010 FFF7FEFF 		bl	wait_ms
+ 679              	.LVL56:
+ 157:ads7843.c     ****       read_ads7843_2(&pen_point.x,&pen_point.y);
+ 680              		.loc 1 157 7 view .LVU224
+ 681 0014 1049     		ldr	r1, .L52+4
+ 158:ads7843.c     ****       while (flag) {
+ 159:ads7843.c     ****       	    if ((PEN) || (idx >= 500)) {
+ 682              		.loc 1 159 22 is_stmt 0 view .LVU225
+ 683 0016 40F2F317 		movw	r7, #499
+ 157:ads7843.c     ****       read_ads7843_2(&pen_point.x,&pen_point.y);
+ 684              		.loc 1 157 7 view .LVU226
+ 685 001a 881E     		subs	r0, r1, #2
+ 686 001c FFF7FEFF 		bl	read_ads7843_2
+ 687              	.LVL57:
+ 158:ads7843.c     ****       while (flag) {
+ 688              		.loc 1 158 7 is_stmt 1 view .LVU227
+ 158:ads7843.c     ****       while (flag) {
+ 689              		.loc 1 158 13 view .LVU228
+ 690              		.loc 1 159 17 is_stmt 0 view .LVU229
+ 691 0020 0E4E     		ldr	r6, .L52+8
+ 692              	.LVL58:
+ 693              	.L49:
+ 694              		.loc 1 159 12 is_stmt 1 view .LVU230
+ 695              		.loc 1 159 17 is_stmt 0 view .LVU231
+ 696 0022 3368     		ldr	r3, [r6]
+ 697              		.loc 1 159 15 view .LVU232
+ 698 0024 A3B9     		cbnz	r3, .L50
+ 699              		.loc 1 159 22 discriminator 1 view .LVU233
+ 700 0026 BC42     		cmp	r4, r7
+ 701 0028 CCBF     		ite	gt
+ 702 002a 0025     		movgt	r5, #0
+ 703 002c 0125     		movle	r5, #1
+ 704              	.L48:
+ 705              	.LVL59:
+ 160:ads7843.c     ****       	       flag = 0;
+ 161:ads7843.c     ****       	    }
+ 162:ads7843.c     ****       	    wait_ms(2);
+ 706              		.loc 1 162 12 is_stmt 1 view .LVU234
+ 707 002e 0220     		movs	r0, #2
+ 708 0030 FFF7FEFF 		bl	wait_ms
+ 709              	.LVL60:
+ 163:ads7843.c     ****       	    idx++;
+ 710              		.loc 1 163 12 view .LVU235
+ 711              		.loc 1 163 15 is_stmt 0 view .LVU236
+ 712 0034 0134     		adds	r4, r4, #1
+ 713              	.LVL61:
+ 158:ads7843.c     ****       while (flag) {
+ 714              		.loc 1 158 13 is_stmt 1 view .LVU237
+ 715 0036 002D     		cmp	r5, #0
+ 716 0038 F3D1     		bne	.L49
+ 717              	.LVL62:
+ 164:ads7843.c     ****       }
+ 165:ads7843.c     ****       EXTI_ClearFlag(EXTI_Line4);
+ 718              		.loc 1 165 7 view .LVU238
+ 719 003a 1020     		movs	r0, #16
+ 720 003c FFF7FEFF 		bl	EXTI_ClearFlag
+ 721              	.LVL63:
+ 166:ads7843.c     ****       pen_interrupt_set(1);
+ 722              		.loc 1 166 7 view .LVU239
+ 723              	.LBB8:
+ 724              	.LBI8:
+ 144:ads7843.c     **** {
+ 725              		.loc 1 144 6 view .LVU240
+ 726              	.LBB9:
+ 146:ads7843.c     **** }
+ 727              		.loc 1 146 7 view .LVU241
+ 728 0040 FFF7FEFF 		bl	pen_interrupt_set.part.0
+ 729              	.LVL64:
+ 146:ads7843.c     **** }
+ 730              		.loc 1 146 7 is_stmt 0 view .LVU242
+ 731              	.LBE9:
+ 732              	.LBE8:
+ 167:ads7843.c     ****       if (idx >= 500) return 0;else return 1;
+ 733              		.loc 1 167 7 is_stmt 1 view .LVU243
+ 168:ads7843.c     **** }
+ 734              		.loc 1 168 1 is_stmt 0 view .LVU244
+ 735 0044 B4F5FA7F 		cmp	r4, #500
+ 736 0048 ACBF     		ite	ge
+ 737 004a 0020     		movge	r0, #0
+ 738 004c 0120     		movlt	r0, #1
+ 739 004e F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 740              	.LVL65:
+ 741              	.L50:
+ 160:ads7843.c     ****       	    }
+ 742              		.loc 1 160 20 view .LVU245
+ 743 0050 0025     		movs	r5, #0
+ 744 0052 ECE7     		b	.L48
+ 745              	.L53:
+ 746              		.align	2
+ 747              	.L52:
+ 748 0054 00000000 		.word	pen_status
+ 749 0058 06000000 		.word	pen_point+6
+ 750 005c 10012242 		.word	1109524752
+ 751              		.cfi_endproc
+ 752              	.LFE38:
+ 754              		.section	.text.drow_touch_point,"ax",%progbits
+ 755              		.align	1
+ 756              		.global	drow_touch_point
+ 757              		.syntax unified
+ 758              		.thumb
+ 759              		.thumb_func
+ 760              		.fpu softvfp
+ 762              	drow_touch_point:
+ 763              	.LVL66:
+ 764              	.LFB39:
+ 169:ads7843.c     **** 
+ 170:ads7843.c     **** 
+ 171:ads7843.c     **** void drow_touch_point (unsigned char x,unsigned short y)
+ 172:ads7843.c     **** {
+ 765              		.loc 1 172 1 is_stmt 1 view -0
+ 766              		.cfi_startproc
+ 767              		@ args = 0, pretend = 0, frame = 0
+ 768              		@ frame_needed = 0, uses_anonymous_args = 0
+ 173:ads7843.c     ****       lcd_draw_line(x - 12,y,x + 13,y);
+ 769              		.loc 1 173 7 view .LVU247
+ 172:ads7843.c     ****       lcd_draw_line(x - 12,y,x + 13,y);
+ 770              		.loc 1 172 1 is_stmt 0 view .LVU248
+ 771 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 772              		.cfi_def_cfa_offset 24
+ 773              		.cfi_offset 4, -24
+ 774              		.cfi_offset 5, -20
+ 775              		.cfi_offset 6, -16
+ 776              		.cfi_offset 7, -12
+ 777              		.cfi_offset 8, -8
+ 778              		.cfi_offset 14, -4
+ 172:ads7843.c     ****       lcd_draw_line(x - 12,y,x + 13,y);
+ 779              		.loc 1 172 1 view .LVU249
+ 780 0004 0446     		mov	r4, r0
+ 781 0006 0D46     		mov	r5, r1
+ 782              		.loc 1 173 7 view .LVU250
+ 783 0008 00F10D02 		add	r2, r0, #13
+ 784 000c 0C38     		subs	r0, r0, #12
+ 785              	.LVL67:
+ 786              		.loc 1 173 7 view .LVU251
+ 787 000e 0B46     		mov	r3, r1
+ 788 0010 D2B2     		uxtb	r2, r2
+ 789 0012 C0B2     		uxtb	r0, r0
+ 790 0014 FFF7FEFF 		bl	lcd_draw_line
+ 791              	.LVL68:
+ 174:ads7843.c     ****       lcd_draw_line(x,y - 12,x,y + 13);
+ 792              		.loc 1 174 7 is_stmt 1 view .LVU252
+ 175:ads7843.c     ****       lcd_set_pixel(x + 1,y + 1);
+ 793              		.loc 1 175 7 is_stmt 0 view .LVU253
+ 794 0018 04F10108 		add	r8, r4, #1
+ 174:ads7843.c     ****       lcd_draw_line(x,y - 12,x,y + 13);
+ 795              		.loc 1 174 7 view .LVU254
+ 796 001c 05F10D03 		add	r3, r5, #13
+ 797 0020 A5F10C01 		sub	r1, r5, #12
+ 798              		.loc 1 175 7 view .LVU255
+ 799 0024 6F1C     		adds	r7, r5, #1
+ 174:ads7843.c     ****       lcd_draw_line(x,y - 12,x,y + 13);
+ 800              		.loc 1 174 7 view .LVU256
+ 801 0026 2246     		mov	r2, r4
+ 802 0028 9BB2     		uxth	r3, r3
+ 803 002a 2046     		mov	r0, r4
+ 804              		.loc 1 175 7 view .LVU257
+ 805 002c 5FFA88F8 		uxtb	r8, r8
+ 806 0030 BFB2     		uxth	r7, r7
+ 174:ads7843.c     ****       lcd_draw_line(x,y - 12,x,y + 13);
+ 807              		.loc 1 174 7 view .LVU258
+ 808 0032 89B2     		uxth	r1, r1
+ 809 0034 FFF7FEFF 		bl	lcd_draw_line
+ 810              	.LVL69:
+ 811              		.loc 1 175 7 is_stmt 1 view .LVU259
+ 176:ads7843.c     ****       lcd_set_pixel(x - 1,y + 1);
+ 812              		.loc 1 176 7 is_stmt 0 view .LVU260
+ 813 0038 661E     		subs	r6, r4, #1
+ 175:ads7843.c     ****       lcd_set_pixel(x + 1,y + 1);
+ 814              		.loc 1 175 7 view .LVU261
+ 815 003a 3946     		mov	r1, r7
+ 816 003c 4046     		mov	r0, r8
+ 817 003e FFF7FEFF 		bl	lcd_set_pixel
+ 818              	.LVL70:
+ 819              		.loc 1 176 7 is_stmt 1 view .LVU262
+ 820 0042 F6B2     		uxtb	r6, r6
+ 821 0044 3946     		mov	r1, r7
+ 177:ads7843.c     ****       lcd_set_pixel(x + 1,y - 1);
+ 822              		.loc 1 177 7 is_stmt 0 view .LVU263
+ 823 0046 6F1E     		subs	r7, r5, #1
+ 176:ads7843.c     ****       lcd_set_pixel(x - 1,y + 1);
+ 824              		.loc 1 176 7 view .LVU264
+ 825 0048 3046     		mov	r0, r6
+ 826              		.loc 1 177 7 view .LVU265
+ 827 004a BFB2     		uxth	r7, r7
+ 176:ads7843.c     ****       lcd_set_pixel(x - 1,y + 1);
+ 828              		.loc 1 176 7 view .LVU266
+ 829 004c FFF7FEFF 		bl	lcd_set_pixel
+ 830              	.LVL71:
+ 831              		.loc 1 177 7 is_stmt 1 view .LVU267
+ 832 0050 3946     		mov	r1, r7
+ 833 0052 4046     		mov	r0, r8
+ 834 0054 FFF7FEFF 		bl	lcd_set_pixel
+ 835              	.LVL72:
+ 178:ads7843.c     ****       lcd_set_pixel(x - 1,y - 1);
+ 836              		.loc 1 178 7 view .LVU268
+ 837 0058 3946     		mov	r1, r7
+ 838 005a 3046     		mov	r0, r6
+ 839 005c FFF7FEFF 		bl	lcd_set_pixel
+ 840              	.LVL73:
+ 179:ads7843.c     ****       lcd_draw_circle(x,y,6);
+ 841              		.loc 1 179 7 view .LVU269
+ 842 0060 2946     		mov	r1, r5
+ 843 0062 2046     		mov	r0, r4
+ 180:ads7843.c     **** }
+ 844              		.loc 1 180 1 is_stmt 0 view .LVU270
+ 845 0064 BDE8F041 		pop	{r4, r5, r6, r7, r8, lr}
+ 846              		.cfi_restore 14
+ 847              		.cfi_restore 8
+ 848              		.cfi_restore 7
+ 849              		.cfi_restore 6
+ 850              		.cfi_restore 5
+ 851              		.cfi_restore 4
+ 852              		.cfi_def_cfa_offset 0
+ 179:ads7843.c     ****       lcd_draw_circle(x,y,6);
+ 853              		.loc 1 179 7 view .LVU271
+ 854 0068 0622     		movs	r2, #6
+ 855 006a FFF7FEBF 		b	lcd_draw_circle
+ 856              	.LVL74:
+ 857              		.cfi_endproc
+ 858              	.LFE39:
+ 860              		.global	__aeabi_ui2d
+ 861              		.global	__aeabi_d2uiz
+ 862              		.section	.rodata.touch_adjust.str1.1,"aMS",%progbits,1
+ 863              	.LC0:
+ 864 0000 45523120 		.ascii	"ER1 fac %4d\000"
+ 864      66616320 
+ 864      25346400 
+ 865              	.LC1:
+ 866 000c 3120583A 		.ascii	"1 X: %4d Y:%4d\000"
+ 866      20253464 
+ 866      20593A25 
+ 866      346400
+ 867              	.LC2:
+ 868 001b 3220583A 		.ascii	"2 X: %4d Y:%4d\000"
+ 868      20253464 
+ 868      20593A25 
+ 868      346400
+ 869              	.LC3:
+ 870 002a 3320583A 		.ascii	"3 X: %4d Y:%4d\000"
+ 870      20253464 
+ 870      20593A25 
+ 870      346400
+ 871              	.LC4:
+ 872 0039 3420583A 		.ascii	"4 X: %4d Y:%4d\000"
+ 872      20253464 
+ 872      20593A25 
+ 872      346400
+ 873              	.LC5:
+ 874 0048 44313A20 		.ascii	"D1: %4d D2: %4d\000"
+ 874      25346420 
+ 874      44323A20 
+ 874      25346400 
+ 875              	.LC6:
+ 876 0058 45523220 		.ascii	"ER2 fac %4d\000"
+ 876      66616320 
+ 876      25346400 
+ 877              	.LC7:
+ 878 0064 45523320 		.ascii	"ER3 fac %4d\000"
+ 878      66616320 
+ 878      25346400 
+ 879              	.LC8:
+ 880 0070 41646A75 		.ascii	"Adjust OK!\000"
+ 880      7374204F 
+ 880      4B2100
+ 881              	.LC9:
+ 882 007b 58663A20 		.ascii	"Xf: %4d Xoff:%4d\000"
+ 882      25346420 
+ 882      586F6666 
+ 882      3A253464 
+ 882      00
+ 883              	.LC10:
+ 884 008c 59663A20 		.ascii	"Yf: %4d Yoff:%4d\000"
+ 884      25346420 
+ 884      596F6666 
+ 884      3A253464 
+ 884      00
+ 885              	.LC11:
+ 886 009d 50726573 		.ascii	"Press toutch\000"
+ 886      7320746F 
+ 886      75746368 
+ 886      00
+ 887              		.section	.text.touch_adjust,"ax",%progbits
+ 888              		.align	1
+ 889              		.global	touch_adjust
+ 890              		.syntax unified
+ 891              		.thumb
+ 892              		.thumb_func
+ 893              		.fpu softvfp
+ 895              	touch_adjust:
+ 896              	.LFB40:
+ 181:ads7843.c     **** 
+ 182:ads7843.c     **** 
+ 183:ads7843.c     **** void touch_adjust (void)
+ 184:ads7843.c     **** {
+ 897              		.loc 1 184 1 is_stmt 1 view -0
+ 898              		.cfi_startproc
+ 899              		@ args = 0, pretend = 0, frame = 40
+ 900              		@ frame_needed = 0, uses_anonymous_args = 0
+ 185:ads7843.c     ****       unsigned short pos_temp[4][2];
+ 901              		.loc 1 185 7 view .LVU273
+ 186:ads7843.c     ****       unsigned char cnt;
+ 902              		.loc 1 186 7 view .LVU274
+ 187:ads7843.c     ****       unsigned short d1,d2;
+ 903              		.loc 1 187 7 view .LVU275
+ 188:ads7843.c     ****       unsigned int tem1,tem2;
+ 904              		.loc 1 188 7 view .LVU276
+ 189:ads7843.c     ****       unsigned short fac;
+ 905              		.loc 1 189 7 view .LVU277
+ 190:ads7843.c     ****       int temp;
+ 906              		.loc 1 190 7 view .LVU278
+ 191:ads7843.c     ****       cnt = 0;
+ 907              		.loc 1 191 7 view .LVU279
+ 908              	.LVL75:
+ 192:ads7843.c     ****       //set_color(color);
+ 193:ads7843.c     ****       //set_background_color(bcolor);
+ 194:ads7843.c     ****       drow_touch_point(20,20);
+ 909              		.loc 1 194 7 view .LVU280
+ 910 0000 1421     		movs	r1, #20
+ 184:ads7843.c     ****       unsigned short pos_temp[4][2];
+ 911              		.loc 1 184 1 is_stmt 0 view .LVU281
+ 912 0002 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 913              		.cfi_def_cfa_offset 36
+ 914              		.cfi_offset 4, -36
+ 915              		.cfi_offset 5, -32
+ 916              		.cfi_offset 6, -28
+ 917              		.cfi_offset 7, -24
+ 918              		.cfi_offset 8, -20
+ 919              		.cfi_offset 9, -16
+ 920              		.cfi_offset 10, -12
+ 921              		.cfi_offset 11, -8
+ 922              		.cfi_offset 14, -4
+ 195:ads7843.c     ****       pen_status = KEY_UP;
+ 923              		.loc 1 195 18 view .LVU282
+ 924 0006 0024     		movs	r4, #0
+ 194:ads7843.c     ****       pen_status = KEY_UP;
+ 925              		.loc 1 194 7 view .LVU283
+ 926 0008 0846     		mov	r0, r1
+ 184:ads7843.c     ****       unsigned short pos_temp[4][2];
+ 927              		.loc 1 184 1 view .LVU284
+ 928 000a 8DB0     		sub	sp, sp, #52
+ 929              		.cfi_def_cfa_offset 88
+ 194:ads7843.c     ****       pen_status = KEY_UP;
+ 930              		.loc 1 194 7 view .LVU285
+ 931 000c FFF7FEFF 		bl	drow_touch_point
+ 932              	.LVL76:
+ 933              		.loc 1 195 7 is_stmt 1 view .LVU286
+ 196:ads7843.c     ****       pen_point.xfac = 0;
+ 197:ads7843.c     ****       pen_enable = 1;
+ 934              		.loc 1 197 18 is_stmt 0 view .LVU287
+ 935 0010 0122     		movs	r2, #1
+ 195:ads7843.c     ****       pen_point.xfac = 0;
+ 936              		.loc 1 195 18 view .LVU288
+ 937 0012 C24B     		ldr	r3, .L87
+ 938 0014 1C70     		strb	r4, [r3]
+ 196:ads7843.c     ****       pen_point.xfac = 0;
+ 939              		.loc 1 196 7 is_stmt 1 view .LVU289
+ 196:ads7843.c     ****       pen_point.xfac = 0;
+ 940              		.loc 1 196 22 is_stmt 0 view .LVU290
+ 941 0016 C24B     		ldr	r3, .L87+4
+ 942 0018 1C81     		strh	r4, [r3, #8]	@ movhi
+ 943              		.loc 1 197 7 is_stmt 1 view .LVU291
+ 944              		.loc 1 197 18 is_stmt 0 view .LVU292
+ 945 001a C24B     		ldr	r3, .L87+8
+ 946 001c 1A70     		strb	r2, [r3]
+ 947              	.LVL77:
+ 948              	.L56:
+ 198:ads7843.c     ****       while (1) {
+ 199:ads7843.c     ****       	    if (tick) {
+ 200:ads7843.c     ****       	       tick = 0;
+ 201:ads7843.c     ****                if (pen_enable == 0) {
+ 202:ads7843.c     ****       	          pen_count++;
+ 203:ads7843.c     ****       	          if (pen_count >= 10) {
+ 204:ads7843.c     ****       	             pen_count = 0;
+ 205:ads7843.c     ****       	             pen_enable = 1;
+ 949              		.loc 1 205 32 view .LVU293
+ 950 001e 0126     		movs	r6, #1
+ 199:ads7843.c     ****       	       tick = 0;
+ 951              		.loc 1 199 16 view .LVU294
+ 952 0020 C148     		ldr	r0, .L87+12
+ 201:ads7843.c     ****       	          pen_count++;
+ 953              		.loc 1 201 31 view .LVU295
+ 954 0022 C04D     		ldr	r5, .L87+8
+ 202:ads7843.c     ****       	          if (pen_count >= 10) {
+ 955              		.loc 1 202 27 view .LVU296
+ 956 0024 C14A     		ldr	r2, .L87+16
+ 206:ads7843.c     ****       	          }
+ 207:ads7843.c     ****                }
+ 208:ads7843.c     ****             }
+ 209:ads7843.c     **** 	    if (pen_status == KEY_DOWN) {
+ 957              		.loc 1 209 21 view .LVU297
+ 958 0026 BD49     		ldr	r1, .L87
+ 959              	.L61:
+ 198:ads7843.c     ****       	    if (tick) {
+ 960              		.loc 1 198 7 is_stmt 1 view .LVU298
+ 199:ads7843.c     ****       	       tick = 0;
+ 961              		.loc 1 199 12 view .LVU299
+ 199:ads7843.c     ****       	       tick = 0;
+ 962              		.loc 1 199 16 is_stmt 0 view .LVU300
+ 963 0028 0388     		ldrh	r3, [r0]
+ 964 002a 9BB2     		uxth	r3, r3
+ 199:ads7843.c     ****       	       tick = 0;
+ 965              		.loc 1 199 15 view .LVU301
+ 966 002c 73B1     		cbz	r3, .L59
+ 200:ads7843.c     ****                if (pen_enable == 0) {
+ 967              		.loc 1 200 15 is_stmt 1 view .LVU302
+ 200:ads7843.c     ****                if (pen_enable == 0) {
+ 968              		.loc 1 200 20 is_stmt 0 view .LVU303
+ 969 002e 4FF00003 		mov	r3, #0	@ movhi
+ 970 0032 0380     		strh	r3, [r0]	@ movhi
+ 201:ads7843.c     ****       	          pen_count++;
+ 971              		.loc 1 201 16 is_stmt 1 view .LVU304
+ 201:ads7843.c     ****       	          pen_count++;
+ 972              		.loc 1 201 31 is_stmt 0 view .LVU305
+ 973 0034 2B78     		ldrb	r3, [r5]	@ zero_extendqisi2
+ 201:ads7843.c     ****       	          pen_count++;
+ 974              		.loc 1 201 19 view .LVU306
+ 975 0036 4BB9     		cbnz	r3, .L59
+ 202:ads7843.c     ****       	          if (pen_count >= 10) {
+ 976              		.loc 1 202 18 is_stmt 1 view .LVU307
+ 202:ads7843.c     ****       	          if (pen_count >= 10) {
+ 977              		.loc 1 202 27 is_stmt 0 view .LVU308
+ 978 0038 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 979 003a 0133     		adds	r3, r3, #1
+ 980 003c DBB2     		uxtb	r3, r3
+ 981 003e 1370     		strb	r3, [r2]
+ 203:ads7843.c     ****       	             pen_count = 0;
+ 982              		.loc 1 203 18 is_stmt 1 view .LVU309
+ 203:ads7843.c     ****       	             pen_count = 0;
+ 983              		.loc 1 203 32 is_stmt 0 view .LVU310
+ 984 0040 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 203:ads7843.c     ****       	             pen_count = 0;
+ 985              		.loc 1 203 21 view .LVU311
+ 986 0042 092B     		cmp	r3, #9
+ 204:ads7843.c     ****       	             pen_enable = 1;
+ 987              		.loc 1 204 21 is_stmt 1 view .LVU312
+ 204:ads7843.c     ****       	             pen_enable = 1;
+ 988              		.loc 1 204 31 is_stmt 0 view .LVU313
+ 989 0044 82BF     		ittt	hi
+ 990 0046 0023     		movhi	r3, #0
+ 991 0048 1370     		strbhi	r3, [r2]
+ 205:ads7843.c     ****       	          }
+ 992              		.loc 1 205 21 is_stmt 1 view .LVU314
+ 205:ads7843.c     ****       	          }
+ 993              		.loc 1 205 32 is_stmt 0 view .LVU315
+ 994 004a 2E70     		strbhi	r6, [r5]
+ 995              	.L59:
+ 996              		.loc 1 209 6 is_stmt 1 view .LVU316
+ 997              		.loc 1 209 21 is_stmt 0 view .LVU317
+ 998 004c 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 999              		.loc 1 209 9 view .LVU318
+ 1000 004e 012B     		cmp	r3, #1
+ 1001 0050 EAD1     		bne	.L61
+ 210:ads7843.c     ****                if (PEN) {
+ 1002              		.loc 1 210 16 is_stmt 1 view .LVU319
+ 1003              		.loc 1 210 20 is_stmt 0 view .LVU320
+ 1004 0052 B74B     		ldr	r3, .L87+20
+ 1005 0054 1B68     		ldr	r3, [r3]
+ 1006              		.loc 1 210 19 view .LVU321
+ 1007 0056 3BB1     		cbz	r3, .L62
+ 211:ads7843.c     ****       	          pen_status = KEY_UP;
+ 1008              		.loc 1 211 18 is_stmt 1 view .LVU322
+ 1009              		.loc 1 211 29 is_stmt 0 view .LVU323
+ 1010 0058 4FF00003 		mov	r3, #0
+ 212:ads7843.c     ****                   EXTI_ClearFlag(EXTI_Line4);
+ 1011              		.loc 1 212 19 view .LVU324
+ 1012 005c 1020     		movs	r0, #16
+ 211:ads7843.c     ****       	          pen_status = KEY_UP;
+ 1013              		.loc 1 211 29 view .LVU325
+ 1014 005e 0B70     		strb	r3, [r1]
+ 1015              		.loc 1 212 19 is_stmt 1 view .LVU326
+ 1016 0060 FFF7FEFF 		bl	EXTI_ClearFlag
+ 1017              	.LVL78:
+ 213:ads7843.c     ****                   pen_interrupt_set(1);
+ 1018              		.loc 1 213 19 view .LVU327
+ 1019              	.LBB10:
+ 1020              	.LBI10:
+ 144:ads7843.c     **** {
+ 1021              		.loc 1 144 6 view .LVU328
+ 1022              	.LBB11:
+ 146:ads7843.c     **** }
+ 1023              		.loc 1 146 7 view .LVU329
+ 1024 0064 FFF7FEFF 		bl	pen_interrupt_set.part.0
+ 1025              	.LVL79:
+ 1026              	.L62:
+ 146:ads7843.c     **** }
+ 1027              		.loc 1 146 7 is_stmt 0 view .LVU330
+ 1028              	.LBE11:
+ 1029              	.LBE10:
+ 214:ads7843.c     ****                }
+ 215:ads7843.c     **** 	       led_control(LED3,OFF);
+ 1030              		.loc 1 215 9 is_stmt 1 view .LVU331
+ 1031 0068 0021     		movs	r1, #0
+ 1032 006a 4FF40060 		mov	r0, #2048
+ 1033 006e FFF7FEFF 		bl	led_control
+ 1034              	.LVL80:
+ 216:ads7843.c     **** 	       if (read_tp_once()) {
+ 1035              		.loc 1 216 9 view .LVU332
+ 1036              		.loc 1 216 13 is_stmt 0 view .LVU333
+ 1037 0072 FFF7FEFF 		bl	read_tp_once
+ 1038              	.LVL81:
+ 1039              		.loc 1 216 12 view .LVU334
+ 1040 0076 58B1     		cbz	r0, .L63
+ 217:ads7843.c     **** 		  pos_temp[cnt][0] = pen_point.x;
+ 1041              		.loc 1 217 5 is_stmt 1 view .LVU335
+ 1042              		.loc 1 217 33 is_stmt 0 view .LVU336
+ 1043 0078 A94A     		ldr	r2, .L87+4
+ 1044              		.loc 1 217 22 view .LVU337
+ 1045 007a 0CAB     		add	r3, sp, #48
+ 1046 007c 9188     		ldrh	r1, [r2, #4]
+ 218:ads7843.c     **** 		  pos_temp[cnt][1] = pen_point.y;
+ 1047              		.loc 1 218 22 view .LVU338
+ 1048 007e D288     		ldrh	r2, [r2, #6]
+ 217:ads7843.c     **** 		  pos_temp[cnt][0] = pen_point.x;
+ 1049              		.loc 1 217 22 view .LVU339
+ 1050 0080 03EB8403 		add	r3, r3, r4, lsl #2
+ 219:ads7843.c     **** 		  cnt++;
+ 1051              		.loc 1 219 8 view .LVU340
+ 1052 0084 0134     		adds	r4, r4, #1
+ 217:ads7843.c     **** 		  pos_temp[cnt][0] = pen_point.x;
+ 1053              		.loc 1 217 22 view .LVU341
+ 1054 0086 23F8101C 		strh	r1, [r3, #-16]	@ movhi
+ 218:ads7843.c     **** 		  pos_temp[cnt][1] = pen_point.y;
+ 1055              		.loc 1 218 5 is_stmt 1 view .LVU342
+ 218:ads7843.c     **** 		  pos_temp[cnt][1] = pen_point.y;
+ 1056              		.loc 1 218 22 is_stmt 0 view .LVU343
+ 1057 008a 23F80E2C 		strh	r2, [r3, #-14]	@ movhi
+ 1058              		.loc 1 219 5 is_stmt 1 view .LVU344
+ 1059              		.loc 1 219 8 is_stmt 0 view .LVU345
+ 1060 008e E4B2     		uxtb	r4, r4
+ 1061              	.LVL82:
+ 220:ads7843.c     **** 		  if (cnt >= 5) cnt = 0;
+ 1062              		.loc 1 220 5 is_stmt 1 view .LVU346
+ 1063              	.L63:
+ 221:ads7843.c     **** 	       }
+ 222:ads7843.c     **** 	       switch (cnt) {
+ 1064              		.loc 1 222 9 view .LVU347
+ 1065 0090 631E     		subs	r3, r4, #1
+ 1066 0092 032B     		cmp	r3, #3
+ 1067 0094 00F2A280 		bhi	.L73
+ 1068 0098 DFE803F0 		tbb	[pc, r3]
+ 1069              	.L65:
+ 1070 009c 02       		.byte	(.L68-.L65)/2
+ 1071 009d 09       		.byte	(.L67-.L65)/2
+ 1072 009e 13       		.byte	(.L66-.L65)/2
+ 1073 009f 1A       		.byte	(.L64-.L65)/2
+ 1074              		.p2align 1
+ 1075              	.L68:
+ 223:ads7843.c     **** 	       	  case 1:
+ 224:ads7843.c     **** 		    lcd_clear(background_color);
+ 1076              		.loc 1 224 7 view .LVU348
+ 1077 00a0 A44B     		ldr	r3, .L87+24
+ 1078 00a2 1888     		ldrh	r0, [r3]
+ 1079 00a4 FFF7FEFF 		bl	lcd_clear
+ 1080              	.LVL83:
+ 225:ads7843.c     **** 		    drow_touch_point(220,20);
+ 1081              		.loc 1 225 7 view .LVU349
+ 1082 00a8 1421     		movs	r1, #20
+ 1083              	.L85:
+ 226:ads7843.c     **** 		    break;
+ 227:ads7843.c     **** 		  case 2:
+ 228:ads7843.c     **** 		    lcd_clear(background_color);
+ 229:ads7843.c     **** 		    drow_touch_point(20,300);
+ 230:ads7843.c     **** 		    break;
+ 231:ads7843.c     **** 	  	  case 3:
+ 232:ads7843.c     **** 		    lcd_clear(background_color);
+ 233:ads7843.c     **** 		    drow_touch_point(220,300);
+ 1084              		.loc 1 233 7 is_stmt 0 view .LVU350
+ 1085 00aa DC20     		movs	r0, #220
+ 1086 00ac 06E0     		b	.L84
+ 1087              	.L67:
+ 228:ads7843.c     **** 		    drow_touch_point(20,300);
+ 1088              		.loc 1 228 7 is_stmt 1 view .LVU351
+ 1089 00ae A14B     		ldr	r3, .L87+24
+ 1090 00b0 1888     		ldrh	r0, [r3]
+ 1091 00b2 FFF7FEFF 		bl	lcd_clear
+ 1092              	.LVL84:
+ 229:ads7843.c     **** 		    break;
+ 1093              		.loc 1 229 7 view .LVU352
+ 1094 00b6 4FF49671 		mov	r1, #300
+ 1095 00ba 1420     		movs	r0, #20
+ 1096              	.L84:
+ 1097              		.loc 1 233 7 is_stmt 0 view .LVU353
+ 1098 00bc FFF7FEFF 		bl	drow_touch_point
+ 1099              	.LVL85:
+ 234:ads7843.c     **** 		    break;
+ 1100              		.loc 1 234 7 is_stmt 1 view .LVU354
+ 1101 00c0 ADE7     		b	.L56
+ 1102              	.L66:
+ 232:ads7843.c     **** 		    drow_touch_point(220,300);
+ 1103              		.loc 1 232 7 view .LVU355
+ 1104 00c2 9C4B     		ldr	r3, .L87+24
+ 1105 00c4 1888     		ldrh	r0, [r3]
+ 1106 00c6 FFF7FEFF 		bl	lcd_clear
+ 1107              	.LVL86:
+ 233:ads7843.c     **** 		    break;
+ 1108              		.loc 1 233 7 view .LVU356
+ 1109 00ca 4FF49671 		mov	r1, #300
+ 1110 00ce ECE7     		b	.L85
+ 1111              	.L64:
+ 235:ads7843.c     **** 	 	  case 4:
+ 236:ads7843.c     **** 		    tem1 = abs(pos_temp[0][0] - pos_temp[1][0]);
+ 1112              		.loc 1 236 7 view .LVU357
+ 1113              		.loc 1 236 29 is_stmt 0 view .LVU358
+ 1114 00d0 BDF82050 		ldrh	r5, [sp, #32]
+ 1115              		.loc 1 236 46 view .LVU359
+ 1116 00d4 BDF82440 		ldrh	r4, [sp, #36]
+ 1117              	.LVL87:
+ 237:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[1][1]);
+ 1118              		.loc 1 237 46 view .LVU360
+ 1119 00d8 BDF82630 		ldrh	r3, [sp, #38]
+ 1120              		.loc 1 237 29 view .LVU361
+ 1121 00dc BDF82260 		ldrh	r6, [sp, #34]
+ 236:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[1][1]);
+ 1122              		.loc 1 236 33 view .LVU362
+ 1123 00e0 281B     		subs	r0, r5, r4
+ 236:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[1][1]);
+ 1124              		.loc 1 236 14 view .LVU363
+ 1125 00e2 0028     		cmp	r0, #0
+ 1126              		.loc 1 237 46 view .LVU364
+ 1127 00e4 0393     		str	r3, [sp, #12]
+ 1128              		.loc 1 237 33 view .LVU365
+ 1129 00e6 A6EB0303 		sub	r3, r6, r3
+ 236:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[1][1]);
+ 1130              		.loc 1 236 14 view .LVU366
+ 1131 00ea B8BF     		it	lt
+ 1132 00ec 4042     		rsblt	r0, r0, #0
+ 1133              	.LVL88:
+ 1134              		.loc 1 237 7 is_stmt 1 view .LVU367
+ 1135              		.loc 1 237 14 is_stmt 0 view .LVU368
+ 1136 00ee 002B     		cmp	r3, #0
+ 1137 00f0 B8BF     		it	lt
+ 1138 00f2 5B42     		rsblt	r3, r3, #0
+ 1139              	.LVL89:
+ 238:ads7843.c     **** 		    tem1 *= tem1;
+ 1140              		.loc 1 238 7 is_stmt 1 view .LVU369
+ 239:ads7843.c     **** 		    tem2 *= tem2;
+ 1141              		.loc 1 239 7 view .LVU370
+ 240:ads7843.c     **** 		    d1 = sqrt(tem1 + tem2);
+ 1142              		.loc 1 240 7 view .LVU371
+ 239:ads7843.c     **** 		    tem2 *= tem2;
+ 1143              		.loc 1 239 12 is_stmt 0 view .LVU372
+ 1144 00f4 5B43     		muls	r3, r3, r3
+ 1145              	.LVL90:
+ 1146              		.loc 1 240 12 view .LVU373
+ 1147 00f6 00FB0030 		mla	r0, r0, r0, r3
+ 1148              	.LVL91:
+ 1149              		.loc 1 240 12 view .LVU374
+ 1150 00fa FFF7FEFF 		bl	__aeabi_ui2d
+ 1151              	.LVL92:
+ 1152              		.loc 1 240 12 view .LVU375
+ 1153 00fe FFF7FEFF 		bl	sqrt
+ 1154              	.LVL93:
+ 1155              		.loc 1 240 10 view .LVU376
+ 1156 0102 FFF7FEFF 		bl	__aeabi_d2uiz
+ 1157              	.LVL94:
+ 241:ads7843.c     **** 		    tem1 = abs(pos_temp[2][0] - pos_temp[3][0]);
+ 242:ads7843.c     **** 		    tem2 = abs(pos_temp[2][1] - pos_temp[3][1]);
+ 1158              		.loc 1 242 29 view .LVU377
+ 1159 0106 BDF82A30 		ldrh	r3, [sp, #42]
+ 241:ads7843.c     **** 		    tem1 = abs(pos_temp[2][0] - pos_temp[3][0]);
+ 1160              		.loc 1 241 29 view .LVU378
+ 1161 010a BDF82880 		ldrh	r8, [sp, #40]
+ 1162              		.loc 1 242 29 view .LVU379
+ 1163 010e 0293     		str	r3, [sp, #8]
+ 1164              		.loc 1 242 46 view .LVU380
+ 1165 0110 BDF82E30 		ldrh	r3, [sp, #46]
+ 241:ads7843.c     **** 		    tem1 = abs(pos_temp[2][0] - pos_temp[3][0]);
+ 1166              		.loc 1 241 46 view .LVU381
+ 1167 0114 BDF82C70 		ldrh	r7, [sp, #44]
+ 1168              		.loc 1 242 46 view .LVU382
+ 1169 0118 0493     		str	r3, [sp, #16]
+ 1170              		.loc 1 242 33 view .LVU383
+ 1171 011a 049A     		ldr	r2, [sp, #16]
+ 1172 011c 029B     		ldr	r3, [sp, #8]
+ 240:ads7843.c     **** 		    d1 = sqrt(tem1 + tem2);
+ 1173              		.loc 1 240 10 view .LVU384
+ 1174 011e 1FFA80F9 		uxth	r9, r0
+ 1175              	.LVL95:
+ 241:ads7843.c     **** 		    tem1 = abs(pos_temp[2][0] - pos_temp[3][0]);
+ 1176              		.loc 1 241 7 is_stmt 1 view .LVU385
+ 241:ads7843.c     **** 		    tem1 = abs(pos_temp[2][0] - pos_temp[3][0]);
+ 1177              		.loc 1 241 33 is_stmt 0 view .LVU386
+ 1178 0122 A8EB0700 		sub	r0, r8, r7
+ 1179              		.loc 1 242 33 view .LVU387
+ 1180 0126 9B1A     		subs	r3, r3, r2
+ 241:ads7843.c     **** 		    tem1 = abs(pos_temp[2][0] - pos_temp[3][0]);
+ 1181              		.loc 1 241 14 view .LVU388
+ 1182 0128 0028     		cmp	r0, #0
+ 1183 012a B8BF     		it	lt
+ 1184 012c 4042     		rsblt	r0, r0, #0
+ 1185              	.LVL96:
+ 1186              		.loc 1 242 7 is_stmt 1 view .LVU389
+ 1187              		.loc 1 242 14 is_stmt 0 view .LVU390
+ 1188 012e 002B     		cmp	r3, #0
+ 1189 0130 B8BF     		it	lt
+ 1190 0132 5B42     		rsblt	r3, r3, #0
+ 1191              	.LVL97:
+ 243:ads7843.c     **** 		    tem1 *= tem1;
+ 1192              		.loc 1 243 7 is_stmt 1 view .LVU391
+ 244:ads7843.c     **** 		    tem2 *= tem2;
+ 1193              		.loc 1 244 7 view .LVU392
+ 245:ads7843.c     **** 		    d2 = sqrt(tem1 + tem2);
+ 1194              		.loc 1 245 7 view .LVU393
+ 244:ads7843.c     **** 		    tem2 *= tem2;
+ 1195              		.loc 1 244 12 is_stmt 0 view .LVU394
+ 1196 0134 5B43     		muls	r3, r3, r3
+ 1197              	.LVL98:
+ 1198              		.loc 1 245 12 view .LVU395
+ 1199 0136 00FB0030 		mla	r0, r0, r0, r3
+ 1200              	.LVL99:
+ 1201              		.loc 1 245 12 view .LVU396
+ 1202 013a FFF7FEFF 		bl	__aeabi_ui2d
+ 1203              	.LVL100:
+ 1204              		.loc 1 245 12 view .LVU397
+ 1205 013e FFF7FEFF 		bl	sqrt
+ 1206              	.LVL101:
+ 1207              		.loc 1 245 10 view .LVU398
+ 1208 0142 FFF7FEFF 		bl	__aeabi_d2uiz
+ 1209              	.LVL102:
+ 246:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1210              		.loc 1 246 17 view .LVU399
+ 1211 0146 42F21073 		movw	r3, #10000
+ 1212 014a 03FB09FB 		mul	fp, r3, r9
+ 245:ads7843.c     **** 		    d2 = sqrt(tem1 + tem2);
+ 1213              		.loc 1 245 10 view .LVU400
+ 1214 014e 1FFA80FA 		uxth	r10, r0
+ 1215              	.LVL103:
+ 1216              		.loc 1 246 7 is_stmt 1 view .LVU401
+ 1217              		.loc 1 246 26 is_stmt 0 view .LVU402
+ 1218 0152 BBFBFAFB 		udiv	fp, fp, r10
+ 1219              	.LVL104:
+ 247:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500) || (d1 == 0) || (d2 == 0)) {
+ 1220              		.loc 1 247 7 is_stmt 1 view .LVU403
+ 1221              		.loc 1 247 24 is_stmt 0 view .LVU404
+ 1222 0156 ABF51453 		sub	r3, fp, #9472
+ 1223 015a 1C3B     		subs	r3, r3, #28
+ 1224              		.loc 1 247 10 view .LVU405
+ 1225 015c 9BB2     		uxth	r3, r3
+ 1226 015e B3F57A7F 		cmp	r3, #1000
+ 1227 0162 05D8     		bhi	.L69
+ 1228              		.loc 1 247 41 discriminator 1 view .LVU406
+ 1229 0164 B9F1000F 		cmp	r9, #0
+ 1230 0168 02D0     		beq	.L69
+ 1231              		.loc 1 247 54 discriminator 2 view .LVU407
+ 1232 016a BAF1000F 		cmp	r10, #0
+ 1233 016e 37D1     		bne	.L70
+ 1234              	.L69:
+ 248:ads7843.c     **** 		       cnt = 0;
+ 1235              		.loc 1 248 10 is_stmt 1 view .LVU408
+ 1236              	.LVL105:
+ 249:ads7843.c     **** 		       lcd_clear(background_color);
+ 1237              		.loc 1 249 10 view .LVU409
+ 1238 0170 704B     		ldr	r3, .L87+24
+ 1239 0172 1888     		ldrh	r0, [r3]
+ 1240 0174 FFF7FEFF 		bl	lcd_clear
+ 1241              	.LVL106:
+ 250:ads7843.c     **** 		       drow_touch_point(20,20);
+ 1242              		.loc 1 250 10 view .LVU410
+ 1243 0178 1421     		movs	r1, #20
+ 1244 017a 0846     		mov	r0, r1
+ 1245 017c FFF7FEFF 		bl	drow_touch_point
+ 1246              	.LVL107:
+ 251:ads7843.c     **** 		       lcd_printf(1,2,"ER1 fac %4d",fac);
+ 1247              		.loc 1 251 10 view .LVU411
+ 1248 0180 6D4A     		ldr	r2, .L87+28
+ 1249 0182 1FFA8BF3 		uxth	r3, fp
+ 1250              	.LVL108:
+ 1251              	.L86:
+ 252:ads7843.c     **** 		       lcd_printf(1,3,"1 X: %4d Y:%4d",pos_temp[0][0],pos_temp[0][1]);
+ 253:ads7843.c     **** 		       lcd_printf(1,4,"2 X: %4d Y:%4d",pos_temp[1][0],pos_temp[1][1]);
+ 254:ads7843.c     **** 		       lcd_printf(1,5,"3 X: %4d Y:%4d",pos_temp[2][0],pos_temp[2][1]);
+ 255:ads7843.c     **** 		       lcd_printf(1,6,"4 X: %4d Y:%4d",pos_temp[3][0],pos_temp[3][1]);
+ 256:ads7843.c     **** 		       lcd_printf(1,8,"D1: %4d D2: %4d",d1,d2);
+ 257:ads7843.c     **** 		       continue;
+ 258:ads7843.c     **** 		    }
+ 259:ads7843.c     **** 		    tem1 = abs(pos_temp[0][0] - pos_temp[2][0]);
+ 260:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[2][1]);
+ 261:ads7843.c     **** 		    tem1 *= tem1;
+ 262:ads7843.c     **** 		    tem2 *= tem2;
+ 263:ads7843.c     **** 		    d1 = sqrt(tem1 + tem2);
+ 264:ads7843.c     **** 		    tem1 = abs(pos_temp[1][0] - pos_temp[3][0]);
+ 265:ads7843.c     **** 		    tem2 = abs(pos_temp[1][1] - pos_temp[3][1]);
+ 266:ads7843.c     **** 		    tem1 *= tem1;
+ 267:ads7843.c     **** 		    tem2 *= tem2;
+ 268:ads7843.c     **** 		    d2 = sqrt(tem1 + tem2);
+ 269:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 270:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 271:ads7843.c     **** 		       cnt = 0;
+ 272:ads7843.c     **** 		       lcd_clear(background_color);
+ 273:ads7843.c     **** 		       drow_touch_point(20,20);
+ 274:ads7843.c     **** 		       lcd_printf(1,2,"ER2 fac %4d",fac);
+ 275:ads7843.c     **** 		       lcd_printf(1,3,"1 X: %4d Y:%4d",pos_temp[0][0],pos_temp[0][1]);
+ 276:ads7843.c     **** 		       lcd_printf(1,4,"2 X: %4d Y:%4d",pos_temp[1][0],pos_temp[1][1]);
+ 277:ads7843.c     **** 		       lcd_printf(1,5,"3 X: %4d Y:%4d",pos_temp[2][0],pos_temp[2][1]);
+ 278:ads7843.c     **** 		       lcd_printf(1,6,"4 X: %4d Y:%4d",pos_temp[3][0],pos_temp[3][1]);
+ 279:ads7843.c     **** 		       lcd_printf(1,8,"D1: %4d D2: %4d",d1,d2);
+ 280:ads7843.c     **** 		       continue;
+ 281:ads7843.c     **** 		    }
+ 282:ads7843.c     **** 		    tem1 = abs(pos_temp[1][0] - pos_temp[2][0]);
+ 283:ads7843.c     **** 		    tem2 = abs(pos_temp[1][1] - pos_temp[2][1]);
+ 284:ads7843.c     **** 		    tem1 *= tem1;
+ 285:ads7843.c     **** 		    tem2 *= tem2;
+ 286:ads7843.c     **** 		    d1 = sqrt(tem1 + tem2);
+ 287:ads7843.c     **** 		    tem1 = abs(pos_temp[0][0] - pos_temp[3][0]);
+ 288:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[3][1]);
+ 289:ads7843.c     **** 		    tem1 *= tem1;
+ 290:ads7843.c     **** 		    tem2 *= tem2;
+ 291:ads7843.c     **** 		    d2 = sqrt(tem1 + tem2);
+ 292:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 293:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 294:ads7843.c     **** 		       cnt = 0;
+ 295:ads7843.c     **** 		       lcd_clear(background_color);
+ 296:ads7843.c     **** 		       drow_touch_point(20,20);
+ 297:ads7843.c     **** 		       lcd_printf(1,2,"ER3 fac %4d",fac);
+ 1252              		.loc 1 297 10 is_stmt 0 view .LVU412
+ 1253 0186 0221     		movs	r1, #2
+ 1254 0188 0120     		movs	r0, #1
+ 1255 018a FFF7FEFF 		bl	lcd_printf
+ 1256              	.LVL109:
+ 298:ads7843.c     **** 		       lcd_printf(1,3,"1 X: %4d Y:%4d",pos_temp[0][0],pos_temp[0][1]);
+ 1257              		.loc 1 298 10 is_stmt 1 view .LVU413
+ 1258 018e 2B46     		mov	r3, r5
+ 1259 0190 0321     		movs	r1, #3
+ 1260 0192 0120     		movs	r0, #1
+ 1261 0194 694A     		ldr	r2, .L87+32
+ 1262 0196 0096     		str	r6, [sp]
+ 1263 0198 FFF7FEFF 		bl	lcd_printf
+ 1264              	.LVL110:
+ 299:ads7843.c     **** 		       lcd_printf(1,4,"2 X: %4d Y:%4d",pos_temp[1][0],pos_temp[1][1]);
+ 1265              		.loc 1 299 10 view .LVU414
+ 1266 019c 039B     		ldr	r3, [sp, #12]
+ 1267 019e 0421     		movs	r1, #4
+ 1268 01a0 0120     		movs	r0, #1
+ 1269 01a2 674A     		ldr	r2, .L87+36
+ 1270 01a4 0093     		str	r3, [sp]
+ 1271 01a6 2346     		mov	r3, r4
+ 1272 01a8 FFF7FEFF 		bl	lcd_printf
+ 1273              	.LVL111:
+ 300:ads7843.c     **** 		       lcd_printf(1,5,"3 X: %4d Y:%4d",pos_temp[2][0],pos_temp[2][1]);
+ 1274              		.loc 1 300 10 view .LVU415
+ 1275 01ac 029B     		ldr	r3, [sp, #8]
+ 1276 01ae 0521     		movs	r1, #5
+ 1277 01b0 0120     		movs	r0, #1
+ 1278 01b2 644A     		ldr	r2, .L87+40
+ 1279 01b4 0093     		str	r3, [sp]
+ 1280 01b6 4346     		mov	r3, r8
+ 1281 01b8 FFF7FEFF 		bl	lcd_printf
+ 1282              	.LVL112:
+ 301:ads7843.c     **** 		       lcd_printf(1,6,"4 X: %4d Y:%4d",pos_temp[3][0],pos_temp[3][1]);
+ 1283              		.loc 1 301 10 view .LVU416
+ 1284 01bc 049B     		ldr	r3, [sp, #16]
+ 1285 01be 0621     		movs	r1, #6
+ 1286 01c0 0120     		movs	r0, #1
+ 1287 01c2 614A     		ldr	r2, .L87+44
+ 1288 01c4 0093     		str	r3, [sp]
+ 1289 01c6 3B46     		mov	r3, r7
+ 1290 01c8 FFF7FEFF 		bl	lcd_printf
+ 1291              	.LVL113:
+ 302:ads7843.c     **** 		       lcd_printf(1,8,"D1: %4d D2: %4d",d1,d2);
+ 1292              		.loc 1 302 10 view .LVU417
+ 1293 01cc 4B46     		mov	r3, r9
+ 1294 01ce 0821     		movs	r1, #8
+ 1295 01d0 0120     		movs	r0, #1
+ 1296 01d2 5E4A     		ldr	r2, .L87+48
+ 1297 01d4 CDF800A0 		str	r10, [sp]
+ 1298 01d8 FFF7FEFF 		bl	lcd_printf
+ 1299              	.LVL114:
+ 303:ads7843.c     **** 		       continue;
+ 1300              		.loc 1 303 10 view .LVU418
+ 1301              	.L73:
+ 248:ads7843.c     **** 		       lcd_clear(background_color);
+ 1302              		.loc 1 248 14 is_stmt 0 view .LVU419
+ 1303 01dc 0024     		movs	r4, #0
+ 1304 01de 1EE7     		b	.L56
+ 1305              	.LVL115:
+ 1306              	.L70:
+ 259:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[2][1]);
+ 1307              		.loc 1 259 7 is_stmt 1 view .LVU420
+ 260:ads7843.c     **** 		    tem1 *= tem1;
+ 1308              		.loc 1 260 33 is_stmt 0 view .LVU421
+ 1309 01e0 029B     		ldr	r3, [sp, #8]
+ 259:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[2][1]);
+ 1310              		.loc 1 259 33 view .LVU422
+ 1311 01e2 A5EB0800 		sub	r0, r5, r8
+ 260:ads7843.c     **** 		    tem1 *= tem1;
+ 1312              		.loc 1 260 33 view .LVU423
+ 1313 01e6 F31A     		subs	r3, r6, r3
+ 259:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[2][1]);
+ 1314              		.loc 1 259 14 view .LVU424
+ 1315 01e8 0028     		cmp	r0, #0
+ 1316 01ea B8BF     		it	lt
+ 1317 01ec 4042     		rsblt	r0, r0, #0
+ 1318              	.LVL116:
+ 260:ads7843.c     **** 		    tem1 *= tem1;
+ 1319              		.loc 1 260 7 is_stmt 1 view .LVU425
+ 260:ads7843.c     **** 		    tem1 *= tem1;
+ 1320              		.loc 1 260 14 is_stmt 0 view .LVU426
+ 1321 01ee 002B     		cmp	r3, #0
+ 260:ads7843.c     **** 		    tem1 *= tem1;
+ 1322              		.loc 1 260 33 view .LVU427
+ 1323 01f0 0593     		str	r3, [sp, #20]
+ 260:ads7843.c     **** 		    tem1 *= tem1;
+ 1324              		.loc 1 260 14 view .LVU428
+ 1325 01f2 B8BF     		it	lt
+ 1326 01f4 5B42     		rsblt	r3, r3, #0
+ 1327              	.LVL117:
+ 261:ads7843.c     **** 		    tem2 *= tem2;
+ 1328              		.loc 1 261 7 is_stmt 1 view .LVU429
+ 262:ads7843.c     **** 		    d1 = sqrt(tem1 + tem2);
+ 1329              		.loc 1 262 7 view .LVU430
+ 263:ads7843.c     **** 		    tem1 = abs(pos_temp[1][0] - pos_temp[3][0]);
+ 1330              		.loc 1 263 7 view .LVU431
+ 262:ads7843.c     **** 		    d1 = sqrt(tem1 + tem2);
+ 1331              		.loc 1 262 12 is_stmt 0 view .LVU432
+ 1332 01f6 5B43     		muls	r3, r3, r3
+ 1333              	.LVL118:
+ 263:ads7843.c     **** 		    tem1 = abs(pos_temp[1][0] - pos_temp[3][0]);
+ 1334              		.loc 1 263 12 view .LVU433
+ 1335 01f8 00FB0030 		mla	r0, r0, r0, r3
+ 1336              	.LVL119:
+ 263:ads7843.c     **** 		    tem1 = abs(pos_temp[1][0] - pos_temp[3][0]);
+ 1337              		.loc 1 263 12 view .LVU434
+ 1338 01fc FFF7FEFF 		bl	__aeabi_ui2d
+ 1339              	.LVL120:
+ 263:ads7843.c     **** 		    tem1 = abs(pos_temp[1][0] - pos_temp[3][0]);
+ 1340              		.loc 1 263 12 view .LVU435
+ 1341 0200 FFF7FEFF 		bl	sqrt
+ 1342              	.LVL121:
+ 1343 0204 0246     		mov	r2, r0
+ 1344 0206 0B46     		mov	r3, r1
+ 264:ads7843.c     **** 		    tem2 = abs(pos_temp[1][1] - pos_temp[3][1]);
+ 1345              		.loc 1 264 33 view .LVU436
+ 1346 0208 E01B     		subs	r0, r4, r7
+ 264:ads7843.c     **** 		    tem2 = abs(pos_temp[1][1] - pos_temp[3][1]);
+ 1347              		.loc 1 264 14 view .LVU437
+ 1348 020a 0028     		cmp	r0, #0
+ 263:ads7843.c     **** 		    tem1 = abs(pos_temp[1][0] - pos_temp[3][0]);
+ 1349              		.loc 1 263 12 view .LVU438
+ 1350 020c CDE90623 		strd	r2, [sp, #24]
+ 1351              	.LVL122:
+ 264:ads7843.c     **** 		    tem2 = abs(pos_temp[1][1] - pos_temp[3][1]);
+ 1352              		.loc 1 264 7 is_stmt 1 view .LVU439
+ 265:ads7843.c     **** 		    tem1 *= tem1;
+ 1353              		.loc 1 265 33 is_stmt 0 view .LVU440
+ 1354 0210 DDE90332 		ldrd	r3, r2, [sp, #12]
+ 1355 0214 A3EB0201 		sub	r1, r3, r2
+ 264:ads7843.c     **** 		    tem2 = abs(pos_temp[1][1] - pos_temp[3][1]);
+ 1356              		.loc 1 264 14 view .LVU441
+ 1357 0218 B8BF     		it	lt
+ 1358 021a 4042     		rsblt	r0, r0, #0
+ 1359              	.LVL123:
+ 265:ads7843.c     **** 		    tem1 *= tem1;
+ 1360              		.loc 1 265 7 is_stmt 1 view .LVU442
+ 265:ads7843.c     **** 		    tem1 *= tem1;
+ 1361              		.loc 1 265 14 is_stmt 0 view .LVU443
+ 1362 021c 0029     		cmp	r1, #0
+ 1363 021e B8BF     		it	lt
+ 1364 0220 4942     		rsblt	r1, r1, #0
+ 1365              	.LVL124:
+ 266:ads7843.c     **** 		    tem2 *= tem2;
+ 1366              		.loc 1 266 7 is_stmt 1 view .LVU444
+ 267:ads7843.c     **** 		    d2 = sqrt(tem1 + tem2);
+ 1367              		.loc 1 267 7 view .LVU445
+ 268:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1368              		.loc 1 268 7 view .LVU446
+ 267:ads7843.c     **** 		    d2 = sqrt(tem1 + tem2);
+ 1369              		.loc 1 267 12 is_stmt 0 view .LVU447
+ 1370 0222 4943     		muls	r1, r1, r1
+ 1371              	.LVL125:
+ 268:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1372              		.loc 1 268 12 view .LVU448
+ 1373 0224 00FB0010 		mla	r0, r0, r0, r1
+ 1374              	.LVL126:
+ 268:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1375              		.loc 1 268 12 view .LVU449
+ 1376 0228 FFF7FEFF 		bl	__aeabi_ui2d
+ 1377              	.LVL127:
+ 268:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1378              		.loc 1 268 12 view .LVU450
+ 1379 022c FFF7FEFF 		bl	sqrt
+ 1380              	.LVL128:
+ 263:ads7843.c     **** 		    tem1 = abs(pos_temp[1][0] - pos_temp[3][0]);
+ 1381              		.loc 1 263 10 view .LVU451
+ 1382 0230 DDE90623 		ldrd	r2, [sp, #24]
+ 268:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1383              		.loc 1 268 12 view .LVU452
+ 1384 0234 8246     		mov	r10, r0
+ 1385              	.LVL129:
+ 268:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1386              		.loc 1 268 12 view .LVU453
+ 1387 0236 8B46     		mov	fp, r1
+ 1388              	.LVL130:
+ 269:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1389              		.loc 1 269 7 is_stmt 1 view .LVU454
+ 263:ads7843.c     **** 		    tem1 = abs(pos_temp[1][0] - pos_temp[3][0]);
+ 1390              		.loc 1 263 10 is_stmt 0 view .LVU455
+ 1391 0238 1046     		mov	r0, r2
+ 1392 023a 1946     		mov	r1, r3
+ 1393 023c FFF7FEFF 		bl	__aeabi_d2uiz
+ 1394              	.LVL131:
+ 268:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1395              		.loc 1 268 10 view .LVU456
+ 1396 0240 5946     		mov	r1, fp
+ 269:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1397              		.loc 1 269 17 view .LVU457
+ 1398 0242 1FFA80F9 		uxth	r9, r0
+ 268:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1399              		.loc 1 268 10 view .LVU458
+ 1400 0246 5046     		mov	r0, r10
+ 1401 0248 FFF7FEFF 		bl	__aeabi_d2uiz
+ 1402              	.LVL132:
+ 269:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1403              		.loc 1 269 17 view .LVU459
+ 1404 024c 42F21073 		movw	r3, #10000
+ 269:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1405              		.loc 1 269 17 view .LVU460
+ 1406 0250 03FB09FB 		mul	fp, r3, r9
+ 269:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1407              		.loc 1 269 26 view .LVU461
+ 1408 0254 1FFA80FA 		uxth	r10, r0
+ 1409              	.LVL133:
+ 269:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1410              		.loc 1 269 26 view .LVU462
+ 1411 0258 BBFBFAFB 		udiv	fp, fp, r10
+ 1412              	.LVL134:
+ 270:ads7843.c     **** 		       cnt = 0;
+ 1413              		.loc 1 270 7 is_stmt 1 view .LVU463
+ 270:ads7843.c     **** 		       cnt = 0;
+ 1414              		.loc 1 270 24 is_stmt 0 view .LVU464
+ 1415 025c ABF51453 		sub	r3, fp, #9472
+ 1416 0260 1C3B     		subs	r3, r3, #28
+ 270:ads7843.c     **** 		       cnt = 0;
+ 1417              		.loc 1 270 10 view .LVU465
+ 1418 0262 9BB2     		uxth	r3, r3
+ 1419 0264 B3F57A7F 		cmp	r3, #1000
+ 1420 0268 324A     		ldr	r2, .L87+24
+ 1421 026a 0AD9     		bls	.L71
+ 271:ads7843.c     **** 		       lcd_clear(background_color);
+ 1422              		.loc 1 271 10 is_stmt 1 view .LVU466
+ 1423              	.LVL135:
+ 272:ads7843.c     **** 		       drow_touch_point(20,20);
+ 1424              		.loc 1 272 10 view .LVU467
+ 1425 026c 1088     		ldrh	r0, [r2]
+ 1426 026e FFF7FEFF 		bl	lcd_clear
+ 1427              	.LVL136:
+ 273:ads7843.c     **** 		       lcd_printf(1,2,"ER2 fac %4d",fac);
+ 1428              		.loc 1 273 10 view .LVU468
+ 1429 0272 1421     		movs	r1, #20
+ 1430 0274 0846     		mov	r0, r1
+ 1431 0276 FFF7FEFF 		bl	drow_touch_point
+ 1432              	.LVL137:
+ 274:ads7843.c     **** 		       lcd_printf(1,3,"1 X: %4d Y:%4d",pos_temp[0][0],pos_temp[0][1]);
+ 1433              		.loc 1 274 10 view .LVU469
+ 1434 027a 354A     		ldr	r2, .L87+52
+ 1435 027c 1FFA8BF3 		uxth	r3, fp
+ 1436 0280 81E7     		b	.L86
+ 1437              	.LVL138:
+ 1438              	.L71:
+ 282:ads7843.c     **** 		    tem2 = abs(pos_temp[1][1] - pos_temp[2][1]);
+ 1439              		.loc 1 282 7 view .LVU470
+ 282:ads7843.c     **** 		    tem2 = abs(pos_temp[1][1] - pos_temp[2][1]);
+ 1440              		.loc 1 282 33 is_stmt 0 view .LVU471
+ 1441 0282 A4EB0800 		sub	r0, r4, r8
+ 283:ads7843.c     **** 		    tem1 *= tem1;
+ 1442              		.loc 1 283 33 view .LVU472
+ 1443 0286 DDE90223 		ldrd	r2, r3, [sp, #8]
+ 282:ads7843.c     **** 		    tem2 = abs(pos_temp[1][1] - pos_temp[2][1]);
+ 1444              		.loc 1 282 14 view .LVU473
+ 1445 028a 0028     		cmp	r0, #0
+ 283:ads7843.c     **** 		    tem1 *= tem1;
+ 1446              		.loc 1 283 33 view .LVU474
+ 1447 028c A3EB0203 		sub	r3, r3, r2
+ 282:ads7843.c     **** 		    tem2 = abs(pos_temp[1][1] - pos_temp[2][1]);
+ 1448              		.loc 1 282 14 view .LVU475
+ 1449 0290 B8BF     		it	lt
+ 1450 0292 4042     		rsblt	r0, r0, #0
+ 1451              	.LVL139:
+ 283:ads7843.c     **** 		    tem1 *= tem1;
+ 1452              		.loc 1 283 7 is_stmt 1 view .LVU476
+ 283:ads7843.c     **** 		    tem1 *= tem1;
+ 1453              		.loc 1 283 14 is_stmt 0 view .LVU477
+ 1454 0294 002B     		cmp	r3, #0
+ 1455 0296 B8BF     		it	lt
+ 1456 0298 5B42     		rsblt	r3, r3, #0
+ 1457              	.LVL140:
+ 284:ads7843.c     **** 		    tem2 *= tem2;
+ 1458              		.loc 1 284 7 is_stmt 1 view .LVU478
+ 285:ads7843.c     **** 		    d1 = sqrt(tem1 + tem2);
+ 1459              		.loc 1 285 7 view .LVU479
+ 286:ads7843.c     **** 		    tem1 = abs(pos_temp[0][0] - pos_temp[3][0]);
+ 1460              		.loc 1 286 7 view .LVU480
+ 285:ads7843.c     **** 		    d1 = sqrt(tem1 + tem2);
+ 1461              		.loc 1 285 12 is_stmt 0 view .LVU481
+ 1462 029a 5B43     		muls	r3, r3, r3
+ 1463              	.LVL141:
+ 286:ads7843.c     **** 		    tem1 = abs(pos_temp[0][0] - pos_temp[3][0]);
+ 1464              		.loc 1 286 12 view .LVU482
+ 1465 029c 00FB0030 		mla	r0, r0, r0, r3
+ 1466              	.LVL142:
+ 286:ads7843.c     **** 		    tem1 = abs(pos_temp[0][0] - pos_temp[3][0]);
+ 1467              		.loc 1 286 12 view .LVU483
+ 1468 02a0 FFF7FEFF 		bl	__aeabi_ui2d
+ 1469              	.LVL143:
+ 286:ads7843.c     **** 		    tem1 = abs(pos_temp[0][0] - pos_temp[3][0]);
+ 1470              		.loc 1 286 12 view .LVU484
+ 1471 02a4 FFF7FEFF 		bl	sqrt
+ 1472              	.LVL144:
+ 288:ads7843.c     **** 		    tem1 *= tem1;
+ 1473              		.loc 1 288 33 view .LVU485
+ 1474 02a8 049B     		ldr	r3, [sp, #16]
+ 286:ads7843.c     **** 		    tem1 = abs(pos_temp[0][0] - pos_temp[3][0]);
+ 1475              		.loc 1 286 12 view .LVU486
+ 1476 02aa CDE90601 		strd	r0, [sp, #24]
+ 1477              	.LVL145:
+ 287:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[3][1]);
+ 1478              		.loc 1 287 7 is_stmt 1 view .LVU487
+ 287:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[3][1]);
+ 1479              		.loc 1 287 33 is_stmt 0 view .LVU488
+ 1480 02ae E81B     		subs	r0, r5, r7
+ 1481              	.LVL146:
+ 287:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[3][1]);
+ 1482              		.loc 1 287 14 view .LVU489
+ 1483 02b0 0028     		cmp	r0, #0
+ 288:ads7843.c     **** 		    tem1 *= tem1;
+ 1484              		.loc 1 288 33 view .LVU490
+ 1485 02b2 A6EB0303 		sub	r3, r6, r3
+ 287:ads7843.c     **** 		    tem2 = abs(pos_temp[0][1] - pos_temp[3][1]);
+ 1486              		.loc 1 287 14 view .LVU491
+ 1487 02b6 B8BF     		it	lt
+ 1488 02b8 4042     		rsblt	r0, r0, #0
+ 1489              	.LVL147:
+ 288:ads7843.c     **** 		    tem1 *= tem1;
+ 1490              		.loc 1 288 7 is_stmt 1 view .LVU492
+ 288:ads7843.c     **** 		    tem1 *= tem1;
+ 1491              		.loc 1 288 14 is_stmt 0 view .LVU493
+ 1492 02ba 002B     		cmp	r3, #0
+ 1493 02bc B8BF     		it	lt
+ 1494 02be 5B42     		rsblt	r3, r3, #0
+ 1495              	.LVL148:
+ 289:ads7843.c     **** 		    tem2 *= tem2;
+ 1496              		.loc 1 289 7 is_stmt 1 view .LVU494
+ 290:ads7843.c     **** 		    d2 = sqrt(tem1 + tem2);
+ 1497              		.loc 1 290 7 view .LVU495
+ 291:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1498              		.loc 1 291 7 view .LVU496
+ 290:ads7843.c     **** 		    d2 = sqrt(tem1 + tem2);
+ 1499              		.loc 1 290 12 is_stmt 0 view .LVU497
+ 1500 02c0 5B43     		muls	r3, r3, r3
+ 1501              	.LVL149:
+ 291:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1502              		.loc 1 291 12 view .LVU498
+ 1503 02c2 00FB0030 		mla	r0, r0, r0, r3
+ 1504              	.LVL150:
+ 291:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1505              		.loc 1 291 12 view .LVU499
+ 1506 02c6 FFF7FEFF 		bl	__aeabi_ui2d
+ 1507              	.LVL151:
+ 291:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1508              		.loc 1 291 12 view .LVU500
+ 1509 02ca FFF7FEFF 		bl	sqrt
+ 1510              	.LVL152:
+ 1511 02ce 8246     		mov	r10, r0
+ 1512 02d0 8B46     		mov	fp, r1
+ 1513              	.LVL153:
+ 292:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1514              		.loc 1 292 7 is_stmt 1 view .LVU501
+ 286:ads7843.c     **** 		    tem1 = abs(pos_temp[0][0] - pos_temp[3][0]);
+ 1515              		.loc 1 286 10 is_stmt 0 view .LVU502
+ 1516 02d2 DDE90601 		ldrd	r0, [sp, #24]
+ 1517 02d6 FFF7FEFF 		bl	__aeabi_d2uiz
+ 1518              	.LVL154:
+ 291:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1519              		.loc 1 291 10 view .LVU503
+ 1520 02da 5946     		mov	r1, fp
+ 292:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1521              		.loc 1 292 17 view .LVU504
+ 1522 02dc 1FFA80F9 		uxth	r9, r0
+ 291:ads7843.c     **** 		    fac = (d1 * 10000) / d2;
+ 1523              		.loc 1 291 10 view .LVU505
+ 1524 02e0 5046     		mov	r0, r10
+ 1525 02e2 FFF7FEFF 		bl	__aeabi_d2uiz
+ 1526              	.LVL155:
+ 292:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1527              		.loc 1 292 17 view .LVU506
+ 1528 02e6 42F21073 		movw	r3, #10000
+ 292:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1529              		.loc 1 292 17 view .LVU507
+ 1530 02ea 03FB09FB 		mul	fp, r3, r9
+ 292:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1531              		.loc 1 292 26 view .LVU508
+ 1532 02ee 1FFA80FA 		uxth	r10, r0
+ 1533              	.LVL156:
+ 292:ads7843.c     **** 		    if ((fac < 9500) || (fac > 10500)) {
+ 1534              		.loc 1 292 26 view .LVU509
+ 1535 02f2 BBFBFAFB 		udiv	fp, fp, r10
+ 1536              	.LVL157:
+ 293:ads7843.c     **** 		       cnt = 0;
+ 1537              		.loc 1 293 7 is_stmt 1 view .LVU510
+ 293:ads7843.c     **** 		       cnt = 0;
+ 1538              		.loc 1 293 24 is_stmt 0 view .LVU511
+ 1539 02f6 ABF51453 		sub	r3, fp, #9472
+ 1540 02fa 1C3B     		subs	r3, r3, #28
+ 293:ads7843.c     **** 		       cnt = 0;
+ 1541              		.loc 1 293 10 view .LVU512
+ 1542 02fc 9BB2     		uxth	r3, r3
+ 1543 02fe B3F57A7F 		cmp	r3, #1000
+ 1544 0302 0C4A     		ldr	r2, .L87+24
+ 1545 0304 28D9     		bls	.L72
+ 294:ads7843.c     **** 		       lcd_clear(background_color);
+ 1546              		.loc 1 294 10 is_stmt 1 view .LVU513
+ 1547              	.LVL158:
+ 295:ads7843.c     **** 		       drow_touch_point(20,20);
+ 1548              		.loc 1 295 10 view .LVU514
+ 1549 0306 1088     		ldrh	r0, [r2]
+ 1550 0308 FFF7FEFF 		bl	lcd_clear
+ 1551              	.LVL159:
+ 296:ads7843.c     **** 		       lcd_printf(1,2,"ER3 fac %4d",fac);
+ 1552              		.loc 1 296 10 view .LVU515
+ 1553 030c 1421     		movs	r1, #20
+ 1554 030e 0846     		mov	r0, r1
+ 1555 0310 FFF7FEFF 		bl	drow_touch_point
+ 1556              	.LVL160:
+ 297:ads7843.c     **** 		       lcd_printf(1,3,"1 X: %4d Y:%4d",pos_temp[0][0],pos_temp[0][1]);
+ 1557              		.loc 1 297 10 view .LVU516
+ 1558 0314 0F4A     		ldr	r2, .L87+56
+ 1559 0316 1FFA8BF3 		uxth	r3, fp
+ 1560 031a 34E7     		b	.L86
+ 1561              	.L88:
+ 1562              		.align	2
+ 1563              	.L87:
+ 1564 031c 00000000 		.word	pen_status
+ 1565 0320 00000000 		.word	pen_point
+ 1566 0324 00000000 		.word	pen_enable
+ 1567 0328 00000000 		.word	tick
+ 1568 032c 00000000 		.word	pen_count
+ 1569 0330 10012242 		.word	1109524752
+ 1570 0334 00000000 		.word	background_color
+ 1571 0338 00000000 		.word	.LC0
+ 1572 033c 0C000000 		.word	.LC1
+ 1573 0340 1B000000 		.word	.LC2
+ 1574 0344 2A000000 		.word	.LC3
+ 1575 0348 39000000 		.word	.LC4
+ 1576 034c 48000000 		.word	.LC5
+ 1577 0350 58000000 		.word	.LC6
+ 1578 0354 64000000 		.word	.LC7
+ 1579              	.LVL161:
+ 1580              	.L72:
+ 304:ads7843.c     **** 		    }
+ 305:ads7843.c     **** 		    pen_point.xfac = (200 * 10000) / (pos_temp[1][0] - pos_temp[0][0]);
+ 1581              		.loc 1 305 7 view .LVU517
+ 1582              		.loc 1 305 38 is_stmt 0 view .LVU518
+ 1583 0358 354B     		ldr	r3, .L89
+ 1584              		.loc 1 305 56 view .LVU519
+ 1585 035a 611B     		subs	r1, r4, r5
+ 1586              		.loc 1 305 38 view .LVU520
+ 1587 035c 93FBF1F3 		sdiv	r3, r3, r1
+ 1588              		.loc 1 305 22 view .LVU521
+ 1589 0360 DFF8F890 		ldr	r9, .L89+44
+ 306:ads7843.c     **** 		    tem1 = (unsigned int)(240 * 10000);
+ 307:ads7843.c     **** 		    tem2 = (unsigned int)(pen_point.xfac * (pos_temp[1][0] + pos_temp[0][0]));
+ 308:ads7843.c     **** 		    temp = tem1 - tem2;
+ 1590              		.loc 1 308 19 view .LVU522
+ 1591 0364 3348     		ldr	r0, .L89+4
+ 305:ads7843.c     **** 		    tem1 = (unsigned int)(240 * 10000);
+ 1592              		.loc 1 305 22 view .LVU523
+ 1593 0366 A9F80830 		strh	r3, [r9, #8]	@ movhi
+ 306:ads7843.c     **** 		    tem1 = (unsigned int)(240 * 10000);
+ 1594              		.loc 1 306 7 is_stmt 1 view .LVU524
+ 1595              	.LVL162:
+ 307:ads7843.c     **** 		    temp = tem1 - tem2;
+ 1596              		.loc 1 307 7 view .LVU525
+ 1597              		.loc 1 308 7 view .LVU526
+ 307:ads7843.c     **** 		    temp = tem1 - tem2;
+ 1598              		.loc 1 307 62 is_stmt 0 view .LVU527
+ 1599 036a 2919     		adds	r1, r5, r4
+ 307:ads7843.c     **** 		    temp = tem1 - tem2;
+ 1600              		.loc 1 307 44 view .LVU528
+ 1601 036c 9BB2     		uxth	r3, r3
+ 1602              	.LVL163:
+ 1603              		.loc 1 308 19 view .LVU529
+ 1604 036e 01FB1303 		mls	r3, r1, r3, r0
+ 1605              	.LVL164:
+ 309:ads7843.c     **** 		    temp = temp / 20000;
+ 1606              		.loc 1 309 7 is_stmt 1 view .LVU530
+ 310:ads7843.c     **** 		    pen_point.xoff = (short)temp;
+ 1607              		.loc 1 310 7 view .LVU531
+ 309:ads7843.c     **** 		    temp = temp / 20000;
+ 1608              		.loc 1 309 12 is_stmt 0 view .LVU532
+ 1609 0372 44F62061 		movw	r1, #20000
+ 1610 0376 93FBF1F3 		sdiv	r3, r3, r1
+ 1611              	.LVL165:
+ 311:ads7843.c     **** 		    pen_point.yfac = (280 * 10000) / (pos_temp[0][1] - pos_temp[2][1]);
+ 1612              		.loc 1 311 38 view .LVU533
+ 1613 037a 0598     		ldr	r0, [sp, #20]
+ 310:ads7843.c     **** 		    pen_point.xoff = (short)temp;
+ 1614              		.loc 1 310 24 view .LVU534
+ 1615 037c A9F80C30 		strh	r3, [r9, #12]	@ movhi
+ 1616              		.loc 1 311 7 is_stmt 1 view .LVU535
+ 1617              		.loc 1 311 38 is_stmt 0 view .LVU536
+ 1618 0380 2D4B     		ldr	r3, .L89+8
+ 1619              	.LVL166:
+ 312:ads7843.c     **** 		    tem1 = (unsigned int)(320 * 10000);
+ 313:ads7843.c     **** 		    tem2 = (unsigned int)(pen_point.yfac * (pos_temp[2][1] + pos_temp[0][1]));
+ 314:ads7843.c     **** 		    temp = tem1 - tem2;
+ 1620              		.loc 1 314 19 view .LVU537
+ 1621 0382 DFF8DCC0 		ldr	ip, .L89+48
+ 311:ads7843.c     **** 		    pen_point.yfac = (280 * 10000) / (pos_temp[0][1] - pos_temp[2][1]);
+ 1622              		.loc 1 311 38 view .LVU538
+ 1623 0386 93FBF0F3 		sdiv	r3, r3, r0
+ 313:ads7843.c     **** 		    temp = tem1 - tem2;
+ 1624              		.loc 1 313 62 view .LVU539
+ 1625 038a 0298     		ldr	r0, [sp, #8]
+ 311:ads7843.c     **** 		    pen_point.yfac = (280 * 10000) / (pos_temp[0][1] - pos_temp[2][1]);
+ 1626              		.loc 1 311 22 view .LVU540
+ 1627 038c A9F80A30 		strh	r3, [r9, #10]	@ movhi
+ 312:ads7843.c     **** 		    tem1 = (unsigned int)(320 * 10000);
+ 1628              		.loc 1 312 7 is_stmt 1 view .LVU541
+ 1629              	.LVL167:
+ 313:ads7843.c     **** 		    temp = tem1 - tem2;
+ 1630              		.loc 1 313 7 view .LVU542
+ 1631              		.loc 1 314 7 view .LVU543
+ 313:ads7843.c     **** 		    temp = tem1 - tem2;
+ 1632              		.loc 1 313 62 is_stmt 0 view .LVU544
+ 1633 0390 3018     		adds	r0, r6, r0
+ 1634              	.LVL168:
+ 313:ads7843.c     **** 		    temp = tem1 - tem2;
+ 1635              		.loc 1 313 44 view .LVU545
+ 1636 0392 9BB2     		uxth	r3, r3
+ 1637              	.LVL169:
+ 1638              		.loc 1 314 19 view .LVU546
+ 1639 0394 03FB10C3 		mls	r3, r3, r0, ip
+ 1640              	.LVL170:
+ 315:ads7843.c     **** 		    temp = temp / 20000;
+ 1641              		.loc 1 315 7 is_stmt 1 view .LVU547
+ 316:ads7843.c     **** 		    pen_point.yoff = (short)temp;
+ 1642              		.loc 1 316 7 view .LVU548
+ 315:ads7843.c     **** 		    temp = temp / 20000;
+ 1643              		.loc 1 315 12 is_stmt 0 view .LVU549
+ 1644 0398 93FBF1F1 		sdiv	r1, r3, r1
+ 1645              	.LVL171:
+ 317:ads7843.c     ****                     lcd_clear(background_color);
+ 1646              		.loc 1 317 21 view .LVU550
+ 1647 039c 1088     		ldrh	r0, [r2]
+ 316:ads7843.c     **** 		    pen_point.yoff = (short)temp;
+ 1648              		.loc 1 316 24 view .LVU551
+ 1649 039e A9F80E10 		strh	r1, [r9, #14]	@ movhi
+ 1650              		.loc 1 317 21 is_stmt 1 view .LVU552
+ 1651 03a2 FFF7FEFF 		bl	lcd_clear
+ 1652              	.LVL172:
+ 318:ads7843.c     **** 		    lcd_printf(5,2,"Adjust OK!");
+ 1653              		.loc 1 318 7 view .LVU553
+ 1654 03a6 0221     		movs	r1, #2
+ 1655 03a8 0520     		movs	r0, #5
+ 1656 03aa 244A     		ldr	r2, .L89+12
+ 1657 03ac FFF7FEFF 		bl	lcd_printf
+ 1658              	.LVL173:
+ 319:ads7843.c     ****                     lcd_printf(5,3,"Xf: %4d Xoff:%4d",pen_point.xfac,pen_point.xoff);
+ 1659              		.loc 1 319 21 view .LVU554
+ 1660 03b0 B9F90C30 		ldrsh	r3, [r9, #12]
+ 1661 03b4 0321     		movs	r1, #3
+ 1662 03b6 0093     		str	r3, [sp]
+ 1663 03b8 B9F80830 		ldrh	r3, [r9, #8]
+ 1664 03bc 0520     		movs	r0, #5
+ 1665 03be 204A     		ldr	r2, .L89+16
+ 1666 03c0 FFF7FEFF 		bl	lcd_printf
+ 1667              	.LVL174:
+ 320:ads7843.c     **** 		    lcd_printf(5,4,"Yf: %4d Yoff:%4d",pen_point.yfac,pen_point.yoff);
+ 1668              		.loc 1 320 7 view .LVU555
+ 1669 03c4 B9F90E30 		ldrsh	r3, [r9, #14]
+ 1670 03c8 0421     		movs	r1, #4
+ 1671 03ca 0093     		str	r3, [sp]
+ 1672 03cc B9F80A30 		ldrh	r3, [r9, #10]
+ 1673 03d0 0520     		movs	r0, #5
+ 1674 03d2 1C4A     		ldr	r2, .L89+20
+ 1675 03d4 FFF7FEFF 		bl	lcd_printf
+ 1676              	.LVL175:
+ 321:ads7843.c     **** 		    lcd_printf(5,5,"1 X: %4d Y:%4d",pos_temp[0][0],pos_temp[0][1]);
+ 1677              		.loc 1 321 7 view .LVU556
+ 1678 03d8 0521     		movs	r1, #5
+ 1679 03da 2B46     		mov	r3, r5
+ 1680 03dc 0846     		mov	r0, r1
+ 1681 03de 1A4A     		ldr	r2, .L89+24
+ 1682 03e0 0096     		str	r6, [sp]
+ 1683 03e2 FFF7FEFF 		bl	lcd_printf
+ 1684              	.LVL176:
+ 322:ads7843.c     **** 		    lcd_printf(5,6,"2 X: %4d Y:%4d",pos_temp[1][0],pos_temp[1][1]);
+ 1685              		.loc 1 322 7 view .LVU557
+ 1686 03e6 039B     		ldr	r3, [sp, #12]
+ 1687 03e8 0621     		movs	r1, #6
+ 1688 03ea 0093     		str	r3, [sp]
+ 1689 03ec 0520     		movs	r0, #5
+ 1690 03ee 2346     		mov	r3, r4
+ 1691 03f0 164A     		ldr	r2, .L89+28
+ 1692 03f2 FFF7FEFF 		bl	lcd_printf
+ 1693              	.LVL177:
+ 323:ads7843.c     **** 		    lcd_printf(5,7,"3 X: %4d Y:%4d",pos_temp[2][0],pos_temp[2][1]);
+ 1694              		.loc 1 323 7 view .LVU558
+ 1695 03f6 029B     		ldr	r3, [sp, #8]
+ 1696 03f8 0721     		movs	r1, #7
+ 1697 03fa 0093     		str	r3, [sp]
+ 1698 03fc 0520     		movs	r0, #5
+ 1699 03fe 4346     		mov	r3, r8
+ 1700 0400 134A     		ldr	r2, .L89+32
+ 1701 0402 FFF7FEFF 		bl	lcd_printf
+ 1702              	.LVL178:
+ 324:ads7843.c     **** 		    lcd_printf(5,8,"4 X: %4d Y:%4d",pos_temp[3][0],pos_temp[3][1]);
+ 1703              		.loc 1 324 7 view .LVU559
+ 1704 0406 049B     		ldr	r3, [sp, #16]
+ 1705 0408 0821     		movs	r1, #8
+ 1706 040a 124A     		ldr	r2, .L89+36
+ 1707 040c 0093     		str	r3, [sp]
+ 1708 040e 0520     		movs	r0, #5
+ 1709 0410 3B46     		mov	r3, r7
+ 1710 0412 FFF7FEFF 		bl	lcd_printf
+ 1711              	.LVL179:
+ 325:ads7843.c     **** 		    wait_ms(500);
+ 1712              		.loc 1 325 7 view .LVU560
+ 1713 0416 4FF4FA70 		mov	r0, #500
+ 1714 041a FFF7FEFF 		bl	wait_ms
+ 1715              	.LVL180:
+ 326:ads7843.c     **** 		    lcd_printf(5,9,"Press toutch");
+ 1716              		.loc 1 326 7 view .LVU561
+ 1717 041e 0921     		movs	r1, #9
+ 1718 0420 0520     		movs	r0, #5
+ 1719 0422 0D4A     		ldr	r2, .L89+40
+ 327:ads7843.c     **** 		    return;
+ 328:ads7843.c     **** 	       }
+ 329:ads7843.c     **** 	    }
+ 330:ads7843.c     ****       }
+ 331:ads7843.c     ****       cnt = 1;
+ 332:ads7843.c     ****       while (cnt) {
+ 333:ads7843.c     ****       	    if (tick) {
+ 334:ads7843.c     ****       	       tick = 0;
+ 335:ads7843.c     ****                if (pen_enable == 0) {
+ 336:ads7843.c     ****       	          pen_count++;
+ 337:ads7843.c     ****       	          if (pen_count >= 10) {
+ 338:ads7843.c     ****       	             pen_count = 0;
+ 339:ads7843.c     ****       	             pen_enable = 1;
+ 340:ads7843.c     ****       	          }
+ 341:ads7843.c     ****                }
+ 342:ads7843.c     ****             }
+ 343:ads7843.c     **** 	    if (pen_status == KEY_DOWN) {
+ 344:ads7843.c     ****                if (PEN) {
+ 345:ads7843.c     ****       	          pen_status = KEY_UP;
+ 346:ads7843.c     ****                   EXTI_ClearFlag(EXTI_Line4);
+ 347:ads7843.c     ****                   pen_interrupt_set(1);
+ 348:ads7843.c     **** 		  lcd_clear(background_color);
+ 349:ads7843.c     ****                   cnt = 0;
+ 350:ads7843.c     ****                }
+ 351:ads7843.c     **** 	    }
+ 352:ads7843.c     ****       }
+ 353:ads7843.c     **** }
+ 1720              		.loc 1 353 1 is_stmt 0 view .LVU562
+ 1721 0424 0DB0     		add	sp, sp, #52
+ 1722              		.cfi_def_cfa_offset 36
+ 1723              		@ sp needed
+ 1724 0426 BDE8F04F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1725              		.cfi_restore 14
+ 1726              		.cfi_restore 11
+ 1727              		.cfi_restore 10
+ 1728              		.cfi_restore 9
+ 1729              		.cfi_restore 8
+ 1730              		.cfi_restore 7
+ 1731              		.cfi_restore 6
+ 1732              		.cfi_restore 5
+ 1733              		.cfi_restore 4
+ 1734              		.cfi_def_cfa_offset 0
+ 1735              	.LVL181:
+ 326:ads7843.c     **** 		    lcd_printf(5,9,"Press toutch");
+ 1736              		.loc 1 326 7 view .LVU563
+ 1737 042a FFF7FEBF 		b	lcd_printf
+ 1738              	.LVL182:
+ 1739              	.L90:
+ 1740 042e 00BF     		.align	2
+ 1741              	.L89:
+ 1742 0430 80841E00 		.word	2000000
+ 1743 0434 009F2400 		.word	2400000
+ 1744 0438 80B92A00 		.word	2800000
+ 1745 043c 70000000 		.word	.LC8
+ 1746 0440 7B000000 		.word	.LC9
+ 1747 0444 8C000000 		.word	.LC10
+ 1748 0448 0C000000 		.word	.LC1
+ 1749 044c 1B000000 		.word	.LC2
+ 1750 0450 2A000000 		.word	.LC3
+ 1751 0454 39000000 		.word	.LC4
+ 1752 0458 9D000000 		.word	.LC11
+ 1753 045c 00000000 		.word	pen_point
+ 1754 0460 00D43000 		.word	3200000
+ 1755              		.cfi_endproc
+ 1756              	.LFE40:
+ 1758              		.section	.text.touch_init,"ax",%progbits
+ 1759              		.align	1
+ 1760              		.global	touch_init
+ 1761              		.syntax unified
+ 1762              		.thumb
+ 1763              		.thumb_func
+ 1764              		.fpu softvfp
+ 1766              	touch_init:
+ 1767              	.LFB41:
+ 354:ads7843.c     **** 
+ 355:ads7843.c     **** 
+ 356:ads7843.c     **** void touch_init (void)
+ 357:ads7843.c     **** {
+ 1768              		.loc 1 357 1 is_stmt 1 view -0
+ 1769              		.cfi_startproc
+ 1770              		@ args = 0, pretend = 0, frame = 24
+ 1771              		@ frame_needed = 0, uses_anonymous_args = 0
+ 358:ads7843.c     ****       NVIC_InitTypeDef NVIC_InitStructure;
+ 1772              		.loc 1 358 7 view .LVU565
+ 359:ads7843.c     ****       EXTI_InitTypeDef EXTI_InitStructure;
+ 1773              		.loc 1 359 7 view .LVU566
+ 360:ads7843.c     ****       //TCLK, TDIN
+ 361:ads7843.c     ****       GPIO_Init_Pin(GPIOA,GPIO_Pin_5,GPIO_Speed_50MHz,GPIO_Mode_Out_PP);
+ 1774              		.loc 1 361 7 view .LVU567
+ 357:ads7843.c     ****       NVIC_InitTypeDef NVIC_InitStructure;
+ 1775              		.loc 1 357 1 is_stmt 0 view .LVU568
+ 1776 0000 30B5     		push	{r4, r5, lr}
+ 1777              		.cfi_def_cfa_offset 12
+ 1778              		.cfi_offset 4, -12
+ 1779              		.cfi_offset 5, -8
+ 1780              		.cfi_offset 14, -4
+ 1781              		.loc 1 361 7 view .LVU569
+ 1782 0002 234C     		ldr	r4, .L92
+ 357:ads7843.c     ****       NVIC_InitTypeDef NVIC_InitStructure;
+ 1783              		.loc 1 357 1 view .LVU570
+ 1784 0004 87B0     		sub	sp, sp, #28
+ 1785              		.cfi_def_cfa_offset 40
+ 1786              		.loc 1 361 7 view .LVU571
+ 1787 0006 2046     		mov	r0, r4
+ 1788 0008 1023     		movs	r3, #16
+ 1789 000a 0322     		movs	r2, #3
+ 1790 000c 2021     		movs	r1, #32
+ 1791 000e FFF7FEFF 		bl	GPIO_Init_Pin
+ 1792              	.LVL183:
+ 362:ads7843.c     ****       GPIO_Init_Pin(GPIOA,GPIO_Pin_7,GPIO_Speed_50MHz,GPIO_Mode_Out_PP);
+ 1793              		.loc 1 362 7 is_stmt 1 view .LVU572
+ 363:ads7843.c     ****       //DOUT
+ 364:ads7843.c     ****       GPIO_Init_Pin(GPIOA,GPIO_Pin_6,GPIO_Speed_50MHz,GPIO_Mode_IPU);
+ 365:ads7843.c     ****       //TCS
+ 366:ads7843.c     ****       GPIO_Init_Pin(GPIOC,GPIO_Pin_6,GPIO_Speed_50MHz,GPIO_Mode_Out_PP);
+ 1794              		.loc 1 366 7 is_stmt 0 view .LVU573
+ 1795 0012 204D     		ldr	r5, .L92+4
+ 362:ads7843.c     ****       GPIO_Init_Pin(GPIOA,GPIO_Pin_7,GPIO_Speed_50MHz,GPIO_Mode_Out_PP);
+ 1796              		.loc 1 362 7 view .LVU574
+ 1797 0014 2046     		mov	r0, r4
+ 1798 0016 1023     		movs	r3, #16
+ 1799 0018 0322     		movs	r2, #3
+ 1800 001a 8021     		movs	r1, #128
+ 1801 001c FFF7FEFF 		bl	GPIO_Init_Pin
+ 1802              	.LVL184:
+ 364:ads7843.c     ****       //TCS
+ 1803              		.loc 1 364 7 is_stmt 1 view .LVU575
+ 1804 0020 2046     		mov	r0, r4
+ 1805 0022 4823     		movs	r3, #72
+ 1806 0024 0322     		movs	r2, #3
+ 1807 0026 4021     		movs	r1, #64
+ 1808 0028 FFF7FEFF 		bl	GPIO_Init_Pin
+ 1809              	.LVL185:
+ 1810              		.loc 1 366 7 view .LVU576
+ 1811 002c 2846     		mov	r0, r5
+ 1812 002e 1023     		movs	r3, #16
+ 1813 0030 0322     		movs	r2, #3
+ 1814 0032 4021     		movs	r1, #64
+ 1815 0034 FFF7FEFF 		bl	GPIO_Init_Pin
+ 1816              	.LVL186:
+ 367:ads7843.c     ****       //PEN
+ 368:ads7843.c     ****       GPIO_Init_Pin(GPIOC,GPIO_Pin_4,GPIO_Speed_50MHz,GPIO_Mode_IPU);
+ 1817              		.loc 1 368 7 view .LVU577
+ 1818 0038 2846     		mov	r0, r5
+ 1819 003a 4823     		movs	r3, #72
+ 1820 003c 0322     		movs	r2, #3
+ 1821 003e 1021     		movs	r1, #16
+ 1822 0040 FFF7FEFF 		bl	GPIO_Init_Pin
+ 1823              	.LVL187:
+ 369:ads7843.c     ****       //USER
+ 370:ads7843.c     ****       GPIO_Init_Pin(GPIOA,GPIO_Pin_8,GPIO_Speed_50MHz,GPIO_Mode_IPU);
+ 1824              		.loc 1 370 7 view .LVU578
+ 1825 0044 0322     		movs	r2, #3
+ 1826 0046 4823     		movs	r3, #72
+ 1827 0048 2046     		mov	r0, r4
+ 1828 004a 4FF48071 		mov	r1, #256
+ 1829 004e FFF7FEFF 		bl	GPIO_Init_Pin
+ 1830              	.LVL188:
+ 371:ads7843.c     ****       read_ads7843(&pen_point.x,&pen_point.y);
+ 1831              		.loc 1 371 7 view .LVU579
+ 1832 0052 1149     		ldr	r1, .L92+8
+ 372:ads7843.c     ****       /* Connect PEN EXTI Line to Key Button GPIO Pin */
+ 373:ads7843.c     ****       GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource4);
+ 374:ads7843.c     ****       /* Configure PEN EXTI Line to generate an interrupt on falling edge */
+ 375:ads7843.c     ****       EXTI_InitStructure.EXTI_Line = EXTI_Line4;
+ 376:ads7843.c     ****       EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+ 377:ads7843.c     ****       EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+ 378:ads7843.c     ****       EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+ 1833              		.loc 1 378 39 is_stmt 0 view .LVU580
+ 1834 0054 0124     		movs	r4, #1
+ 371:ads7843.c     ****       read_ads7843(&pen_point.x,&pen_point.y);
+ 1835              		.loc 1 371 7 view .LVU581
+ 1836 0056 881E     		subs	r0, r1, #2
+ 1837 0058 FFF7FEFF 		bl	read_ads7843
+ 1838              	.LVL189:
+ 373:ads7843.c     ****       /* Configure PEN EXTI Line to generate an interrupt on falling edge */
+ 1839              		.loc 1 373 7 is_stmt 1 view .LVU582
+ 1840 005c 0421     		movs	r1, #4
+ 1841 005e 0220     		movs	r0, #2
+ 1842 0060 FFF7FEFF 		bl	GPIO_EXTILineConfig
+ 1843              	.LVL190:
+ 375:ads7843.c     ****       EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+ 1844              		.loc 1 375 7 view .LVU583
+ 376:ads7843.c     ****       EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+ 1845              		.loc 1 376 7 view .LVU584
+ 377:ads7843.c     ****       EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+ 1846              		.loc 1 377 7 view .LVU585
+ 375:ads7843.c     ****       EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+ 1847              		.loc 1 375 36 is_stmt 0 view .LVU586
+ 1848 0064 1023     		movs	r3, #16
+ 1849 0066 0393     		str	r3, [sp, #12]
+ 376:ads7843.c     ****       EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+ 1850              		.loc 1 376 36 view .LVU587
+ 1851 0068 4FF44063 		mov	r3, #3072
+ 379:ads7843.c     ****       EXTI_Init(&EXTI_InitStructure);
+ 1852              		.loc 1 379 7 view .LVU588
+ 1853 006c 03A8     		add	r0, sp, #12
+ 376:ads7843.c     ****       EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+ 1854              		.loc 1 376 36 view .LVU589
+ 1855 006e ADF81030 		strh	r3, [sp, #16]	@ movhi
+ 378:ads7843.c     ****       EXTI_Init(&EXTI_InitStructure);
+ 1856              		.loc 1 378 7 is_stmt 1 view .LVU590
+ 378:ads7843.c     ****       EXTI_Init(&EXTI_InitStructure);
+ 1857              		.loc 1 378 39 is_stmt 0 view .LVU591
+ 1858 0072 0594     		str	r4, [sp, #20]
+ 1859              		.loc 1 379 7 is_stmt 1 view .LVU592
+ 1860 0074 FFF7FEFF 		bl	EXTI_Init
+ 1861              	.LVL191:
+ 380:ads7843.c     ****       /* Generate software interrupt: simulate a falling edge applied on PEN EXTI line */
+ 381:ads7843.c     ****       //EXTI_GenerateSWInterrupt(EXTI_Line4);
+ 382:ads7843.c     ****       /* Enable the EXTI Line4 Interrupt */
+ 383:ads7843.c     ****       NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;
+ 1862              		.loc 1 383 7 view .LVU593
+ 384:ads7843.c     ****       NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+ 1863              		.loc 1 384 7 view .LVU594
+ 385:ads7843.c     ****       NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+ 1864              		.loc 1 385 7 view .LVU595
+ 383:ads7843.c     ****       NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+ 1865              		.loc 1 383 42 is_stmt 0 view .LVU596
+ 1866 0078 0A23     		movs	r3, #10
+ 1867 007a ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 1868              		.loc 1 385 53 view .LVU597
+ 1869 007e 0023     		movs	r3, #0
+ 386:ads7843.c     ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 387:ads7843.c     ****       NVIC_Init(&NVIC_InitStructure);
+ 1870              		.loc 1 387 7 view .LVU598
+ 1871 0080 01A8     		add	r0, sp, #4
+ 385:ads7843.c     ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 1872              		.loc 1 385 53 view .LVU599
+ 1873 0082 8DF80630 		strb	r3, [sp, #6]
+ 386:ads7843.c     ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 1874              		.loc 1 386 7 is_stmt 1 view .LVU600
+ 386:ads7843.c     ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 1875              		.loc 1 386 45 is_stmt 0 view .LVU601
+ 1876 0086 0294     		str	r4, [sp, #8]
+ 1877              		.loc 1 387 7 is_stmt 1 view .LVU602
+ 1878 0088 FFF7FEFF 		bl	NVIC_Init
+ 1879              	.LVL192:
+ 388:ads7843.c     ****       //touch_adjust();
+ 389:ads7843.c     **** }
+ 1880              		.loc 1 389 1 is_stmt 0 view .LVU603
+ 1881 008c 07B0     		add	sp, sp, #28
+ 1882              		.cfi_def_cfa_offset 12
+ 1883              		@ sp needed
+ 1884 008e 30BD     		pop	{r4, r5, pc}
+ 1885              	.L93:
+ 1886              		.align	2
+ 1887              	.L92:
+ 1888 0090 00080140 		.word	1073809408
+ 1889 0094 00100140 		.word	1073811456
+ 1890 0098 06000000 		.word	pen_point+6
+ 1891              		.cfi_endproc
+ 1892              	.LFE41:
+ 1894              		.section	.text.EXTI4_IRQHandler,"ax",%progbits
+ 1895              		.align	1
+ 1896              		.global	EXTI4_IRQHandler
+ 1897              		.syntax unified
+ 1898              		.thumb
+ 1899              		.thumb_func
+ 1900              		.fpu softvfp
+ 1902              	EXTI4_IRQHandler:
+ 1903              	.LFB42:
+ 390:ads7843.c     **** 
+ 391:ads7843.c     **** 
+ 392:ads7843.c     **** void EXTI4_IRQHandler (void)
+ 393:ads7843.c     **** {
+ 1904              		.loc 1 393 1 is_stmt 1 view -0
+ 1905              		.cfi_startproc
+ 1906              		@ args = 0, pretend = 0, frame = 0
+ 1907              		@ frame_needed = 0, uses_anonymous_args = 0
+ 394:ads7843.c     ****       if (EXTI_GetITStatus(EXTI_Line4) != RESET) {
+ 1908              		.loc 1 394 7 view .LVU605
+ 393:ads7843.c     ****       if (EXTI_GetITStatus(EXTI_Line4) != RESET) {
+ 1909              		.loc 1 393 1 is_stmt 0 view .LVU606
+ 1910 0000 10B5     		push	{r4, lr}
+ 1911              		.cfi_def_cfa_offset 8
+ 1912              		.cfi_offset 4, -8
+ 1913              		.cfi_offset 14, -4
+ 1914              		.loc 1 394 11 view .LVU607
+ 1915 0002 1020     		movs	r0, #16
+ 1916 0004 FFF7FEFF 		bl	EXTI_GetITStatus
+ 1917              	.LVL193:
+ 1918              		.loc 1 394 10 view .LVU608
+ 1919 0008 78B1     		cbz	r0, .L94
+ 395:ads7843.c     ****     	 EXTI_ClearITPendingBit(EXTI_Line4);
+ 1920              		.loc 1 395 7 is_stmt 1 view .LVU609
+ 396:ads7843.c     ****     	 if (pen_enable) {
+ 1921              		.loc 1 396 11 is_stmt 0 view .LVU610
+ 1922 000a 084C     		ldr	r4, .L101
+ 395:ads7843.c     ****     	 EXTI_ClearITPendingBit(EXTI_Line4);
+ 1923              		.loc 1 395 7 view .LVU611
+ 1924 000c 1020     		movs	r0, #16
+ 1925 000e FFF7FEFF 		bl	EXTI_ClearITPendingBit
+ 1926              	.LVL194:
+ 1927              		.loc 1 396 7 is_stmt 1 view .LVU612
+ 1928              		.loc 1 396 11 is_stmt 0 view .LVU613
+ 1929 0012 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 1930              		.loc 1 396 10 view .LVU614
+ 1931 0014 4BB1     		cbz	r3, .L94
+ 397:ads7843.c     ****     	    led_control(LED3,ON);
+ 1932              		.loc 1 397 10 is_stmt 1 view .LVU615
+ 1933 0016 0121     		movs	r1, #1
+ 1934 0018 4FF40060 		mov	r0, #2048
+ 1935 001c FFF7FEFF 		bl	led_control
+ 1936              	.LVL195:
+ 398:ads7843.c     **** 	    pen_status = KEY_DOWN;
+ 1937              		.loc 1 398 6 view .LVU616
+ 1938              		.loc 1 398 17 is_stmt 0 view .LVU617
+ 1939 0020 0122     		movs	r2, #1
+ 1940 0022 034B     		ldr	r3, .L101+4
+ 1941 0024 1A70     		strb	r2, [r3]
+ 399:ads7843.c     **** 	    pen_enable = 0;
+ 1942              		.loc 1 399 6 is_stmt 1 view .LVU618
+ 1943              		.loc 1 399 17 is_stmt 0 view .LVU619
+ 1944 0026 0023     		movs	r3, #0
+ 1945 0028 2370     		strb	r3, [r4]
+ 1946              	.L94:
+ 400:ads7843.c     **** 	 }
+ 401:ads7843.c     ****       }
+ 402:ads7843.c     **** }
+ 1947              		.loc 1 402 1 view .LVU620
+ 1948 002a 10BD     		pop	{r4, pc}
+ 1949              	.L102:
+ 1950              		.align	2
+ 1951              	.L101:
+ 1952 002c 00000000 		.word	pen_enable
+ 1953 0030 00000000 		.word	pen_status
+ 1954              		.cfi_endproc
+ 1955              	.LFE42:
+ 1957              		.section	.text.draw_point,"ax",%progbits
+ 1958              		.align	1
+ 1959              		.global	draw_point
+ 1960              		.syntax unified
+ 1961              		.thumb
+ 1962              		.thumb_func
+ 1963              		.fpu softvfp
+ 1965              	draw_point:
+ 1966              	.LVL196:
+ 1967              	.LFB43:
+ 403:ads7843.c     **** 
+ 404:ads7843.c     **** 
+ 405:ads7843.c     **** void draw_point (unsigned short x,unsigned short y)
+ 406:ads7843.c     **** {
+ 1968              		.loc 1 406 1 is_stmt 1 view -0
+ 1969              		.cfi_startproc
+ 1970              		@ args = 0, pretend = 0, frame = 0
+ 1971              		@ frame_needed = 0, uses_anonymous_args = 0
+ 407:ads7843.c     **** 	lcd_set_pixel(x,y);
+ 1972              		.loc 1 407 2 view .LVU622
+ 406:ads7843.c     **** 	lcd_set_pixel(x,y);
+ 1973              		.loc 1 406 1 is_stmt 0 view .LVU623
+ 1974 0000 70B5     		push	{r4, r5, r6, lr}
+ 1975              		.cfi_def_cfa_offset 16
+ 1976              		.cfi_offset 4, -16
+ 1977              		.cfi_offset 5, -12
+ 1978              		.cfi_offset 6, -8
+ 1979              		.cfi_offset 14, -4
+ 406:ads7843.c     **** 	lcd_set_pixel(x,y);
+ 1980              		.loc 1 406 1 view .LVU624
+ 1981 0002 0C46     		mov	r4, r1
+ 1982              		.loc 1 407 2 view .LVU625
+ 1983 0004 C5B2     		uxtb	r5, r0
+ 1984 0006 2846     		mov	r0, r5
+ 1985              	.LVL197:
+ 408:ads7843.c     **** 	lcd_set_pixel(x + 1,y);
+ 1986              		.loc 1 408 2 view .LVU626
+ 1987 0008 6E1C     		adds	r6, r5, #1
+ 407:ads7843.c     **** 	lcd_set_pixel(x,y);
+ 1988              		.loc 1 407 2 view .LVU627
+ 1989 000a FFF7FEFF 		bl	lcd_set_pixel
+ 1990              	.LVL198:
+ 1991              		.loc 1 408 2 is_stmt 1 view .LVU628
+ 1992 000e F6B2     		uxtb	r6, r6
+ 1993 0010 2146     		mov	r1, r4
+ 409:ads7843.c     **** 	lcd_set_pixel(x,y + 1);
+ 1994              		.loc 1 409 2 is_stmt 0 view .LVU629
+ 1995 0012 0134     		adds	r4, r4, #1
+ 408:ads7843.c     **** 	lcd_set_pixel(x + 1,y);
+ 1996              		.loc 1 408 2 view .LVU630
+ 1997 0014 3046     		mov	r0, r6
+ 1998              		.loc 1 409 2 view .LVU631
+ 1999 0016 A4B2     		uxth	r4, r4
+ 408:ads7843.c     **** 	lcd_set_pixel(x + 1,y);
+ 2000              		.loc 1 408 2 view .LVU632
+ 2001 0018 FFF7FEFF 		bl	lcd_set_pixel
+ 2002              	.LVL199:
+ 2003              		.loc 1 409 2 is_stmt 1 view .LVU633
+ 2004 001c 2146     		mov	r1, r4
+ 2005 001e 2846     		mov	r0, r5
+ 2006 0020 FFF7FEFF 		bl	lcd_set_pixel
+ 2007              	.LVL200:
+ 410:ads7843.c     **** 	lcd_set_pixel(x + 1,y + 1);
+ 2008              		.loc 1 410 2 view .LVU634
+ 2009 0024 2146     		mov	r1, r4
+ 2010 0026 3046     		mov	r0, r6
+ 411:ads7843.c     **** }
+ 2011              		.loc 1 411 1 is_stmt 0 view .LVU635
+ 2012 0028 BDE87040 		pop	{r4, r5, r6, lr}
+ 2013              		.cfi_restore 14
+ 2014              		.cfi_restore 6
+ 2015              		.cfi_restore 5
+ 2016              		.cfi_restore 4
+ 2017              		.cfi_def_cfa_offset 0
+ 410:ads7843.c     **** 	lcd_set_pixel(x + 1,y + 1);
+ 2018              		.loc 1 410 2 view .LVU636
+ 2019 002c FFF7FEBF 		b	lcd_set_pixel
+ 2020              	.LVL201:
+ 2021              		.cfi_endproc
+ 2022              	.LFE43:
+ 2024              		.section	.text.touch_process,"ax",%progbits
+ 2025              		.align	1
+ 2026              		.global	touch_process
+ 2027              		.syntax unified
+ 2028              		.thumb
+ 2029              		.thumb_func
+ 2030              		.fpu softvfp
+ 2032              	touch_process:
+ 2033              	.LVL202:
+ 2034              	.LFB44:
+ 412:ads7843.c     **** 
+ 413:ads7843.c     **** 
+ 414:ads7843.c     **** void touch_process (unsigned short *x,unsigned short *y)
+ 415:ads7843.c     **** {
+ 2035              		.loc 1 415 1 is_stmt 1 view -0
+ 2036              		.cfi_startproc
+ 2037              		@ args = 0, pretend = 0, frame = 0
+ 2038              		@ frame_needed = 0, uses_anonymous_args = 0
+ 416:ads7843.c     ****       if (pen_status == KEY_DOWN) {
+ 2039              		.loc 1 416 7 view .LVU638
+ 415:ads7843.c     ****       if (pen_status == KEY_DOWN) {
+ 2040              		.loc 1 415 1 is_stmt 0 view .LVU639
+ 2041 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 2042              		.cfi_def_cfa_offset 24
+ 2043              		.cfi_offset 3, -24
+ 2044              		.cfi_offset 4, -20
+ 2045              		.cfi_offset 5, -16
+ 2046              		.cfi_offset 6, -12
+ 2047              		.cfi_offset 7, -8
+ 2048              		.cfi_offset 14, -4
+ 2049              		.loc 1 416 22 view .LVU640
+ 2050 0002 224F     		ldr	r7, .L119
+ 415:ads7843.c     ****       if (pen_status == KEY_DOWN) {
+ 2051              		.loc 1 415 1 view .LVU641
+ 2052 0004 0646     		mov	r6, r0
+ 2053              		.loc 1 416 22 view .LVU642
+ 2054 0006 3A78     		ldrb	r2, [r7]	@ zero_extendqisi2
+ 415:ads7843.c     ****       if (pen_status == KEY_DOWN) {
+ 2055              		.loc 1 415 1 view .LVU643
+ 2056 0008 0D46     		mov	r5, r1
+ 2057              		.loc 1 416 10 view .LVU644
+ 2058 000a 012A     		cmp	r2, #1
+ 2059 000c 23D1     		bne	.L106
+ 417:ads7843.c     **** 	 led_control(LED3,OFF);
+ 2060              		.loc 1 417 3 is_stmt 1 view .LVU645
+ 2061 000e 0021     		movs	r1, #0
+ 2062              	.LVL203:
+ 2063              		.loc 1 417 3 is_stmt 0 view .LVU646
+ 2064 0010 4FF40060 		mov	r0, #2048
+ 2065              	.LVL204:
+ 418:ads7843.c     **** 	 pen_interrupt_set(0);
+ 419:ads7843.c     **** 	 if (read_ads7843_2(&pen_point.x,&pen_point.y)) {
+ 2066              		.loc 1 419 7 view .LVU647
+ 2067 0014 1E4C     		ldr	r4, .L119+4
+ 417:ads7843.c     **** 	 led_control(LED3,OFF);
+ 2068              		.loc 1 417 3 view .LVU648
+ 2069 0016 FFF7FEFF 		bl	led_control
+ 2070              	.LVL205:
+ 418:ads7843.c     **** 	 pen_interrupt_set(0);
+ 2071              		.loc 1 418 3 is_stmt 1 view .LVU649
+ 2072 001a 0020     		movs	r0, #0
+ 2073 001c FFF7FEFF 		bl	pen_interrupt_set
+ 2074              	.LVL206:
+ 2075              		.loc 1 419 3 view .LVU650
+ 2076              		.loc 1 419 7 is_stmt 0 view .LVU651
+ 2077 0020 2146     		mov	r1, r4
+ 2078 0022 A01E     		subs	r0, r4, #2
+ 2079 0024 FFF7FEFF 		bl	read_ads7843_2
+ 2080              	.LVL207:
+ 2081              		.loc 1 419 6 view .LVU652
+ 2082 0028 58B1     		cbz	r0, .L107
+ 420:ads7843.c     **** 	    pen_point.x0 = pen_point.x;
+ 2083              		.loc 1 420 6 is_stmt 1 view .LVU653
+ 421:ads7843.c     **** 	    pen_point.y0 = pen_point.y;
+ 2084              		.loc 1 421 19 is_stmt 0 view .LVU654
+ 2085 002a 2188     		ldrh	r1, [r4]
+ 420:ads7843.c     **** 	    pen_point.x0 = pen_point.x;
+ 2086              		.loc 1 420 30 view .LVU655
+ 2087 002c 34F8022C 		ldrh	r2, [r4, #-2]
+ 2088              		.loc 1 421 19 view .LVU656
+ 2089 0030 24F8041C 		strh	r1, [r4, #-4]	@ movhi
+ 420:ads7843.c     **** 	    pen_point.x0 = pen_point.x;
+ 2090              		.loc 1 420 19 view .LVU657
+ 2091 0034 24F8062C 		strh	r2, [r4, #-6]	@ movhi
+ 2092              		.loc 1 421 6 is_stmt 1 view .LVU658
+ 422:ads7843.c     **** 		*x=pen_point.x0;
+ 2093              		.loc 1 422 3 view .LVU659
+ 2094              		.loc 1 422 5 is_stmt 0 view .LVU660
+ 2095 0038 3280     		strh	r2, [r6]	@ movhi
+ 423:ads7843.c     **** 		*y=pen_point.y0;
+ 2096              		.loc 1 423 3 is_stmt 1 view .LVU661
+ 420:ads7843.c     **** 	    pen_point.y0 = pen_point.y;
+ 2097              		.loc 1 420 30 is_stmt 0 view .LVU662
+ 2098 003a A31F     		subs	r3, r4, #6
+ 2099              		.loc 1 423 15 view .LVU663
+ 2100 003c 34F8043C 		ldrh	r3, [r4, #-4]
+ 2101              		.loc 1 423 5 view .LVU664
+ 2102 0040 2B80     		strh	r3, [r5]	@ movhi
+ 2103              	.L107:
+ 424:ads7843.c     **** 	    //lcd_printf(5,3,"X:%5d Y%5d ",pen_point.x0,pen_point.y0);
+ 425:ads7843.c     **** 	    //draw_point(pen_point.x0,pen_point.y0);
+ 426:ads7843.c     ****          }
+ 427:ads7843.c     ****          if (PEN) {
+ 2104              		.loc 1 427 10 is_stmt 1 view .LVU665
+ 2105              		.loc 1 427 14 is_stmt 0 view .LVU666
+ 2106 0042 144B     		ldr	r3, .L119+8
+ 2107 0044 1B68     		ldr	r3, [r3]
+ 2108              		.loc 1 427 13 view .LVU667
+ 2109 0046 33B1     		cbz	r3, .L106
+ 428:ads7843.c     ****       	    pen_status = KEY_UP;
+ 2110              		.loc 1 428 12 is_stmt 1 view .LVU668
+ 2111              		.loc 1 428 23 is_stmt 0 view .LVU669
+ 2112 0048 0023     		movs	r3, #0
+ 429:ads7843.c     ****             EXTI_ClearFlag(EXTI_Line4);
+ 2113              		.loc 1 429 13 view .LVU670
+ 2114 004a 1020     		movs	r0, #16
+ 428:ads7843.c     ****       	    pen_status = KEY_UP;
+ 2115              		.loc 1 428 23 view .LVU671
+ 2116 004c 3B70     		strb	r3, [r7]
+ 2117              		.loc 1 429 13 is_stmt 1 view .LVU672
+ 2118 004e FFF7FEFF 		bl	EXTI_ClearFlag
+ 2119              	.LVL208:
+ 430:ads7843.c     ****             pen_interrupt_set(1);
+ 2120              		.loc 1 430 13 view .LVU673
+ 2121              	.LBB12:
+ 2122              	.LBI12:
+ 144:ads7843.c     **** {
+ 2123              		.loc 1 144 6 view .LVU674
+ 2124              	.LBB13:
+ 146:ads7843.c     **** }
+ 2125              		.loc 1 146 7 view .LVU675
+ 2126 0052 FFF7FEFF 		bl	pen_interrupt_set.part.0
+ 2127              	.LVL209:
+ 2128              	.L106:
+ 146:ads7843.c     **** }
+ 2129              		.loc 1 146 7 is_stmt 0 view .LVU676
+ 2130              	.LBE13:
+ 2131              	.LBE12:
+ 431:ads7843.c     ****          }
+ 432:ads7843.c     ****       }
+ 433:ads7843.c     ****       if (pen_enable == 0) {
+ 2132              		.loc 1 433 7 is_stmt 1 view .LVU677
+ 2133              		.loc 1 433 22 is_stmt 0 view .LVU678
+ 2134 0056 1049     		ldr	r1, .L119+12
+ 2135 0058 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 2136              		.loc 1 433 10 view .LVU679
+ 2137 005a 03F0FF00 		and	r0, r3, #255
+ 2138 005e 53B9     		cbnz	r3, .L110
+ 434:ads7843.c     ****       	 pen_count++;
+ 2139              		.loc 1 434 9 is_stmt 1 view .LVU680
+ 2140              		.loc 1 434 18 is_stmt 0 view .LVU681
+ 2141 0060 0E4A     		ldr	r2, .L119+16
+ 2142 0062 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 2143 0064 0133     		adds	r3, r3, #1
+ 2144 0066 DBB2     		uxtb	r3, r3
+ 2145 0068 1370     		strb	r3, [r2]
+ 435:ads7843.c     ****       	 if (pen_count >= 2) {
+ 2146              		.loc 1 435 9 is_stmt 1 view .LVU682
+ 2147              		.loc 1 435 23 is_stmt 0 view .LVU683
+ 2148 006a 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 2149              		.loc 1 435 12 view .LVU684
+ 2150 006c 012B     		cmp	r3, #1
+ 436:ads7843.c     ****       	    pen_count = 0;
+ 2151              		.loc 1 436 12 is_stmt 1 view .LVU685
+ 437:ads7843.c     ****       	    pen_enable = 1;
+ 2152              		.loc 1 437 23 is_stmt 0 view .LVU686
+ 2153 006e 82BF     		ittt	hi
+ 2154 0070 0123     		movhi	r3, #1
+ 436:ads7843.c     ****       	    pen_count = 0;
+ 2155              		.loc 1 436 22 view .LVU687
+ 2156 0072 1070     		strbhi	r0, [r2]
+ 2157              		.loc 1 437 12 is_stmt 1 view .LVU688
+ 2158              		.loc 1 437 23 is_stmt 0 view .LVU689
+ 2159 0074 0B70     		strbhi	r3, [r1]
+ 2160              	.L110:
+ 438:ads7843.c     ****       	 }
+ 439:ads7843.c     ****       }
+ 440:ads7843.c     ****       if (USER == 0) {
+ 2161              		.loc 1 440 7 is_stmt 1 view .LVU690
+ 2162              		.loc 1 440 11 is_stmt 0 view .LVU691
+ 2163 0076 0A4B     		ldr	r3, .L119+20
+ 2164 0078 1B68     		ldr	r3, [r3]
+ 2165              		.loc 1 440 10 view .LVU692
+ 2166 007a 2BB9     		cbnz	r3, .L104
+ 441:ads7843.c     ****       	 lcd_clear(background_color);
+ 2167              		.loc 1 441 9 is_stmt 1 view .LVU693
+ 2168 007c 094B     		ldr	r3, .L119+24
+ 2169 007e 1888     		ldrh	r0, [r3]
+ 442:ads7843.c     ****       }
+ 443:ads7843.c     **** }...
+ 2170              		.loc 1 443 1 is_stmt 0 view .LVU694
+ 2171 0080 BDE8F840 		pop	{r3, r4, r5, r6, r7, lr}
+ 2172              		.cfi_remember_state
+ 2173              		.cfi_restore 14
+ 2174              		.cfi_restore 7
+ 2175              		.cfi_restore 6
+ 2176              		.cfi_restore 5
+ 2177              		.cfi_restore 4
+ 2178              		.cfi_restore 3
+ 2179              		.cfi_def_cfa_offset 0
+ 2180              	.LVL210:
+ 441:ads7843.c     ****       	 lcd_clear(background_color);
+ 2181              		.loc 1 441 9 view .LVU695
+ 2182 0084 FFF7FEBF 		b	lcd_clear
+ 2183              	.LVL211:
+ 2184              	.L104:
+ 2185              		.cfi_restore_state
+ 2186              		.loc 1 443 1 view .LVU696
+ 2187 0088 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2188              	.LVL212:
+ 2189              	.L120:
+ 2190              		.loc 1 443 1 view .LVU697
+ 2191 008a 00BF     		.align	2
+ 2192              	.L119:
+ 2193 008c 00000000 		.word	pen_status
+ 2194 0090 06000000 		.word	pen_point+6
+ 2195 0094 10012242 		.word	1109524752
+ 2196 0098 00000000 		.word	pen_enable
+ 2197 009c 00000000 		.word	pen_count
+ 2198 00a0 20012142 		.word	1109459232
+ 2199 00a4 00000000 		.word	background_color
+ 2200              		.cfi_endproc
+ 2201              	.LFE44:
+ 2203              		.comm	pen_count,1,1
+ 2204              		.comm	pen_enable,1,1
+ 2205              		.comm	pen_status,1,1
+ 2206              		.comm	pen_point,16,2
+ 2207              		.text
+ 2208              	.Letext0:
+ 2209              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2210              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2211              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
+ 2212              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2213              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2214              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2215              		.file 8 "/project/stm32fx_lib/stm32f1x_iolib/include/cmsis/stm32f1xx.h"
+ 2216              		.file 9 "c:\\project\\stm32fx_lib\\stm32f1x_iolib\\include\\core.h"
+ 2217              		.file 10 "/project/stm32fx_lib/stm32f1x_iolib/include/irq.h"
+ 2218              		.file 11 "/project/stm32fx_lib/stm32f1x_iolib/include/gpio.h"
+ 2219              		.file 12 "/project/stm32fx_lib/stm32f1x_iolib/include/exti.h"
+ 2220              		.file 13 "userdefs.h"
+ 2221              		.file 14 "/project/stm32fx_lib/stm32f1x_iolib/include/fundefs.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 ads7843.c
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:16     .text.pen_interrupt_set.part.0:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:23     .text.pen_interrupt_set.part.0:00000000 pen_interrupt_set.part.0
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:43     .text.pen_interrupt_set.part.0:0000000c $d
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:48     .text.ads7843_write_byte:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:55     .text.ads7843_write_byte:00000000 ads7843_write_byte
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:123    .text.ads7843_write_byte:00000030 $d
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:129    .text.ads7843_read_adc:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:136    .text.ads7843_read_adc:00000000 ads7843_read_adc
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:240    .text.ads7843_read_adc:00000040 $d
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:247    .text.ads7843_read_xy:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:254    .text.ads7843_read_xy:00000000 ads7843_read_xy
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:398    .text.read_ads7843:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:405    .text.read_ads7843:00000000 read_ads7843
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:470    .text.read_ads7843_2:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:477    .text.read_ads7843_2:00000000 read_ads7843_2
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:603    .text.pen_interrupt_set:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:610    .text.pen_interrupt_set:00000000 pen_interrupt_set
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:635    .text.pen_interrupt_set:00000014 $d
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:640    .text.read_tp_once:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:647    .text.read_tp_once:00000000 read_tp_once
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:748    .text.read_tp_once:00000054 $d
+                            *COM*:00000001 pen_status
+                            *COM*:00000010 pen_point
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:755    .text.drow_touch_point:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:762    .text.drow_touch_point:00000000 drow_touch_point
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:888    .text.touch_adjust:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:895    .text.touch_adjust:00000000 touch_adjust
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1070   .text.touch_adjust:0000009c $d
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1074   .text.touch_adjust:000000a0 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1564   .text.touch_adjust:0000031c $d
+                            *COM*:00000001 pen_enable
+                            *COM*:00000001 pen_count
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1583   .text.touch_adjust:00000358 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1742   .text.touch_adjust:00000430 $d
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1759   .text.touch_init:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1766   .text.touch_init:00000000 touch_init
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1888   .text.touch_init:00000090 $d
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1895   .text.EXTI4_IRQHandler:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1902   .text.EXTI4_IRQHandler:00000000 EXTI4_IRQHandler
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1952   .text.EXTI4_IRQHandler:0000002c $d
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1958   .text.draw_point:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1965   .text.draw_point:00000000 draw_point
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:2025   .text.touch_process:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:2032   .text.touch_process:00000000 touch_process
+C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:2193   .text.touch_process:0000008c $d
+
+UNDEFINED SYMBOLS
+wait_ms
+EXTI_ClearFlag
+lcd_draw_line
+lcd_set_pixel
+lcd_draw_circle
+__aeabi_ui2d
+__aeabi_d2uiz
+led_control
+lcd_clear
+sqrt
+lcd_printf
+tick
+background_color
+GPIO_Init_Pin
+GPIO_EXTILineConfig
+EXTI_Init
+NVIC_Init
+EXTI_GetITStatus
+EXTI_ClearITPendingBit

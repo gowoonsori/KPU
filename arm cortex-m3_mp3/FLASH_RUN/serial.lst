@@ -1,0 +1,2708 @@
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 4
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"serial.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.NVIC_SystemReset,"ax",%progbits
+  16              		.align	1
+  17              		.arch armv7-m
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	NVIC_SystemReset:
+  24              	.LFB28:
+  25              		.file 1 "c:\\project\\stm32fx_lib\\stm32f1x_iolib\\include\\core.h"
+   1:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /********************************************************************************/
+   2:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* core.h                                                                       */
+   3:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* STM32F10X                                                                    */
+   4:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* ÀÌ Ã¢¿ì (Lee ChangWoo HL2IRW  hl2irw@kpu.ac.kr 011-726-6860)                 */
+   5:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /*                                                                              */
+   6:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /********************************************************************************/
+   7:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #ifndef __CORE_H__
+   8:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define __CORE_H__
+   9:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+  10:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define __CM3_CMSIS_VERSION_MAIN		(0x01)	/* [31:16] CMSIS HAL main version */
+  11:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define __CM3_CMSIS_VERSION_SUB			(0x30)	/* [15:0]  CMSIS HAL sub version */
+  12:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define __CM3_CMSIS_VERSION			((__CM3_CMSIS_VERSION_MAIN << 16) | __CM3_CMSIS_VERSION_SUB)	/* CMSIS
+  13:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define __CORTEX_M				(0x03)	/* Cortex core */
+  14:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+  15:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #ifndef __NVIC_PRIO_BITS
+  16:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define __NVIC_PRIO_BITS			4	/* standard definition for NVIC Priority Bits */
+  17:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #endif
+  18:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+  19:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* CMSIS_CM3_NVIC CMSIS CM3 NVIC memory mapped structure for Nested Vectored Interrupt Controller (
+  20:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** typedef struct
+  21:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+  22:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int ISER[8];			/* Offset: 0x000  Interrupt Set Enable Register */
+  23:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED0[24];
+  24:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int ICER[8];			/* Offset: 0x080  Interrupt Clear Enable Register */
+  25:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RSERVED1[24];
+  26:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int ISPR[8];			/* Offset: 0x100  Interrupt Set Pending Register */
+  27:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED2[24];
+  28:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int ICPR[8];			/* Offset: 0x180  Interrupt Clear Pending Register */
+  29:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED3[24];
+  30:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int IABR[8];			/* Offset: 0x200  Interrupt Active bit Register */
+  31:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED4[56];
+  32:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned char IP[240];			/* Offset: 0x300  Interrupt Priority Register (8Bit wide) *
+  33:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED5[644];
+  34:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile  unsigned int STIR;			/* Offset: 0xE00  Software Trigger Interrupt Register */
+  35:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }  NVIC_Type;
+  36:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+  37:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+  38:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** typedef struct
+  39:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+  40:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int CPUID;		/* Offset: 0x00  CPU ID Base Register */
+  41:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int ICSR;			/* Offset: 0x04  Interrupt Control State Register */
+  42:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int VTOR;			/* Offset: 0x08  Vector Table Offset Register */
+  43:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int AIRCR;			/* Offset: 0x0C  Application Interrupt / Reset Control Registe
+  44:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int SCR;			/* Offset: 0x10  System Control Register */
+  45:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int CCR;			/* Offset: 0x14  Configuration Control Register */
+  46:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned char  SHP[12];			/* Offset: 0x18  System Handlers Priority Registers (4-7, 
+  47:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int SHCSR;			/* Offset: 0x24  System Handler Control and State Register */
+  48:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int CFSR;			/* Offset: 0x28  Configurable Fault Status Register */
+  49:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int HFSR;			/* Offset: 0x2C  Hard Fault Status Register */
+  50:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int DFSR;			/* Offset: 0x30  Debug Fault Status Register */
+  51:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int MMFAR;			/* Offset: 0x34  Mem Manage Address Register */
+  52:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int BFAR;			/* Offset: 0x38  Bus Fault Address Register */
+  53:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int AFSR;			/* Offset: 0x3C  Auxiliary Fault Status Register */
+  54:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int PFR[2];		/* Offset: 0x40  Processor Feature Register */
+  55:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int DFR;			/* Offset: 0x48  Debug Feature Register */
+  56:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int ADR;			/* Offset: 0x4C  Auxiliary Feature Register */
+  57:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int MMFR[4];		/* Offset: 0x50  Memory Model Feature Register */
+  58:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int ISAR[5];		/* Offset: 0x60  ISA Feature Register */
+  59:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** } SCB_Type;
+  60:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+  61:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+  62:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SCB CPUID Register Definitions */
+  63:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CPUID_IMPLEMENTER_Pos          24                                             /* SCB CP
+  64:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CPUID_IMPLEMENTER_Msk          (0xFFul << SCB_CPUID_IMPLEMENTER_Pos)          /* SCB CP
+  65:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CPUID_VARIANT_Pos              20                                             /* SCB CP
+  66:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CPUID_VARIANT_Msk              (0xFul << SCB_CPUID_VARIANT_Pos)               /* SCB CP
+  67:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CPUID_PARTNO_Pos                4                                             /* SCB CP
+  68:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CPUID_PARTNO_Msk               (0xFFFul << SCB_CPUID_PARTNO_Pos)              /* SCB CP
+  69:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CPUID_REVISION_Pos              0                                             /* SCB CP
+  70:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CPUID_REVISION_Msk             (0xFul << SCB_CPUID_REVISION_Pos)              /* SCB CP
+  71:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+  72:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SCB Interrupt Control State Register Definitions */
+  73:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_NMIPENDSET_Pos            31                                             /* SCB IC
+  74:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_NMIPENDSET_Msk            (1ul << SCB_ICSR_NMIPENDSET_Pos)               /* SCB IC
+  75:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_PENDSVSET_Pos             28                                             /* SCB IC
+  76:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_PENDSVSET_Msk             (1ul << SCB_ICSR_PENDSVSET_Pos)                /* SCB IC
+  77:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_PENDSVCLR_Pos             27                                             /* SCB IC
+  78:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_PENDSVCLR_Msk             (1ul << SCB_ICSR_PENDSVCLR_Pos)                /* SCB IC
+  79:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_PENDSTSET_Pos             26                                             /* SCB IC
+  80:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_PENDSTSET_Msk             (1ul << SCB_ICSR_PENDSTSET_Pos)                /* SCB IC
+  81:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_PENDSTCLR_Pos             25                                             /* SCB IC
+  82:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_PENDSTCLR_Msk             (1ul << SCB_ICSR_PENDSTCLR_Pos)                /* SCB IC
+  83:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_ISRPREEMPT_Pos            23                                             /* SCB IC
+  84:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_ISRPREEMPT_Msk            (1ul << SCB_ICSR_ISRPREEMPT_Pos)               /* SCB IC
+  85:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_ISRPENDING_Pos            22                                             /* SCB IC
+  86:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_ISRPENDING_Msk            (1ul << SCB_ICSR_ISRPENDING_Pos)               /* SCB IC
+  87:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_VECTPENDING_Pos           12                                             /* SCB IC
+  88:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_VECTPENDING_Msk           (0x1FFul << SCB_ICSR_VECTPENDING_Pos)          /* SCB IC
+  89:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_RETTOBASE_Pos             11                                             /* SCB IC
+  90:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_RETTOBASE_Msk             (1ul << SCB_ICSR_RETTOBASE_Pos)                /* SCB IC
+  91:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_VECTACTIVE_Pos             0                                             /* SCB IC
+  92:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_ICSR_VECTACTIVE_Msk            (0x1FFul << SCB_ICSR_VECTACTIVE_Pos)           /* SCB IC
+  93:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+  94:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SCB Interrupt Control State Register Definitions */
+  95:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_VTOR_TBLBASE_Pos               29                                             /* SCB VT
+  96:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_VTOR_TBLBASE_Msk               (0x1FFul << SCB_VTOR_TBLBASE_Pos)              /* SCB VT
+  97:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_VTOR_TBLOFF_Pos                 7                                             /* SCB VT
+  98:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_VTOR_TBLOFF_Msk                (0x3FFFFFul << SCB_VTOR_TBLOFF_Pos)            /* SCB VT
+  99:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 100:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SCB Application Interrupt and Reset Control Register Definitions */
+ 101:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_VECTKEY_Pos              16                                             /* SCB AI
+ 102:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_VECTKEY_Msk              (0xFFFFul << SCB_AIRCR_VECTKEY_Pos)            /* SCB AI
+ 103:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_VECTKEYSTAT_Pos          16                                             /* SCB AI
+ 104:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_VECTKEYSTAT_Msk          (0xFFFFul << SCB_AIRCR_VECTKEYSTAT_Pos)        /* SCB AI
+ 105:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_ENDIANESS_Pos            15                                             /* SCB AI
+ 106:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_ENDIANESS_Msk            (1ul << SCB_AIRCR_ENDIANESS_Pos)               /* SCB AI
+ 107:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_PRIGROUP_Pos              8                                             /* SCB AI
+ 108:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_PRIGROUP_Msk             (7ul << SCB_AIRCR_PRIGROUP_Pos)                /* SCB AI
+ 109:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_SYSRESETREQ_Pos           2                                             /* SCB AI
+ 110:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_SYSRESETREQ_Msk          (1ul << SCB_AIRCR_SYSRESETREQ_Pos)             /* SCB AI
+ 111:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_VECTCLRACTIVE_Pos         1                                             /* SCB AI
+ 112:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_VECTCLRACTIVE_Msk        (1ul << SCB_AIRCR_VECTCLRACTIVE_Pos)           /* SCB AI
+ 113:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_VECTRESET_Pos             0                                             /* SCB AI
+ 114:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_AIRCR_VECTRESET_Msk            (1ul << SCB_AIRCR_VECTRESET_Pos)               /* SCB AI
+ 115:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 116:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SCB System Control Register Definitions */
+ 117:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SCR_SEVONPEND_Pos               4                                             /* SCB SC
+ 118:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SCR_SEVONPEND_Msk              (1ul << SCB_SCR_SEVONPEND_Pos)                 /* SCB SC
+ 119:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SCR_SLEEPDEEP_Pos               2                                             /* SCB SC
+ 120:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SCR_SLEEPDEEP_Msk              (1ul << SCB_SCR_SLEEPDEEP_Pos)                 /* SCB SC
+ 121:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SCR_SLEEPONEXIT_Pos             1                                             /* SCB SC
+ 122:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SCR_SLEEPONEXIT_Msk            (1ul << SCB_SCR_SLEEPONEXIT_Pos)               /* SCB SC
+ 123:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 124:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SCB Configuration Control Register Definitions */
+ 125:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_STKALIGN_Pos                9                                             /* SCB CC
+ 126:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_STKALIGN_Msk               (1ul << SCB_CCR_STKALIGN_Pos)                  /* SCB CC
+ 127:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_BFHFNMIGN_Pos               8                                             /* SCB CC
+ 128:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_BFHFNMIGN_Msk              (1ul << SCB_CCR_BFHFNMIGN_Pos)                 /* SCB CC
+ 129:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_DIV_0_TRP_Pos               4                                             /* SCB CC
+ 130:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_DIV_0_TRP_Msk              (1ul << SCB_CCR_DIV_0_TRP_Pos)                 /* SCB CC
+ 131:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_UNALIGN_TRP_Pos             3                                             /* SCB CC
+ 132:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_UNALIGN_TRP_Msk            (1ul << SCB_CCR_UNALIGN_TRP_Pos)               /* SCB CC
+ 133:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_USERSETMPEND_Pos            1                                             /* SCB CC
+ 134:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_USERSETMPEND_Msk           (1ul << SCB_CCR_USERSETMPEND_Pos)              /* SCB CC
+ 135:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_NONBASETHRDENA_Pos          0                                             /* SCB CC
+ 136:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CCR_NONBASETHRDENA_Msk         (1ul << SCB_CCR_NONBASETHRDENA_Pos)            /* SCB CC
+ 137:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 138:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SCB System Handler Control and State Register Definitions */
+ 139:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_USGFAULTENA_Pos          18                                             /* SCB SH
+ 140:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_USGFAULTENA_Msk          (1ul << SCB_SHCSR_USGFAULTENA_Pos)             /* SCB SH
+ 141:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_BUSFAULTENA_Pos          17                                             /* SCB SH
+ 142:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_BUSFAULTENA_Msk          (1ul << SCB_SHCSR_BUSFAULTENA_Pos)             /* SCB SH
+ 143:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_MEMFAULTENA_Pos          16                                             /* SCB SH
+ 144:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_MEMFAULTENA_Msk          (1ul << SCB_SHCSR_MEMFAULTENA_Pos)             /* SCB SH
+ 145:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_SVCALLPENDED_Pos         15                                             /* SCB SH
+ 146:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_SVCALLPENDED_Msk         (1ul << SCB_SHCSR_SVCALLPENDED_Pos)            /* SCB SH
+ 147:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_BUSFAULTPENDED_Pos       14                                             /* SCB SH
+ 148:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_BUSFAULTPENDED_Msk       (1ul << SCB_SHCSR_BUSFAULTPENDED_Pos)          /* SCB SH
+ 149:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_MEMFAULTPENDED_Pos       13                                             /* SCB SH
+ 150:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_MEMFAULTPENDED_Msk       (1ul << SCB_SHCSR_MEMFAULTPENDED_Pos)          /* SCB SH
+ 151:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_USGFAULTPENDED_Pos       12                                             /* SCB SH
+ 152:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_USGFAULTPENDED_Msk       (1ul << SCB_SHCSR_USGFAULTPENDED_Pos)          /* SCB SH
+ 153:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_SYSTICKACT_Pos           11                                             /* SCB SH
+ 154:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_SYSTICKACT_Msk           (1ul << SCB_SHCSR_SYSTICKACT_Pos)              /* SCB SH
+ 155:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_PENDSVACT_Pos            10                                             /* SCB SH
+ 156:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_PENDSVACT_Msk            (1ul << SCB_SHCSR_PENDSVACT_Pos)               /* SCB SH
+ 157:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_MONITORACT_Pos            8                                             /* SCB SH
+ 158:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_MONITORACT_Msk           (1ul << SCB_SHCSR_MONITORACT_Pos)              /* SCB SH
+ 159:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_SVCALLACT_Pos             7                                             /* SCB SH
+ 160:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_SVCALLACT_Msk            (1ul << SCB_SHCSR_SVCALLACT_Pos)               /* SCB SH
+ 161:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_USGFAULTACT_Pos           3                                             /* SCB SH
+ 162:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_USGFAULTACT_Msk          (1ul << SCB_SHCSR_USGFAULTACT_Pos)             /* SCB SH
+ 163:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_BUSFAULTACT_Pos           1                                             /* SCB SH
+ 164:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_BUSFAULTACT_Msk          (1ul << SCB_SHCSR_BUSFAULTACT_Pos)             /* SCB SH
+ 165:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_MEMFAULTACT_Pos           0                                             /* SCB SH
+ 166:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_SHCSR_MEMFAULTACT_Msk          (1ul << SCB_SHCSR_MEMFAULTACT_Pos)             /* SCB SH
+ 167:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 168:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SCB Configurable Fault Status Registers Definitions */
+ 169:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CFSR_USGFAULTSR_Pos            16                                             /* SCB CF
+ 170:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CFSR_USGFAULTSR_Msk            (0xFFFFul << SCB_CFSR_USGFAULTSR_Pos)          /* SCB CF
+ 171:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CFSR_BUSFAULTSR_Pos             8                                             /* SCB CF
+ 172:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CFSR_BUSFAULTSR_Msk            (0xFFul << SCB_CFSR_BUSFAULTSR_Pos)            /* SCB CF
+ 173:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CFSR_MEMFAULTSR_Pos             0                                             /* SCB CF
+ 174:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_CFSR_MEMFAULTSR_Msk            (0xFFul << SCB_CFSR_MEMFAULTSR_Pos)            /* SCB CF
+ 175:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 176:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SCB Hard Fault Status Registers Definitions */
+ 177:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_HFSR_DEBUGEVT_Pos              31                                             /* SCB HF
+ 178:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_HFSR_DEBUGEVT_Msk              (1ul << SCB_HFSR_DEBUGEVT_Pos)                 /* SCB HF
+ 179:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_HFSR_FORCED_Pos                30                                             /* SCB HF
+ 180:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_HFSR_FORCED_Msk                (1ul << SCB_HFSR_FORCED_Pos)                   /* SCB HF
+ 181:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_HFSR_VECTTBL_Pos                1                                             /* SCB HF
+ 182:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_HFSR_VECTTBL_Msk               (1ul << SCB_HFSR_VECTTBL_Pos)                  /* SCB HF
+ 183:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 184:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SCB Debug Fault Status Register Definitions */
+ 185:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_DFSR_EXTERNAL_Pos               4                                             /* SCB DF
+ 186:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_DFSR_EXTERNAL_Msk              (1ul << SCB_DFSR_EXTERNAL_Pos)                 /* SCB DF
+ 187:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_DFSR_VCATCH_Pos                 3                                             /* SCB DF
+ 188:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_DFSR_VCATCH_Msk                (1ul << SCB_DFSR_VCATCH_Pos)                   /* SCB DF
+ 189:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_DFSR_DWTTRAP_Pos                2                                             /* SCB DF
+ 190:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_DFSR_DWTTRAP_Msk               (1ul << SCB_DFSR_DWTTRAP_Pos)                  /* SCB DF
+ 191:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_DFSR_BKPT_Pos                   1                                             /* SCB DF
+ 192:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_DFSR_BKPT_Msk                  (1ul << SCB_DFSR_BKPT_Pos)                     /* SCB DF
+ 193:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_DFSR_HALTED_Pos                 0                                             /* SCB DF
+ 194:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_DFSR_HALTED_Msk                (1ul << SCB_DFSR_HALTED_Pos)                   /* SCB DF
+ 195:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 196:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 197:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** typedef struct
+ 198:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 199:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int CTRL;			/* Offset: 0x00  SysTick Control and Status Register */
+ 200:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int LOAD;			/* Offset: 0x04  SysTick Reload Value Register */
+ 201:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int VAL;			/* Offset: 0x08  SysTick Current Value Register */
+ 202:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int CALIB;		/* Offset: 0x0C  SysTick Calibration Register */
+ 203:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** } SysTick_Type;
+ 204:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 205:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SysTick Control / Status Register Definitions */
+ 206:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CTRL_COUNTFLAG_Pos         16                                             /* SysTic
+ 207:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CTRL_COUNTFLAG_Msk         (1ul << SysTick_CTRL_COUNTFLAG_Pos)            /* SysTic
+ 208:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CTRL_CLKSOURCE_Pos          2                                             /* SysTic
+ 209:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CTRL_CLKSOURCE_Msk         (1ul << SysTick_CTRL_CLKSOURCE_Pos)            /* SysTic
+ 210:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CTRL_TICKINT_Pos            1                                             /* SysTic
+ 211:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CTRL_TICKINT_Msk           (1ul << SysTick_CTRL_TICKINT_Pos)              /* SysTic
+ 212:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CTRL_ENABLE_Pos             0                                             /* SysTic
+ 213:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CTRL_ENABLE_Msk            (1ul << SysTick_CTRL_ENABLE_Pos)               /* SysTic
+ 214:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 215:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SysTick Reload Register Definitions */
+ 216:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_LOAD_RELOAD_Pos             0                                             /* SysTic
+ 217:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_LOAD_RELOAD_Msk            (0xFFFFFFul << SysTick_LOAD_RELOAD_Pos)        /* SysTic
+ 218:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 219:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SysTick Current Register Definitions */
+ 220:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_VAL_CURRENT_Pos             0                                             /* SysTic
+ 221:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_VAL_CURRENT_Msk            (0xFFFFFFul << SysTick_VAL_CURRENT_Pos)        /* SysTic
+ 222:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 223:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* SysTick Calibration Register Definitions */
+ 224:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CALIB_NOREF_Pos            31                                             /* SysTic
+ 225:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CALIB_NOREF_Msk            (1ul << SysTick_CALIB_NOREF_Pos)               /* SysTic
+ 226:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 227:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CALIB_SKEW_Pos             30                                             /* SysTic
+ 228:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CALIB_SKEW_Msk             (1ul << SysTick_CALIB_SKEW_Pos)                /* SysTic
+ 229:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 230:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CALIB_TENMS_Pos             0                                             /* SysTic
+ 231:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_CALIB_TENMS_Msk            (0xFFFFFFul << SysTick_VAL_CURRENT_Pos)        /* SysTic
+ 232:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 233:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 234:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** typedef struct
+ 235:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 236:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile union {
+ 237:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****                       volatile unsigned char u8;	/* Offset:       ITM Stimulus Port 8-bit */
+ 238:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****                       volatile unsigned short u16;	/* Offset:       ITM Stimulus Port 16-bit */
+ 239:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****                       volatile  unsigned int u32;	/* Offset:       ITM Stimulus Port 32-bit */
+ 240:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       } PORT [32];					/* Offset: 0x00  ITM Stimulus Port Registers */
+ 241:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED0[864];
+ 242:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int TER;			/* Offset:       ITM Trace Enable Register */
+ 243:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED1[15];
+ 244:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int TPR;			/* Offset:       ITM Trace Privilege Register */
+ 245:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED2[15];
+ 246:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int TCR;			/* Offset:       ITM Trace Control Register */
+ 247:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED3[29];
+ 248:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int IWR;			/* Offset:       ITM Integration Write Register */
+ 249:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int IRR;			/* Offset:       ITM Integration Read Register */
+ 250:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int IMCR;			/* Offset:       ITM Integration Mode Control Register */
+ 251:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED4[43];
+ 252:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int LAR;			/* Offset:       ITM Lock Access Register */
+ 253:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int LSR;			/* Offset:       ITM Lock Status Register */
+ 254:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED5[6];
+ 255:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int PID4;			/* Offset:       ITM Peripheral Identification Register #
+ 256:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int PID5;			/* Offset:       ITM Peripheral Identification Register #
+ 257:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int PID6;			/* Offset:       ITM Peripheral Identification Register #
+ 258:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int PID7;			/* Offset:       ITM Peripheral Identification Register #
+ 259:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int PID0;			/* Offset:       ITM Peripheral Identification Register #
+ 260:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int PID1;			/* Offset:       ITM Peripheral Identification Register #
+ 261:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int PID2;			/* Offset:       ITM Peripheral Identification Register #
+ 262:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int PID3;			/* Offset:       ITM Peripheral Identification Register #
+ 263:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int CID0;			/* Offset:       ITM Component  Identification Register #
+ 264:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int CID1;			/* Offset:       ITM Component  Identification Register #
+ 265:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int CID2;			/* Offset:       ITM Component  Identification Register #
+ 266:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int CID3;			/* Offset:       ITM Component  Identification Register #
+ 267:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** } ITM_Type;
+ 268:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 269:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* ITM Trace Privilege Register Definitions */
+ 270:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TPR_PRIVMASK_Pos                0                                             /* ITM TP
+ 271:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TPR_PRIVMASK_Msk               (0xFul << ITM_TPR_PRIVMASK_Pos)                /* ITM TP
+ 272:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 273:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* ITM Trace Control Register Definitions */
+ 274:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_BUSY_Pos                   23                                             /* ITM TC
+ 275:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_BUSY_Msk                   (1ul << ITM_TCR_BUSY_Pos)                      /* ITM TC
+ 276:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_ATBID_Pos                  16                                             /* ITM TC
+ 277:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_ATBID_Msk                  (0x7Ful << ITM_TCR_ATBID_Pos)                  /* ITM TC
+ 278:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_TSPrescale_Pos              8                                             /* ITM TC
+ 279:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_TSPrescale_Msk             (3ul << ITM_TCR_TSPrescale_Pos)                /* ITM TC
+ 280:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_SWOENA_Pos                  4                                             /* ITM TC
+ 281:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_SWOENA_Msk                 (1ul << ITM_TCR_SWOENA_Pos)                    /* ITM TC
+ 282:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_DWTENA_Pos                  3                                             /* ITM TC
+ 283:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_DWTENA_Msk                 (1ul << ITM_TCR_DWTENA_Pos)                    /* ITM TC
+ 284:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_SYNCENA_Pos                 2                                             /* ITM TC
+ 285:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_SYNCENA_Msk                (1ul << ITM_TCR_SYNCENA_Pos)                   /* ITM TC
+ 286:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_TSENA_Pos                   1                                             /* ITM TC
+ 287:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_TSENA_Msk                  (1ul << ITM_TCR_TSENA_Pos)                     /* ITM TC
+ 288:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_ITMENA_Pos                  0                                             /* ITM TC
+ 289:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_TCR_ITMENA_Msk                 (1ul << ITM_TCR_ITMENA_Pos)                    /* ITM TC
+ 290:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 291:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* ITM Integration Write Register Definitions */
+ 292:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_IWR_ATVALIDM_Pos                0                                             /* ITM IW
+ 293:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_IWR_ATVALIDM_Msk               (1ul << ITM_IWR_ATVALIDM_Pos)                  /* ITM IW
+ 294:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 295:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* ITM Integration Read Register Definitions */
+ 296:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_IRR_ATREADYM_Pos                0                                             /* ITM IR
+ 297:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_IRR_ATREADYM_Msk               (1ul << ITM_IRR_ATREADYM_Pos)                  /* ITM IR
+ 298:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 299:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* ITM Integration Mode Control Register Definitions */
+ 300:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_IMCR_INTEGRATION_Pos            0                                             /* ITM IM
+ 301:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_IMCR_INTEGRATION_Msk           (1ul << ITM_IMCR_INTEGRATION_Pos)              /* ITM IM
+ 302:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 303:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* ITM Lock Status Register Definitions */
+ 304:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_LSR_ByteAcc_Pos                 2                                             /* ITM LS
+ 305:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_LSR_ByteAcc_Msk                (1ul << ITM_LSR_ByteAcc_Pos)                   /* ITM LS
+ 306:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_LSR_Access_Pos                  1                                             /* ITM LS
+ 307:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_LSR_Access_Msk                 (1ul << ITM_LSR_Access_Pos)                    /* ITM LS
+ 308:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_LSR_Present_Pos                 0                                             /* ITM LS
+ 309:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_LSR_Present_Msk                (1ul << ITM_LSR_Present_Pos)                   /* ITM LS
+ 310:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 311:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 312:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** typedef struct
+ 313:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 314:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED0;
+ 315:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const unsigned int ICTR;			/* Offset: 0x04  Interrupt Control Type Register */
+ 316:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #if ((defined __CM3_REV) && (__CM3_REV >= 0x200))
+ 317:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int ACTLR;			/* Offset: 0x08  Auxiliary Control Register */
+ 318:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #else
+ 319:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int RESERVED1;
+ 320:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #endif
+ 321:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** } InterruptType_Type;
+ 322:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 323:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 324:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* Interrupt Controller Type Register Definitions */
+ 325:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define InterruptType_ICTR_INTLINESNUM_Pos  0                                             /* Interr
+ 326:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define InterruptType_ICTR_INTLINESNUM_Msk (0x1Ful << InterruptType_ICTR_INTLINESNUM_Pos) /* Interr
+ 327:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 328:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* Auxiliary Control Register Definitions */
+ 329:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define InterruptType_ACTLR_DISFOLD_Pos     2                                             /* Interr
+ 330:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define InterruptType_ACTLR_DISFOLD_Msk    (1ul << InterruptType_ACTLR_DISFOLD_Pos)       /* Interr
+ 331:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 332:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define InterruptType_ACTLR_DISDEFWBUF_Pos  1                                             /* Interr
+ 333:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define InterruptType_ACTLR_DISDEFWBUF_Msk (1ul << InterruptType_ACTLR_DISDEFWBUF_Pos)    /* Interr
+ 334:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 335:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define InterruptType_ACTLR_DISMCYCINT_Pos  0                                             /* Interr
+ 336:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define InterruptType_ACTLR_DISMCYCINT_Msk (1ul << InterruptType_ACTLR_DISMCYCINT_Pos)    /* Interr
+ 337:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 338:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #if defined (__MPU_PRESENT) && (__MPU_PRESENT == 1)
+ 339:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** typedef struct
+ 340:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 341:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile const  unsigned int TYPE;		/* Offset: 0x00  MPU Type Register */
+ 342:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int CTRL;			/* Offset: 0x04  MPU Control Register */
+ 343:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int RNR;			/* Offset: 0x08  MPU Region RNRber Register */
+ 344:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int RBAR;			/* Offset: 0x0C  MPU Region Base Address Register */
+ 345:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int RASR;			/* Offset: 0x10  MPU Region Attribute and Size Register */
+ 346:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int RBAR_A1;			/* Offset: 0x14  MPU Alias 1 Region Base Address Register */
+ 347:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int RASR_A1;			/* Offset: 0x18  MPU Alias 1 Region Attribute and Size Regis
+ 348:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int RBAR_A2;			/* Offset: 0x1C  MPU Alias 2 Region Base Address Register */
+ 349:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int RASR_A2;			/* Offset: 0x20  MPU Alias 2 Region Attribute and Size Regis
+ 350:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int RBAR_A3;			/* Offset: 0x24  MPU Alias 3 Region Base Address Register */
+ 351:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int RASR_A3;			/* Offset: 0x28  MPU Alias 3 Region Attribute and Size Regis
+ 352:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** } MPU_Type;
+ 353:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 354:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* MPU Type Register */
+ 355:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_TYPE_IREGION_Pos               16                                             /* MPU TY
+ 356:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_TYPE_IREGION_Msk               (0xFFul << MPU_TYPE_IREGION_Pos)               /* MPU TY
+ 357:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_TYPE_DREGION_Pos                8                                             /* MPU TY
+ 358:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_TYPE_DREGION_Msk               (0xFFul << MPU_TYPE_DREGION_Pos)               /* MPU TY
+ 359:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_TYPE_SEPARATE_Pos               0                                             /* MPU TY
+ 360:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_TYPE_SEPARATE_Msk              (1ul << MPU_TYPE_SEPARATE_Pos)                 /* MPU TY
+ 361:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 362:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* MPU Control Register */
+ 363:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_CTRL_PRIVDEFENA_Pos             2                                             /* MPU CT
+ 364:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_CTRL_PRIVDEFENA_Msk            (1ul << MPU_CTRL_PRIVDEFENA_Pos)               /* MPU CT
+ 365:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_CTRL_HFNMIENA_Pos               1                                             /* MPU CT
+ 366:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_CTRL_HFNMIENA_Msk              (1ul << MPU_CTRL_HFNMIENA_Pos)                 /* MPU CT
+ 367:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_CTRL_ENABLE_Pos                 0                                             /* MPU CT
+ 368:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_CTRL_ENABLE_Msk                (1ul << MPU_CTRL_ENABLE_Pos)                   /* MPU CT
+ 369:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 370:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* MPU Region Number Register */
+ 371:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RNR_REGION_Pos                  0                                             /* MPU RN
+ 372:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RNR_REGION_Msk                 (0xFFul << MPU_RNR_REGION_Pos)                 /* MPU RN
+ 373:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 374:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* MPU Region Base Address Register */
+ 375:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RBAR_ADDR_Pos                   5                                             /* MPU RB
+ 376:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RBAR_ADDR_Msk                  (0x7FFFFFFul << MPU_RBAR_ADDR_Pos)             /* MPU RB
+ 377:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RBAR_VALID_Pos                  4                                             /* MPU RB
+ 378:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RBAR_VALID_Msk                 (1ul << MPU_RBAR_VALID_Pos)                    /* MPU RB
+ 379:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RBAR_REGION_Pos                 0                                             /* MPU RB
+ 380:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RBAR_REGION_Msk                (0xFul << MPU_RBAR_REGION_Pos)                 /* MPU RB
+ 381:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 382:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* MPU Region Attribute and Size Register */
+ 383:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_XN_Pos                    28                                             /* MPU RA
+ 384:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_XN_Msk                    (1ul << MPU_RASR_XN_Pos)                       /* MPU RA
+ 385:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_AP_Pos                    24                                             /* MPU RA
+ 386:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_AP_Msk                    (7ul << MPU_RASR_AP_Pos)                       /* MPU RA
+ 387:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_TEX_Pos                   19                                             /* MPU RA
+ 388:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_TEX_Msk                   (7ul << MPU_RASR_TEX_Pos)                      /* MPU RA
+ 389:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_S_Pos                     18                                             /* MPU RA
+ 390:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_S_Msk                     (1ul << MPU_RASR_S_Pos)                        /* MPU RA
+ 391:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_C_Pos                     17                                             /* MPU RA
+ 392:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_C_Msk                     (1ul << MPU_RASR_C_Pos)                        /* MPU RA
+ 393:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_B_Pos                     16                                             /* MPU RA
+ 394:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_B_Msk                     (1ul << MPU_RASR_B_Pos)                        /* MPU RA
+ 395:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_SRD_Pos                    8                                             /* MPU RA
+ 396:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_SRD_Msk                   (0xFFul << MPU_RASR_SRD_Pos)                   /* MPU RA
+ 397:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_SIZE_Pos                   1                                             /* MPU RA
+ 398:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_SIZE_Msk                  (0x1Ful << MPU_RASR_SIZE_Pos)                  /* MPU RA
+ 399:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_ENA_Pos                    0                                            /* MPU RAS
+ 400:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_RASR_ENA_Msk                   (0x1Ful << MPU_RASR_ENA_Pos)                  /* MPU RAS
+ 401:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #endif
+ 402:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 403:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 404:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** typedef struct
+ 405:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 406:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int DHCSR;			/* Offset: 0x00  Debug Halting Control and Status Register    
+ 407:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int DCRSR;			/* Offset: 0x04  Debug Core Register Selector Register        
+ 408:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int DCRDR;			/* Offset: 0x08  Debug Core Register Data Register            
+ 409:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       volatile unsigned int DEMCR;			/* Offset: 0x0C  Debug Exception and Monitor Control Register 
+ 410:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** } CoreDebug_Type;
+ 411:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 412:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* Debug Halting Control and Status Register */
+ 413:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_DBGKEY_Pos         16                                             /* CoreDe
+ 414:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_DBGKEY_Msk         (0xFFFFul << CoreDebug_DHCSR_DBGKEY_Pos)       /* CoreDe
+ 415:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_RESET_ST_Pos     25                                             /* CoreDe
+ 416:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_RESET_ST_Msk     (1ul << CoreDebug_DHCSR_S_RESET_ST_Pos)        /* CoreDe
+ 417:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Pos    24                                             /* CoreDe
+ 418:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Msk    (1ul << CoreDebug_DHCSR_S_RETIRE_ST_Pos)       /* CoreDe
+ 419:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_LOCKUP_Pos       19                                             /* CoreDe
+ 420:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_LOCKUP_Msk       (1ul << CoreDebug_DHCSR_S_LOCKUP_Pos)          /* CoreDe
+ 421:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_SLEEP_Pos        18                                             /* CoreDe
+ 422:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_SLEEP_Msk        (1ul << CoreDebug_DHCSR_S_SLEEP_Pos)           /* CoreDe
+ 423:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_HALT_Pos         17                                             /* CoreDe
+ 424:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_HALT_Msk         (1ul << CoreDebug_DHCSR_S_HALT_Pos)            /* CoreDe
+ 425:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_REGRDY_Pos       16                                             /* CoreDe
+ 426:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_S_REGRDY_Msk       (1ul << CoreDebug_DHCSR_S_REGRDY_Pos)          /* CoreDe
+ 427:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_C_SNAPSTALL_Pos     5                                             /* CoreDe
+ 428:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_C_SNAPSTALL_Msk    (1ul << CoreDebug_DHCSR_C_SNAPSTALL_Pos)       /* CoreDe
+ 429:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_C_MASKINTS_Pos      3                                             /* CoreDe
+ 430:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_C_MASKINTS_Msk     (1ul << CoreDebug_DHCSR_C_MASKINTS_Pos)        /* CoreDe
+ 431:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_C_STEP_Pos          2                                             /* CoreDe
+ 432:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_C_STEP_Msk         (1ul << CoreDebug_DHCSR_C_STEP_Pos)            /* CoreDe
+ 433:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_C_HALT_Pos          1                                             /* CoreDe
+ 434:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_C_HALT_Msk         (1ul << CoreDebug_DHCSR_C_HALT_Pos)            /* CoreDe
+ 435:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_C_DEBUGEN_Pos       0                                             /* CoreDe
+ 436:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DHCSR_C_DEBUGEN_Msk      (1ul << CoreDebug_DHCSR_C_DEBUGEN_Pos)         /* CoreDe
+ 437:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 438:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* Debug Core Register Selector Register */
+ 439:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DCRSR_REGWnR_Pos         16                                             /* CoreDe
+ 440:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DCRSR_REGWnR_Msk         (1ul << CoreDebug_DCRSR_REGWnR_Pos)            /* CoreDe
+ 441:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DCRSR_REGSEL_Pos          0                                             /* CoreDe
+ 442:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DCRSR_REGSEL_Msk         (0x1Ful << CoreDebug_DCRSR_REGSEL_Pos)         /* CoreDe
+ 443:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 444:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* Debug Exception and Monitor Control Register */
+ 445:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_TRCENA_Pos         24                                             /* CoreDe
+ 446:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_TRCENA_Msk         (1ul << CoreDebug_DEMCR_TRCENA_Pos)            /* CoreDe
+ 447:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_MON_REQ_Pos        19                                             /* CoreDe
+ 448:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_MON_REQ_Msk        (1ul << CoreDebug_DEMCR_MON_REQ_Pos)           /* CoreDe
+ 449:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_MON_STEP_Pos       18                                             /* CoreDe
+ 450:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_MON_STEP_Msk       (1ul << CoreDebug_DEMCR_MON_STEP_Pos)          /* CoreDe
+ 451:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_MON_PEND_Pos       17                                             /* CoreDe
+ 452:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_MON_PEND_Msk       (1ul << CoreDebug_DEMCR_MON_PEND_Pos)          /* CoreDe
+ 453:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_MON_EN_Pos         16                                             /* CoreDe
+ 454:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_MON_EN_Msk         (1ul << CoreDebug_DEMCR_MON_EN_Pos)            /* CoreDe
+ 455:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_HARDERR_Pos     10                                             /* CoreDe
+ 456:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_HARDERR_Msk     (1ul << CoreDebug_DEMCR_VC_HARDERR_Pos)        /* CoreDe
+ 457:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_INTERR_Pos       9                                             /* CoreDe
+ 458:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_INTERR_Msk      (1ul << CoreDebug_DEMCR_VC_INTERR_Pos)         /* CoreDe
+ 459:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_BUSERR_Pos       8                                             /* CoreDe
+ 460:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_BUSERR_Msk      (1ul << CoreDebug_DEMCR_VC_BUSERR_Pos)         /* CoreDe
+ 461:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_STATERR_Pos      7                                             /* CoreDe
+ 462:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_STATERR_Msk     (1ul << CoreDebug_DEMCR_VC_STATERR_Pos)        /* CoreDe
+ 463:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_CHKERR_Pos       6                                             /* CoreDe
+ 464:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_CHKERR_Msk      (1ul << CoreDebug_DEMCR_VC_CHKERR_Pos)         /* CoreDe
+ 465:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_NOCPERR_Pos      5                                             /* CoreDe
+ 466:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_NOCPERR_Msk     (1ul << CoreDebug_DEMCR_VC_NOCPERR_Pos)        /* CoreDe
+ 467:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_MMERR_Pos        4                                             /* CoreDe
+ 468:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_MMERR_Msk       (1ul << CoreDebug_DEMCR_VC_MMERR_Pos)          /* CoreDe
+ 469:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_CORERESET_Pos    0                                             /* CoreDe
+ 470:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_DEMCR_VC_CORERESET_Msk   (1ul << CoreDebug_DEMCR_VC_CORERESET_Pos)      /* CoreDe
+ 471:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 472:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* Memory mapping of Cortex-M3 Hardware */
+ 473:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCS_BASE            (0xE000E000)                              /* System Control Space Base 
+ 474:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM_BASE            (0xE0000000)                              /* ITM Base Address */
+ 475:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug_BASE      (0xE000EDF0)                              /* Core Debug Base Address */
+ 476:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick_BASE        (SCS_BASE +  0x0010)                      /* SysTick Base Address */
+ 477:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define NVIC_BASE           (SCS_BASE +  0x0100)                      /* NVIC Base Address */
+ 478:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB_BASE            (SCS_BASE +  0x0D00)                      /* System Control Block Base 
+ 479:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 480:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define InterruptType       ((InterruptType_Type *) SCS_BASE)         /* Interrupt Type Register */
+ 481:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SCB                 ((SCB_Type *)  SCB_BASE)                  /* SCB configuration struct  
+ 482:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define SysTick             ((SysTick_Type *) SysTick_BASE)           /* SysTick configuration stru
+ 483:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define NVIC                ((NVIC_Type *) NVIC_BASE)                 /* NVIC configuration struct 
+ 484:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define ITM                 ((ITM_Type *) ITM_BASE)                   /* ITM configuration struct *
+ 485:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define CoreDebug           ((CoreDebug_Type *) CoreDebug_BASE)       /* Core Debug configuration s
+ 486:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 487:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #if defined (__MPU_PRESENT) && (__MPU_PRESENT == 1)
+ 488:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU_BASE            (SCS_BASE +  0x0D90)                      /* Memory Protection Unit */
+ 489:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #define MPU                 ((MPU_Type*) MPU_BASE)                    /* Memory Protection Unit */
+ 490:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #endif
+ 491:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 492:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 493:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** /* GNU gcc specific functions */
+ 494:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __enable_irq()               { __asm volatile ("cpsie i"); }
+ 495:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __disable_irq()              { __asm volatile ("cpsid i"); }
+ 496:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __enable_fault_irq()         { __asm volatile ("cpsie f"); }
+ 497:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __disable_fault_irq()        { __asm volatile ("cpsid f"); }
+ 498:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __NOP()                      { __asm volatile ("nop"); }
+ 499:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __WFI()                      { __asm volatile ("wfi"); }
+ 500:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __WFE()                      { __asm volatile ("wfe"); }
+ 501:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __SEV()                      { __asm volatile ("sev"); }
+ 502:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void constSB()                    { __asm volatile ("isb"); }
+ 503:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __DSB()                      { __asm volatile ("dsb"); }
+ 504:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __DMB()                      { __asm volatile ("dmb"); }
+ 505:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __CLREX()                    { __asm volatile ("clrex"); }
+ 506:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 507:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __get_PSP(void);
+ 508:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern void __set_PSP(unsigned int topOfProcStack);
+ 509:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __get_MSP(void);
+ 510:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern void __set_MSP(unsigned int topOfMainStack);
+ 511:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __get_BASEPRI(void);
+ 512:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern void __set_BASEPRI(unsigned int basePri);
+ 513:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int  __get_PRIMASK(void);
+ 514:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern void __set_PRIMASK(unsigned int priMask);
+ 515:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __get_FAULTMASK(void);
+ 516:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern void __set_FAULTMASK(unsigned int faultMask);
+ 517:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __get_CONTROL(void);
+ 518:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern void __set_CONTROL(unsigned int control);
+ 519:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __REV(unsigned int value);
+ 520:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __REV16(unsigned shortvalue);
+ 521:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern int __REVSH(int value);
+ 522:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __RBIT(unsigned int value);
+ 523:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned char __LDREXB(unsigned char *addr);
+ 524:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned short__LDREXH(unsigned short*addr);
+ 525:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __LDREXW(unsigned int *addr);
+ 526:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __STREXB(unsigned char value, unsigned char *addr);
+ 527:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __STREXH(unsigned shortvalue, unsigned short*addr);
+ 528:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** extern unsigned int __STREXW(unsigned int value, unsigned int *addr);
+ 529:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 530:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 531:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 532:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void NVIC_SetPriorityGrouping (unsigned int PriorityGroup)
+ 533:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 534:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int reg_value;
+ 535:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int PriorityGroupTmp = (PriorityGroup & 0x07);			/* only values 0..7 are used */
+ 536:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       reg_value = SCB->AIRCR;                                                   /* read old registe
+ 537:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       reg_value &= ~(SCB_AIRCR_VECTKEY_Msk | SCB_AIRCR_PRIGROUP_Msk);           /* clear bits to ch
+ 538:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       reg_value = (reg_value | (0x5FA << SCB_AIRCR_VECTKEY_Pos) | (PriorityGroupTmp << 8));	/* Inse
+ 539:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       SCB->AIRCR =  reg_value;
+ 540:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 541:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 542:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 543:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline unsigned int NVIC_GetPriorityGrouping (void)
+ 544:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 545:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       return ((SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) >> SCB_AIRCR_PRIGROUP_Pos);   /* read priority 
+ 546:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 547:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 548:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 549:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void NVIC_EnableIRQ (IRQn_Type IRQn)
+ 550:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 551:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       NVIC->ISER[((unsigned int)(IRQn) >> 5)] = (1 << ((unsigned int)(IRQn) & 0x1F)); /* enable int
+ 552:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 553:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 554:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 555:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void NVIC_DisableIRQ (IRQn_Type IRQn)
+ 556:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 557:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       NVIC->ICER[((unsigned int)(IRQn) >> 5)] = (1 << ((unsigned int)(IRQn) & 0x1F)); /* disable in
+ 558:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 559:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 560:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 561:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline unsigned int NVIC_GetPendingIRQ (IRQn_Type IRQn)
+ 562:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 563:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       return((unsigned int) ((NVIC->ISPR[(unsigned int)(IRQn) >> 5] & (1 << ((unsigned int)(IRQn) &
+ 564:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 565:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 566:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 567:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void NVIC_SetPendingIRQ (IRQn_Type IRQn)
+ 568:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 569:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       NVIC->ISPR[((unsigned int)(IRQn) >> 5)] = (1 << ((unsigned int)(IRQn) & 0x1F)); /* set interr
+ 570:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 571:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 572:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 573:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void NVIC_ClearPendingIRQ (IRQn_Type IRQn)
+ 574:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 575:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       NVIC->ICPR[((unsigned int)(IRQn) >> 5)] = (1 << ((unsigned int)(IRQn) & 0x1F)); /* Clear pend
+ 576:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 577:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 578:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 579:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline unsigned int NVIC_GetActive (IRQn_Type IRQn)
+ 580:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 581:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       return((unsigned int)((NVIC->IABR[(unsigned int)(IRQn) >> 5] & (1 << ((unsigned int)(IRQn) & 
+ 582:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 583:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 584:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 585:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void NVIC_SetPriority (IRQn_Type IRQn, unsigned int priority)
+ 586:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 587:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       if (IRQn < 0) {
+ 588:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****          SCB->SHP[((unsigned int)(IRQn) & 0xF)-4] = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff);	
+ 589:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       } else {
+ 590:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****          NVIC->IP[(unsigned int)(IRQn)] = ((priority << (8 - __NVIC_PRIO_BITS)) & 0xff);		/* set Pr
+ 591:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       }
+ 592:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 593:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 594:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 595:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline unsigned int NVIC_GetPriority (IRQn_Type IRQn)
+ 596:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 597:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 598:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       if (IRQn < 0) {
+ 599:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****          return((unsigned int)(SCB->SHP[((unsigned int)(IRQn) & 0xF)-4] >> (8 - __NVIC_PRIO_BITS)))
+ 600:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       } else {
+ 601:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****          return((unsigned int)(NVIC->IP[(unsigned int)(IRQn)] >> (8 - __NVIC_PRIO_BITS)));		/* get 
+ 602:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       }
+ 603:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 604:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 605:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 606:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline unsigned int NVIC_EncodePriority (unsigned int PriorityGroup, unsigned int PreemptPri
+ 607:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 608:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int PriorityGroupTmp = (PriorityGroup & 0x07);          /* only values 0..7 are used
+ 609:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int PreemptPriorityBits;
+ 610:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int SubPriorityBits;
+ 611:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       PreemptPriorityBits = ((7 - PriorityGroupTmp) > __NVIC_PRIO_BITS) ? __NVIC_PRIO_BITS : 7 - Pr
+ 612:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       SubPriorityBits = ((PriorityGroupTmp + __NVIC_PRIO_BITS) < 7) ? 0 : PriorityGroupTmp - 7 + __
+ 613:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       return (((PreemptPriority & ((1 << (PreemptPriorityBits)) - 1)) << SubPriorityBits) | ((SubPr
+ 614:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 615:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 616:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 617:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void NVIC_DecodePriority (unsigned int Priority, unsigned int PriorityGroup, unsigned
+ 618:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 619:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int PriorityGroupTmp = (PriorityGroup & 0x07);          /* only values 0..7 are used
+ 620:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int PreemptPriorityBits;
+ 621:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       unsigned int SubPriorityBits;
+ 622:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       PreemptPriorityBits = ((7 - PriorityGroupTmp) > __NVIC_PRIO_BITS) ? __NVIC_PRIO_BITS : 7 - Pr
+ 623:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       SubPriorityBits = ((PriorityGroupTmp + __NVIC_PRIO_BITS) < 7) ? 0 : PriorityGroupTmp - 7 + __
+ 624:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       *pPreemptPriority = (Priority >> SubPriorityBits) & ((1 << (PreemptPriorityBits)) - 1);
+ 625:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       *pSubPriority = (Priority ) & ((1 << (SubPriorityBits )) - 1);
+ 626:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 627:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 628:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 629:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #if (!defined (__Vendor_SysTickConfig)) || (__Vendor_SysTickConfig == 0)
+ 630:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline unsigned int SysTick_Config (unsigned int ticks)
+ 631:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+ 632:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       if (ticks > SysTick_LOAD_RELOAD_Msk) return (1);		/* Reload value impossible */
+ 633:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       SysTick->LOAD = (ticks & SysTick_LOAD_RELOAD_Msk) - 1;      /* set reload register */
+ 634:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       NVIC_SetPriority(SysTick_IRQn, (1<<__NVIC_PRIO_BITS) - 1);  /* set Priority for Cortex-M0 Sys
+ 635:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       SysTick->VAL = 0;                                          /* Load the SysTick Counter Value 
+ 636:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_M
+ 637:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       return (0);	/* Function successful */
+ 638:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** }
+ 639:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** #endif
+ 640:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 641:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** 
+ 642:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void NVIC_SystemReset (void)
+ 643:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** {
+  26              		.loc 1 643 1 view -0
+  27              		.cfi_startproc
+  28              		@ Volatile: function does not return.
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+ 644:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       SCB->AIRCR = ((0x5FA << SCB_AIRCR_VECTKEY_Pos) | (SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) | SCB_
+  32              		.loc 1 644 7 view .LVU1
+  33              		.loc 1 644 60 is_stmt 0 view .LVU2
+  34 0000 0449     		ldr	r1, .L3
+  35              		.loc 1 644 94 view .LVU3
+  36 0002 054B     		ldr	r3, .L3+4
+  37              		.loc 1 644 60 view .LVU4
+  38 0004 CA68     		ldr	r2, [r1, #12]
+  39              		.loc 1 644 68 view .LVU5
+  40 0006 02F4E062 		and	r2, r2, #1792
+  41              		.loc 1 644 94 view .LVU6
+  42 000a 1343     		orrs	r3, r3, r2
+  43              		.loc 1 644 18 view .LVU7
+  44 000c CB60     		str	r3, [r1, #12]
+ 645:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       __DSB();	/* Ensure completion of memory access */
+  45              		.loc 1 645 7 is_stmt 1 view .LVU8
+  46              	.LBB4:
+  47              	.LBI4:
+ 503:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __DMB()                      { __asm volatile ("dmb"); }
+  48              		.loc 1 503 20 view .LVU9
+  49              	.LBB5:
+ 503:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h **** static inline void __DMB()                      { __asm volatile ("dmb"); }
+  50              		.loc 1 503 51 view .LVU10
+  51              		.syntax unified
+  52              	@ 503 "c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h" 1
+  53 000e BFF34F8F 		dsb
+  54              	@ 0 "" 2
+  55              		.thumb
+  56              		.syntax unified
+  57              	.L2:
+  58              	.LBE5:
+  59              	.LBE4:
+ 646:c:\project\stm32fx_lib\stm32f1x_iolib\include\core.h ****       while(1);	/* wait until reset */
+  60              		.loc 1 646 7 discriminator 1 view .LVU11
+  61              		.loc 1 646 15 discriminator 1 view .LVU12
+  62              		.loc 1 646 12 discriminator 1 view .LVU13
+  63 0012 FEE7     		b	.L2
+  64              	.L4:
+  65              		.align	2
+  66              	.L3:
+  67 0014 00ED00E0 		.word	-536810240
+  68 0018 0400FA05 		.word	100270084
+  69              		.cfi_endproc
+  70              	.LFE28:
+  72              		.section	.text.flash_read,"ax",%progbits
+  73              		.align	1
+  74              		.global	flash_read
+  75              		.syntax unified
+  76              		.thumb
+  77              		.thumb_func
+  78              		.fpu softvfp
+  80              	flash_read:
+  81              	.LFB32:
+  82              		.file 2 "serial.c"
+   1:serial.c      **** /********************************************************************************/
+   2:serial.c      **** /* serial.c                                                                     */
+   3:serial.c      **** /* STM32F103VET6                                                                */
+   4:serial.c      **** /* (Lee ChangWoo HL2IRW  hl2irw@kpu.ac.kr 011-726-6860)                 	*/
+   5:serial.c      **** /* stm32f103ve_mp3								*/
+   6:serial.c      **** /********************************************************************************/
+   7:serial.c      **** #include <stdint.h>
+   8:serial.c      **** #include <stdio.h>
+   9:serial.c      **** #include <stdarg.h>
+  10:serial.c      **** #include <stdlib.h>
+  11:serial.c      **** #include <string.h>
+  12:serial.c      **** #include "hwdefs.h"
+  13:serial.c      **** 
+  14:serial.c      **** #define SOH				0x01
+  15:serial.c      **** #define STX				0x02
+  16:serial.c      **** #define ETX				0x03
+  17:serial.c      **** #define EOT				0x04
+  18:serial.c      **** #define ENQ				0x05
+  19:serial.c      **** #define ACK				0x06
+  20:serial.c      **** #define NAK				0x15
+  21:serial.c      **** 
+  22:serial.c      **** 
+  23:serial.c      **** volatile unsigned short rxcnt1,txcnt1,maxtx1,rxcnt2,txcnt2,maxtx2;
+  24:serial.c      **** volatile unsigned char tx_flag1,tx_flag2,rxck1,rxck2,rxled,txled,this_id;
+  25:serial.c      **** char txbuff1[256],rxbuff1[256],txbuff2[256],rxbuff2[256];
+  26:serial.c      **** char sbuff[256];
+  27:serial.c      **** unsigned char USART1_PORT;
+  28:serial.c      **** volatile unsigned int flash_para[64];
+  29:serial.c      **** 
+  30:serial.c      **** 
+  31:serial.c      **** void flash_read (void)
+  32:serial.c      **** {
+  83              		.loc 2 32 1 view -0
+  84              		.cfi_startproc
+  85              		@ args = 0, pretend = 0, frame = 0
+  86              		@ frame_needed = 0, uses_anonymous_args = 0
+  33:serial.c      ****       unsigned int idx,flash_address;
+  87              		.loc 2 33 7 view .LVU15
+  34:serial.c      ****       FLASH_Unlock();
+  88              		.loc 2 34 7 view .LVU16
+  32:serial.c      ****       unsigned int idx,flash_address;
+  89              		.loc 2 32 1 is_stmt 0 view .LVU17
+  90 0000 08B5     		push	{r3, lr}
+  91              		.cfi_def_cfa_offset 8
+  92              		.cfi_offset 3, -8
+  93              		.cfi_offset 14, -4
+  94              		.loc 2 34 7 view .LVU18
+  95 0002 FFF7FEFF 		bl	FLASH_Unlock
+  96              	.LVL0:
+  35:serial.c      ****       flash_address = (unsigned int)0x0807F800;
+  97              		.loc 2 35 7 is_stmt 1 view .LVU19
+  36:serial.c      ****       for (idx=0;idx<64;idx++) {
+  98              		.loc 2 36 7 view .LVU20
+  99              		.loc 2 36 18 view .LVU21
+ 100              		.loc 2 36 15 is_stmt 0 view .LVU22
+ 101 0006 0023     		movs	r3, #0
+  37:serial.c      ****           flash_para[idx] = (*(volatile unsigned int *)(flash_address + (idx * 4)));
+ 102              		.loc 2 37 27 view .LVU23
+ 103 0008 0749     		ldr	r1, .L8
+ 104              	.LVL1:
+ 105              	.L6:
+ 106              		.loc 2 37 11 is_stmt 1 discriminator 3 view .LVU24
+ 107 000a 9A00     		lsls	r2, r3, #2
+ 108 000c 02F10062 		add	r2, r2, #134217728
+ 109 0010 02F5FF22 		add	r2, r2, #522240
+ 110              		.loc 2 37 30 is_stmt 0 discriminator 3 view .LVU25
+ 111 0014 1268     		ldr	r2, [r2]
+ 112              		.loc 2 37 27 discriminator 3 view .LVU26
+ 113 0016 41F82320 		str	r2, [r1, r3, lsl #2]
+  36:serial.c      ****       for (idx=0;idx<64;idx++) {
+ 114              		.loc 2 36 25 is_stmt 1 discriminator 3 view .LVU27
+  36:serial.c      ****       for (idx=0;idx<64;idx++) {
+ 115              		.loc 2 36 28 is_stmt 0 discriminator 3 view .LVU28
+ 116 001a 0133     		adds	r3, r3, #1
+ 117              	.LVL2:
+  36:serial.c      ****       for (idx=0;idx<64;idx++) {
+ 118              		.loc 2 36 18 is_stmt 1 discriminator 3 view .LVU29
+  36:serial.c      ****       for (idx=0;idx<64;idx++) {
+ 119              		.loc 2 36 7 is_stmt 0 discriminator 3 view .LVU30
+ 120 001c 402B     		cmp	r3, #64
+ 121 001e F4D1     		bne	.L6
+  38:serial.c      ****       }
+  39:serial.c      ****       FLASH_Lock();
+ 122              		.loc 2 39 7 is_stmt 1 view .LVU31
+  40:serial.c      **** }
+ 123              		.loc 2 40 1 is_stmt 0 view .LVU32
+ 124 0020 BDE80840 		pop	{r3, lr}
+ 125              		.cfi_restore 14
+ 126              		.cfi_restore 3
+ 127              		.cfi_def_cfa_offset 0
+ 128              	.LVL3:
+  39:serial.c      **** }
+ 129              		.loc 2 39 7 view .LVU33
+ 130 0024 FFF7FEBF 		b	FLASH_Lock
+ 131              	.LVL4:
+ 132              	.L9:
+ 133              		.align	2
+ 134              	.L8:
+ 135 0028 00000000 		.word	flash_para
+ 136              		.cfi_endproc
+ 137              	.LFE32:
+ 139              		.section	.text.USART1_IRQHandler,"ax",%progbits
+ 140              		.align	1
+ 141              		.global	USART1_IRQHandler
+ 142              		.syntax unified
+ 143              		.thumb
+ 144              		.thumb_func
+ 145              		.fpu softvfp
+ 147              	USART1_IRQHandler:
+ 148              	.LFB33:
+  41:serial.c      **** 
+  42:serial.c      **** 
+  43:serial.c      **** void USART1_IRQHandler (void)
+  44:serial.c      **** {
+ 149              		.loc 2 44 1 is_stmt 1 view -0
+ 150              		.cfi_startproc
+ 151              		@ args = 0, pretend = 0, frame = 0
+ 152              		@ frame_needed = 0, uses_anonymous_args = 0
+  45:serial.c      ****       if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) {
+ 153              		.loc 2 45 7 view .LVU35
+  44:serial.c      ****       if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) {
+ 154              		.loc 2 44 1 is_stmt 0 view .LVU36
+ 155 0000 10B5     		push	{r4, lr}
+ 156              		.cfi_def_cfa_offset 8
+ 157              		.cfi_offset 4, -8
+ 158              		.cfi_offset 14, -4
+ 159              		.loc 2 45 11 view .LVU37
+ 160 0002 40F22551 		movw	r1, #1317
+ 161 0006 3048     		ldr	r0, .L28
+ 162 0008 FFF7FEFF 		bl	USART_GetITStatus
+ 163              	.LVL5:
+ 164              		.loc 2 45 10 view .LVU38
+ 165 000c C0B1     		cbz	r0, .L11
+  46:serial.c      ****          /* Read one byte from the receive data register */
+  47:serial.c      ****          rxbuff1[rxcnt1] = USART_ReceiveData(USART1);
+ 166              		.loc 2 47 10 is_stmt 1 view .LVU39
+ 167              		.loc 2 47 28 is_stmt 0 view .LVU40
+ 168 000e 2E48     		ldr	r0, .L28
+ 169 0010 FFF7FEFF 		bl	USART_ReceiveData
+ 170              	.LVL6:
+ 171              		.loc 2 47 17 view .LVU41
+ 172 0014 2D4A     		ldr	r2, .L28+4
+ 173              		.loc 2 47 26 view .LVU42
+ 174 0016 2E49     		ldr	r1, .L28+8
+ 175              		.loc 2 47 17 view .LVU43
+ 176 0018 1388     		ldrh	r3, [r2]
+ 177 001a 9BB2     		uxth	r3, r3
+ 178              		.loc 2 47 26 view .LVU44
+ 179 001c C854     		strb	r0, [r1, r3]
+  48:serial.c      ****          rxcnt1++;
+ 180              		.loc 2 48 10 is_stmt 1 view .LVU45
+ 181              		.loc 2 48 16 is_stmt 0 view .LVU46
+ 182 001e 1388     		ldrh	r3, [r2]
+ 183 0020 0133     		adds	r3, r3, #1
+ 184 0022 9BB2     		uxth	r3, r3
+ 185 0024 1380     		strh	r3, [r2]	@ movhi
+  49:serial.c      ****          rxck1 = 0;
+ 186              		.loc 2 49 10 is_stmt 1 view .LVU47
+ 187              		.loc 2 49 16 is_stmt 0 view .LVU48
+ 188 0026 0022     		movs	r2, #0
+ 189 0028 2A4B     		ldr	r3, .L28+12
+ 190 002a 1A70     		strb	r2, [r3]
+  50:serial.c      ****          if (rxled == 0) rxled = 1;
+ 191              		.loc 2 50 10 is_stmt 1 view .LVU49
+ 192              		.loc 2 50 20 is_stmt 0 view .LVU50
+ 193 002c 2A4B     		ldr	r3, .L28+16
+ 194 002e 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 195              		.loc 2 50 13 view .LVU51
+ 196 0030 0AB9     		cbnz	r2, .L12
+ 197              		.loc 2 50 26 is_stmt 1 discriminator 1 view .LVU52
+ 198              		.loc 2 50 32 is_stmt 0 discriminator 1 view .LVU53
+ 199 0032 0122     		movs	r2, #1
+ 200 0034 1A70     		strb	r2, [r3]
+ 201              	.L12:
+  51:serial.c      ****          USART_ClearITPendingBit(USART1, USART_IT_RXNE);
+ 202              		.loc 2 51 10 is_stmt 1 view .LVU54
+ 203 0036 40F22551 		movw	r1, #1317
+ 204 003a 2348     		ldr	r0, .L28
+ 205 003c FFF7FEFF 		bl	USART_ClearITPendingBit
+ 206              	.LVL7:
+ 207              	.L11:
+  52:serial.c      ****       }
+  53:serial.c      ****       if (USART_GetITStatus(USART1, USART_IT_TXE) != RESET) {
+ 208              		.loc 2 53 7 view .LVU55
+ 209              		.loc 2 53 11 is_stmt 0 view .LVU56
+ 210 0040 40F22771 		movw	r1, #1831
+ 211 0044 2048     		ldr	r0, .L28
+ 212 0046 FFF7FEFF 		bl	USART_GetITStatus
+ 213              	.LVL8:
+ 214              		.loc 2 53 10 view .LVU57
+ 215 004a B8B1     		cbz	r0, .L13
+  54:serial.c      ****          /* Write one byte to the transmit data register */
+  55:serial.c      ****       	 if (txcnt1 < maxtx1) {
+ 216              		.loc 2 55 9 is_stmt 1 view .LVU58
+ 217              		.loc 2 55 20 is_stmt 0 view .LVU59
+ 218 004c 234C     		ldr	r4, .L28+20
+ 219 004e 244B     		ldr	r3, .L28+24
+ 220 0050 2288     		ldrh	r2, [r4]
+ 221 0052 1B88     		ldrh	r3, [r3]
+ 222 0054 92B2     		uxth	r2, r2
+ 223 0056 9BB2     		uxth	r3, r3
+ 224              		.loc 2 55 12 view .LVU60
+ 225 0058 9A42     		cmp	r2, r3
+ 226 005a 28D2     		bcs	.L14
+  56:serial.c      ****             USART_SendData(USART1, txbuff1[txcnt1]);
+ 227              		.loc 2 56 13 is_stmt 1 view .LVU61
+ 228              		.loc 2 56 43 is_stmt 0 view .LVU62
+ 229 005c 2388     		ldrh	r3, [r4]
+ 230              		.loc 2 56 13 view .LVU63
+ 231 005e 214A     		ldr	r2, .L28+28
+ 232              		.loc 2 56 43 view .LVU64
+ 233 0060 9BB2     		uxth	r3, r3
+ 234              		.loc 2 56 13 view .LVU65
+ 235 0062 D15C     		ldrb	r1, [r2, r3]	@ zero_extendqisi2
+ 236 0064 1848     		ldr	r0, .L28
+ 237 0066 FFF7FEFF 		bl	USART_SendData
+ 238              	.LVL9:
+  57:serial.c      ****       	    txcnt1++;
+ 239              		.loc 2 57 12 is_stmt 1 view .LVU66
+ 240              		.loc 2 57 18 is_stmt 0 view .LVU67
+ 241 006a 2388     		ldrh	r3, [r4]
+ 242 006c 0133     		adds	r3, r3, #1
+ 243 006e 9BB2     		uxth	r3, r3
+ 244 0070 2380     		strh	r3, [r4]	@ movhi
+ 245              	.L15:
+  58:serial.c      ****       	 } else {
+  59:serial.c      ****       	    /* Disable the USART1 Transmit interrupt */
+  60:serial.c      ****       	    USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
+  61:serial.c      ****       	    USART_ITConfig(USART1, USART_IT_TC, ENABLE);
+  62:serial.c      ****       	 }
+  63:serial.c      ****       	 USART_ClearITPendingBit(USART1, USART_IT_TXE);
+ 246              		.loc 2 63 9 is_stmt 1 view .LVU68
+ 247 0072 40F22771 		movw	r1, #1831
+ 248 0076 1448     		ldr	r0, .L28
+ 249 0078 FFF7FEFF 		bl	USART_ClearITPendingBit
+ 250              	.LVL10:
+ 251              	.L13:
+  64:serial.c      ****       }
+  65:serial.c      ****       if (USART_GetITStatus(USART1, USART_IT_TC) != RESET) {
+ 252              		.loc 2 65 7 view .LVU69
+ 253              		.loc 2 65 11 is_stmt 0 view .LVU70
+ 254 007c 40F22661 		movw	r1, #1574
+ 255 0080 1148     		ldr	r0, .L28
+ 256 0082 FFF7FEFF 		bl	USART_GetITStatus
+ 257              	.LVL11:
+ 258              		.loc 2 65 10 view .LVU71
+ 259 0086 88B1     		cbz	r0, .L10
+  66:serial.c      ****       	 USART_ITConfig(USART1, USART_IT_TC, DISABLE);
+ 260              		.loc 2 66 9 is_stmt 1 view .LVU72
+ 261 0088 0022     		movs	r2, #0
+ 262 008a 40F22661 		movw	r1, #1574
+ 263 008e 0E48     		ldr	r0, .L28
+ 264 0090 FFF7FEFF 		bl	USART_ITConfig
+ 265              	.LVL12:
+  67:serial.c      ****       	 USART_ClearITPendingBit(USART1, USART_IT_TC);
+ 266              		.loc 2 67 9 view .LVU73
+ 267 0094 40F22661 		movw	r1, #1574
+ 268 0098 0B48     		ldr	r0, .L28
+ 269 009a FFF7FEFF 		bl	USART_ClearITPendingBit
+ 270              	.LVL13:
+  68:serial.c      ****          tx_flag1 = 0;
+ 271              		.loc 2 68 10 view .LVU74
+ 272              		.loc 2 68 19 is_stmt 0 view .LVU75
+ 273 009e 0022     		movs	r2, #0
+ 274 00a0 114B     		ldr	r3, .L28+32
+ 275 00a2 1A70     		strb	r2, [r3]
+  69:serial.c      ****          if (txled) txled = 0;
+ 276              		.loc 2 69 10 is_stmt 1 view .LVU76
+ 277              		.loc 2 69 14 is_stmt 0 view .LVU77
+ 278 00a4 114B     		ldr	r3, .L28+36
+ 279 00a6 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 280              		.loc 2 69 13 view .LVU78
+ 281 00a8 01B1     		cbz	r1, .L10
+ 282              		.loc 2 69 21 is_stmt 1 discriminator 1 view .LVU79
+ 283              		.loc 2 69 27 is_stmt 0 discriminator 1 view .LVU80
+ 284 00aa 1A70     		strb	r2, [r3]
+ 285              	.L10:
+  70:serial.c      ****       }
+  71:serial.c      **** }
+ 286              		.loc 2 71 1 view .LVU81
+ 287 00ac 10BD     		pop	{r4, pc}
+ 288              	.L14:
+  60:serial.c      ****       	    USART_ITConfig(USART1, USART_IT_TC, ENABLE);
+ 289              		.loc 2 60 12 is_stmt 1 view .LVU82
+ 290 00ae 0022     		movs	r2, #0
+ 291 00b0 40F22771 		movw	r1, #1831
+ 292 00b4 0448     		ldr	r0, .L28
+ 293 00b6 FFF7FEFF 		bl	USART_ITConfig
+ 294              	.LVL14:
+  61:serial.c      ****       	 }
+ 295              		.loc 2 61 12 view .LVU83
+ 296 00ba 0122     		movs	r2, #1
+ 297 00bc 40F22661 		movw	r1, #1574
+ 298 00c0 0148     		ldr	r0, .L28
+ 299 00c2 FFF7FEFF 		bl	USART_ITConfig
+ 300              	.LVL15:
+ 301 00c6 D4E7     		b	.L15
+ 302              	.L29:
+ 303              		.align	2
+ 304              	.L28:
+ 305 00c8 00380140 		.word	1073821696
+ 306 00cc 00000000 		.word	rxcnt1
+ 307 00d0 00000000 		.word	rxbuff1
+ 308 00d4 00000000 		.word	rxck1
+ 309 00d8 00000000 		.word	rxled
+ 310 00dc 00000000 		.word	txcnt1
+ 311 00e0 00000000 		.word	maxtx1
+ 312 00e4 00000000 		.word	txbuff1
+ 313 00e8 00000000 		.word	tx_flag1
+ 314 00ec 00000000 		.word	txled
+ 315              		.cfi_endproc
+ 316              	.LFE33:
+ 318              		.section	.text.USART2_IRQHandler,"ax",%progbits
+ 319              		.align	1
+ 320              		.global	USART2_IRQHandler
+ 321              		.syntax unified
+ 322              		.thumb
+ 323              		.thumb_func
+ 324              		.fpu softvfp
+ 326              	USART2_IRQHandler:
+ 327              	.LFB34:
+  72:serial.c      **** 
+  73:serial.c      **** 
+  74:serial.c      **** void USART2_IRQHandler (void)
+  75:serial.c      **** {
+ 328              		.loc 2 75 1 view -0
+ 329              		.cfi_startproc
+ 330              		@ args = 0, pretend = 0, frame = 0
+ 331              		@ frame_needed = 0, uses_anonymous_args = 0
+  76:serial.c      ****       if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET) {
+ 332              		.loc 2 76 7 view .LVU85
+  75:serial.c      ****       if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET) {
+ 333              		.loc 2 75 1 is_stmt 0 view .LVU86
+ 334 0000 10B5     		push	{r4, lr}
+ 335              		.cfi_def_cfa_offset 8
+ 336              		.cfi_offset 4, -8
+ 337              		.cfi_offset 14, -4
+ 338              		.loc 2 76 11 view .LVU87
+ 339 0002 40F22551 		movw	r1, #1317
+ 340 0006 3048     		ldr	r0, .L48
+ 341 0008 FFF7FEFF 		bl	USART_GetITStatus
+ 342              	.LVL16:
+ 343              		.loc 2 76 10 view .LVU88
+ 344 000c C0B1     		cbz	r0, .L31
+  77:serial.c      ****          /* Read one byte from the receive data register */
+  78:serial.c      ****          rxbuff2[rxcnt2] = USART_ReceiveData(USART2);
+ 345              		.loc 2 78 10 is_stmt 1 view .LVU89
+ 346              		.loc 2 78 28 is_stmt 0 view .LVU90
+ 347 000e 2E48     		ldr	r0, .L48
+ 348 0010 FFF7FEFF 		bl	USART_ReceiveData
+ 349              	.LVL17:
+ 350              		.loc 2 78 17 view .LVU91
+ 351 0014 2D4A     		ldr	r2, .L48+4
+ 352              		.loc 2 78 26 view .LVU92
+ 353 0016 2E49     		ldr	r1, .L48+8
+ 354              		.loc 2 78 17 view .LVU93
+ 355 0018 1388     		ldrh	r3, [r2]
+ 356 001a 9BB2     		uxth	r3, r3
+ 357              		.loc 2 78 26 view .LVU94
+ 358 001c C854     		strb	r0, [r1, r3]
+  79:serial.c      ****          rxcnt2++;
+ 359              		.loc 2 79 10 is_stmt 1 view .LVU95
+ 360              		.loc 2 79 16 is_stmt 0 view .LVU96
+ 361 001e 1388     		ldrh	r3, [r2]
+ 362 0020 0133     		adds	r3, r3, #1
+ 363 0022 9BB2     		uxth	r3, r3
+ 364 0024 1380     		strh	r3, [r2]	@ movhi
+  80:serial.c      ****          rxck2 = 0;
+ 365              		.loc 2 80 10 is_stmt 1 view .LVU97
+ 366              		.loc 2 80 16 is_stmt 0 view .LVU98
+ 367 0026 0022     		movs	r2, #0
+ 368 0028 2A4B     		ldr	r3, .L48+12
+ 369 002a 1A70     		strb	r2, [r3]
+  81:serial.c      ****          if (rxled == 0) rxled = 1;
+ 370              		.loc 2 81 10 is_stmt 1 view .LVU99
+ 371              		.loc 2 81 20 is_stmt 0 view .LVU100
+ 372 002c 2A4B     		ldr	r3, .L48+16
+ 373 002e 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 374              		.loc 2 81 13 view .LVU101
+ 375 0030 0AB9     		cbnz	r2, .L32
+ 376              		.loc 2 81 26 is_stmt 1 discriminator 1 view .LVU102
+ 377              		.loc 2 81 32 is_stmt 0 discriminator 1 view .LVU103
+ 378 0032 0122     		movs	r2, #1
+ 379 0034 1A70     		strb	r2, [r3]
+ 380              	.L32:
+  82:serial.c      ****          USART_ClearITPendingBit(USART2, USART_IT_RXNE);
+ 381              		.loc 2 82 10 is_stmt 1 view .LVU104
+ 382 0036 40F22551 		movw	r1, #1317
+ 383 003a 2348     		ldr	r0, .L48
+ 384 003c FFF7FEFF 		bl	USART_ClearITPendingBit
+ 385              	.LVL18:
+ 386              	.L31:
+  83:serial.c      ****       }
+  84:serial.c      ****       if (USART_GetITStatus(USART2, USART_IT_TXE) != RESET) {
+ 387              		.loc 2 84 7 view .LVU105
+ 388              		.loc 2 84 11 is_stmt 0 view .LVU106
+ 389 0040 40F22771 		movw	r1, #1831
+ 390 0044 2048     		ldr	r0, .L48
+ 391 0046 FFF7FEFF 		bl	USART_GetITStatus
+ 392              	.LVL19:
+ 393              		.loc 2 84 10 view .LVU107
+ 394 004a B8B1     		cbz	r0, .L33
+  85:serial.c      ****          /* Write one byte to the transmit data register */
+  86:serial.c      ****       	 if (txcnt2 < maxtx2) {
+ 395              		.loc 2 86 9 is_stmt 1 view .LVU108
+ 396              		.loc 2 86 20 is_stmt 0 view .LVU109
+ 397 004c 234C     		ldr	r4, .L48+20
+ 398 004e 244B     		ldr	r3, .L48+24
+ 399 0050 2288     		ldrh	r2, [r4]
+ 400 0052 1B88     		ldrh	r3, [r3]
+ 401 0054 92B2     		uxth	r2, r2
+ 402 0056 9BB2     		uxth	r3, r3
+ 403              		.loc 2 86 12 view .LVU110
+ 404 0058 9A42     		cmp	r2, r3
+ 405 005a 28D2     		bcs	.L34
+  87:serial.c      ****             USART_SendData(USART2, txbuff2[txcnt2]);
+ 406              		.loc 2 87 13 is_stmt 1 view .LVU111
+ 407              		.loc 2 87 43 is_stmt 0 view .LVU112
+ 408 005c 2388     		ldrh	r3, [r4]
+ 409              		.loc 2 87 13 view .LVU113
+ 410 005e 214A     		ldr	r2, .L48+28
+ 411              		.loc 2 87 43 view .LVU114
+ 412 0060 9BB2     		uxth	r3, r3
+ 413              		.loc 2 87 13 view .LVU115
+ 414 0062 D15C     		ldrb	r1, [r2, r3]	@ zero_extendqisi2
+ 415 0064 1848     		ldr	r0, .L48
+ 416 0066 FFF7FEFF 		bl	USART_SendData
+ 417              	.LVL20:
+  88:serial.c      ****       	    txcnt2++;
+ 418              		.loc 2 88 12 is_stmt 1 view .LVU116
+ 419              		.loc 2 88 18 is_stmt 0 view .LVU117
+ 420 006a 2388     		ldrh	r3, [r4]
+ 421 006c 0133     		adds	r3, r3, #1
+ 422 006e 9BB2     		uxth	r3, r3
+ 423 0070 2380     		strh	r3, [r4]	@ movhi
+ 424              	.L35:
+  89:serial.c      ****       	 } else {
+  90:serial.c      ****       	    /* Disable the USART2 Transmit interrupt */
+  91:serial.c      ****       	    USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
+  92:serial.c      ****       	    USART_ITConfig(USART2, USART_IT_TC, ENABLE);
+  93:serial.c      ****       	 }
+  94:serial.c      ****       	 USART_ClearITPendingBit(USART2, USART_IT_TXE);
+ 425              		.loc 2 94 9 is_stmt 1 view .LVU118
+ 426 0072 40F22771 		movw	r1, #1831
+ 427 0076 1448     		ldr	r0, .L48
+ 428 0078 FFF7FEFF 		bl	USART_ClearITPendingBit
+ 429              	.LVL21:
+ 430              	.L33:
+  95:serial.c      ****       }
+  96:serial.c      ****       if (USART_GetITStatus(USART2, USART_IT_TC) != RESET) {
+ 431              		.loc 2 96 7 view .LVU119
+ 432              		.loc 2 96 11 is_stmt 0 view .LVU120
+ 433 007c 40F22661 		movw	r1, #1574
+ 434 0080 1148     		ldr	r0, .L48
+ 435 0082 FFF7FEFF 		bl	USART_GetITStatus
+ 436              	.LVL22:
+ 437              		.loc 2 96 10 view .LVU121
+ 438 0086 88B1     		cbz	r0, .L30
+  97:serial.c      ****       	 USART_ITConfig(USART2, USART_IT_TC, DISABLE);
+ 439              		.loc 2 97 9 is_stmt 1 view .LVU122
+ 440 0088 0022     		movs	r2, #0
+ 441 008a 40F22661 		movw	r1, #1574
+ 442 008e 0E48     		ldr	r0, .L48
+ 443 0090 FFF7FEFF 		bl	USART_ITConfig
+ 444              	.LVL23:
+  98:serial.c      ****       	 USART_ClearITPendingBit(USART2, USART_IT_TC);
+ 445              		.loc 2 98 9 view .LVU123
+ 446 0094 40F22661 		movw	r1, #1574
+ 447 0098 0B48     		ldr	r0, .L48
+ 448 009a FFF7FEFF 		bl	USART_ClearITPendingBit
+ 449              	.LVL24:
+  99:serial.c      ****          tx_flag2 = 0;
+ 450              		.loc 2 99 10 view .LVU124
+ 451              		.loc 2 99 19 is_stmt 0 view .LVU125
+ 452 009e 0022     		movs	r2, #0
+ 453 00a0 114B     		ldr	r3, .L48+32
+ 454 00a2 1A70     		strb	r2, [r3]
+ 100:serial.c      ****          if (txled) txled = 0;
+ 455              		.loc 2 100 10 is_stmt 1 view .LVU126
+ 456              		.loc 2 100 14 is_stmt 0 view .LVU127
+ 457 00a4 114B     		ldr	r3, .L48+36
+ 458 00a6 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 459              		.loc 2 100 13 view .LVU128
+ 460 00a8 01B1     		cbz	r1, .L30
+ 461              		.loc 2 100 21 is_stmt 1 discriminator 1 view .LVU129
+ 462              		.loc 2 100 27 is_stmt 0 discriminator 1 view .LVU130
+ 463 00aa 1A70     		strb	r2, [r3]
+ 464              	.L30:
+ 101:serial.c      ****       }
+ 102:serial.c      **** }
+ 465              		.loc 2 102 1 view .LVU131
+ 466 00ac 10BD     		pop	{r4, pc}
+ 467              	.L34:
+  91:serial.c      ****       	    USART_ITConfig(USART2, USART_IT_TC, ENABLE);
+ 468              		.loc 2 91 12 is_stmt 1 view .LVU132
+ 469 00ae 0022     		movs	r2, #0
+ 470 00b0 40F22771 		movw	r1, #1831
+ 471 00b4 0448     		ldr	r0, .L48
+ 472 00b6 FFF7FEFF 		bl	USART_ITConfig
+ 473              	.LVL25:
+  92:serial.c      ****       	 }
+ 474              		.loc 2 92 12 view .LVU133
+ 475 00ba 0122     		movs	r2, #1
+ 476 00bc 40F22661 		movw	r1, #1574
+ 477 00c0 0148     		ldr	r0, .L48
+ 478 00c2 FFF7FEFF 		bl	USART_ITConfig
+ 479              	.LVL26:
+ 480 00c6 D4E7     		b	.L35
+ 481              	.L49:
+ 482              		.align	2
+ 483              	.L48:
+ 484 00c8 00440040 		.word	1073759232
+ 485 00cc 00000000 		.word	rxcnt2
+ 486 00d0 00000000 		.word	rxbuff2
+ 487 00d4 00000000 		.word	rxck2
+ 488 00d8 00000000 		.word	rxled
+ 489 00dc 00000000 		.word	txcnt2
+ 490 00e0 00000000 		.word	maxtx2
+ 491 00e4 00000000 		.word	txbuff2
+ 492 00e8 00000000 		.word	tx_flag2
+ 493 00ec 00000000 		.word	txled
+ 494              		.cfi_endproc
+ 495              	.LFE34:
+ 497              		.section	.text.uasrt_send,"ax",%progbits
+ 498              		.align	1
+ 499              		.global	uasrt_send
+ 500              		.syntax unified
+ 501              		.thumb
+ 502              		.thumb_func
+ 503              		.fpu softvfp
+ 505              	uasrt_send:
+ 506              	.LVL27:
+ 507              	.LFB35:
+ 103:serial.c      **** 
+ 104:serial.c      **** 
+ 105:serial.c      **** void uasrt_send (USART_TypeDef *USARTx,char *buff,int length)
+ 106:serial.c      **** {
+ 508              		.loc 2 106 1 view -0
+ 509              		.cfi_startproc
+ 510              		@ args = 0, pretend = 0, frame = 0
+ 511              		@ frame_needed = 0, uses_anonymous_args = 0
+ 107:serial.c      ****       if (USARTx == USART1) {
+ 512              		.loc 2 107 7 view .LVU135
+ 106:serial.c      ****       if (USARTx == USART1) {
+ 513              		.loc 2 106 1 is_stmt 0 view .LVU136
+ 514 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 515              		.cfi_def_cfa_offset 24
+ 516              		.cfi_offset 3, -24
+ 517              		.cfi_offset 4, -20
+ 518              		.cfi_offset 5, -16
+ 519              		.cfi_offset 6, -12
+ 520              		.cfi_offset 7, -8
+ 521              		.cfi_offset 14, -4
+ 522              		.loc 2 107 10 view .LVU137
+ 523 0002 244B     		ldr	r3, .L62
+ 106:serial.c      ****       if (USARTx == USART1) {
+ 524              		.loc 2 106 1 view .LVU138
+ 525 0004 0D46     		mov	r5, r1
+ 526              		.loc 2 107 10 view .LVU139
+ 527 0006 9842     		cmp	r0, r3
+ 106:serial.c      ****       if (USARTx == USART1) {
+ 528              		.loc 2 106 1 view .LVU140
+ 529 0008 1446     		mov	r4, r2
+ 530              		.loc 2 107 10 view .LVU141
+ 531 000a 22D1     		bne	.L51
+ 108:serial.c      ****       	 while (tx_flag1);
+ 532              		.loc 2 108 16 view .LVU142
+ 533 000c 224E     		ldr	r6, .L62+4
+ 534              	.L52:
+ 535              		.loc 2 108 25 is_stmt 1 discriminator 1 view .LVU143
+ 536              		.loc 2 108 15 discriminator 1 view .LVU144
+ 537              		.loc 2 108 16 is_stmt 0 discriminator 1 view .LVU145
+ 538 000e 3378     		ldrb	r3, [r6]	@ zero_extendqisi2
+ 539              		.loc 2 108 15 discriminator 1 view .LVU146
+ 540 0010 03F0FF07 		and	r7, r3, #255
+ 541 0014 002B     		cmp	r3, #0
+ 542 0016 FAD1     		bne	.L52
+ 109:serial.c      ****          bzero(txbuff1,256);
+ 543              		.loc 2 109 10 is_stmt 1 view .LVU147
+ 544 0018 4FF48072 		mov	r2, #256
+ 545              	.LVL28:
+ 546              		.loc 2 109 10 is_stmt 0 view .LVU148
+ 547 001c 3946     		mov	r1, r7
+ 548              	.LVL29:
+ 549              		.loc 2 109 10 view .LVU149
+ 550 001e 1F48     		ldr	r0, .L62+8
+ 551              	.LVL30:
+ 552              		.loc 2 109 10 view .LVU150
+ 553 0020 FFF7FEFF 		bl	memset
+ 554              	.LVL31:
+ 110:serial.c      ****          memcpy(txbuff1,buff,length);
+ 555              		.loc 2 110 10 is_stmt 1 view .LVU151
+ 556 0024 2246     		mov	r2, r4
+ 557 0026 2946     		mov	r1, r5
+ 558 0028 1C48     		ldr	r0, .L62+8
+ 559 002a FFF7FEFF 		bl	memcpy
+ 560              	.LVL32:
+ 111:serial.c      ****          maxtx1 = length;
+ 561              		.loc 2 111 10 view .LVU152
+ 562              		.loc 2 111 17 is_stmt 0 view .LVU153
+ 563 002e 1C4B     		ldr	r3, .L62+12
+ 564 0030 A4B2     		uxth	r4, r4
+ 565              	.LVL33:
+ 566              		.loc 2 111 17 view .LVU154
+ 567 0032 1C80     		strh	r4, [r3]	@ movhi
+ 112:serial.c      ****          txcnt1 = 0;
+ 568              		.loc 2 112 10 is_stmt 1 view .LVU155
+ 113:serial.c      ****          tx_flag1 = 1;
+ 569              		.loc 2 113 19 is_stmt 0 view .LVU156
+ 570 0034 0124     		movs	r4, #1
+ 114:serial.c      ****          USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
+ 571              		.loc 2 114 10 view .LVU157
+ 572 0036 40F22771 		movw	r1, #1831
+ 573 003a 2246     		mov	r2, r4
+ 112:serial.c      ****          txcnt1 = 0;
+ 574              		.loc 2 112 17 view .LVU158
+ 575 003c 194B     		ldr	r3, .L62+16
+ 576              		.loc 2 114 10 view .LVU159
+ 577 003e 1548     		ldr	r0, .L62
+ 112:serial.c      ****          txcnt1 = 0;
+ 578              		.loc 2 112 17 view .LVU160
+ 579 0040 1F80     		strh	r7, [r3]	@ movhi
+ 113:serial.c      ****          tx_flag1 = 1;
+ 580              		.loc 2 113 10 is_stmt 1 view .LVU161
+ 113:serial.c      ****          tx_flag1 = 1;
+ 581              		.loc 2 113 19 is_stmt 0 view .LVU162
+ 582 0042 3470     		strb	r4, [r6]
+ 583              		.loc 2 114 10 is_stmt 1 view .LVU163
+ 584              	.L61:
+ 585              	.LBB8:
+ 586              	.LBB9:
+ 115:serial.c      ****          if (txled == 0) txled = 1;
+ 116:serial.c      ****       }
+ 117:serial.c      ****       if (USARTx == USART2) {
+ 118:serial.c      ****          while (tx_flag2);
+ 119:serial.c      ****          bzero(txbuff2,256);
+ 120:serial.c      ****          memcpy(txbuff2,buff,length);
+ 121:serial.c      ****          maxtx2 = length;
+ 122:serial.c      ****          txcnt2 = 0;
+ 123:serial.c      ****          tx_flag2 = 1;
+ 124:serial.c      ****          USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
+ 587              		.loc 2 124 10 is_stmt 0 view .LVU164
+ 588 0044 FFF7FEFF 		bl	USART_ITConfig
+ 589              	.LVL34:
+ 125:serial.c      ****          if (txled == 0) txled = 1;
+ 590              		.loc 2 125 10 is_stmt 1 view .LVU165
+ 591              		.loc 2 125 20 is_stmt 0 view .LVU166
+ 592 0048 174B     		ldr	r3, .L62+20
+ 593 004a 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 594              		.loc 2 125 13 view .LVU167
+ 595 004c 02B9     		cbnz	r2, .L50
+ 596              		.loc 2 125 26 is_stmt 1 view .LVU168
+ 597              		.loc 2 125 32 is_stmt 0 view .LVU169
+ 598 004e 1C70     		strb	r4, [r3]
+ 599              	.L50:
+ 600              	.LBE9:
+ 601              	.LBE8:
+ 126:serial.c      ****       }
+ 127:serial.c      **** }
+ 602              		.loc 2 127 1 view .LVU170
+ 603 0050 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 604              	.LVL35:
+ 605              	.L51:
+ 117:serial.c      ****          while (tx_flag2);
+ 606              		.loc 2 117 7 is_stmt 1 view .LVU171
+ 117:serial.c      ****          while (tx_flag2);
+ 607              		.loc 2 117 10 is_stmt 0 view .LVU172
+ 608 0052 164B     		ldr	r3, .L62+24
+ 609 0054 9842     		cmp	r0, r3
+ 610 0056 FBD1     		bne	.L50
+ 611              	.LBB11:
+ 612              	.LBB10:
+ 118:serial.c      ****          bzero(txbuff2,256);
+ 613              		.loc 2 118 17 view .LVU173
+ 614 0058 154E     		ldr	r6, .L62+28
+ 615              	.L56:
+ 118:serial.c      ****          bzero(txbuff2,256);
+ 616              		.loc 2 118 26 is_stmt 1 view .LVU174
+ 118:serial.c      ****          bzero(txbuff2,256);
+ 617              		.loc 2 118 16 view .LVU175
+ 118:serial.c      ****          bzero(txbuff2,256);
+ 618              		.loc 2 118 17 is_stmt 0 view .LVU176
+ 619 005a 3378     		ldrb	r3, [r6]	@ zero_extendqisi2
+ 118:serial.c      ****          bzero(txbuff2,256);
+ 620              		.loc 2 118 16 view .LVU177
+ 621 005c 03F0FF07 		and	r7, r3, #255
+ 622 0060 002B     		cmp	r3, #0
+ 623 0062 FAD1     		bne	.L56
+ 119:serial.c      ****          memcpy(txbuff2,buff,length);
+ 624              		.loc 2 119 10 is_stmt 1 view .LVU178
+ 625 0064 4FF48072 		mov	r2, #256
+ 626              	.LVL36:
+ 119:serial.c      ****          memcpy(txbuff2,buff,length);
+ 627              		.loc 2 119 10 is_stmt 0 view .LVU179
+ 628 0068 3946     		mov	r1, r7
+ 629              	.LVL37:
+ 119:serial.c      ****          memcpy(txbuff2,buff,length);
+ 630              		.loc 2 119 10 view .LVU180
+ 631 006a 1248     		ldr	r0, .L62+32
+ 632              	.LVL38:
+ 119:serial.c      ****          memcpy(txbuff2,buff,length);
+ 633              		.loc 2 119 10 view .LVU181
+ 634 006c FFF7FEFF 		bl	memset
+ 635              	.LVL39:
+ 120:serial.c      ****          maxtx2 = length;
+ 636              		.loc 2 120 10 is_stmt 1 view .LVU182
+ 637 0070 2246     		mov	r2, r4
+ 638 0072 2946     		mov	r1, r5
+ 639 0074 0F48     		ldr	r0, .L62+32
+ 640 0076 FFF7FEFF 		bl	memcpy
+ 641              	.LVL40:
+ 121:serial.c      ****          txcnt2 = 0;
+ 642              		.loc 2 121 10 view .LVU183
+ 121:serial.c      ****          txcnt2 = 0;
+ 643              		.loc 2 121 17 is_stmt 0 view .LVU184
+ 644 007a 0F4B     		ldr	r3, .L62+36
+ 645 007c A4B2     		uxth	r4, r4
+ 646              	.LVL41:
+ 121:serial.c      ****          txcnt2 = 0;
+ 647              		.loc 2 121 17 view .LVU185
+ 648 007e 1C80     		strh	r4, [r3]	@ movhi
+ 122:serial.c      ****          tx_flag2 = 1;
+ 649              		.loc 2 122 10 is_stmt 1 view .LVU186
+ 123:serial.c      ****          USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
+ 650              		.loc 2 123 19 is_stmt 0 view .LVU187
+ 651 0080 0124     		movs	r4, #1
+ 122:serial.c      ****          tx_flag2 = 1;
+ 652              		.loc 2 122 17 view .LVU188
+ 653 0082 0E4B     		ldr	r3, .L62+40
+ 124:serial.c      ****          if (txled == 0) txled = 1;
+ 654              		.loc 2 124 10 view .LVU189
+ 655 0084 2246     		mov	r2, r4
+ 122:serial.c      ****          tx_flag2 = 1;
+ 656              		.loc 2 122 17 view .LVU190
+ 657 0086 1F80     		strh	r7, [r3]	@ movhi
+ 123:serial.c      ****          USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
+ 658              		.loc 2 123 10 is_stmt 1 view .LVU191
+ 124:serial.c      ****          if (txled == 0) txled = 1;
+ 659              		.loc 2 124 10 is_stmt 0 view .LVU192
+ 660 0088 40F22771 		movw	r1, #1831
+ 661 008c 0748     		ldr	r0, .L62+24
+ 123:serial.c      ****          USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
+ 662              		.loc 2 123 19 view .LVU193
+ 663 008e 3470     		strb	r4, [r6]
+ 124:serial.c      ****          if (txled == 0) txled = 1;
+ 664              		.loc 2 124 10 is_stmt 1 view .LVU194
+ 665 0090 D8E7     		b	.L61
+ 666              	.L63:
+ 667 0092 00BF     		.align	2
+ 668              	.L62:
+ 669 0094 00380140 		.word	1073821696
+ 670 0098 00000000 		.word	tx_flag1
+ 671 009c 00000000 		.word	txbuff1
+ 672 00a0 00000000 		.word	maxtx1
+ 673 00a4 00000000 		.word	txcnt1
+ 674 00a8 00000000 		.word	txled
+ 675 00ac 00440040 		.word	1073759232
+ 676 00b0 00000000 		.word	tx_flag2
+ 677 00b4 00000000 		.word	txbuff2
+ 678 00b8 00000000 		.word	maxtx2
+ 679 00bc 00000000 		.word	txcnt2
+ 680              	.LBE10:
+ 681              	.LBE11:
+ 682              		.cfi_endproc
+ 683              	.LFE35:
+ 685              		.section	.text.uasrt_read,"ax",%progbits
+ 686              		.align	1
+ 687              		.global	uasrt_read
+ 688              		.syntax unified
+ 689              		.thumb
+ 690              		.thumb_func
+ 691              		.fpu softvfp
+ 693              	uasrt_read:
+ 694              	.LVL42:
+ 695              	.LFB36:
+ 128:serial.c      **** 
+ 129:serial.c      **** 
+ 130:serial.c      **** int uasrt_read (USART_TypeDef *USARTx,char *buff,int length)
+ 131:serial.c      **** {
+ 696              		.loc 2 131 1 view -0
+ 697              		.cfi_startproc
+ 698              		@ args = 0, pretend = 0, frame = 0
+ 699              		@ frame_needed = 0, uses_anonymous_args = 0
+ 132:serial.c      ****       if (USARTx == USART1) {
+ 700              		.loc 2 132 7 view .LVU196
+ 131:serial.c      ****       if (USARTx == USART1) {
+ 701              		.loc 2 131 1 is_stmt 0 view .LVU197
+ 702 0000 0346     		mov	r3, r0
+ 703 0002 0846     		mov	r0, r1
+ 704              	.LVL43:
+ 705              		.loc 2 132 10 view .LVU198
+ 706 0004 1449     		ldr	r1, .L73
+ 707              	.LVL44:
+ 131:serial.c      ****       if (USARTx == USART1) {
+ 708              		.loc 2 131 1 view .LVU199
+ 709 0006 10B5     		push	{r4, lr}
+ 710              		.cfi_def_cfa_offset 8
+ 711              		.cfi_offset 4, -8
+ 712              		.cfi_offset 14, -4
+ 713              		.loc 2 132 10 view .LVU200
+ 714 0008 8B42     		cmp	r3, r1
+ 715 000a 10D1     		bne	.L65
+ 133:serial.c      ****       	 if (rxcnt1 == 0) return 0;
+ 716              		.loc 2 133 9 is_stmt 1 view .LVU201
+ 717              		.loc 2 133 20 is_stmt 0 view .LVU202
+ 718 000c 134C     		ldr	r4, .L73+4
+ 719 000e 2388     		ldrh	r3, [r4]
+ 720              	.LVL45:
+ 721              		.loc 2 133 20 view .LVU203
+ 722 0010 9BB2     		uxth	r3, r3
+ 723              		.loc 2 133 12 view .LVU204
+ 724 0012 F3B1     		cbz	r3, .L71
+ 134:serial.c      ****       	 if (rxcnt1 < length) length = rxcnt1;
+ 725              		.loc 2 134 9 is_stmt 1 view .LVU205
+ 726              		.loc 2 134 20 is_stmt 0 view .LVU206
+ 727 0014 2388     		ldrh	r3, [r4]
+ 135:serial.c      ****       	 memcpy(buff,(char *)rxbuff1,rxcnt1);
+ 728              		.loc 2 135 9 view .LVU207
+ 729 0016 1249     		ldr	r1, .L73+8
+ 134:serial.c      ****       	 if (rxcnt1 < length) length = rxcnt1;
+ 730              		.loc 2 134 20 view .LVU208
+ 731 0018 9BB2     		uxth	r3, r3
+ 134:serial.c      ****       	 if (rxcnt1 < length) length = rxcnt1;
+ 732              		.loc 2 134 12 view .LVU209
+ 733 001a 9342     		cmp	r3, r2
+ 134:serial.c      ****       	 if (rxcnt1 < length) length = rxcnt1;
+ 734              		.loc 2 134 30 is_stmt 1 view .LVU210
+ 134:serial.c      ****       	 if (rxcnt1 < length) length = rxcnt1;
+ 735              		.loc 2 134 37 is_stmt 0 view .LVU211
+ 736 001c B8BF     		it	lt
+ 737 001e 2388     		ldrhlt	r3, [r4]
+ 738              	.LVL46:
+ 739              		.loc 2 135 9 is_stmt 1 view .LVU212
+ 740 0020 2288     		ldrh	r2, [r4]
+ 741 0022 92B2     		uxth	r2, r2
+ 742              	.L72:
+ 136:serial.c      ****       	 return rxcnt1;
+ 137:serial.c      ****       }
+ 138:serial.c      ****       if (USARTx == USART2) {
+ 139:serial.c      ****       	 if (rxcnt2 == 0) return 0;
+ 140:serial.c      ****       	 if (rxcnt2 < length) length = rxcnt2;
+ 141:serial.c      ****       	 memcpy(buff,(char *)rxbuff2,rxcnt2);
+ 743              		.loc 2 141 9 is_stmt 0 view .LVU213
+ 744 0024 FFF7FEFF 		bl	memcpy
+ 745              	.LVL47:
+ 142:serial.c      ****       	 return rxcnt2;
+ 746              		.loc 2 142 9 is_stmt 1 view .LVU214
+ 747              		.loc 2 142 16 is_stmt 0 view .LVU215
+ 748 0028 2088     		ldrh	r0, [r4]
+ 749 002a 80B2     		uxth	r0, r0
+ 750              	.L64:
+ 143:serial.c      ****       }
+ 144:serial.c      ****       return 0;
+ 145:serial.c      **** }
+ 751              		.loc 2 145 1 view .LVU216
+ 752 002c 10BD     		pop	{r4, pc}
+ 753              	.LVL48:
+ 754              	.L65:
+ 138:serial.c      ****       	 if (rxcnt2 == 0) return 0;
+ 755              		.loc 2 138 7 is_stmt 1 view .LVU217
+ 138:serial.c      ****       	 if (rxcnt2 == 0) return 0;
+ 756              		.loc 2 138 10 is_stmt 0 view .LVU218
+ 757 002e 0D49     		ldr	r1, .L73+12
+ 758 0030 8B42     		cmp	r3, r1
+ 759 0032 0CD1     		bne	.L70
+ 139:serial.c      ****       	 if (rxcnt2 < length) length = rxcnt2;
+ 760              		.loc 2 139 9 is_stmt 1 view .LVU219
+ 139:serial.c      ****       	 if (rxcnt2 < length) length = rxcnt2;
+ 761              		.loc 2 139 20 is_stmt 0 view .LVU220
+ 762 0034 0C4C     		ldr	r4, .L73+16
+ 763 0036 2388     		ldrh	r3, [r4]
+ 764              	.LVL49:
+ 139:serial.c      ****       	 if (rxcnt2 < length) length = rxcnt2;
+ 765              		.loc 2 139 20 view .LVU221
+ 766 0038 9BB2     		uxth	r3, r3
+ 139:serial.c      ****       	 if (rxcnt2 < length) length = rxcnt2;
+ 767              		.loc 2 139 12 view .LVU222
+ 768 003a 53B1     		cbz	r3, .L71
+ 140:serial.c      ****       	 memcpy(buff,(char *)rxbuff2,rxcnt2);
+ 769              		.loc 2 140 9 is_stmt 1 view .LVU223
+ 140:serial.c      ****       	 memcpy(buff,(char *)rxbuff2,rxcnt2);
+ 770              		.loc 2 140 20 is_stmt 0 view .LVU224
+ 771 003c 2388     		ldrh	r3, [r4]
+ 141:serial.c      ****       	 return rxcnt2;
+ 772              		.loc 2 141 9 view .LVU225
+ 773 003e 0B49     		ldr	r1, .L73+20
+ 140:serial.c      ****       	 memcpy(buff,(char *)rxbuff2,rxcnt2);
+ 774              		.loc 2 140 20 view .LVU226
+ 775 0040 9BB2     		uxth	r3, r3
+ 140:serial.c      ****       	 memcpy(buff,(char *)rxbuff2,rxcnt2);
+ 776              		.loc 2 140 12 view .LVU227
+ 777 0042 9342     		cmp	r3, r2
+ 140:serial.c      ****       	 memcpy(buff,(char *)rxbuff2,rxcnt2);
+ 778              		.loc 2 140 30 is_stmt 1 view .LVU228
+ 140:serial.c      ****       	 memcpy(buff,(char *)rxbuff2,rxcnt2);
+ 779              		.loc 2 140 37 is_stmt 0 view .LVU229
+ 780 0044 B8BF     		it	lt
+ 781 0046 2388     		ldrhlt	r3, [r4]
+ 782              	.LVL50:
+ 141:serial.c      ****       	 return rxcnt2;
+ 783              		.loc 2 141 9 is_stmt 1 view .LVU230
+ 784 0048 2288     		ldrh	r2, [r4]
+ 785 004a 92B2     		uxth	r2, r2
+ 786 004c EAE7     		b	.L72
+ 787              	.LVL51:
+ 788              	.L70:
+ 133:serial.c      ****       	 if (rxcnt1 < length) length = rxcnt1;
+ 789              		.loc 2 133 33 is_stmt 0 view .LVU231
+ 790 004e 0020     		movs	r0, #0
+ 791              	.LVL52:
+ 133:serial.c      ****       	 if (rxcnt1 < length) length = rxcnt1;
+ 792              		.loc 2 133 33 view .LVU232
+ 793 0050 ECE7     		b	.L64
+ 794              	.LVL53:
+ 795              	.L71:
+ 133:serial.c      ****       	 if (rxcnt1 < length) length = rxcnt1;
+ 796              		.loc 2 133 33 view .LVU233
+ 797 0052 1846     		mov	r0, r3
+ 798              	.LVL54:
+ 133:serial.c      ****       	 if (rxcnt1 < length) length = rxcnt1;
+ 799              		.loc 2 133 33 view .LVU234
+ 800 0054 EAE7     		b	.L64
+ 801              	.L74:
+ 802 0056 00BF     		.align	2
+ 803              	.L73:
+ 804 0058 00380140 		.word	1073821696
+ 805 005c 00000000 		.word	rxcnt1
+ 806 0060 00000000 		.word	rxbuff1
+ 807 0064 00440040 		.word	1073759232
+ 808 0068 00000000 		.word	rxcnt2
+ 809 006c 00000000 		.word	rxbuff2
+ 810              		.cfi_endproc
+ 811              	.LFE36:
+ 813              		.section	.text.usart_check,"ax",%progbits
+ 814              		.align	1
+ 815              		.global	usart_check
+ 816              		.syntax unified
+ 817              		.thumb
+ 818              		.thumb_func
+ 819              		.fpu softvfp
+ 821              	usart_check:
+ 822              	.LVL55:
+ 823              	.LFB37:
+ 146:serial.c      **** 
+ 147:serial.c      **** 
+ 148:serial.c      **** int usart_check (USART_TypeDef *USARTx)
+ 149:serial.c      **** {
+ 824              		.loc 2 149 1 is_stmt 1 view -0
+ 825              		.cfi_startproc
+ 826              		@ args = 0, pretend = 0, frame = 0
+ 827              		@ frame_needed = 0, uses_anonymous_args = 0
+ 828              		@ link register save eliminated.
+ 150:serial.c      ****       if (USARTx == USART1) {
+ 829              		.loc 2 150 7 view .LVU236
+ 830              		.loc 2 150 10 is_stmt 0 view .LVU237
+ 831 0000 064B     		ldr	r3, .L80
+ 832 0002 9842     		cmp	r0, r3
+ 833 0004 03D1     		bne	.L76
+ 151:serial.c      ****          return rxcnt1;
+ 834              		.loc 2 151 10 is_stmt 1 view .LVU238
+ 835              		.loc 2 151 17 is_stmt 0 view .LVU239
+ 836 0006 064B     		ldr	r3, .L80+4
+ 837              	.L79:
+ 152:serial.c      ****       }
+ 153:serial.c      ****       if (USARTx == USART2) {
+ 154:serial.c      ****          return rxcnt2;
+ 838              		.loc 2 154 17 view .LVU240
+ 839 0008 1888     		ldrh	r0, [r3]
+ 840              	.LVL56:
+ 841              		.loc 2 154 17 view .LVU241
+ 842 000a 80B2     		uxth	r0, r0
+ 843 000c 7047     		bx	lr
+ 844              	.LVL57:
+ 845              	.L76:
+ 153:serial.c      ****          return rxcnt2;
+ 846              		.loc 2 153 7 is_stmt 1 view .LVU242
+ 153:serial.c      ****          return rxcnt2;
+ 847              		.loc 2 153 10 is_stmt 0 view .LVU243
+ 848 000e 054B     		ldr	r3, .L80+8
+ 849 0010 9842     		cmp	r0, r3
+ 850 0012 01D1     		bne	.L78
+ 851              		.loc 2 154 10 is_stmt 1 view .LVU244
+ 852              		.loc 2 154 17 is_stmt 0 view .LVU245
+ 853 0014 044B     		ldr	r3, .L80+12
+ 854 0016 F7E7     		b	.L79
+ 855              	.L78:
+ 155:serial.c      ****       }
+ 156:serial.c      ****       return 0;
+ 856              		.loc 2 156 14 view .LVU246
+ 857 0018 0020     		movs	r0, #0
+ 858              	.LVL58:
+ 157:serial.c      **** }
+ 859              		.loc 2 157 1 view .LVU247
+ 860 001a 7047     		bx	lr
+ 861              	.L81:
+ 862              		.align	2
+ 863              	.L80:
+ 864 001c 00380140 		.word	1073821696
+ 865 0020 00000000 		.word	rxcnt1
+ 866 0024 00440040 		.word	1073759232
+ 867 0028 00000000 		.word	rxcnt2
+ 868              		.cfi_endproc
+ 869              	.LFE37:
+ 871              		.section	.text.s_printf,"ax",%progbits
+ 872              		.align	1
+ 873              		.global	s_printf
+ 874              		.syntax unified
+ 875              		.thumb
+ 876              		.thumb_func
+ 877              		.fpu softvfp
+ 879              	s_printf:
+ 880              	.LVL59:
+ 881              	.LFB38:
+ 158:serial.c      **** 
+ 159:serial.c      **** 
+ 160:serial.c      **** void s_printf (USART_TypeDef *USARTx,char *form,...)
+ 161:serial.c      **** {
+ 882              		.loc 2 161 1 is_stmt 1 view -0
+ 883              		.cfi_startproc
+ 884              		@ args = 4, pretend = 12, frame = 8
+ 885              		@ frame_needed = 0, uses_anonymous_args = 1
+ 162:serial.c      ****       va_list argptr;
+ 886              		.loc 2 162 7 view .LVU249
+ 163:serial.c      ****       va_start(argptr,form);
+ 887              		.loc 2 163 7 view .LVU250
+ 161:serial.c      ****       va_list argptr;
+ 888              		.loc 2 161 1 is_stmt 0 view .LVU251
+ 889 0000 0EB4     		push	{r1, r2, r3}
+ 890              		.cfi_def_cfa_offset 12
+ 891              		.cfi_offset 1, -12
+ 892              		.cfi_offset 2, -8
+ 893              		.cfi_offset 3, -4
+ 894 0002 33B5     		push	{r0, r1, r4, r5, lr}
+ 895              		.cfi_def_cfa_offset 32
+ 896              		.cfi_offset 4, -24
+ 897              		.cfi_offset 5, -20
+ 898              		.cfi_offset 14, -16
+ 164:serial.c      ****       vsprintf(sbuff,form,argptr);
+ 899              		.loc 2 164 7 view .LVU252
+ 900 0004 0A4D     		ldr	r5, .L83
+ 161:serial.c      ****       va_list argptr;
+ 901              		.loc 2 161 1 view .LVU253
+ 902 0006 05AA     		add	r2, sp, #20
+ 903 0008 52F8041B 		ldr	r1, [r2], #4
+ 904 000c 0446     		mov	r4, r0
+ 905              		.loc 2 164 7 view .LVU254
+ 906 000e 2846     		mov	r0, r5
+ 907              	.LVL60:
+ 163:serial.c      ****       va_start(argptr,form);
+ 908              		.loc 2 163 7 view .LVU255
+ 909 0010 0192     		str	r2, [sp, #4]
+ 910              		.loc 2 164 7 is_stmt 1 view .LVU256
+ 911 0012 FFF7FEFF 		bl	vsprintf
+ 912              	.LVL61:
+ 165:serial.c      ****       uasrt_send(USARTx,sbuff,strlen(sbuff));
+ 913              		.loc 2 165 7 view .LVU257
+ 914              		.loc 2 165 31 is_stmt 0 view .LVU258
+ 915 0016 2846     		mov	r0, r5
+ 916 0018 FFF7FEFF 		bl	strlen
+ 917              	.LVL62:
+ 918              		.loc 2 165 7 view .LVU259
+ 919 001c 2946     		mov	r1, r5
+ 920              		.loc 2 165 31 view .LVU260
+ 921 001e 0246     		mov	r2, r0
+ 922              		.loc 2 165 7 view .LVU261
+ 923 0020 2046     		mov	r0, r4
+ 924 0022 FFF7FEFF 		bl	uasrt_send
+ 925              	.LVL63:
+ 166:serial.c      ****       va_end(argptr);
+ 926              		.loc 2 166 7 is_stmt 1 view .LVU262
+ 167:serial.c      **** }
+ 927              		.loc 2 167 1 is_stmt 0 view .LVU263
+ 928 0026 02B0     		add	sp, sp, #8
+ 929              		.cfi_def_cfa_offset 24
+ 930              		@ sp needed
+ 931 0028 BDE83040 		pop	{r4, r5, lr}
+ 932              		.cfi_restore 14
+ 933              		.cfi_restore 5
+ 934              		.cfi_restore 4
+ 935              		.cfi_def_cfa_offset 12
+ 936              	.LVL64:
+ 937              		.loc 2 167 1 view .LVU264
+ 938 002c 03B0     		add	sp, sp, #12
+ 939              		.cfi_restore 3
+ 940              		.cfi_restore 2
+ 941              		.cfi_restore 1
+ 942              		.cfi_def_cfa_offset 0
+ 943 002e 7047     		bx	lr
+ 944              	.L84:
+ 945              		.align	2
+ 946              	.L83:
+ 947 0030 00000000 		.word	sbuff
+ 948              		.cfi_endproc
+ 949              	.LFE38:
+ 951              		.section	.text.receive_serial1,"ax",%progbits
+ 952              		.align	1
+ 953              		.global	receive_serial1
+ 954              		.syntax unified
+ 955              		.thumb
+ 956              		.thumb_func
+ 957              		.fpu softvfp
+ 959              	receive_serial1:
+ 960              	.LFB39:
+ 168:serial.c      **** 
+ 169:serial.c      **** 
+ 170:serial.c      **** void receive_serial1 (void)
+ 171:serial.c      **** {
+ 961              		.loc 2 171 1 is_stmt 1 view -0
+ 962              		.cfi_startproc
+ 963              		@ args = 0, pretend = 0, frame = 0
+ 964              		@ frame_needed = 0, uses_anonymous_args = 0
+ 172:serial.c      ****       unsigned short idx;
+ 965              		.loc 2 172 7 view .LVU266
+ 173:serial.c      ****       unsigned char bcc;
+ 966              		.loc 2 173 7 view .LVU267
+ 174:serial.c      ****       if (rxcnt1) {
+ 967              		.loc 2 174 7 view .LVU268
+ 968              		.loc 2 174 11 is_stmt 0 view .LVU269
+ 969 0000 1B49     		ldr	r1, .L103
+ 171:serial.c      ****       unsigned short idx;
+ 970              		.loc 2 171 1 view .LVU270
+ 971 0002 70B5     		push	{r4, r5, r6, lr}
+ 972              		.cfi_def_cfa_offset 16
+ 973              		.cfi_offset 4, -16
+ 974              		.cfi_offset 5, -12
+ 975              		.cfi_offset 6, -8
+ 976              		.cfi_offset 14, -4
+ 977              		.loc 2 174 11 view .LVU271
+ 978 0004 0B88     		ldrh	r3, [r1]
+ 979 0006 9BB2     		uxth	r3, r3
+ 980              		.loc 2 174 10 view .LVU272
+ 981 0008 4BB3     		cbz	r3, .L86
+ 175:serial.c      ****          if ((rxbuff1[0] == STX) && (rxbuff1[5] == ETX) && ((rxbuff1[1] == this_id) || (rxbuff1[1] 
+ 982              		.loc 2 175 10 is_stmt 1 view .LVU273
+ 983              		.loc 2 175 22 is_stmt 0 view .LVU274
+ 984 000a 1A4A     		ldr	r2, .L103+4
+ 985              		.loc 2 175 13 view .LVU275
+ 986 000c 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 987 000e 022B     		cmp	r3, #2
+ 988 0010 2BD1     		bne	.L96
+ 989              		.loc 2 175 34 discriminator 1 view .LVU276
+ 990 0012 5379     		ldrb	r3, [r2, #5]	@ zero_extendqisi2
+ 991 0014 032B     		cmp	r3, #3
+ 992 0016 28D1     		bne	.L96
+ 993              		.loc 2 175 73 discriminator 2 view .LVU277
+ 994 0018 1748     		ldr	r0, .L103+8
+ 995              		.loc 2 175 69 discriminator 2 view .LVU278
+ 996 001a 5378     		ldrb	r3, [r2, #1]	@ zero_extendqisi2
+ 997              		.loc 2 175 73 discriminator 2 view .LVU279
+ 998 001c 0078     		ldrb	r0, [r0]	@ zero_extendqisi2
+ 999              		.loc 2 175 57 discriminator 2 view .LVU280
+ 1000 001e 8342     		cmp	r3, r0
+ 1001 0020 01D0     		beq	.L88
+ 1002              		.loc 2 175 85 discriminator 3 view .LVU281
+ 1003 0022 212B     		cmp	r3, #33
+ 1004 0024 21D1     		bne	.L96
+ 1005              	.L88:
+ 1006              	.LVL65:
+ 176:serial.c      **** 	    bcc = rxbuff1[0];
+ 177:serial.c      **** 	    for (idx=1;idx<6;idx++) bcc = bcc ^ rxbuff1[idx];
+ 1007              		.loc 2 177 30 is_stmt 1 view .LVU282
+ 1008              		.loc 2 177 49 is_stmt 0 view .LVU283
+ 1009 0026 9478     		ldrb	r4, [r2, #2]	@ zero_extendqisi2
+ 1010 0028 D578     		ldrb	r5, [r2, #3]	@ zero_extendqisi2
+ 1011              		.loc 2 177 34 view .LVU284
+ 1012 002a 83F00203 		eor	r3, r3, #2
+ 1013              	.LVL66:
+ 1014              		.loc 2 177 23 is_stmt 1 view .LVU285
+ 1015              		.loc 2 177 17 view .LVU286
+ 1016              		.loc 2 177 30 view .LVU287
+ 1017              		.loc 2 177 49 is_stmt 0 view .LVU288
+ 1018 002e 1079     		ldrb	r0, [r2, #4]	@ zero_extendqisi2
+ 1019              		.loc 2 177 34 view .LVU289
+ 1020 0030 6340     		eors	r3, r3, r4
+ 1021              	.LVL67:
+ 1022              		.loc 2 177 23 is_stmt 1 view .LVU290
+ 1023              		.loc 2 177 17 view .LVU291
+ 1024              		.loc 2 177 30 view .LVU292
+ 1025              		.loc 2 177 34 is_stmt 0 view .LVU293
+ 1026 0032 6B40     		eors	r3, r3, r5
+ 1027              	.LVL68:
+ 1028              		.loc 2 177 23 is_stmt 1 view .LVU294
+ 1029              		.loc 2 177 17 view .LVU295
+ 1030              		.loc 2 177 30 view .LVU296
+ 178:serial.c      ****             if (bcc == rxbuff1[6]) {
+ 1031              		.loc 2 178 16 is_stmt 0 view .LVU297
+ 1032 0034 9679     		ldrb	r6, [r2, #6]	@ zero_extendqisi2
+ 177:serial.c      ****             if (bcc == rxbuff1[6]) {
+ 1033              		.loc 2 177 34 view .LVU298
+ 1034 0036 4340     		eors	r3, r3, r0
+ 1035              	.LVL69:
+ 177:serial.c      ****             if (bcc == rxbuff1[6]) {
+ 1036              		.loc 2 177 23 is_stmt 1 view .LVU299
+ 177:serial.c      ****             if (bcc == rxbuff1[6]) {
+ 1037              		.loc 2 177 17 view .LVU300
+ 177:serial.c      ****             if (bcc == rxbuff1[6]) {
+ 1038              		.loc 2 177 30 view .LVU301
+ 177:serial.c      ****             if (bcc == rxbuff1[6]) {
+ 1039              		.loc 2 177 23 view .LVU302
+ 177:serial.c      ****             if (bcc == rxbuff1[6]) {
+ 1040              		.loc 2 177 17 view .LVU303
+ 1041              		.loc 2 178 13 view .LVU304
+ 1042              		.loc 2 178 16 is_stmt 0 view .LVU305
+ 1043 0038 83F00303 		eor	r3, r3, #3
+ 1044              	.LVL70:
+ 1045              		.loc 2 178 16 view .LVU306
+ 1046 003c 9E42     		cmp	r6, r3
+ 1047 003e 14D1     		bne	.L96
+ 179:serial.c      **** 	       if ((rxbuff1[2] == 0xFF) && (rxbuff1[3] == 0xFF) && (rxbuff1[4] == 0xFF)) {
+ 1048              		.loc 2 179 9 is_stmt 1 view .LVU307
+ 1049              		.loc 2 179 58 is_stmt 0 view .LVU308
+ 1050 0040 2C40     		ands	r4, r4, r5
+ 1051 0042 2040     		ands	r0, r0, r4
+ 1052 0044 FF28     		cmp	r0, #255
+ 1053 0046 10D1     		bne	.L96
+ 180:serial.c      **** 	       	  NVIC_SystemReset();
+ 1054              		.loc 2 180 12 is_stmt 1 view .LVU309
+ 1055 0048 FFF7FEFF 		bl	NVIC_SystemReset
+ 1056              	.LVL71:
+ 1057              	.L90:
+ 181:serial.c      **** 	       }
+ 182:serial.c      **** 	    }
+ 183:serial.c      ****          }
+ 184:serial.c      ****          for (idx=0;idx<rxcnt1;idx++) {
+ 185:serial.c      ****       	     rxbuff1[idx] = 0;
+ 1058              		.loc 2 185 13 discriminator 3 view .LVU310
+ 1059              		.loc 2 185 20 is_stmt 0 discriminator 3 view .LVU311
+ 1060 004c 98B2     		uxth	r0, r3
+ 1061              		.loc 2 185 26 discriminator 3 view .LVU312
+ 1062 004e 1454     		strb	r4, [r2, r0]
+ 184:serial.c      ****       	     rxbuff1[idx] = 0;
+ 1063              		.loc 2 184 32 is_stmt 1 discriminator 3 view .LVU313
+ 1064              	.LVL72:
+ 184:serial.c      ****       	     rxbuff1[idx] = 0;
+ 1065              		.loc 2 184 32 is_stmt 0 discriminator 3 view .LVU314
+ 1066 0050 0133     		adds	r3, r3, #1
+ 1067              	.LVL73:
+ 1068              	.L89:
+ 184:serial.c      ****       	     rxbuff1[idx] = 0;
+ 1069              		.loc 2 184 21 is_stmt 1 discriminator 1 view .LVU315
+ 184:serial.c      ****       	     rxbuff1[idx] = 0;
+ 1070              		.loc 2 184 24 is_stmt 0 discriminator 1 view .LVU316
+ 1071 0052 0888     		ldrh	r0, [r1]
+ 184:serial.c      ****       	     rxbuff1[idx] = 0;
+ 1072              		.loc 2 184 10 discriminator 1 view .LVU317
+ 1073 0054 9DB2     		uxth	r5, r3
+ 184:serial.c      ****       	     rxbuff1[idx] = 0;
+ 1074              		.loc 2 184 24 discriminator 1 view .LVU318
+ 1075 0056 80B2     		uxth	r0, r0
+ 184:serial.c      ****       	     rxbuff1[idx] = 0;
+ 1076              		.loc 2 184 10 discriminator 1 view .LVU319
+ 1077 0058 A842     		cmp	r0, r5
+ 1078 005a F7D8     		bhi	.L90
+ 186:serial.c      ****       	 }
+ 187:serial.c      ****          rxcnt1 = 0;
+ 1079              		.loc 2 187 10 is_stmt 1 view .LVU320
+ 1080              		.loc 2 187 17 is_stmt 0 view .LVU321
+ 1081 005c 0C80     		strh	r4, [r1]	@ movhi
+ 1082              	.LVL74:
+ 1083              	.L86:
+ 188:serial.c      ****       }
+ 189:serial.c      ****       if (rxled) rxled = 0;
+ 1084              		.loc 2 189 7 is_stmt 1 view .LVU322
+ 1085              		.loc 2 189 11 is_stmt 0 view .LVU323
+ 1086 005e 074B     		ldr	r3, .L103+12
+ 1087 0060 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 1088              		.loc 2 189 10 view .LVU324
+ 1089 0062 0AB1     		cbz	r2, .L85
+ 1090              		.loc 2 189 18 is_stmt 1 discriminator 1 view .LVU325
+ 1091              		.loc 2 189 24 is_stmt 0 discriminator 1 view .LVU326
+ 1092 0064 0022     		movs	r2, #0
+ 1093 0066 1A70     		strb	r2, [r3]
+ 1094              	.L85:
+ 190:serial.c      **** }
+ 1095              		.loc 2 190 1 view .LVU327
+ 1096 0068 70BD     		pop	{r4, r5, r6, pc}
+ 1097              	.L96:
+ 1098 006a 0023     		movs	r3, #0
+ 1099 006c 0024     		movs	r4, #0
+ 1100 006e F0E7     		b	.L89
+ 1101              	.L104:
+ 1102              		.align	2
+ 1103              	.L103:
+ 1104 0070 00000000 		.word	rxcnt1
+ 1105 0074 00000000 		.word	rxbuff1
+ 1106 0078 00000000 		.word	this_id
+ 1107 007c 00000000 		.word	rxled
+ 1108              		.cfi_endproc
+ 1109              	.LFE39:
+ 1111              		.section	.text.receive_serial2,"ax",%progbits
+ 1112              		.align	1
+ 1113              		.global	receive_serial2
+ 1114              		.syntax unified
+ 1115              		.thumb
+ 1116              		.thumb_func
+ 1117              		.fpu softvfp
+ 1119              	receive_serial2:
+ 1120              	.LFB40:
+ 191:serial.c      **** 
+ 192:serial.c      **** 
+ 193:serial.c      **** void receive_serial2 (void)
+ 194:serial.c      **** {
+ 1121              		.loc 2 194 1 is_stmt 1 view -0
+ 1122              		.cfi_startproc
+ 1123              		@ args = 0, pretend = 0, frame = 0
+ 1124              		@ frame_needed = 0, uses_anonymous_args = 0
+ 195:serial.c      ****       unsigned short idx;
+ 1125              		.loc 2 195 7 view .LVU329
+ 196:serial.c      ****       unsigned char bcc;
+ 1126              		.loc 2 196 7 view .LVU330
+ 197:serial.c      ****       if (rxcnt2) {
+ 1127              		.loc 2 197 7 view .LVU331
+ 1128              		.loc 2 197 11 is_stmt 0 view .LVU332
+ 1129 0000 1B49     		ldr	r1, .L123
+ 194:serial.c      ****       unsigned short idx;
+ 1130              		.loc 2 194 1 view .LVU333
+ 1131 0002 70B5     		push	{r4, r5, r6, lr}
+ 1132              		.cfi_def_cfa_offset 16
+ 1133              		.cfi_offset 4, -16
+ 1134              		.cfi_offset 5, -12
+ 1135              		.cfi_offset 6, -8
+ 1136              		.cfi_offset 14, -4
+ 1137              		.loc 2 197 11 view .LVU334
+ 1138 0004 0B88     		ldrh	r3, [r1]
+ 1139 0006 9BB2     		uxth	r3, r3
+ 1140              		.loc 2 197 10 view .LVU335
+ 1141 0008 4BB3     		cbz	r3, .L106
+ 198:serial.c      ****          if ((rxbuff2[0] == STX) && (rxbuff2[5] == ETX) && ((rxbuff2[1] == this_id) || (rxbuff2[1] 
+ 1142              		.loc 2 198 10 is_stmt 1 view .LVU336
+ 1143              		.loc 2 198 22 is_stmt 0 view .LVU337
+ 1144 000a 1A4A     		ldr	r2, .L123+4
+ 1145              		.loc 2 198 13 view .LVU338
+ 1146 000c 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 1147 000e 022B     		cmp	r3, #2
+ 1148 0010 2BD1     		bne	.L116
+ 1149              		.loc 2 198 34 discriminator 1 view .LVU339
+ 1150 0012 5379     		ldrb	r3, [r2, #5]	@ zero_extendqisi2
+ 1151 0014 032B     		cmp	r3, #3
+ 1152 0016 28D1     		bne	.L116
+ 1153              		.loc 2 198 73 discriminator 2 view .LVU340
+ 1154 0018 1748     		ldr	r0, .L123+8
+ 1155              		.loc 2 198 69 discriminator 2 view .LVU341
+ 1156 001a 5378     		ldrb	r3, [r2, #1]	@ zero_extendqisi2
+ 1157              		.loc 2 198 73 discriminator 2 view .LVU342
+ 1158 001c 0078     		ldrb	r0, [r0]	@ zero_extendqisi2
+ 1159              		.loc 2 198 57 discriminator 2 view .LVU343
+ 1160 001e 8342     		cmp	r3, r0
+ 1161 0020 01D0     		beq	.L108
+ 1162              		.loc 2 198 85 discriminator 3 view .LVU344
+ 1163 0022 212B     		cmp	r3, #33
+ 1164 0024 21D1     		bne	.L116
+ 1165              	.L108:
+ 1166              	.LVL75:
+ 199:serial.c      **** 	    bcc = rxbuff2[0];
+ 200:serial.c      **** 	    for (idx=1;idx<6;idx++) bcc = bcc ^ rxbuff2[idx];
+ 1167              		.loc 2 200 30 is_stmt 1 view .LVU345
+ 1168              		.loc 2 200 49 is_stmt 0 view .LVU346
+ 1169 0026 9478     		ldrb	r4, [r2, #2]	@ zero_extendqisi2
+ 1170 0028 D578     		ldrb	r5, [r2, #3]	@ zero_extendqisi2
+ 1171              		.loc 2 200 34 view .LVU347
+ 1172 002a 83F00203 		eor	r3, r3, #2
+ 1173              	.LVL76:
+ 1174              		.loc 2 200 23 is_stmt 1 view .LVU348
+ 1175              		.loc 2 200 17 view .LVU349
+ 1176              		.loc 2 200 30 view .LVU350
+ 1177              		.loc 2 200 49 is_stmt 0 view .LVU351
+ 1178 002e 1079     		ldrb	r0, [r2, #4]	@ zero_extendqisi2
+ 1179              		.loc 2 200 34 view .LVU352
+ 1180 0030 6340     		eors	r3, r3, r4
+ 1181              	.LVL77:
+ 1182              		.loc 2 200 23 is_stmt 1 view .LVU353
+ 1183              		.loc 2 200 17 view .LVU354
+ 1184              		.loc 2 200 30 view .LVU355
+ 1185              		.loc 2 200 34 is_stmt 0 view .LVU356
+ 1186 0032 6B40     		eors	r3, r3, r5
+ 1187              	.LVL78:
+ 1188              		.loc 2 200 23 is_stmt 1 view .LVU357
+ 1189              		.loc 2 200 17 view .LVU358
+ 1190              		.loc 2 200 30 view .LVU359
+ 201:serial.c      ****             if (bcc == rxbuff2[6]) {
+ 1191              		.loc 2 201 16 is_stmt 0 view .LVU360
+ 1192 0034 9679     		ldrb	r6, [r2, #6]	@ zero_extendqisi2
+ 200:serial.c      ****             if (bcc == rxbuff2[6]) {
+ 1193              		.loc 2 200 34 view .LVU361
+ 1194 0036 4340     		eors	r3, r3, r0
+ 1195              	.LVL79:
+ 200:serial.c      ****             if (bcc == rxbuff2[6]) {
+ 1196              		.loc 2 200 23 is_stmt 1 view .LVU362
+ 200:serial.c      ****             if (bcc == rxbuff2[6]) {
+ 1197              		.loc 2 200 17 view .LVU363
+ 200:serial.c      ****             if (bcc == rxbuff2[6]) {
+ 1198              		.loc 2 200 30 view .LVU364
+ 200:serial.c      ****             if (bcc == rxbuff2[6]) {
+ 1199              		.loc 2 200 23 view .LVU365
+ 200:serial.c      ****             if (bcc == rxbuff2[6]) {
+ 1200              		.loc 2 200 17 view .LVU366
+ 1201              		.loc 2 201 13 view .LVU367
+ 1202              		.loc 2 201 16 is_stmt 0 view .LVU368
+ 1203 0038 83F00303 		eor	r3, r3, #3
+ 1204              	.LVL80:
+ 1205              		.loc 2 201 16 view .LVU369
+ 1206 003c 9E42     		cmp	r6, r3
+ 1207 003e 14D1     		bne	.L116
+ 202:serial.c      **** 	       if ((rxbuff2[2] == 0xFF) && (rxbuff2[3] == 0xFF) && (rxbuff2[4] == 0xFF)) {
+ 1208              		.loc 2 202 9 is_stmt 1 view .LVU370
+ 1209              		.loc 2 202 58 is_stmt 0 view .LVU371
+ 1210 0040 2C40     		ands	r4, r4, r5
+ 1211 0042 2040     		ands	r0, r0, r4
+ 1212 0044 FF28     		cmp	r0, #255
+ 1213 0046 10D1     		bne	.L116
+ 203:serial.c      **** 	       	  NVIC_SystemReset();
+ 1214              		.loc 2 203 12 is_stmt 1 view .LVU372
+ 1215 0048 FFF7FEFF 		bl	NVIC_SystemReset
+ 1216              	.LVL81:
+ 1217              	.L110:
+ 204:serial.c      **** 	       }
+ 205:serial.c      **** 	    }
+ 206:serial.c      ****          }
+ 207:serial.c      ****          for (idx=0;idx<rxcnt2;idx++) {
+ 208:serial.c      ****       	     rxbuff2[idx] = 0;
+ 1218              		.loc 2 208 13 discriminator 3 view .LVU373
+ 1219              		.loc 2 208 20 is_stmt 0 discriminator 3 view .LVU374
+ 1220 004c 98B2     		uxth	r0, r3
+ 1221              		.loc 2 208 26 discriminator 3 view .LVU375
+ 1222 004e 1454     		strb	r4, [r2, r0]
+ 207:serial.c      ****       	     rxbuff2[idx] = 0;
+ 1223              		.loc 2 207 32 is_stmt 1 discriminator 3 view .LVU376
+ 1224              	.LVL82:
+ 207:serial.c      ****       	     rxbuff2[idx] = 0;
+ 1225              		.loc 2 207 32 is_stmt 0 discriminator 3 view .LVU377
+ 1226 0050 0133     		adds	r3, r3, #1
+ 1227              	.LVL83:
+ 1228              	.L109:
+ 207:serial.c      ****       	     rxbuff2[idx] = 0;
+ 1229              		.loc 2 207 21 is_stmt 1 discriminator 1 view .LVU378
+ 207:serial.c      ****       	     rxbuff2[idx] = 0;
+ 1230              		.loc 2 207 24 is_stmt 0 discriminator 1 view .LVU379
+ 1231 0052 0888     		ldrh	r0, [r1]
+ 207:serial.c      ****       	     rxbuff2[idx] = 0;
+ 1232              		.loc 2 207 10 discriminator 1 view .LVU380
+ 1233 0054 9DB2     		uxth	r5, r3
+ 207:serial.c      ****       	     rxbuff2[idx] = 0;
+ 1234              		.loc 2 207 24 discriminator 1 view .LVU381
+ 1235 0056 80B2     		uxth	r0, r0
+ 207:serial.c      ****       	     rxbuff2[idx] = 0;
+ 1236              		.loc 2 207 10 discriminator 1 view .LVU382
+ 1237 0058 A842     		cmp	r0, r5
+ 1238 005a F7D8     		bhi	.L110
+ 209:serial.c      ****       	 }
+ 210:serial.c      ****          rxcnt2 = 0;
+ 1239              		.loc 2 210 10 is_stmt 1 view .LVU383
+ 1240              		.loc 2 210 17 is_stmt 0 view .LVU384
+ 1241 005c 0C80     		strh	r4, [r1]	@ movhi
+ 1242              	.LVL84:
+ 1243              	.L106:
+ 211:serial.c      ****       }
+ 212:serial.c      ****       if (rxled) rxled = 0;
+ 1244              		.loc 2 212 7 is_stmt 1 view .LVU385
+ 1245              		.loc 2 212 11 is_stmt 0 view .LVU386
+ 1246 005e 074B     		ldr	r3, .L123+12
+ 1247 0060 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 1248              		.loc 2 212 10 view .LVU387
+ 1249 0062 0AB1     		cbz	r2, .L105
+ 1250              		.loc 2 212 18 is_stmt 1 discriminator 1 view .LVU388
+ 1251              		.loc 2 212 24 is_stmt 0 discriminator 1 view .LVU389
+ 1252 0064 0022     		movs	r2, #0
+ 1253 0066 1A70     		strb	r2, [r3]
+ 1254              	.L105:
+ 213:serial.c      **** }
+ 1255              		.loc 2 213 1 view .LVU390
+ 1256 0068 70BD     		pop	{r4, r5, r6, pc}
+ 1257              	.L116:
+ 1258 006a 0023     		movs	r3, #0
+ 1259 006c 0024     		movs	r4, #0
+ 1260 006e F0E7     		b	.L109
+ 1261              	.L124:
+ 1262              		.align	2
+ 1263              	.L123:
+ 1264 0070 00000000 		.word	rxcnt2
+ 1265 0074 00000000 		.word	rxbuff2
+ 1266 0078 00000000 		.word	this_id
+ 1267 007c 00000000 		.word	rxled
+ 1268              		.cfi_endproc
+ 1269              	.LFE40:
+ 1271              		.section	.text.serial_init,"ax",%progbits
+ 1272              		.align	1
+ 1273              		.global	serial_init
+ 1274              		.syntax unified
+ 1275              		.thumb
+ 1276              		.thumb_func
+ 1277              		.fpu softvfp
+ 1279              	serial_init:
+ 1280              	.LFB41:
+ 214:serial.c      **** 
+ 215:serial.c      **** 
+ 216:serial.c      **** void serial_init (void)
+ 217:serial.c      **** {
+ 1281              		.loc 2 217 1 is_stmt 1 view -0
+ 1282              		.cfi_startproc
+ 1283              		@ args = 0, pretend = 0, frame = 24
+ 1284              		@ frame_needed = 0, uses_anonymous_args = 0
+ 218:serial.c      ****       USART_InitTypeDef	USART_InitStructure;
+ 1285              		.loc 2 218 7 view .LVU392
+ 219:serial.c      ****       NVIC_InitTypeDef NVIC_InitStructure;
+ 1286              		.loc 2 219 7 view .LVU393
+ 220:serial.c      ****       USART1_PORT = 0;
+ 1287              		.loc 2 220 7 view .LVU394
+ 217:serial.c      ****       USART_InitTypeDef	USART_InitStructure;
+ 1288              		.loc 2 217 1 is_stmt 0 view .LVU395
+ 1289 0000 70B5     		push	{r4, r5, r6, lr}
+ 1290              		.cfi_def_cfa_offset 16
+ 1291              		.cfi_offset 4, -16
+ 1292              		.cfi_offset 5, -12
+ 1293              		.cfi_offset 6, -8
+ 1294              		.cfi_offset 14, -4
+ 1295              		.loc 2 220 19 view .LVU396
+ 1296 0002 0024     		movs	r4, #0
+ 221:serial.c      ****       rxcnt1 = 0;
+ 1297              		.loc 2 221 14 view .LVU397
+ 1298 0004 474B     		ldr	r3, .L135
+ 222:serial.c      ****       txcnt1 = 0;
+ 223:serial.c      ****       maxtx1 = 0;
+ 224:serial.c      ****       tx_flag1 = 0;
+ 225:serial.c      ****       rxcnt2 = 0;
+ 226:serial.c      ****       txcnt2 = 0;
+ 227:serial.c      ****       maxtx2 = 0;
+ 228:serial.c      ****       tx_flag2 = 0;
+ 229:serial.c      ****       /* Enable the USART1 Interrupt */
+ 230:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+ 231:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+ 232:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+ 233:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 1299              		.loc 2 233 45 view .LVU398
+ 1300 0006 0125     		movs	r5, #1
+ 221:serial.c      ****       rxcnt1 = 0;
+ 1301              		.loc 2 221 14 view .LVU399
+ 1302 0008 1C80     		strh	r4, [r3]	@ movhi
+ 222:serial.c      ****       txcnt1 = 0;
+ 1303              		.loc 2 222 14 view .LVU400
+ 1304 000a 474B     		ldr	r3, .L135+4
+ 217:serial.c      ****       USART_InitTypeDef	USART_InitStructure;
+ 1305              		.loc 2 217 1 view .LVU401
+ 1306 000c 86B0     		sub	sp, sp, #24
+ 1307              		.cfi_def_cfa_offset 40
+ 222:serial.c      ****       txcnt1 = 0;
+ 1308              		.loc 2 222 14 view .LVU402
+ 1309 000e 1C80     		strh	r4, [r3]	@ movhi
+ 223:serial.c      ****       tx_flag1 = 0;
+ 1310              		.loc 2 223 14 view .LVU403
+ 1311 0010 464B     		ldr	r3, .L135+8
+ 220:serial.c      ****       rxcnt1 = 0;
+ 1312              		.loc 2 220 19 view .LVU404
+ 1313 0012 474E     		ldr	r6, .L135+12
+ 223:serial.c      ****       tx_flag1 = 0;
+ 1314              		.loc 2 223 14 view .LVU405
+ 1315 0014 1C80     		strh	r4, [r3]	@ movhi
+ 224:serial.c      ****       rxcnt2 = 0;
+ 1316              		.loc 2 224 16 view .LVU406
+ 1317 0016 474B     		ldr	r3, .L135+16
+ 234:serial.c      ****       NVIC_Init(&NVIC_InitStructure);
+ 1318              		.loc 2 234 7 view .LVU407
+ 1319 0018 6846     		mov	r0, sp
+ 224:serial.c      ****       rxcnt2 = 0;
+ 1320              		.loc 2 224 16 view .LVU408
+ 1321 001a 1C70     		strb	r4, [r3]
+ 225:serial.c      ****       txcnt2 = 0;
+ 1322              		.loc 2 225 14 view .LVU409
+ 1323 001c 464B     		ldr	r3, .L135+20
+ 220:serial.c      ****       rxcnt1 = 0;
+ 1324              		.loc 2 220 19 view .LVU410
+ 1325 001e 3470     		strb	r4, [r6]
+ 221:serial.c      ****       txcnt1 = 0;
+ 1326              		.loc 2 221 7 is_stmt 1 view .LVU411
+ 222:serial.c      ****       maxtx1 = 0;
+ 1327              		.loc 2 222 7 view .LVU412
+ 223:serial.c      ****       tx_flag1 = 0;
+ 1328              		.loc 2 223 7 view .LVU413
+ 224:serial.c      ****       rxcnt2 = 0;
+ 1329              		.loc 2 224 7 view .LVU414
+ 225:serial.c      ****       txcnt2 = 0;
+ 1330              		.loc 2 225 7 view .LVU415
+ 225:serial.c      ****       txcnt2 = 0;
+ 1331              		.loc 2 225 14 is_stmt 0 view .LVU416
+ 1332 0020 1C80     		strh	r4, [r3]	@ movhi
+ 226:serial.c      ****       maxtx2 = 0;
+ 1333              		.loc 2 226 7 is_stmt 1 view .LVU417
+ 226:serial.c      ****       maxtx2 = 0;
+ 1334              		.loc 2 226 14 is_stmt 0 view .LVU418
+ 1335 0022 464B     		ldr	r3, .L135+24
+ 232:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 1336              		.loc 2 232 53 view .LVU419
+ 1337 0024 8DF80240 		strb	r4, [sp, #2]
+ 226:serial.c      ****       maxtx2 = 0;
+ 1338              		.loc 2 226 14 view .LVU420
+ 1339 0028 1C80     		strh	r4, [r3]	@ movhi
+ 227:serial.c      ****       tx_flag2 = 0;
+ 1340              		.loc 2 227 7 is_stmt 1 view .LVU421
+ 227:serial.c      ****       tx_flag2 = 0;
+ 1341              		.loc 2 227 14 is_stmt 0 view .LVU422
+ 1342 002a 454B     		ldr	r3, .L135+28
+ 233:serial.c      ****       NVIC_Init(&NVIC_InitStructure);
+ 1343              		.loc 2 233 45 view .LVU423
+ 1344 002c 0195     		str	r5, [sp, #4]
+ 227:serial.c      ****       tx_flag2 = 0;
+ 1345              		.loc 2 227 14 view .LVU424
+ 1346 002e 1C80     		strh	r4, [r3]	@ movhi
+ 228:serial.c      ****       /* Enable the USART1 Interrupt */
+ 1347              		.loc 2 228 7 is_stmt 1 view .LVU425
+ 228:serial.c      ****       /* Enable the USART1 Interrupt */
+ 1348              		.loc 2 228 16 is_stmt 0 view .LVU426
+ 1349 0030 444B     		ldr	r3, .L135+32
+ 1350 0032 1C70     		strb	r4, [r3]
+ 230:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+ 1351              		.loc 2 230 7 is_stmt 1 view .LVU427
+ 231:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+ 1352              		.loc 2 231 7 view .LVU428
+ 232:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 1353              		.loc 2 232 7 view .LVU429
+ 233:serial.c      ****       NVIC_Init(&NVIC_InitStructure);
+ 1354              		.loc 2 233 7 view .LVU430
+ 1355              		.loc 2 234 7 view .LVU431
+ 230:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+ 1356              		.loc 2 230 42 is_stmt 0 view .LVU432
+ 1357 0034 40F22523 		movw	r3, #549
+ 1358 0038 ADF80030 		strh	r3, [sp]	@ movhi
+ 1359              		.loc 2 234 7 view .LVU433
+ 1360 003c FFF7FEFF 		bl	NVIC_Init
+ 1361              	.LVL85:
+ 235:serial.c      ****       /* Enable the USART2 Interrupt */
+ 236:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+ 1362              		.loc 2 236 7 is_stmt 1 view .LVU434
+ 237:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+ 1363              		.loc 2 237 7 view .LVU435
+ 238:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+ 1364              		.loc 2 238 7 view .LVU436
+ 236:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+ 1365              		.loc 2 236 42 is_stmt 0 view .LVU437
+ 1366 0040 40F22623 		movw	r3, #550
+ 239:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 240:serial.c      ****       NVIC_Init(&NVIC_InitStructure);
+ 1367              		.loc 2 240 7 view .LVU438
+ 1368 0044 6846     		mov	r0, sp
+ 236:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+ 1369              		.loc 2 236 42 view .LVU439
+ 1370 0046 ADF80030 		strh	r3, [sp]	@ movhi
+ 238:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 1371              		.loc 2 238 53 view .LVU440
+ 1372 004a 8DF80240 		strb	r4, [sp, #2]
+ 239:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 1373              		.loc 2 239 7 is_stmt 1 view .LVU441
+ 239:serial.c      ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 1374              		.loc 2 239 45 is_stmt 0 view .LVU442
+ 1375 004e 0195     		str	r5, [sp, #4]
+ 1376              		.loc 2 240 7 is_stmt 1 view .LVU443
+ 1377 0050 FFF7FEFF 		bl	NVIC_Init
+ 1378              	.LVL86:
+ 241:serial.c      ****       if (USART1_PORT == 0) {
+ 1379              		.loc 2 241 7 view .LVU444
+ 1380              		.loc 2 241 10 is_stmt 0 view .LVU445
+ 1381 0054 3378     		ldrb	r3, [r6]	@ zero_extendqisi2
+ 1382 0056 002B     		cmp	r3, #0
+ 1383 0058 54D1     		bne	.L126
+ 242:serial.c      ****          /* Configure USART1 TX (PA9) as push-pull */
+ 243:serial.c      ****          GPIO_Init_Pin(GPIOA,GPIO_Pin_9,GPIO_Speed_50MHz,GPIO_Mode_AF_PP);
+ 1384              		.loc 2 243 10 is_stmt 1 view .LVU446
+ 1385 005a 1823     		movs	r3, #24
+ 1386 005c 0322     		movs	r2, #3
+ 1387 005e 4FF40071 		mov	r1, #512
+ 1388 0062 3948     		ldr	r0, .L135+36
+ 1389 0064 FFF7FEFF 		bl	GPIO_Init_Pin
+ 1390              	.LVL87:
+ 244:serial.c      ****          /* Configure USART1 RX (PA10) as input floating */
+ 245:serial.c      ****          GPIO_Init_Pin(GPIOA,GPIO_Pin_10,GPIO_Speed_50MHz,GPIO_Mode_IN_FLOATING);
+ 1391              		.loc 2 245 10 view .LVU447
+ 1392 0068 0423     		movs	r3, #4
+ 1393 006a 0322     		movs	r2, #3
+ 1394 006c 4FF48061 		mov	r1, #1024
+ 1395 0070 3548     		ldr	r0, .L135+36
+ 1396              	.L134:
+ 246:serial.c      ****       } else {
+ 247:serial.c      ****          GPIO_PinRemapConfig(GPIO_Remap_USART1,ENABLE);
+ 248:serial.c      ****          /* Configure USART1 TX (PB6) as push-pull */
+ 249:serial.c      ****          GPIO_Init_Pin(GPIOB,GPIO_Pin_6,GPIO_Speed_50MHz,GPIO_Mode_AF_PP);
+ 250:serial.c      ****          /* Configure USART1 RX (PB7) as input floating */
+ 251:serial.c      ****          GPIO_Init_Pin(GPIOB,GPIO_Pin_7,GPIO_Speed_50MHz,GPIO_Mode_IN_FLOATING);
+ 1397              		.loc 2 251 10 is_stmt 0 view .LVU448
+ 1398 0072 FFF7FEFF 		bl	GPIO_Init_Pin
+ 1399              	.LVL88:
+ 252:serial.c      ****       }
+ 253:serial.c      ****       /* Configure USART2 TX (PA2) as push-pull */
+ 254:serial.c      ****       GPIO_Init_Pin(GPIOA,GPIO_Pin_2,GPIO_Speed_50MHz,GPIO_Mode_AF_PP);
+ 1400              		.loc 2 254 7 is_stmt 1 view .LVU449
+ 1401 0076 1823     		movs	r3, #24
+ 1402 0078 0322     		movs	r2, #3
+ 1403 007a 0421     		movs	r1, #4
+ 1404 007c 3248     		ldr	r0, .L135+36
+ 1405 007e FFF7FEFF 		bl	GPIO_Init_Pin
+ 1406              	.LVL89:
+ 255:serial.c      ****       /* Configure USART2 RX (PA3) as input floating */
+ 256:serial.c      ****       GPIO_Init_Pin(GPIOA,GPIO_Pin_3,GPIO_Speed_50MHz,GPIO_Mode_IN_FLOATING);
+ 1407              		.loc 2 256 7 view .LVU450
+ 1408 0082 0423     		movs	r3, #4
+ 1409 0084 0322     		movs	r2, #3
+ 1410 0086 0821     		movs	r1, #8
+ 1411 0088 2F48     		ldr	r0, .L135+36
+ 1412 008a FFF7FEFF 		bl	GPIO_Init_Pin
+ 1413              	.LVL90:
+ 257:serial.c      ****       USART_InitStructure.USART_BaudRate = 9600;
+ 1414              		.loc 2 257 7 view .LVU451
+ 258:serial.c      ****       USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+ 1415              		.loc 2 258 7 view .LVU452
+ 259:serial.c      ****       USART_InitStructure.USART_StopBits = USART_StopBits_1;
+ 1416              		.loc 2 259 7 view .LVU453
+ 260:serial.c      ****       USART_InitStructure.USART_Parity = USART_Parity_No;
+ 1417              		.loc 2 260 7 view .LVU454
+ 261:serial.c      ****       USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+ 1418              		.loc 2 261 7 view .LVU455
+ 262:serial.c      ****       USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+ 1419              		.loc 2 262 7 view .LVU456
+ 258:serial.c      ****       USART_InitStructure.USART_StopBits = USART_StopBits_1;
+ 1420              		.loc 2 258 44 is_stmt 0 view .LVU457
+ 1421 008e 0023     		movs	r3, #0
+ 1422 0090 4FF41652 		mov	r2, #9600
+ 1423 0094 CDE90223 		strd	r2, r3, [sp, #8]
+ 260:serial.c      ****       USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+ 1424              		.loc 2 260 40 view .LVU458
+ 1425 0098 4FF44022 		mov	r2, #786432
+ 263:serial.c      ****       /* Configure USART1 */
+ 264:serial.c      ****       USART_Init(USART1, &USART_InitStructure);
+ 1426              		.loc 2 264 7 view .LVU459
+ 1427 009c 2B48     		ldr	r0, .L135+40
+ 1428 009e 02A9     		add	r1, sp, #8
+ 261:serial.c      ****       USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+ 1429              		.loc 2 261 53 view .LVU460
+ 1430 00a0 ADF81430 		strh	r3, [sp, #20]	@ movhi
+ 1431              		.loc 2 264 7 is_stmt 1 view .LVU461
+ 260:serial.c      ****       USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+ 1432              		.loc 2 260 40 is_stmt 0 view .LVU462
+ 1433 00a4 0492     		str	r2, [sp, #16]
+ 1434              		.loc 2 264 7 view .LVU463
+ 1435 00a6 FFF7FEFF 		bl	USART_Init
+ 1436              	.LVL91:
+ 265:serial.c      ****       /* Configure USART2 */
+ 266:serial.c      ****       USART_Init(USART2, &USART_InitStructure);
+ 1437              		.loc 2 266 7 is_stmt 1 view .LVU464
+ 1438 00aa 2948     		ldr	r0, .L135+44
+ 1439 00ac 02A9     		add	r1, sp, #8
+ 1440 00ae FFF7FEFF 		bl	USART_Init
+ 1441              	.LVL92:
+ 267:serial.c      ****       /* Enable USART1 Receive and Transmit interrupts */
+ 268:serial.c      ****       USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+ 1442              		.loc 2 268 7 view .LVU465
+ 1443 00b2 0122     		movs	r2, #1
+ 1444 00b4 40F22551 		movw	r1, #1317
+ 1445 00b8 2448     		ldr	r0, .L135+40
+ 1446 00ba FFF7FEFF 		bl	USART_ITConfig
+ 1447              	.LVL93:
+ 269:serial.c      ****       /* Enable USART2 Receive and Transmit interrupts */
+ 270:serial.c      ****       USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+ 1448              		.loc 2 270 7 view .LVU466
+ 1449 00be 0122     		movs	r2, #1
+ 1450 00c0 40F22551 		movw	r1, #1317
+ 1451 00c4 2248     		ldr	r0, .L135+44
+ 1452 00c6 FFF7FEFF 		bl	USART_ITConfig
+ 1453              	.LVL94:
+ 271:serial.c      ****       /* Enable the USART1 */
+ 272:serial.c      ****       USART_Cmd(USART1, ENABLE);
+ 1454              		.loc 2 272 7 view .LVU467
+ 1455 00ca 0121     		movs	r1, #1
+ 1456 00cc 1F48     		ldr	r0, .L135+40
+ 1457 00ce FFF7FEFF 		bl	USART_Cmd
+ 1458              	.LVL95:
+ 273:serial.c      ****       /* Enable the USART2 */
+ 274:serial.c      ****       USART_Cmd(USART2, ENABLE);
+ 1459              		.loc 2 274 7 view .LVU468
+ 1460 00d2 0121     		movs	r1, #1
+ 1461 00d4 1E48     		ldr	r0, .L135+44
+ 1462 00d6 FFF7FEFF 		bl	USART_Cmd
+ 1463              	.LVL96:
+ 275:serial.c      ****       flash_read();
+ 1464              		.loc 2 275 7 view .LVU469
+ 1465 00da FFF7FEFF 		bl	flash_read
+ 1466              	.LVL97:
+ 276:serial.c      ****       if (flash_para[0] == 0x68050555) {
+ 1467              		.loc 2 276 7 view .LVU470
+ 1468              		.loc 2 276 21 is_stmt 0 view .LVU471
+ 1469 00de 1D4A     		ldr	r2, .L135+48
+ 1470              		.loc 2 276 10 view .LVU472
+ 1471 00e0 1D4B     		ldr	r3, .L135+52
+ 1472              		.loc 2 276 21 view .LVU473
+ 1473 00e2 1168     		ldr	r1, [r2]
+ 1474              		.loc 2 276 10 view .LVU474
+ 1475 00e4 9942     		cmp	r1, r3
+ 277:serial.c      ****          this_id = flash_para[1];
+ 1476              		.loc 2 277 30 view .LVU475
+ 1477 00e6 08BF     		it	eq
+ 1478 00e8 5268     		ldreq	r2, [r2, #4]
+ 1479 00ea 1C4B     		ldr	r3, .L135+56
+ 1480              		.loc 2 277 10 is_stmt 1 view .LVU476
+ 1481              		.loc 2 277 18 is_stmt 0 view .LVU477
+ 1482 00ec 04BF     		itt	eq
+ 1483 00ee D2B2     		uxtbeq	r2, r2
+ 1484 00f0 1A70     		strbeq	r2, [r3]
+ 278:serial.c      ****       }
+ 279:serial.c      ****       if ((this_id == 0) || (this_id > 32)) this_id = 1;
+ 1485              		.loc 2 279 7 is_stmt 1 view .LVU478
+ 1486              		.loc 2 279 20 is_stmt 0 view .LVU479
+ 1487 00f2 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 1488              		.loc 2 279 10 view .LVU480
+ 1489 00f4 12B1     		cbz	r2, .L129
+ 1490              		.loc 2 279 38 discriminator 2 view .LVU481
+ 1491 00f6 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 1492              		.loc 2 279 26 discriminator 2 view .LVU482
+ 1493 00f8 202A     		cmp	r2, #32
+ 1494 00fa 01D9     		bls	.L125
+ 1495              	.L129:
+ 1496              		.loc 2 279 45 is_stmt 1 discriminator 3 view .LVU483
+ 1497              		.loc 2 279 53 is_stmt 0 discriminator 3 view .LVU484
+ 1498 00fc 0122     		movs	r2, #1
+ 1499 00fe 1A70     		strb	r2, [r3]
+ 1500              	.L125:
+ 280:serial.c      **** }...
+ 1501              		.loc 2 280 1 view .LVU485
+ 1502 0100 06B0     		add	sp, sp, #24
+ 1503              		.cfi_remember_state
+ 1504              		.cfi_def_cfa_offset 16
+ 1505              		@ sp needed
+ 1506 0102 70BD     		pop	{r4, r5, r6, pc}
+ 1507              	.L126:
+ 1508              		.cfi_restore_state
+ 247:serial.c      ****          GPIO_PinRemapConfig(GPIO_Remap_USART1,ENABLE);
+ 1509              		.loc 2 247 10 is_stmt 1 view .LVU486
+ 1510 0104 2946     		mov	r1, r5
+ 1511 0106 0420     		movs	r0, #4
+ 1512 0108 FFF7FEFF 		bl	GPIO_PinRemapConfig
+ 1513              	.LVL98:
+ 249:serial.c      ****          GPIO_Init_Pin(GPIOB,GPIO_Pin_6,GPIO_Speed_50MHz,GPIO_Mode_AF_PP);
+ 1514              		.loc 2 249 10 view .LVU487
+ 1515 010c 1823     		movs	r3, #24
+ 1516 010e 0322     		movs	r2, #3
+ 1517 0110 4021     		movs	r1, #64
+ 1518 0112 1348     		ldr	r0, .L135+60
+ 1519 0114 FFF7FEFF 		bl	GPIO_Init_Pin
+ 1520              	.LVL99:
+ 251:serial.c      ****          GPIO_Init_Pin(GPIOB,GPIO_Pin_7,GPIO_Speed_50MHz,GPIO_Mode_IN_FLOATING);
+ 1521              		.loc 2 251 10 view .LVU488
+ 1522 0118 0423     		movs	r3, #4
+ 1523 011a 0322     		movs	r2, #3
+ 1524 011c 8021     		movs	r1, #128
+ 1525 011e 1048     		ldr	r0, .L135+60
+ 1526 0120 A7E7     		b	.L134
+ 1527              	.L136:
+ 1528 0122 00BF     		.align	2
+ 1529              	.L135:
+ 1530 0124 00000000 		.word	rxcnt1
+ 1531 0128 00000000 		.word	txcnt1
+ 1532 012c 00000000 		.word	maxtx1
+ 1533 0130 00000000 		.word	USART1_PORT
+ 1534 0134 00000000 		.word	tx_flag1
+ 1535 0138 00000000 		.word	rxcnt2
+ 1536 013c 00000000 		.word	txcnt2
+ 1537 0140 00000000 		.word	maxtx2
+ 1538 0144 00000000 		.word	tx_flag2
+ 1539 0148 00080140 		.word	1073809408
+ 1540 014c 00380140 		.word	1073821696
+ 1541 0150 00440040 		.word	1073759232
+ 1542 0154 00000000 		.word	flash_para
+ 1543 0158 55050568 		.word	1745159509
+ 1544 015c 00000000 		.word	this_id
+ 1545 0160 000C0140 		.word	1073810432
+ 1546              		.cfi_endproc
+ 1547              	.LFE41:
+ 1549              		.comm	flash_para,256,4
+ 1550              		.comm	USART1_PORT,1,1
+ 1551              		.comm	sbuff,256,1
+ 1552              		.comm	rxbuff2,256,1
+ 1553              		.comm	txbuff2,256,1
+ 1554              		.comm	rxbuff1,256,1
+ 1555              		.comm	txbuff1,256,1
+ 1556              		.comm	this_id,1,1
+ 1557              		.comm	txled,1,1
+ 1558              		.comm	rxled,1,1
+ 1559              		.comm	rxck2,1,1
+ 1560              		.comm	rxck1,1,1
+ 1561              		.comm	tx_flag2,1,1
+ 1562              		.comm	tx_flag1,1,1
+ 1563              		.comm	maxtx2,2,2
+ 1564              		.comm	txcnt2,2,2
+ 1565              		.comm	rxcnt2,2,2
+ 1566              		.comm	maxtx1,2,2
+ 1567              		.comm	txcnt1,2,2
+ 1568              		.comm	rxcnt1,2,2
+ 1569              		.text
+ 1570              	.Letext0:
+ 1571              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
+ 1572              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 1573              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 1574              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 1575              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
+ 1576              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 1577              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 1578              		.file 10 "/project/stm32fx_lib/stm32f1x_iolib/include/cmsis/stm32f1xx.h"
+ 1579              		.file 11 "/project/stm32fx_lib/stm32f1x_iolib/include/irq.h"
+ 1580              		.file 12 "/project/stm32fx_lib/stm32f1x_iolib/include/usart.h"
+ 1581              		.file 13 "/project/stm32fx_lib/stm32f1x_iolib/include/gpio.h"
+ 1582              		.file 14 "/project/stm32fx_lib/stm32f1x_iolib/include/fundefs.h"
+ 1583              		.file 15 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 1584              		.file 16 "<built-in>"
+DEFINED SYMBOLS
+                            *ABS*:00000000 serial.c
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:16     .text.NVIC_SystemReset:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:23     .text.NVIC_SystemReset:00000000 NVIC_SystemReset
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:67     .text.NVIC_SystemReset:00000014 $d
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:73     .text.flash_read:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:80     .text.flash_read:00000000 flash_read
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:135    .text.flash_read:00000028 $d
+                            *COM*:00000100 flash_para
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:140    .text.USART1_IRQHandler:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:147    .text.USART1_IRQHandler:00000000 USART1_IRQHandler
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:305    .text.USART1_IRQHandler:000000c8 $d
+                            *COM*:00000002 rxcnt1
+                            *COM*:00000100 rxbuff1
+                            *COM*:00000001 rxck1
+                            *COM*:00000001 rxled
+                            *COM*:00000002 txcnt1
+                            *COM*:00000002 maxtx1
+                            *COM*:00000100 txbuff1
+                            *COM*:00000001 tx_flag1
+                            *COM*:00000001 txled
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:319    .text.USART2_IRQHandler:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:326    .text.USART2_IRQHandler:00000000 USART2_IRQHandler
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:484    .text.USART2_IRQHandler:000000c8 $d
+                            *COM*:00000002 rxcnt2
+                            *COM*:00000100 rxbuff2
+                            *COM*:00000001 rxck2
+                            *COM*:00000002 txcnt2
+                            *COM*:00000002 maxtx2
+                            *COM*:00000100 txbuff2
+                            *COM*:00000001 tx_flag2
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:498    .text.uasrt_send:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:505    .text.uasrt_send:00000000 uasrt_send
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:669    .text.uasrt_send:00000094 $d
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:686    .text.uasrt_read:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:693    .text.uasrt_read:00000000 uasrt_read
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:804    .text.uasrt_read:00000058 $d
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:814    .text.usart_check:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:821    .text.usart_check:00000000 usart_check
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:864    .text.usart_check:0000001c $d
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:872    .text.s_printf:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:879    .text.s_printf:00000000 s_printf
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:947    .text.s_printf:00000030 $d
+                            *COM*:00000100 sbuff
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:952    .text.receive_serial1:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:959    .text.receive_serial1:00000000 receive_serial1
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1104   .text.receive_serial1:00000070 $d
+                            *COM*:00000001 this_id
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1112   .text.receive_serial2:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1119   .text.receive_serial2:00000000 receive_serial2
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1264   .text.receive_serial2:00000070 $d
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1272   .text.serial_init:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1279   .text.serial_init:00000000 serial_init
+C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1530   .text.serial_init:00000124 $d
+                            *COM*:00000001 USART1_PORT
+
+UNDEFINED SYMBOLS
+FLASH_Unlock
+FLASH_Lock
+USART_GetITStatus
+USART_ReceiveData
+USART_ClearITPendingBit
+USART_SendData
+USART_ITConfig
+memset
+memcpy
+vsprintf
+strlen
+NVIC_Init
+GPIO_Init_Pin
+USART_Init
+USART_Cmd
+GPIO_PinRemapConfig

@@ -1,0 +1,996 @@
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 4
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"time.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.time_from_seconds,"ax",%progbits
+  16              		.align	1
+  17              		.global	time_from_seconds
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	time_from_seconds:
+  25              	.LVL0:
+  26              	.LFB29:
+  27              		.file 1 "time.c"
+   1:time.c        **** /********************************************************************************/
+   2:time.c        **** /* time.c                                                                       */
+   3:time.c        **** /* STM32F10X                                                                    */
+   4:time.c        **** /*(Lee ChangWoo HL2IRW  hl2irw@kpu.ac.kr 011-726-6860)                          */
+   5:time.c        **** /* stm_start                                                                    */
+   6:time.c        **** /********************************************************************************/
+   7:time.c        **** #include "hwdefs.h"
+   8:time.c        **** #include "fundefs.h"
+   9:time.c        **** 
+  10:time.c        **** volatile unsigned int now_time;
+  11:time.c        **** volatile unsigned char time_rtc_flag;
+  12:time.c        **** const unsigned char month_length[12] = {31,29,31,30,31,30,31,31,30,31,30,31};
+  13:time.c        **** extern volatile unsigned short jiffes;
+  14:time.c        **** 
+  15:time.c        **** 
+  16:time.c        **** void time_from_seconds (time_rtc *ptime, unsigned int ul_seconds)
+  17:time.c        **** {
+  28              		.loc 1 17 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  18:time.c        ****       long year, idx = 0;
+  32              		.loc 1 18 7 view .LVU1
+  19:time.c        ****       // Extract the number of seconds from the time.
+  20:time.c        ****       ptime->sec = ul_seconds % 60;
+  33              		.loc 1 20 7 view .LVU2
+  34              		.loc 1 20 31 is_stmt 0 view .LVU3
+  35 0000 3C23     		movs	r3, #60
+  36 0002 B1FBF3F2 		udiv	r2, r1, r3
+  37 0006 03FB1211 		mls	r1, r3, r2, r1
+  38              	.LVL1:
+  39              		.loc 1 20 18 view .LVU4
+  40 000a 8171     		strb	r1, [r0, #6]
+  21:time.c        ****       ul_seconds /= 60;
+  41              		.loc 1 21 7 is_stmt 1 view .LVU5
+  42              	.LVL2:
+  22:time.c        ****       // Extract the number of minutes from the time.
+  23:time.c        ****       ptime->min = ul_seconds % 60;
+  43              		.loc 1 23 7 view .LVU6
+  44              		.loc 1 23 31 is_stmt 0 view .LVU7
+  45 000c B2FBF3F1 		udiv	r1, r2, r3
+  46 0010 03FB1123 		mls	r3, r3, r1, r2
+  24:time.c        ****       ul_seconds /= 60;
+  25:time.c        ****       // Extract the number of hours from the time.
+  26:time.c        ****       ptime->hour = ul_seconds % 24;
+  47              		.loc 1 26 32 view .LVU8
+  48 0014 1822     		movs	r2, #24
+  49              	.LVL3:
+  23:time.c        ****       ul_seconds /= 60;
+  50              		.loc 1 23 18 view .LVU9
+  51 0016 4371     		strb	r3, [r0, #5]
+  24:time.c        ****       ul_seconds /= 60;
+  52              		.loc 1 24 7 is_stmt 1 view .LVU10
+  53              	.LVL4:
+  54              		.loc 1 26 7 view .LVU11
+  55              		.loc 1 26 32 is_stmt 0 view .LVU12
+  56 0018 B1FBF2F3 		udiv	r3, r1, r2
+  57 001c 02FB1312 		mls	r2, r2, r3, r1
+  58              		.loc 1 26 19 view .LVU13
+  59 0020 0271     		strb	r2, [r0, #4]
+  27:time.c        ****       ul_seconds /= 24;
+  60              		.loc 1 27 7 is_stmt 1 view .LVU14
+  61              	.LVL5:
+  28:time.c        ****       // We now have days, so add the number of days between January 1, 1900 and
+  29:time.c        ****       // January 1, 1970.
+  30:time.c        ****       ul_seconds += (70 * 365) + 18;
+  62              		.loc 1 30 7 view .LVU15
+  63              		.loc 1 30 18 is_stmt 0 view .LVU16
+  64 0022 03F5C742 		add	r2, r3, #25472
+  31:time.c        ****       // The day of the week just happens to work out this way.
+  32:time.c        ****       ptime->wday = ul_seconds % 7;
+  65              		.loc 1 32 32 view .LVU17
+  66 0026 0723     		movs	r3, #7
+  67              	.LVL6:
+  30:time.c        ****       // The day of the week just happens to work out this way.
+  68              		.loc 1 30 18 view .LVU18
+  69 0028 6032     		adds	r2, r2, #96
+  70              	.LVL7:
+  71              		.loc 1 32 7 is_stmt 1 view .LVU19
+  72              		.loc 1 32 32 is_stmt 0 view .LVU20
+  73 002a B2FBF3F3 		udiv	r3, r2, r3
+  17:time.c        ****       long year, idx = 0;
+  74              		.loc 1 17 1 view .LVU21
+  75 002e 30B5     		push	{r4, r5, lr}
+  76              		.cfi_def_cfa_offset 12
+  77              		.cfi_offset 4, -12
+  78              		.cfi_offset 5, -8
+  79              		.cfi_offset 14, -4
+  33:time.c        ****       // Compute the number of years in terms of group of years from leap year to
+  34:time.c        ****       // leap year.
+  35:time.c        ****       year = 4 * (ul_seconds / ((365 * 4) + 1));
+  80              		.loc 1 35 30 view .LVU22
+  81 0030 40F2B554 		movw	r4, #1461
+  32:time.c        ****       // Compute the number of years in terms of group of years from leap year to
+  82              		.loc 1 32 32 view .LVU23
+  83 0034 C3EBC303 		rsb	r3, r3, r3, lsl #3
+  84 0038 D31A     		subs	r3, r2, r3
+  32:time.c        ****       // Compute the number of years in terms of group of years from leap year to
+  85              		.loc 1 32 19 view .LVU24
+  86 003a C371     		strb	r3, [r0, #7]
+  87              		.loc 1 35 7 is_stmt 1 view .LVU25
+  88              		.loc 1 35 30 is_stmt 0 view .LVU26
+  89 003c B2FBF4F3 		udiv	r3, r2, r4
+  90              		.loc 1 35 16 view .LVU27
+  91 0040 9900     		lsls	r1, r3, #2
+  92              	.LVL8:
+  36:time.c        ****       ul_seconds %= (365 * 4) + 1;
+  93              		.loc 1 36 7 is_stmt 1 view .LVU28
+  94              		.loc 1 36 18 is_stmt 0 view .LVU29
+  95 0042 04FB1323 		mls	r3, r4, r3, r2
+  96              	.LVL9:
+  37:time.c        ****       // If there are more than 365 days left in the current count of days, then
+  38:time.c        ****       // subtract the days from the remaining non-leap years.
+  39:time.c        ****       if (ul_seconds >= 366) {
+  97              		.loc 1 39 7 is_stmt 1 view .LVU30
+  98              		.loc 1 39 10 is_stmt 0 view .LVU31
+  99 0046 B3F5B77F 		cmp	r3, #366
+  40:time.c        ****          year += (ul_seconds - 1) / 365;
+ 100              		.loc 1 40 35 view .LVU32
+ 101 004a 23BF     		ittte	cs
+ 102 004c 40F26D15 		movwcs	r5, #365
+ 103              		.loc 1 40 30 view .LVU33
+ 104 0050 03F1FF33 		addcs	r3, r3, #-1
+ 105              	.LVL10:
+ 106              		.loc 1 40 35 view .LVU34
+ 107 0054 B3FBF5F4 		udivcs	r4, r3, r5
+ 108              	.LVL11:
+  35:time.c        ****       ul_seconds %= (365 * 4) + 1;
+ 109              		.loc 1 35 12 view .LVU35
+ 110 0058 0A46     		movcc	r2, r1
+ 111              	.LVL12:
+ 112              		.loc 1 40 10 is_stmt 1 view .LVU36
+ 113              		.loc 1 40 15 is_stmt 0 view .LVU37
+ 114 005a 28BF     		it	cs
+ 115 005c 6218     		addcs	r2, r4, r1
+ 116              	.LVL13:
+  41:time.c        ****          ul_seconds = (ul_seconds - 1) % 365;
+ 117              		.loc 1 41 10 is_stmt 1 view .LVU38
+  42:time.c        ****       }
+  43:time.c        ****       // Save the computed year.
+  44:time.c        ****       ptime->year = 1900 + year;
+ 118              		.loc 1 44 26 is_stmt 0 view .LVU39
+ 119 005e 02F26C71 		addw	r1, r2, #1900
+  41:time.c        ****          ul_seconds = (ul_seconds - 1) % 365;
+ 120              		.loc 1 41 21 view .LVU40
+ 121 0062 28BF     		it	cs
+ 122 0064 05FB1433 		mlscs	r3, r5, r4, r3
+ 123              	.LVL14:
+ 124              		.loc 1 44 7 is_stmt 1 view .LVU41
+  45:time.c        ****       // If this is a non-leap year and the day is past February 28th, then
+  46:time.c        ****       // increment the count of days by one (i.e. act as if each year is a leap
+  47:time.c        ****       // year).
+  48:time.c        ****       if (((year & 3) != 0) && (ul_seconds >= (31 + 28))) {
+ 125              		.loc 1 48 10 is_stmt 0 view .LVU42
+ 126 0068 9207     		lsls	r2, r2, #30
+ 127              	.LVL15:
+  44:time.c        ****       // If this is a non-leap year and the day is past February 28th, then
+ 128              		.loc 1 44 19 view .LVU43
+ 129 006a 0180     		strh	r1, [r0]	@ movhi
+ 130              		.loc 1 48 7 is_stmt 1 view .LVU44
+ 131              		.loc 1 48 10 is_stmt 0 view .LVU45
+ 132 006c 02D0     		beq	.L4
+ 133              		.loc 1 48 29 discriminator 1 view .LVU46
+ 134 006e 3A2B     		cmp	r3, #58
+  49:time.c        ****          ul_seconds++;
+ 135              		.loc 1 49 10 is_stmt 1 discriminator 1 view .LVU47
+ 136              		.loc 1 49 20 is_stmt 0 discriminator 1 view .LVU48
+ 137 0070 88BF     		it	hi
+ 138 0072 0133     		addhi	r3, r3, #1
+ 139              	.LVL16:
+ 140              	.L4:
+  17:time.c        ****       long year, idx = 0;
+ 141              		.loc 1 17 1 view .LVU49
+ 142 0074 0022     		movs	r2, #0
+ 143 0076 064C     		ldr	r4, .L10
+ 144              	.LVL17:
+ 145              	.L5:
+  50:time.c        ****       }
+  51:time.c        ****       // Subtract days for each month till we find the current month.
+  52:time.c        ****       while (ul_seconds >= month_length[idx]) {
+ 146              		.loc 1 52 13 is_stmt 1 view .LVU50
+ 147              		.loc 1 52 40 is_stmt 0 view .LVU51
+ 148 0078 14F8011B 		ldrb	r1, [r4], #1	@ zero_extendqisi2
+ 149 007c 0132     		adds	r2, r2, #1
+ 150              		.loc 1 52 13 view .LVU52
+ 151 007e 9942     		cmp	r1, r3
+ 152 0080 03D9     		bls	.L6
+  53:time.c        ****             ul_seconds -= month_length[idx++];
+  54:time.c        ****       }
+  55:time.c        ****       // Save the computed month and day.
+  56:time.c        ****       ptime->day = ul_seconds + 1;
+ 153              		.loc 1 56 7 is_stmt 1 view .LVU53
+ 154              		.loc 1 56 31 is_stmt 0 view .LVU54
+ 155 0082 0133     		adds	r3, r3, #1
+ 156              	.LVL18:
+ 157              		.loc 1 56 18 view .LVU55
+ 158 0084 C370     		strb	r3, [r0, #3]
+  57:time.c        ****       ptime->month = idx + 1;
+ 159              		.loc 1 57 7 is_stmt 1 view .LVU56
+ 160              		.loc 1 57 20 is_stmt 0 view .LVU57
+ 161 0086 8270     		strb	r2, [r0, #2]
+  58:time.c        **** }
+ 162              		.loc 1 58 1 view .LVU58
+ 163 0088 30BD     		pop	{r4, r5, pc}
+ 164              	.LVL19:
+ 165              	.L6:
+  53:time.c        ****             ul_seconds -= month_length[idx++];
+ 166              		.loc 1 53 13 is_stmt 1 view .LVU59
+  53:time.c        ****             ul_seconds -= month_length[idx++];
+ 167              		.loc 1 53 24 is_stmt 0 view .LVU60
+ 168 008a 5B1A     		subs	r3, r3, r1
+ 169              	.LVL20:
+  53:time.c        ****             ul_seconds -= month_length[idx++];
+ 170              		.loc 1 53 24 view .LVU61
+ 171 008c F4E7     		b	.L5
+ 172              	.L11:
+ 173 008e 00BF     		.align	2
+ 174              	.L10:
+ 175 0090 00000000 		.word	.LANCHOR0
+ 176              		.cfi_endproc
+ 177              	.LFE29:
+ 179              		.section	.text.time_to_seconds,"ax",%progbits
+ 180              		.align	1
+ 181              		.global	time_to_seconds
+ 182              		.syntax unified
+ 183              		.thumb
+ 184              		.thumb_func
+ 185              		.fpu softvfp
+ 187              	time_to_seconds:
+ 188              	.LVL21:
+ 189              	.LFB30:
+  59:time.c        **** 
+  60:time.c        **** 
+  61:time.c        **** 
+  62:time.c        **** void time_to_seconds (time_rtc *ptime, unsigned int *pul_seconds)
+  63:time.c        **** {
+ 190              		.loc 1 63 1 is_stmt 1 view -0
+ 191              		.cfi_startproc
+ 192              		@ args = 0, pretend = 0, frame = 0
+ 193              		@ frame_needed = 0, uses_anonymous_args = 0
+  64:time.c        ****       long idx;
+ 194              		.loc 1 64 7 view .LVU63
+  65:time.c        ****       // Compute the number of days that have past in this year.
+  66:time.c        ****       *pul_seconds = ptime->day - 1;
+ 195              		.loc 1 66 7 view .LVU64
+  63:time.c        ****       long idx;
+ 196              		.loc 1 63 1 is_stmt 0 view .LVU65
+ 197 0000 30B5     		push	{r4, r5, lr}
+ 198              		.cfi_def_cfa_offset 12
+ 199              		.cfi_offset 4, -12
+ 200              		.cfi_offset 5, -8
+ 201              		.cfi_offset 14, -4
+ 202              		.loc 1 66 27 view .LVU66
+ 203 0002 C378     		ldrb	r3, [r0, #3]	@ zero_extendqisi2
+  67:time.c        ****       idx = ptime->month - 1;
+  68:time.c        ****       while (idx--) {
+  69:time.c        ****             *pul_seconds += month_length[idx];
+ 204              		.loc 1 69 41 view .LVU67
+ 205 0004 194D     		ldr	r5, .L20
+  66:time.c        ****       idx = ptime->month - 1;
+ 206              		.loc 1 66 33 view .LVU68
+ 207 0006 013B     		subs	r3, r3, #1
+  66:time.c        ****       idx = ptime->month - 1;
+ 208              		.loc 1 66 20 view .LVU69
+ 209 0008 0B60     		str	r3, [r1]
+  67:time.c        ****       idx = ptime->month - 1;
+ 210              		.loc 1 67 7 is_stmt 1 view .LVU70
+  67:time.c        ****       idx = ptime->month - 1;
+ 211              		.loc 1 67 18 is_stmt 0 view .LVU71
+ 212 000a 8378     		ldrb	r3, [r0, #2]	@ zero_extendqisi2
+  67:time.c        ****       idx = ptime->month - 1;
+ 213              		.loc 1 67 11 view .LVU72
+ 214 000c 013B     		subs	r3, r3, #1
+ 215              	.LVL22:
+  68:time.c        ****             *pul_seconds += month_length[idx];
+ 216              		.loc 1 68 7 is_stmt 1 view .LVU73
+ 217              	.L13:
+  68:time.c        ****             *pul_seconds += month_length[idx];
+ 218              		.loc 1 68 13 view .LVU74
+  68:time.c        ****             *pul_seconds += month_length[idx];
+ 219              		.loc 1 68 17 is_stmt 0 view .LVU75
+ 220 000e 013B     		subs	r3, r3, #1
+ 221              	.LVL23:
+  68:time.c        ****             *pul_seconds += month_length[idx];
+ 222              		.loc 1 68 13 view .LVU76
+ 223 0010 5C1C     		adds	r4, r3, #1
+ 224 0012 0A68     		ldr	r2, [r1]
+ 225 0014 25D1     		bne	.L14
+  70:time.c        ****       }
+  71:time.c        ****       // If this is a non-leap year and the day is past February 28th, then
+  72:time.c        ****       // subtract the count of days by one (since we treat each year as if it
+  73:time.c        ****       // were a leap year).
+  74:time.c        ****       if (((ptime->year & 3) != 0) && (*pul_seconds >= (31 + 28))) {
+ 226              		.loc 1 74 7 is_stmt 1 view .LVU77
+ 227              		.loc 1 74 18 is_stmt 0 view .LVU78
+ 228 0016 B0F90040 		ldrsh	r4, [r0]
+ 229              		.loc 1 74 10 view .LVU79
+ 230 001a A507     		lsls	r5, r4, #30
+ 231 001c 04D0     		beq	.L15
+ 232              		.loc 1 74 36 discriminator 1 view .LVU80
+ 233 001e 3A2A     		cmp	r2, #58
+  75:time.c        ****          (*pul_seconds)--;
+ 234              		.loc 1 75 10 is_stmt 1 discriminator 1 view .LVU81
+ 235              		.loc 1 75 24 is_stmt 0 discriminator 1 view .LVU82
+ 236 0020 84BF     		itt	hi
+ 237 0022 02F1FF32 		addhi	r2, r2, #-1
+ 238 0026 0A60     		strhi	r2, [r1]
+ 239              	.L15:
+  76:time.c        ****       }
+  77:time.c        ****       // Add the days for the years that have past.
+  78:time.c        ****       idx = ptime->year - 1970;
+ 240              		.loc 1 78 7 is_stmt 1 view .LVU83
+ 241              	.LVL24:
+  79:time.c        ****       *pul_seconds += (idx * 365) + ((idx + 1) / 4);
+ 242              		.loc 1 79 7 view .LVU84
+  80:time.c        ****       // Convert the days to hours and add the current hour.
+  81:time.c        ****       *pul_seconds = (*pul_seconds * 24) + ptime->hour;
+ 243              		.loc 1 81 7 view .LVU85
+  82:time.c        ****       // Convert the hours to minutes and add the current minute.
+  83:time.c        ****       *pul_seconds = (*pul_seconds * 60) + ptime->min;
+ 244              		.loc 1 83 7 view .LVU86
+  84:time.c        ****       // Convert the minutes to seconds and add the current second.
+  85:time.c        ****       *pul_seconds = (*pul_seconds * 60) + ptime->sec;
+ 245              		.loc 1 85 7 view .LVU87
+  79:time.c        ****       // Convert the days to hours and add the current hour.
+ 246              		.loc 1 79 28 is_stmt 0 view .LVU88
+ 247 0028 40F26D13 		movw	r3, #365
+  78:time.c        ****       *pul_seconds += (idx * 365) + ((idx + 1) / 4);
+ 248              		.loc 1 78 11 view .LVU89
+ 249 002c A4F2B272 		subw	r2, r4, #1970
+ 250              	.LVL25:
+  79:time.c        ****       // Convert the days to hours and add the current hour.
+ 251              		.loc 1 79 28 view .LVU90
+ 252 0030 5343     		muls	r3, r2, r3
+  79:time.c        ****       // Convert the days to hours and add the current hour.
+ 253              		.loc 1 79 43 view .LVU91
+ 254 0032 6FF4F662 		mvn	r2, #1968
+ 255              	.LVL26:
+  79:time.c        ****       // Convert the days to hours and add the current hour.
+ 256              		.loc 1 79 43 view .LVU92
+ 257 0036 A218     		adds	r2, r4, r2
+  79:time.c        ****       // Convert the days to hours and add the current hour.
+ 258              		.loc 1 79 48 view .LVU93
+ 259 0038 002A     		cmp	r2, #0
+ 260 003a B8BF     		it	lt
+ 261 003c A4F2AE72 		subwlt	r2, r4, #1966
+  81:time.c        ****       // Convert the hours to minutes and add the current minute.
+ 262              		.loc 1 81 42 view .LVU94
+ 263 0040 1824     		movs	r4, #24
+ 264              	.LVL27:
+  79:time.c        ****       // Convert the days to hours and add the current hour.
+ 265              		.loc 1 79 35 view .LVU95
+ 266 0042 03EBA203 		add	r3, r3, r2, asr #2
+  79:time.c        ****       // Convert the days to hours and add the current hour.
+ 267              		.loc 1 79 20 view .LVU96
+ 268 0046 0A68     		ldr	r2, [r1]
+ 269 0048 1344     		add	r3, r3, r2
+  81:time.c        ****       // Convert the hours to minutes and add the current minute.
+ 270              		.loc 1 81 49 view .LVU97
+ 271 004a 0279     		ldrb	r2, [r0, #4]	@ zero_extendqisi2
+  81:time.c        ****       // Convert the hours to minutes and add the current minute.
+ 272              		.loc 1 81 42 view .LVU98
+ 273 004c 04FB0323 		mla	r3, r4, r3, r2
+  83:time.c        ****       // Convert the minutes to seconds and add the current second.
+ 274              		.loc 1 83 36 view .LVU99
+ 275 0050 3C22     		movs	r2, #60
+  83:time.c        ****       // Convert the minutes to seconds and add the current second.
+ 276              		.loc 1 83 49 view .LVU100
+ 277 0052 4479     		ldrb	r4, [r0, #5]	@ zero_extendqisi2
+ 278              		.loc 1 85 49 view .LVU101
+ 279 0054 8079     		ldrb	r0, [r0, #6]	@ zero_extendqisi2
+ 280              	.LVL28:
+  83:time.c        ****       // Convert the minutes to seconds and add the current second.
+ 281              		.loc 1 83 42 view .LVU102
+ 282 0056 02FB0343 		mla	r3, r2, r3, r4
+ 283              		.loc 1 85 42 view .LVU103
+ 284 005a 02FB0303 		mla	r3, r2, r3, r0
+ 285              		.loc 1 85 20 view .LVU104
+ 286 005e 0B60     		str	r3, [r1]
+  86:time.c        **** }
+ 287              		.loc 1 86 1 view .LVU105
+ 288 0060 30BD     		pop	{r4, r5, pc}
+ 289              	.LVL29:
+ 290              	.L14:
+  69:time.c        ****       }
+ 291              		.loc 1 69 13 is_stmt 1 view .LVU106
+  69:time.c        ****       }
+ 292              		.loc 1 69 41 is_stmt 0 view .LVU107
+ 293 0062 5C5D     		ldrb	r4, [r3, r5]	@ zero_extendqisi2
+  69:time.c        ****       }
+ 294              		.loc 1 69 26 view .LVU108
+ 295 0064 2244     		add	r2, r2, r4
+ 296 0066 0A60     		str	r2, [r1]
+ 297 0068 D1E7     		b	.L13
+ 298              	.L21:
+ 299 006a 00BF     		.align	2
+ 300              	.L20:
+ 301 006c 00000000 		.word	.LANCHOR0
+ 302              		.cfi_endproc
+ 303              	.LFE30:
+ 305              		.section	.text.RTC_IRQHandler,"ax",%progbits
+ 306              		.align	1
+ 307              		.global	RTC_IRQHandler
+ 308              		.syntax unified
+ 309              		.thumb
+ 310              		.thumb_func
+ 311              		.fpu softvfp
+ 313              	RTC_IRQHandler:
+ 314              	.LFB31:
+  87:time.c        **** 
+  88:time.c        **** 
+  89:time.c        **** void RTC_IRQHandler (void)
+  90:time.c        **** {
+ 315              		.loc 1 90 1 is_stmt 1 view -0
+ 316              		.cfi_startproc
+ 317              		@ args = 0, pretend = 0, frame = 0
+ 318              		@ frame_needed = 0, uses_anonymous_args = 0
+  91:time.c        ****       if (RTC_GetITStatus(RTC_IT_SEC) != RESET) {
+ 319              		.loc 1 91 7 view .LVU110
+  90:time.c        ****       if (RTC_GetITStatus(RTC_IT_SEC) != RESET) {
+ 320              		.loc 1 90 1 is_stmt 0 view .LVU111
+ 321 0000 08B5     		push	{r3, lr}
+ 322              		.cfi_def_cfa_offset 8
+ 323              		.cfi_offset 3, -8
+ 324              		.cfi_offset 14, -4
+ 325              		.loc 1 91 11 view .LVU112
+ 326 0002 0120     		movs	r0, #1
+ 327 0004 FFF7FEFF 		bl	RTC_GetITStatus
+ 328              	.LVL30:
+ 329              		.loc 1 91 10 view .LVU113
+ 330 0008 48B1     		cbz	r0, .L22
+  92:time.c        ****       	 RTC_ClearITPendingBit(RTC_IT_SEC);
+ 331              		.loc 1 92 9 is_stmt 1 view .LVU114
+ 332 000a 0120     		movs	r0, #1
+ 333 000c FFF7FEFF 		bl	RTC_ClearITPendingBit
+ 334              	.LVL31:
+  93:time.c        ****       	 time_rtc_flag = 1;
+ 335              		.loc 1 93 9 view .LVU115
+ 336              		.loc 1 93 23 is_stmt 0 view .LVU116
+ 337 0010 0122     		movs	r2, #1
+ 338 0012 034B     		ldr	r3, .L24
+ 339 0014 1A70     		strb	r2, [r3]
+  94:time.c        ****       	 RTC_WaitForLastTask();
+ 340              		.loc 1 94 9 is_stmt 1 view .LVU117
+  95:time.c        ****       }
+  96:time.c        **** }
+ 341              		.loc 1 96 1 is_stmt 0 view .LVU118
+ 342 0016 BDE80840 		pop	{r3, lr}
+ 343              		.cfi_remember_state
+ 344              		.cfi_restore 14
+ 345              		.cfi_restore 3
+ 346              		.cfi_def_cfa_offset 0
+  94:time.c        ****       	 RTC_WaitForLastTask();
+ 347              		.loc 1 94 9 view .LVU119
+ 348 001a FFF7FEBF 		b	RTC_WaitForLastTask
+ 349              	.LVL32:
+ 350              	.L22:
+ 351              		.cfi_restore_state
+ 352              		.loc 1 96 1 view .LVU120
+ 353 001e 08BD     		pop	{r3, pc}
+ 354              	.L25:
+ 355              		.align	2
+ 356              	.L24:
+ 357 0020 00000000 		.word	time_rtc_flag
+ 358              		.cfi_endproc
+ 359              	.LFE31:
+ 361              		.section	.text.set_time,"ax",%progbits
+ 362              		.align	1
+ 363              		.global	set_time
+ 364              		.syntax unified
+ 365              		.thumb
+ 366              		.thumb_func
+ 367              		.fpu softvfp
+ 369              	set_time:
+ 370              	.LVL33:
+ 371              	.LFB32:
+  97:time.c        **** 
+  98:time.c        **** 
+  99:time.c        **** void set_time (time_rtc *p_time)
+ 100:time.c        **** {
+ 372              		.loc 1 100 1 is_stmt 1 view -0
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 8
+ 375              		@ frame_needed = 0, uses_anonymous_args = 0
+ 101:time.c        ****       unsigned int real_time_second;
+ 376              		.loc 1 101 7 view .LVU122
+ 102:time.c        ****       time_to_seconds(p_time,&real_time_second);
+ 377              		.loc 1 102 7 view .LVU123
+ 100:time.c        ****       unsigned int real_time_second;
+ 378              		.loc 1 100 1 is_stmt 0 view .LVU124
+ 379 0000 07B5     		push	{r0, r1, r2, lr}
+ 380              		.cfi_def_cfa_offset 16
+ 381              		.cfi_offset 14, -4
+ 382              		.loc 1 102 7 view .LVU125
+ 383 0002 01A9     		add	r1, sp, #4
+ 384 0004 FFF7FEFF 		bl	time_to_seconds
+ 385              	.LVL34:
+ 103:time.c        ****       /* Wait until last write operation on RTC registers has finished */
+ 104:time.c        ****       RTC_WaitForLastTask();
+ 386              		.loc 1 104 7 is_stmt 1 view .LVU126
+ 387 0008 FFF7FEFF 		bl	RTC_WaitForLastTask
+ 388              	.LVL35:
+ 105:time.c        ****       /* Change the current time */
+ 106:time.c        ****       RTC_SetCounter(real_time_second);
+ 389              		.loc 1 106 7 view .LVU127
+ 390 000c 0198     		ldr	r0, [sp, #4]
+ 391 000e FFF7FEFF 		bl	RTC_SetCounter
+ 392              	.LVL36:
+ 107:time.c        ****       /* Wait until last write operation on RTC registers has finished */
+ 108:time.c        ****       RTC_WaitForLastTask();
+ 393              		.loc 1 108 7 view .LVU128
+ 394 0012 FFF7FEFF 		bl	RTC_WaitForLastTask
+ 395              	.LVL37:
+ 109:time.c        **** 	  
+ 110:time.c        **** 	  
+ 111:time.c        **** }
+ 396              		.loc 1 111 1 is_stmt 0 view .LVU129
+ 397 0016 03B0     		add	sp, sp, #12
+ 398              		.cfi_def_cfa_offset 4
+ 399              		@ sp needed
+ 400 0018 5DF804FB 		ldr	pc, [sp], #4
+ 401              		.cfi_endproc
+ 402              	.LFE32:
+ 404              		.section	.text.check_rtc,"ax",%progbits
+ 405              		.align	1
+ 406              		.global	check_rtc
+ 407              		.syntax unified
+ 408              		.thumb
+ 409              		.thumb_func
+ 410              		.fpu softvfp
+ 412              	check_rtc:
+ 413              	.LFB33:
+ 112:time.c        **** 
+ 113:time.c        **** 
+ 114:time.c        **** void check_rtc (void)
+ 115:time.c        **** {
+ 414              		.loc 1 115 1 is_stmt 1 view -0
+ 415              		.cfi_startproc
+ 416              		@ args = 0, pretend = 0, frame = 8
+ 417              		@ frame_needed = 0, uses_anonymous_args = 0
+ 116:time.c        ****       time_rtc n_time;
+ 418              		.loc 1 116 7 view .LVU131
+ 117:time.c        ****       now_time = RTC_GetCounter();
+ 419              		.loc 1 117 7 view .LVU132
+ 115:time.c        ****       time_rtc n_time;
+ 420              		.loc 1 115 1 is_stmt 0 view .LVU133
+ 421 0000 07B5     		push	{r0, r1, r2, lr}
+ 422              		.cfi_def_cfa_offset 16
+ 423              		.cfi_offset 14, -4
+ 424              		.loc 1 117 18 view .LVU134
+ 425 0002 FFF7FEFF 		bl	RTC_GetCounter
+ 426              	.LVL38:
+ 427              		.loc 1 117 16 view .LVU135
+ 428 0006 0D4B     		ldr	r3, .L29
+ 429 0008 1860     		str	r0, [r3]
+ 118:time.c        ****       time_from_seconds(&n_time,now_time);
+ 430              		.loc 1 118 7 is_stmt 1 view .LVU136
+ 431 000a 1968     		ldr	r1, [r3]
+ 432 000c 6846     		mov	r0, sp
+ 433 000e FFF7FEFF 		bl	time_from_seconds
+ 434              	.LVL39:
+ 119:time.c        ****       if ((n_time.year < 2000) || (n_time.year > 2100)) {
+ 435              		.loc 1 119 7 view .LVU137
+ 436              		.loc 1 119 32 is_stmt 0 view .LVU138
+ 437 0012 BDF80030 		ldrh	r3, [sp]
+ 438 0016 A3F5FA63 		sub	r3, r3, #2000
+ 439              		.loc 1 119 10 view .LVU139
+ 440 001a 9BB2     		uxth	r3, r3
+ 441 001c 642B     		cmp	r3, #100
+ 442 001e 0AD9     		bls	.L27
+ 120:time.c        ****          n_time.sec = 0;
+ 443              		.loc 1 120 10 is_stmt 1 view .LVU140
+ 121:time.c        ****          n_time.min = 0;
+ 444              		.loc 1 121 10 view .LVU141
+ 122:time.c        ****          n_time.hour = 12;
+ 445              		.loc 1 122 10 view .LVU142
+ 123:time.c        ****          n_time.day = 1;
+ 446              		.loc 1 123 10 view .LVU143
+ 124:time.c        ****          n_time.month = 1;
+ 447              		.loc 1 124 10 view .LVU144
+ 125:time.c        ****          n_time.year = 2016;
+ 448              		.loc 1 125 10 view .LVU145
+ 449              		.loc 1 125 22 is_stmt 0 view .LVU146
+ 450 0020 074B     		ldr	r3, .L29+4
+ 126:time.c        ****       	 set_time(&n_time);
+ 451              		.loc 1 126 9 view .LVU147
+ 452 0022 6846     		mov	r0, sp
+ 125:time.c        ****          n_time.year = 2016;
+ 453              		.loc 1 125 22 view .LVU148
+ 454 0024 0093     		str	r3, [sp]
+ 122:time.c        ****          n_time.day = 1;
+ 455              		.loc 1 122 22 view .LVU149
+ 456 0026 0C23     		movs	r3, #12
+ 457 0028 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 120:time.c        ****          n_time.min = 0;
+ 458              		.loc 1 120 21 view .LVU150
+ 459 002c 0023     		movs	r3, #0
+ 460 002e 8DF80630 		strb	r3, [sp, #6]
+ 461              		.loc 1 126 9 is_stmt 1 view .LVU151
+ 462 0032 FFF7FEFF 		bl	set_time
+ 463              	.LVL40:
+ 464              	.L27:
+ 127:time.c        ****       }
+ 128:time.c        **** }
+ 465              		.loc 1 128 1 is_stmt 0 view .LVU152
+ 466 0036 03B0     		add	sp, sp, #12
+ 467              		.cfi_def_cfa_offset 4
+ 468              		@ sp needed
+ 469 0038 5DF804FB 		ldr	pc, [sp], #4
+ 470              	.L30:
+ 471              		.align	2
+ 472              	.L29:
+ 473 003c 00000000 		.word	now_time
+ 474 0040 E0070101 		.word	16844768
+ 475              		.cfi_endproc
+ 476              	.LFE33:
+ 478              		.section	.text.setup_rtc,"ax",%progbits
+ 479              		.align	1
+ 480              		.global	setup_rtc
+ 481              		.syntax unified
+ 482              		.thumb
+ 483              		.thumb_func
+ 484              		.fpu softvfp
+ 486              	setup_rtc:
+ 487              	.LFB34:
+ 129:time.c        **** 
+ 130:time.c        **** 
+ 131:time.c        **** void setup_rtc (void)
+ 132:time.c        **** {
+ 488              		.loc 1 132 1 is_stmt 1 view -0
+ 489              		.cfi_startproc
+ 490              		@ args = 0, pretend = 0, frame = 0
+ 491              		@ frame_needed = 0, uses_anonymous_args = 0
+ 133:time.c        ****       /* Enable PWR and BKP clocks */
+ 134:time.c        ****       RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
+ 492              		.loc 1 134 7 view .LVU154
+ 132:time.c        ****       /* Enable PWR and BKP clocks */
+ 493              		.loc 1 132 1 is_stmt 0 view .LVU155
+ 494 0000 10B5     		push	{r4, lr}
+ 495              		.cfi_def_cfa_offset 8
+ 496              		.cfi_offset 4, -8
+ 497              		.cfi_offset 14, -4
+ 498              		.loc 1 134 7 view .LVU156
+ 499 0002 0121     		movs	r1, #1
+ 500 0004 4FF0C050 		mov	r0, #402653184
+ 501 0008 FFF7FEFF 		bl	RCC_APB1PeriphClockCmd
+ 502              	.LVL41:
+ 135:time.c        ****       /* Allow access to BKP Domain */
+ 136:time.c        ****       PWR_BackupAccessCmd(ENABLE);
+ 503              		.loc 1 136 7 is_stmt 1 view .LVU157
+ 504 000c 0120     		movs	r0, #1
+ 505 000e FFF7FEFF 		bl	PWR_BackupAccessCmd
+ 506              	.LVL42:
+ 137:time.c        ****       /* Reset Backup Domain */
+ 138:time.c        ****       BKP_DeInit();
+ 507              		.loc 1 138 7 view .LVU158
+ 508 0012 FFF7FEFF 		bl	BKP_DeInit
+ 509              	.LVL43:
+ 139:time.c        ****       /* Enable LSE */
+ 140:time.c        ****       RCC_LSEConfig(RCC_LSE_ON);
+ 510              		.loc 1 140 7 view .LVU159
+ 511 0016 0120     		movs	r0, #1
+ 512 0018 FFF7FEFF 		bl	RCC_LSEConfig
+ 513              	.LVL44:
+ 141:time.c        ****       /* Wait till LSE is ready */
+ 142:time.c        ****       jiffes = 0;
+ 514              		.loc 1 142 7 view .LVU160
+ 515              		.loc 1 142 14 is_stmt 0 view .LVU161
+ 516 001c 0023     		movs	r3, #0
+ 517 001e 154C     		ldr	r4, .L37
+ 518 0020 2380     		strh	r3, [r4]	@ movhi
+ 143:time.c        ****       while (RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET) {
+ 519              		.loc 1 143 7 is_stmt 1 view .LVU162
+ 520              	.L33:
+ 521              		.loc 1 143 13 view .LVU163
+ 522              		.loc 1 143 14 is_stmt 0 view .LVU164
+ 523 0022 4120     		movs	r0, #65
+ 524 0024 FFF7FEFF 		bl	RCC_GetFlagStatus
+ 525              	.LVL45:
+ 526              		.loc 1 143 13 view .LVU165
+ 527 0028 D8B1     		cbz	r0, .L34
+ 144:time.c        ****             if (jiffes) {
+ 145:time.c        ****                jiffes = 0;
+ 146:time.c        ****                /* Reload IWDG counter */
+ 147:time.c        ****                IWDG_ReloadCounter();
+ 148:time.c        ****             }
+ 149:time.c        ****       }
+ 150:time.c        ****       /* Select LSE as RTC Clock Source */
+ 151:time.c        ****       RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);
+ 528              		.loc 1 151 7 is_stmt 1 view .LVU166
+ 529 002a 4FF48070 		mov	r0, #256
+ 530 002e FFF7FEFF 		bl	RCC_RTCCLKConfig
+ 531              	.LVL46:
+ 152:time.c        ****       /* Enable RTC Clock */
+ 153:time.c        ****       RCC_RTCCLKCmd(ENABLE);
+ 532              		.loc 1 153 7 view .LVU167
+ 533 0032 0120     		movs	r0, #1
+ 534 0034 FFF7FEFF 		bl	RCC_RTCCLKCmd
+ 535              	.LVL47:
+ 154:time.c        ****       /* Wait for RTC registers synchronization */
+ 155:time.c        ****       RTC_WaitForSynchro();
+ 536              		.loc 1 155 7 view .LVU168
+ 537 0038 FFF7FEFF 		bl	RTC_WaitForSynchro
+ 538              	.LVL48:
+ 156:time.c        ****       /* Wait until last write operation on RTC registers has finished */
+ 157:time.c        ****       RTC_WaitForLastTask();
+ 539              		.loc 1 157 7 view .LVU169
+ 540 003c FFF7FEFF 		bl	RTC_WaitForLastTask
+ 541              	.LVL49:
+ 158:time.c        ****       /* Wait until last write operation on RTC registers has finished */
+ 159:time.c        ****       RTC_WaitForLastTask();
+ 542              		.loc 1 159 7 view .LVU170
+ 543 0040 FFF7FEFF 		bl	RTC_WaitForLastTask
+ 544              	.LVL50:
+ 160:time.c        ****       /* Set RTC prescaler: set RTC period to 1sec */
+ 161:time.c        ****       RTC_SetPrescaler(32767); /* RTC period = RTCCLK/RTC_PR = (32.768 KHz)/(32767+1) */
+ 545              		.loc 1 161 7 view .LVU171
+ 546 0044 47F6FF70 		movw	r0, #32767
+ 547 0048 FFF7FEFF 		bl	RTC_SetPrescaler
+ 548              	.LVL51:
+ 162:time.c        ****       /* Wait until last write operation on RTC registers has finished */
+ 163:time.c        ****       RTC_WaitForLastTask();
+ 549              		.loc 1 163 7 view .LVU172
+ 550 004c FFF7FEFF 		bl	RTC_WaitForLastTask
+ 551              	.LVL52:
+ 164:time.c        ****       check_rtc();
+ 552              		.loc 1 164 7 view .LVU173
+ 553 0050 FFF7FEFF 		bl	check_rtc
+ 554              	.LVL53:
+ 165:time.c        ****       BKP_WriteBackupRegister(BKP_DR1,0x0408);
+ 555              		.loc 1 165 7 view .LVU174
+ 166:time.c        **** }
+ 556              		.loc 1 166 1 is_stmt 0 view .LVU175
+ 557 0054 BDE81040 		pop	{r4, lr}
+ 558              		.cfi_remember_state
+ 559              		.cfi_restore 14
+ 560              		.cfi_restore 4
+ 561              		.cfi_def_cfa_offset 0
+ 165:time.c        ****       BKP_WriteBackupRegister(BKP_DR1,0x0408);
+ 562              		.loc 1 165 7 view .LVU176
+ 563 0058 4FF48161 		mov	r1, #1032
+ 564 005c 0420     		movs	r0, #4
+ 565 005e FFF7FEBF 		b	BKP_WriteBackupRegister
+ 566              	.LVL54:
+ 567              	.L34:
+ 568              		.cfi_restore_state
+ 144:time.c        ****                jiffes = 0;
+ 569              		.loc 1 144 13 is_stmt 1 view .LVU177
+ 144:time.c        ****                jiffes = 0;
+ 570              		.loc 1 144 17 is_stmt 0 view .LVU178
+ 571 0062 2388     		ldrh	r3, [r4]
+ 572 0064 9BB2     		uxth	r3, r3
+ 144:time.c        ****                jiffes = 0;
+ 573              		.loc 1 144 16 view .LVU179
+ 574 0066 002B     		cmp	r3, #0
+ 575 0068 DBD0     		beq	.L33
+ 145:time.c        ****                /* Reload IWDG counter */
+ 576              		.loc 1 145 16 is_stmt 1 view .LVU180
+ 145:time.c        ****                /* Reload IWDG counter */
+ 577              		.loc 1 145 23 is_stmt 0 view .LVU181
+ 578 006a 2080     		strh	r0, [r4]	@ movhi
+ 147:time.c        ****             }
+ 579              		.loc 1 147 16 is_stmt 1 view .LVU182
+ 580 006c FFF7FEFF 		bl	IWDG_ReloadCounter
+ 581              	.LVL55:
+ 582 0070 D7E7     		b	.L33
+ 583              	.L38:
+ 584 0072 00BF     		.align	2
+ 585              	.L37:
+ 586 0074 00000000 		.word	jiffes
+ 587              		.cfi_endproc
+ 588              	.LFE34:
+ 590              		.section	.text.init_rtc,"ax",%progbits
+ 591              		.align	1
+ 592              		.global	init_rtc
+ 593              		.syntax unified
+ 594              		.thumb
+ 595              		.thumb_func
+ 596              		.fpu softvfp
+ 598              	init_rtc:
+ 599              	.LFB35:
+ 167:time.c        **** 
+ 168:time.c        **** 
+ 169:time.c        **** void init_rtc (void)
+ 170:time.c        **** {
+ 600              		.loc 1 170 1 view -0
+ 601              		.cfi_startproc
+ 602              		@ args = 0, pretend = 0, frame = 8
+ 603              		@ frame_needed = 0, uses_anonymous_args = 0
+ 171:time.c        ****       NVIC_InitTypeDef NVIC_InitStructure;
+ 604              		.loc 1 171 7 view .LVU184
+ 172:time.c        ****       /* Configure and enable RTC interrupt */
+ 173:time.c        ****       NVIC_InitStructure.NVIC_IRQChannel = RTC_IRQn;
+ 605              		.loc 1 173 7 view .LVU185
+ 174:time.c        ****       NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+ 606              		.loc 1 174 7 view .LVU186
+ 175:time.c        ****       NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+ 607              		.loc 1 175 7 view .LVU187
+ 170:time.c        ****       NVIC_InitTypeDef NVIC_InitStructure;
+ 608              		.loc 1 170 1 is_stmt 0 view .LVU188
+ 609 0000 37B5     		push	{r0, r1, r2, r4, r5, lr}
+ 610              		.cfi_def_cfa_offset 24
+ 611              		.cfi_offset 4, -12
+ 612              		.cfi_offset 5, -8
+ 613              		.cfi_offset 14, -4
+ 173:time.c        ****       NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+ 614              		.loc 1 173 42 view .LVU189
+ 615 0002 40F20333 		movw	r3, #771
+ 176:time.c        ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 616              		.loc 1 176 45 view .LVU190
+ 617 0006 0125     		movs	r5, #1
+ 175:time.c        ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 618              		.loc 1 175 53 view .LVU191
+ 619 0008 0024     		movs	r4, #0
+ 177:time.c        ****       NVIC_Init(&NVIC_InitStructure);
+ 620              		.loc 1 177 7 view .LVU192
+ 621 000a 6846     		mov	r0, sp
+ 173:time.c        ****       NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+ 622              		.loc 1 173 42 view .LVU193
+ 623 000c ADF80030 		strh	r3, [sp]	@ movhi
+ 175:time.c        ****       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 624              		.loc 1 175 53 view .LVU194
+ 625 0010 8DF80240 		strb	r4, [sp, #2]
+ 176:time.c        ****       NVIC_Init(&NVIC_InitStructure);
+ 626              		.loc 1 176 7 is_stmt 1 view .LVU195
+ 176:time.c        ****       NVIC_Init(&NVIC_InitStructure);
+ 627              		.loc 1 176 45 is_stmt 0 view .LVU196
+ 628 0014 0195     		str	r5, [sp, #4]
+ 629              		.loc 1 177 7 is_stmt 1 view .LVU197
+ 630 0016 FFF7FEFF 		bl	NVIC_Init
+ 631              	.LVL56:
+ 178:time.c        ****       PWR_BackupAccessCmd(ENABLE);
+ 632              		.loc 1 178 7 view .LVU198
+ 633 001a 2846     		mov	r0, r5
+ 634 001c FFF7FEFF 		bl	PWR_BackupAccessCmd
+ 635              	.LVL57:
+ 179:time.c        ****       BKP_ClearFlag();
+ 636              		.loc 1 179 7 view .LVU199
+ 637 0020 FFF7FEFF 		bl	BKP_ClearFlag
+ 638              	.LVL58:
+ 180:time.c        ****       if (BKP_ReadBackupRegister(BKP_DR1) != (unsigned short)0x0408) {
+ 639              		.loc 1 180 7 view .LVU200
+ 640              		.loc 1 180 11 is_stmt 0 view .LVU201
+ 641 0024 0420     		movs	r0, #4
+ 642 0026 FFF7FEFF 		bl	BKP_ReadBackupRegister
+ 643              	.LVL59:
+ 644              		.loc 1 180 10 view .LVU202
+ 645 002a B0F5816F 		cmp	r0, #1032
+ 646 002e 17D0     		beq	.L40
+ 181:time.c        ****          setup_rtc();
+ 647              		.loc 1 181 10 is_stmt 1 view .LVU203
+ 648 0030 FFF7FEFF 		bl	setup_rtc
+ 649              	.LVL60:
+ 182:time.c        ****          BKP_TamperPinCmd(DISABLE);
+ 650              		.loc 1 182 10 view .LVU204
+ 651 0034 2046     		mov	r0, r4
+ 652 0036 FFF7FEFF 		bl	BKP_TamperPinCmd
+ 653              	.LVL61:
+ 183:time.c        ****          BKP_ITConfig(DISABLE);
+ 654              		.loc 1 183 10 view .LVU205
+ 655 003a 2046     		mov	r0, r4
+ 656 003c FFF7FEFF 		bl	BKP_ITConfig
+ 657              	.LVL62:
+ 184:time.c        ****          BKP_ClearFlag();
+ 658              		.loc 1 184 10 view .LVU206
+ 659 0040 FFF7FEFF 		bl	BKP_ClearFlag
+ 660              	.LVL63:
+ 185:time.c        ****          BKP_WriteBackupRegister(BKP_DR1,0x0408);
+ 661              		.loc 1 185 10 view .LVU207
+ 662 0044 4FF48161 		mov	r1, #1032
+ 663 0048 0420     		movs	r0, #4
+ 664 004a FFF7FEFF 		bl	BKP_WriteBackupRegister
+ 665              	.LVL64:
+ 666              	.L41:
+ 186:time.c        ****       } else {
+ 187:time.c        ****       	 RTC_WaitForSynchro();
+ 188:time.c        ****       }
+ 189:time.c        ****       PWR_BackupAccessCmd(DISABLE);
+ 667              		.loc 1 189 7 view .LVU208
+ 668 004e 0020     		movs	r0, #0
+ 669 0050 FFF7FEFF 		bl	PWR_BackupAccessCmd
+ 670              	.LVL65:
+ 190:time.c        ****       /* Enable the RTC Second */
+ 191:time.c        ****       RTC_ITConfig(RTC_IT_SEC, ENABLE);
+ 671              		.loc 1 191 7 view .LVU209
+ 672 0054 0121     		movs	r1, #1
+ 673 0056 0846     		mov	r0, r1
+ 674 0058 FFF7FEFF 		bl	RTC_ITConfig
+ 675              	.LVL66:
+ 192:time.c        **** }...
+ 676              		.loc 1 192 1 is_stmt 0 view .LVU210
+ 677 005c 03B0     		add	sp, sp, #12
+ 678              		.cfi_remember_state
+ 679              		.cfi_def_cfa_offset 12
+ 680              		@ sp needed
+ 681 005e 30BD     		pop	{r4, r5, pc}
+ 682              	.L40:
+ 683              		.cfi_restore_state
+ 187:time.c        ****       	 RTC_WaitForSynchro();
+ 684              		.loc 1 187 9 is_stmt 1 view .LVU211
+ 685 0060 FFF7FEFF 		bl	RTC_WaitForSynchro
+ 686              	.LVL67:
+ 687 0064 F3E7     		b	.L41
+ 688              		.cfi_endproc
+ 689              	.LFE35:
+ 691              		.global	month_length
+ 692              		.comm	time_rtc_flag,1,1
+ 693              		.comm	now_time,4,4
+ 694              		.section	.rodata.month_length,"a"
+ 695              		.set	.LANCHOR0,. + 0
+ 698              	month_length:
+ 699 0000 1F1D1F1E 		.ascii	"\037\035\037\036\037\036\037\037\036\037\036\037"
+ 699      1F1E1F1F 
+ 699      1E1F1E1F 
+ 700              		.text
+ 701              	.Letext0:
+ 702              		.file 2 "c:\\project\\stm32fx_lib\\stm32f1x_iolib\\include\\core.h"
+ 703              		.file 3 "/project/stm32fx_lib/stm32f1x_iolib/include/cmsis/stm32f1xx.h"
+ 704              		.file 4 "/project/stm32fx_lib/stm32f1x_iolib/include/irq.h"
+ 705              		.file 5 "userdefs.h"
+ 706              		.file 6 "/project/stm32fx_lib/stm32f1x_iolib/include/fundefs.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 time.c
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:16     .text.time_from_seconds:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:24     .text.time_from_seconds:00000000 time_from_seconds
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:175    .text.time_from_seconds:00000090 $d
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:180    .text.time_to_seconds:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:187    .text.time_to_seconds:00000000 time_to_seconds
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:301    .text.time_to_seconds:0000006c $d
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:306    .text.RTC_IRQHandler:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:313    .text.RTC_IRQHandler:00000000 RTC_IRQHandler
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:357    .text.RTC_IRQHandler:00000020 $d
+                            *COM*:00000001 time_rtc_flag
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:362    .text.set_time:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:369    .text.set_time:00000000 set_time
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:405    .text.check_rtc:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:412    .text.check_rtc:00000000 check_rtc
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:473    .text.check_rtc:0000003c $d
+                            *COM*:00000004 now_time
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:479    .text.setup_rtc:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:486    .text.setup_rtc:00000000 setup_rtc
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:586    .text.setup_rtc:00000074 $d
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:591    .text.init_rtc:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:598    .text.init_rtc:00000000 init_rtc
+C:\Users\gowoo\AppData\Local\Temp\ccGV6dbg.s:698    .rodata.month_length:00000000 month_length
+
+UNDEFINED SYMBOLS
+RTC_GetITStatus
+RTC_ClearITPendingBit
+RTC_WaitForLastTask
+RTC_SetCounter
+RTC_GetCounter
+RCC_APB1PeriphClockCmd
+PWR_BackupAccessCmd
+BKP_DeInit
+RCC_LSEConfig
+RCC_GetFlagStatus
+RCC_RTCCLKConfig
+RCC_RTCCLKCmd
+RTC_WaitForSynchro
+RTC_SetPrescaler
+BKP_WriteBackupRegister
+IWDG_ReloadCounter
+jiffes
+NVIC_Init
+BKP_ClearFlag
+BKP_ReadBackupRegister
+BKP_TamperPinCmd
+BKP_ITConfig
+RTC_ITConfig

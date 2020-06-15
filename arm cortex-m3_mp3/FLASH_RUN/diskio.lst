@@ -1,0 +1,517 @@
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 4
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"diskio.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.disk_initialize,"ax",%progbits
+  16              		.align	1
+  17              		.global	disk_initialize
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	disk_initialize:
+  25              	.LVL0:
+  26              	.LFB29:
+  27              		.file 1 "diskio.c"
+   1:diskio.c      **** /********************************************************************************/
+   2:diskio.c      **** /* diskio.c                                                                     */
+   3:diskio.c      **** /* STM32F103VET6                                                                */
+   4:diskio.c      **** /* (Lee ChangWoo HL2IRW  hl2irw@kpu.ac.kr 011-726-6860)                 	*/
+   5:diskio.c      **** /* stm32f103ve_mp3								*/
+   6:diskio.c      **** /********************************************************************************/
+   7:diskio.c      **** #include "hwdefs.h"
+   8:diskio.c      **** #include "diskio.h"
+   9:diskio.c      **** 
+  10:diskio.c      **** 
+  11:diskio.c      **** DSTATUS disk_initialize (unsigned char drv)
+  12:diskio.c      **** {
+  28              		.loc 1 12 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  13:diskio.c      ****       unsigned char state;
+  32              		.loc 1 13 7 view .LVU1
+  14:diskio.c      ****       if (drv) {
+  33              		.loc 1 14 7 view .LVU2
+  12:diskio.c      ****       unsigned char state;
+  34              		.loc 1 12 1 is_stmt 0 view .LVU3
+  35 0000 08B5     		push	{r3, lr}
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 3, -8
+  38              		.cfi_offset 14, -4
+  39              		.loc 1 14 10 view .LVU4
+  40 0002 38B9     		cbnz	r0, .L3
+  15:diskio.c      ****          return STA_NOINIT;
+  16:diskio.c      ****       }
+  17:diskio.c      ****       state = SD_init();
+  41              		.loc 1 17 7 is_stmt 1 view .LVU5
+  42              		.loc 1 17 15 is_stmt 0 view .LVU6
+  43 0004 FFF7FEFF 		bl	SD_init
+  44              	.LVL1:
+  18:diskio.c      ****       if (state == STA_NODISK) {
+  45              		.loc 1 18 7 is_stmt 1 view .LVU7
+  46              		.loc 1 18 10 is_stmt 0 view .LVU8
+  47 0008 0228     		cmp	r0, #2
+  48 000a 02D0     		beq	.L2
+  19:diskio.c      ****          return STA_NODISK;
+  20:diskio.c      ****       } else if (state != 0) {
+  49              		.loc 1 20 14 is_stmt 1 view .LVU9
+  15:diskio.c      ****       }
+  50              		.loc 1 15 17 is_stmt 0 view .LVU10
+  51 000c 0038     		subs	r0, r0, #0
+  52              	.LVL2:
+  15:diskio.c      ****       }
+  53              		.loc 1 15 17 view .LVU11
+  54 000e 18BF     		it	ne
+  55 0010 0120     		movne	r0, #1
+  56              	.L2:
+  21:diskio.c      ****          return STA_NOINIT;
+  22:diskio.c      ****       } else {
+  23:diskio.c      ****          return 0;
+  24:diskio.c      ****       }
+  25:diskio.c      **** }
+  57              		.loc 1 25 1 view .LVU12
+  58 0012 08BD     		pop	{r3, pc}
+  59              	.LVL3:
+  60              	.L3:
+  15:diskio.c      ****       }
+  61              		.loc 1 15 17 view .LVU13
+  62 0014 0120     		movs	r0, #1
+  63              	.LVL4:
+  15:diskio.c      ****       }
+  64              		.loc 1 15 17 view .LVU14
+  65 0016 FCE7     		b	.L2
+  66              		.cfi_endproc
+  67              	.LFE29:
+  69              		.section	.text.disk_status,"ax",%progbits
+  70              		.align	1
+  71              		.global	disk_status
+  72              		.syntax unified
+  73              		.thumb
+  74              		.thumb_func
+  75              		.fpu softvfp
+  77              	disk_status:
+  78              	.LVL5:
+  79              	.LFB30:
+  26:diskio.c      **** 
+  27:diskio.c      **** 
+  28:diskio.c      **** DSTATUS disk_status (unsigned char drv)
+  29:diskio.c      **** {
+  80              		.loc 1 29 1 is_stmt 1 view -0
+  81              		.cfi_startproc
+  82              		@ args = 0, pretend = 0, frame = 0
+  83              		@ frame_needed = 0, uses_anonymous_args = 0
+  84              		@ link register save eliminated.
+  30:diskio.c      ****       if (drv) {
+  85              		.loc 1 30 7 view .LVU16
+  31:diskio.c      ****          return STA_NOINIT;
+  32:diskio.c      ****       }
+  33:diskio.c      ****       return 0;
+  34:diskio.c      **** }
+  86              		.loc 1 34 1 is_stmt 0 view .LVU17
+  87 0000 0038     		subs	r0, r0, #0
+  88              	.LVL6:
+  89              		.loc 1 34 1 view .LVU18
+  90 0002 18BF     		it	ne
+  91 0004 0120     		movne	r0, #1
+  92 0006 7047     		bx	lr
+  93              		.cfi_endproc
+  94              	.LFE30:
+  96              		.section	.text.disk_read,"ax",%progbits
+  97              		.align	1
+  98              		.global	disk_read
+  99              		.syntax unified
+ 100              		.thumb
+ 101              		.thumb_func
+ 102              		.fpu softvfp
+ 104              	disk_read:
+ 105              	.LVL7:
+ 106              	.LFB31:
+  35:diskio.c      **** 
+  36:diskio.c      **** 
+  37:diskio.c      **** DRESULT disk_read (unsigned char drv,unsigned char *buff,unsigned int sector,unsigned char count)
+  38:diskio.c      **** {
+ 107              		.loc 1 38 1 is_stmt 1 view -0
+ 108              		.cfi_startproc
+ 109              		@ args = 0, pretend = 0, frame = 0
+ 110              		@ frame_needed = 0, uses_anonymous_args = 0
+  39:diskio.c      ****       unsigned char res = 0;
+ 111              		.loc 1 39 7 view .LVU20
+  40:diskio.c      ****       if (drv || !count) {
+ 112              		.loc 1 40 7 view .LVU21
+  38:diskio.c      ****       unsigned char res = 0;
+ 113              		.loc 1 38 1 is_stmt 0 view .LVU22
+ 114 0000 10B5     		push	{r4, lr}
+ 115              		.cfi_def_cfa_offset 8
+ 116              		.cfi_offset 4, -8
+ 117              		.cfi_offset 14, -4
+  38:diskio.c      ****       unsigned char res = 0;
+ 118              		.loc 1 38 1 view .LVU23
+ 119 0002 0446     		mov	r4, r0
+ 120 0004 1046     		mov	r0, r2
+ 121              	.LVL8:
+  38:diskio.c      ****       unsigned char res = 0;
+ 122              		.loc 1 38 1 view .LVU24
+ 123 0006 1A46     		mov	r2, r3
+ 124              	.LVL9:
+ 125              		.loc 1 40 10 view .LVU25
+ 126 0008 5CB9     		cbnz	r4, .L13
+ 127              		.loc 1 40 15 discriminator 1 view .LVU26
+ 128 000a 53B1     		cbz	r3, .L13
+  41:diskio.c      ****          return RES_PARERR;
+  42:diskio.c      ****     }
+  43:diskio.c      ****     if (count == 1) {
+ 129              		.loc 1 43 5 is_stmt 1 view .LVU27
+ 130              		.loc 1 43 8 is_stmt 0 view .LVU28
+ 131 000c 012B     		cmp	r3, #1
+ 132 000e 05D1     		bne	.L10
+  44:diskio.c      ****        res = SD_read_single_block(sector, buff);
+ 133              		.loc 1 44 8 is_stmt 1 view .LVU29
+ 134              		.loc 1 44 14 is_stmt 0 view .LVU30
+ 135 0010 FFF7FEFF 		bl	SD_read_single_block
+ 136              	.LVL10:
+ 137              	.L11:
+  45:diskio.c      ****     } else {
+  46:diskio.c      ****        res = SD_read_multi_block(sector, buff, count);
+  47:diskio.c      ****     }
+  48:diskio.c      ****     if (res == 0x00) {
+ 138              		.loc 1 48 5 is_stmt 1 view .LVU31
+  41:diskio.c      ****     }
+ 139              		.loc 1 41 17 is_stmt 0 view .LVU32
+ 140 0014 0038     		subs	r0, r0, #0
+ 141              	.LVL11:
+  41:diskio.c      ****     }
+ 142              		.loc 1 41 17 view .LVU33
+ 143 0016 18BF     		it	ne
+ 144 0018 0120     		movne	r0, #1
+ 145              	.L9:
+  49:diskio.c      ****        return RES_OK;
+  50:diskio.c      ****     } else {
+  51:diskio.c      ****        return RES_ERROR;
+  52:diskio.c      ****     }
+  53:diskio.c      **** }
+ 146              		.loc 1 53 1 view .LVU34
+ 147 001a 10BD     		pop	{r4, pc}
+ 148              	.LVL12:
+ 149              	.L10:
+  46:diskio.c      ****     }
+ 150              		.loc 1 46 8 is_stmt 1 view .LVU35
+  46:diskio.c      ****     }
+ 151              		.loc 1 46 14 is_stmt 0 view .LVU36
+ 152 001c FFF7FEFF 		bl	SD_read_multi_block
+ 153              	.LVL13:
+  46:diskio.c      ****     }
+ 154              		.loc 1 46 14 view .LVU37
+ 155 0020 F8E7     		b	.L11
+ 156              	.LVL14:
+ 157              	.L13:
+  41:diskio.c      ****     }
+ 158              		.loc 1 41 17 view .LVU38
+ 159 0022 0420     		movs	r0, #4
+ 160              	.LVL15:
+  41:diskio.c      ****     }
+ 161              		.loc 1 41 17 view .LVU39
+ 162 0024 F9E7     		b	.L9
+ 163              		.cfi_endproc
+ 164              	.LFE31:
+ 166              		.section	.text.disk_write,"ax",%progbits
+ 167              		.align	1
+ 168              		.global	disk_write
+ 169              		.syntax unified
+ 170              		.thumb
+ 171              		.thumb_func
+ 172              		.fpu softvfp
+ 174              	disk_write:
+ 175              	.LVL16:
+ 176              	.LFB32:
+  54:diskio.c      **** 
+  55:diskio.c      **** 
+  56:diskio.c      **** #if _READONLY == 0
+  57:diskio.c      **** DRESULT disk_write (unsigned char drv,const unsigned char *buff,unsigned int sector,unsigned char c
+  58:diskio.c      **** {
+ 177              		.loc 1 58 1 is_stmt 1 view -0
+ 178              		.cfi_startproc
+ 179              		@ args = 0, pretend = 0, frame = 0
+ 180              		@ frame_needed = 0, uses_anonymous_args = 0
+  59:diskio.c      ****       unsigned char res;
+ 181              		.loc 1 59 7 view .LVU41
+  60:diskio.c      ****       if (drv || !count) {
+ 182              		.loc 1 60 7 view .LVU42
+  58:diskio.c      ****       unsigned char res;
+ 183              		.loc 1 58 1 is_stmt 0 view .LVU43
+ 184 0000 10B5     		push	{r4, lr}
+ 185              		.cfi_def_cfa_offset 8
+ 186              		.cfi_offset 4, -8
+ 187              		.cfi_offset 14, -4
+  58:diskio.c      ****       unsigned char res;
+ 188              		.loc 1 58 1 view .LVU44
+ 189 0002 0446     		mov	r4, r0
+ 190 0004 1046     		mov	r0, r2
+ 191              	.LVL17:
+  58:diskio.c      ****       unsigned char res;
+ 192              		.loc 1 58 1 view .LVU45
+ 193 0006 1A46     		mov	r2, r3
+ 194              	.LVL18:
+ 195              		.loc 1 60 10 view .LVU46
+ 196 0008 5CB9     		cbnz	r4, .L19
+ 197              		.loc 1 60 15 discriminator 1 view .LVU47
+ 198 000a 53B1     		cbz	r3, .L19
+  61:diskio.c      ****          return RES_PARERR;
+  62:diskio.c      ****       }
+  63:diskio.c      ****       if (count == 1) {
+ 199              		.loc 1 63 7 is_stmt 1 view .LVU48
+ 200              		.loc 1 63 10 is_stmt 0 view .LVU49
+ 201 000c 012B     		cmp	r3, #1
+ 202 000e 05D1     		bne	.L16
+  64:diskio.c      ****          res = SD_write_single_block(sector, buff);
+ 203              		.loc 1 64 10 is_stmt 1 view .LVU50
+ 204              		.loc 1 64 16 is_stmt 0 view .LVU51
+ 205 0010 FFF7FEFF 		bl	SD_write_single_block
+ 206              	.LVL19:
+ 207              	.L17:
+  65:diskio.c      ****       } else {
+  66:diskio.c      ****          res = SD_write_multi_block(sector, buff, count);
+  67:diskio.c      ****       }
+  68:diskio.c      ****       if (res == 0) {
+ 208              		.loc 1 68 7 is_stmt 1 view .LVU52
+  61:diskio.c      ****       }
+ 209              		.loc 1 61 17 is_stmt 0 view .LVU53
+ 210 0014 0038     		subs	r0, r0, #0
+ 211              	.LVL20:
+  61:diskio.c      ****       }
+ 212              		.loc 1 61 17 view .LVU54
+ 213 0016 18BF     		it	ne
+ 214 0018 0120     		movne	r0, #1
+ 215              	.L15:
+  69:diskio.c      ****          return RES_OK;
+  70:diskio.c      ****       } else {
+  71:diskio.c      ****          return RES_ERROR;
+  72:diskio.c      ****       }
+  73:diskio.c      **** }
+ 216              		.loc 1 73 1 view .LVU55
+ 217 001a 10BD     		pop	{r4, pc}
+ 218              	.LVL21:
+ 219              	.L16:
+  66:diskio.c      ****       }
+ 220              		.loc 1 66 10 is_stmt 1 view .LVU56
+  66:diskio.c      ****       }
+ 221              		.loc 1 66 16 is_stmt 0 view .LVU57
+ 222 001c FFF7FEFF 		bl	SD_write_multi_block
+ 223              	.LVL22:
+  66:diskio.c      ****       }
+ 224              		.loc 1 66 16 view .LVU58
+ 225 0020 F8E7     		b	.L17
+ 226              	.LVL23:
+ 227              	.L19:
+  61:diskio.c      ****       }
+ 228              		.loc 1 61 17 view .LVU59
+ 229 0022 0420     		movs	r0, #4
+ 230              	.LVL24:
+  61:diskio.c      ****       }
+ 231              		.loc 1 61 17 view .LVU60
+ 232 0024 F9E7     		b	.L15
+ 233              		.cfi_endproc
+ 234              	.LFE32:
+ 236              		.section	.text.disk_ioctl,"ax",%progbits
+ 237              		.align	1
+ 238              		.global	disk_ioctl
+ 239              		.syntax unified
+ 240              		.thumb
+ 241              		.thumb_func
+ 242              		.fpu softvfp
+ 244              	disk_ioctl:
+ 245              	.LVL25:
+ 246              	.LFB33:
+  74:diskio.c      **** #endif
+  75:diskio.c      **** 
+  76:diskio.c      **** 
+  77:diskio.c      **** DRESULT disk_ioctl (unsigned char drv,unsigned char ctrl,void *buff)
+  78:diskio.c      **** {
+ 247              		.loc 1 78 1 is_stmt 1 view -0
+ 248              		.cfi_startproc
+ 249              		@ args = 0, pretend = 0, frame = 0
+ 250              		@ frame_needed = 0, uses_anonymous_args = 0
+  79:diskio.c      ****       DRESULT res;
+ 251              		.loc 1 79 7 view .LVU62
+  80:diskio.c      ****       if (drv) {
+ 252              		.loc 1 80 7 view .LVU63
+  78:diskio.c      ****       DRESULT res;
+ 253              		.loc 1 78 1 is_stmt 0 view .LVU64
+ 254 0000 38B5     		push	{r3, r4, r5, lr}
+ 255              		.cfi_def_cfa_offset 16
+ 256              		.cfi_offset 3, -16
+ 257              		.cfi_offset 4, -12
+ 258              		.cfi_offset 5, -8
+ 259              		.cfi_offset 14, -4
+  78:diskio.c      ****       DRESULT res;
+ 260              		.loc 1 78 1 view .LVU65
+ 261 0002 1546     		mov	r5, r2
+ 262              		.loc 1 80 10 view .LVU66
+ 263 0004 0446     		mov	r4, r0
+ 264 0006 E0B9     		cbnz	r0, .L25
+  81:diskio.c      ****          return RES_PARERR;
+  82:diskio.c      ****       }
+  83:diskio.c      ****       switch (ctrl) {
+ 265              		.loc 1 83 7 is_stmt 1 view .LVU67
+ 266 0008 0129     		cmp	r1, #1
+ 267 000a 16D0     		beq	.L22
+ 268 000c 0329     		cmp	r1, #3
+ 269 000e 10D0     		beq	.L23
+ 270 0010 B9B9     		cbnz	r1, .L25
+  84:diskio.c      ****          case CTRL_SYNC:
+  85:diskio.c      ****            SD_CS_ENABLE();
+ 271              		.loc 1 85 12 view .LVU68
+ 272 0012 0D4D     		ldr	r5, .L26
+ 273 0014 EB68     		ldr	r3, [r5, #12]
+ 274 0016 23F48053 		bic	r3, r3, #4096
+ 275 001a EB60     		str	r3, [r5, #12]
+  86:diskio.c      ****            if (SD_wait_ready() == 0) {
+ 276              		.loc 1 86 12 view .LVU69
+ 277              		.loc 1 86 16 is_stmt 0 view .LVU70
+ 278 001c FFF7FEFF 		bl	SD_wait_ready
+ 279              	.LVL26:
+  87:diskio.c      ****               res = RES_OK;
+ 280              		.loc 1 87 19 view .LVU71
+ 281 0020 041E     		subs	r4, r0, #0
+ 282 0022 18BF     		it	ne
+ 283 0024 0124     		movne	r4, #1
+ 284              	.LVL27:
+  88:diskio.c      ****            } else {
+  89:diskio.c      ****               res = RES_ERROR;
+  90:diskio.c      ****            }
+  91:diskio.c      ****            SD_CS_DISABLE();
+ 285              		.loc 1 91 12 is_stmt 1 view .LVU72
+ 286 0026 EB68     		ldr	r3, [r5, #12]
+ 287 0028 43F48053 		orr	r3, r3, #4096
+ 288 002c EB60     		str	r3, [r5, #12]
+  92:diskio.c      ****            break;
+ 289              		.loc 1 92 12 view .LVU73
+ 290              	.LVL28:
+ 291              	.L21:
+  93:diskio.c      ****          case GET_BLOCK_SIZE:
+  94:diskio.c      ****            *(WORD*)buff = 512;
+  95:diskio.c      ****            res = RES_OK;
+  96:diskio.c      ****            break;
+  97:diskio.c      ****          case GET_SECTOR_COUNT:
+  98:diskio.c      ****            *(DWORD*)buff = SD_get_capacity();
+  99:diskio.c      ****            res = RES_OK;
+ 100:diskio.c      ****            break;
+ 101:diskio.c      ****          default:
+ 102:diskio.c      ****            res = RES_PARERR;
+ 103:diskio.c      ****            break;
+ 104:diskio.c      ****       }
+ 105:diskio.c      ****       return res;
+ 106:diskio.c      **** }
+ 292              		.loc 1 106 1 is_stmt 0 view .LVU74
+ 293 002e 2046     		mov	r0, r4
+ 294 0030 38BD     		pop	{r3, r4, r5, pc}
+ 295              	.LVL29:
+ 296              	.L23:
+  94:diskio.c      ****            res = RES_OK;
+ 297              		.loc 1 94 12 is_stmt 1 view .LVU75
+  94:diskio.c      ****            res = RES_OK;
+ 298              		.loc 1 94 25 is_stmt 0 view .LVU76
+ 299 0032 4FF40073 		mov	r3, #512
+ 300 0036 1380     		strh	r3, [r2]	@ movhi
+  95:diskio.c      ****            break;
+ 301              		.loc 1 95 12 is_stmt 1 view .LVU77
+ 302              	.LVL30:
+  96:diskio.c      ****          case GET_SECTOR_COUNT:
+ 303              		.loc 1 96 12 view .LVU78
+ 304 0038 F9E7     		b	.L21
+ 305              	.LVL31:
+ 306              	.L22:
+  98:diskio.c      ****            res = RES_OK;
+ 307              		.loc 1 98 12 view .LVU79
+  98:diskio.c      ****            res = RES_OK;
+ 308              		.loc 1 98 28 is_stmt 0 view .LVU80
+ 309 003a FFF7FEFF 		bl	SD_get_capacity
+ 310              	.LVL32:
+  98:diskio.c      ****            res = RES_OK;
+ 311              		.loc 1 98 26 view .LVU81
+ 312 003e 2860     		str	r0, [r5]
+  99:diskio.c      ****            break;
+ 313              		.loc 1 99 12 is_stmt 1 view .LVU82
+ 314              	.LVL33:
+ 100:diskio.c      ****          default:
+ 315              		.loc 1 100 12 view .LVU83
+ 316 0040 F5E7     		b	.L21
+ 317              	.LVL34:
+ 318              	.L25:
+  83:diskio.c      ****          case CTRL_SYNC:
+ 319              		.loc 1 83 7 is_stmt 0 view .LVU84
+ 320 0042 0424     		movs	r4, #4
+ 321 0044 F3E7     		b	.L21
+ 322              	.L27:
+ 323 0046 00BF     		.align	2
+ 324              	.L26:
+ 325 0048 000C0140 		.word	1073810432
+ 326              		.cfi_endproc
+ 327              	.LFE33:
+ 329              		.section	.text.get_fattime,"ax",%progbits
+ 330              		.align	1
+ 331              		.global	get_fattime
+ 332              		.syntax unified
+ 333              		.thumb
+ 334              		.thumb_func
+ 335              		.fpu softvfp
+ 337              	get_fattime:
+ 338              	.LFB34:
+ 107:diskio.c      **** 
+ 108:diskio.c      **** 
+ 109:diskio.c      **** DWORD get_fattime (void)
+ 110:diskio.c      **** {
+ 339              		.loc 1 110 1 is_stmt 1 view -0
+ 340              		.cfi_startproc
+ 341              		@ args = 0, pretend = 0, frame = 0
+ 342              		@ frame_needed = 0, uses_anonymous_args = 0
+ 343              		@ link register save eliminated.
+ 111:diskio.c      ****       return 0;
+ 344              		.loc 1 111 7 view .LVU86
+ 112:diskio.c      **** }
+ 345              		.loc 1 112 1 is_stmt 0 view .LVU87
+ 346 0000 0020     		movs	r0, #0
+ 347 0002 7047     		bx	lr
+ 348              		.cfi_endproc
+ 349              	.LFE34:
+ 351              		.text
+ 352              	.Letext0:
+ 353              		.file 2 "c:\\project\\stm32fx_lib\\stm32f1x_iolib\\include\\core.h"
+ 354              		.file 3 "/project/stm32fx_lib/stm32f1x_iolib/include/cmsis/stm32f1xx.h"
+ 355              		.file 4 "userdefs.h"
+ 356              		.file 5 "diskio.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 diskio.c
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:16     .text.disk_initialize:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:24     .text.disk_initialize:00000000 disk_initialize
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:70     .text.disk_status:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:77     .text.disk_status:00000000 disk_status
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:97     .text.disk_read:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:104    .text.disk_read:00000000 disk_read
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:167    .text.disk_write:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:174    .text.disk_write:00000000 disk_write
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:237    .text.disk_ioctl:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:244    .text.disk_ioctl:00000000 disk_ioctl
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:325    .text.disk_ioctl:00000048 $d
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:330    .text.get_fattime:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:337    .text.get_fattime:00000000 get_fattime
+
+UNDEFINED SYMBOLS
+SD_init
+SD_read_single_block
+SD_read_multi_block
+SD_write_single_block
+SD_write_multi_block
+SD_wait_ready
+SD_get_capacity

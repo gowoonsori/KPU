@@ -1,0 +1,870 @@
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 4
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"core.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.__get_MSP,"ax",%progbits
+  16              		.align	1
+  17              		.global	__get_MSP
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	__get_MSP:
+  25              	.LFB3:
+  26              		.file 1 "core.c"
+   1:core.c        **** /********************************************************************************/
+   2:core.c        **** /* core.c                                                                       */
+   3:core.c        **** /* STM32F10X                                                                    */
+   4:core.c        **** /* ÀÌ Ã¢¿ì (Lee ChangWoo HL2IRW  hl2irw@kpu.ac.kr 011-726-6860)                 */
+   5:core.c        **** /*                                                                              */
+   6:core.c        **** /********************************************************************************/
+   7:core.c        **** #define SBRK_VERBOSE 1
+   8:core.c        **** 
+   9:core.c        **** #include <reent.h>
+  10:core.c        **** #include <errno.h>
+  11:core.c        **** #include <stdlib.h> /* abort */
+  12:core.c        **** #include <stdio.h>
+  13:core.c        **** #include <sys/types.h>
+  14:core.c        **** #include <sys/stat.h>
+  15:core.c        **** 
+  16:core.c        **** extern void s_printf (char *form,...);
+  17:core.c        **** /*
+  18:core.c        **** unsigned int __get_PSP (void) __attribute__( ( naked ) );
+  19:core.c        **** unsigned int __get_PSP (void)
+  20:core.c        **** {
+  21:core.c        ****       unsigned int result = 0;
+  22:core.c        ****       __asm volatile ("MRS %0, psp\n\t" "MOV r0, %0 \n\t" "BX  lr     \n\t"  : "=r" (result) );
+  23:core.c        ****       return(result);
+  24:core.c        **** }
+  25:core.c        **** 
+  26:core.c        **** 
+  27:core.c        **** void __set_PSP (unsigned int topOfProcStack) __attribute__( ( naked ) );
+  28:core.c        **** void __set_PSP (unsigned int topOfProcStack)
+  29:core.c        **** {
+  30:core.c        ****       __asm volatile ("MSR psp, %0\n\t" "BX  lr     \n\t" : : "r" (topOfProcStack) );
+  31:core.c        **** }
+  32:core.c        **** 
+  33:core.c        **** 
+  34:core.c        **** void __set_MSP (unsigned int topOfMainStack) __attribute__( ( naked ) );
+  35:core.c        **** void __set_MSP (unsigned int topOfMainStack)
+  36:core.c        **** {
+  37:core.c        ****       __asm volatile ("MSR msp, %0\n\t" "BX  lr     \n\t" : : "r" (topOfMainStack) );
+  38:core.c        **** }
+  39:core.c        **** 
+  40:core.c        **** 
+  41:core.c        **** unsigned int __get_BASEPRI (void)
+  42:core.c        **** {
+  43:core.c        ****       unsigned int result=0;
+  44:core.c        ****       __asm volatile ("MRS %0, basepri_max" : "=r" (result) );
+  45:core.c        ****       return(result);
+  46:core.c        **** }
+  47:core.c        **** 
+  48:core.c        **** 
+  49:core.c        **** void __set_BASEPRI (unsigned int value)
+  50:core.c        **** {
+  51:core.c        ****       __asm volatile ("MSR basepri, %0" : : "r" (value) );
+  52:core.c        **** }
+  53:core.c        **** 
+  54:core.c        **** 
+  55:core.c        **** unsigned int __get_PRIMASK (void)
+  56:core.c        **** {
+  57:core.c        ****        unsigned int result=0;
+  58:core.c        ****       __asm volatile ("MRS %0, primask" : "=r" (result) );
+  59:core.c        ****       return(result);
+  60:core.c        **** }
+  61:core.c        **** 
+  62:core.c        **** 
+  63:core.c        **** void __set_PRIMASK (unsigned int priMask)
+  64:core.c        **** {
+  65:core.c        ****       __asm volatile ("MSR primask, %0" : : "r" (priMask) );
+  66:core.c        **** }
+  67:core.c        **** 
+  68:core.c        **** 
+  69:core.c        **** unsigned int __get_FAULTMASK (void)
+  70:core.c        **** {
+  71:core.c        ****       unsigned int result = 0;
+  72:core.c        ****       __asm volatile ("MRS %0, faultmask" : "=r" (result) );
+  73:core.c        ****       return(result);
+  74:core.c        **** }
+  75:core.c        **** 
+  76:core.c        **** 
+  77:core.c        **** void __set_FAULTMASK (unsigned int faultMask)
+  78:core.c        **** {
+  79:core.c        ****       __asm volatile ("MSR faultmask, %0" : : "r" (faultMask) );
+  80:core.c        **** }
+  81:core.c        **** 
+  82:core.c        **** 
+  83:core.c        **** unsigned int __get_CONTROL (void)
+  84:core.c        **** {
+  85:core.c        ****       unsigned int result = 0;
+  86:core.c        ****       __asm volatile ("MRS %0, control" : "=r" (result) );
+  87:core.c        ****       return(result);
+  88:core.c        **** }
+  89:core.c        **** 
+  90:core.c        **** 
+  91:core.c        **** void __set_CONTROL (unsigned int control)
+  92:core.c        **** {
+  93:core.c        ****       __asm volatile ("MSR control, %0" : : "r" (control) );
+  94:core.c        **** }
+  95:core.c        **** 
+  96:core.c        **** 
+  97:core.c        **** unsigned int __REV (unsigned int value)
+  98:core.c        **** {
+  99:core.c        ****       unsigned int result = 0;
+ 100:core.c        ****       __asm volatile ("rev %0, %1" : "=r" (result) : "r" (value) );
+ 101:core.c        ****       return(result);
+ 102:core.c        **** }
+ 103:core.c        **** 
+ 104:core.c        **** 
+ 105:core.c        **** unsigned int __REV16 (unsigned short value)
+ 106:core.c        **** {
+ 107:core.c        ****       unsigned int result = 0;
+ 108:core.c        ****       __asm volatile ("rev16 %0, %1" : "=r" (result) : "r" (value) );
+ 109:core.c        ****       return(result);
+ 110:core.c        **** }
+ 111:core.c        **** 
+ 112:core.c        **** 
+ 113:core.c        **** int __REVSH (short value)
+ 114:core.c        **** {
+ 115:core.c        ****       unsigned int result=0;
+ 116:core.c        ****       __asm volatile ("revsh %0, %1" : "=r" (result) : "r" (value) );
+ 117:core.c        ****       return(result);
+ 118:core.c        **** }
+ 119:core.c        **** 
+ 120:core.c        **** 
+ 121:core.c        **** unsigned int __RBIT (unsigned int value)
+ 122:core.c        **** {
+ 123:core.c        ****       unsigned int result=0;
+ 124:core.c        ****       __asm volatile ("rbit %0, %1" : "=r" (result) : "r" (value) );
+ 125:core.c        ****       return(result);
+ 126:core.c        **** }
+ 127:core.c        **** 
+ 128:core.c        **** 
+ 129:core.c        **** unsigned char __LDREXB (unsigned char *addr)
+ 130:core.c        **** {
+ 131:core.c        ****       unsigned char result=0;
+ 132:core.c        ****       __asm volatile ("ldrexb %0, [%1]" : "=r" (result) : "r" (addr) );
+ 133:core.c        ****       return(result);
+ 134:core.c        **** }
+ 135:core.c        **** 
+ 136:core.c        **** 
+ 137:core.c        **** unsigned short __LDREXH (unsigned short *addr)
+ 138:core.c        **** {
+ 139:core.c        ****       unsigned short result = 0;
+ 140:core.c        ****       __asm volatile ("ldrexh %0, [%1]" : "=r" (result) : "r" (addr) );
+ 141:core.c        ****       return(result);
+ 142:core.c        **** }
+ 143:core.c        **** 
+ 144:core.c        **** 
+ 145:core.c        **** unsigned int __LDREXW (unsigned int *addr)
+ 146:core.c        **** {
+ 147:core.c        ****       unsigned int result = 0;
+ 148:core.c        ****       __asm volatile ("ldrex %0, [%1]" : "=r" (result) : "r" (addr) );
+ 149:core.c        ****       return(result);
+ 150:core.c        **** }
+ 151:core.c        **** 
+ 152:core.c        **** 
+ 153:core.c        **** unsigned int __STREXB (unsigned char value, unsigned char *addr)
+ 154:core.c        **** {
+ 155:core.c        ****       unsigned int result = 0;
+ 156:core.c        ****       __asm volatile ("strexb %0, %2, [%1]" : "=r" (result) : "r" (addr), "r" (value) );
+ 157:core.c        ****       return(result);
+ 158:core.c        **** }
+ 159:core.c        **** 
+ 160:core.c        **** 
+ 161:core.c        **** unsigned int __STREXH (unsigned short value, unsigned short *addr)
+ 162:core.c        **** {
+ 163:core.c        ****       unsigned int result = 0;
+ 164:core.c        ****       __asm volatile ("strexh %0, %2, [%1]" : "=r" (result) : "r" (addr), "r" (value) );
+ 165:core.c        ****       return(result);
+ 166:core.c        **** }
+ 167:core.c        **** 
+ 168:core.c        **** 
+ 169:core.c        **** unsigned int __STREXW (unsigned int value, unsigned int *addr)
+ 170:core.c        **** {
+ 171:core.c        ****       unsigned int result = 0;
+ 172:core.c        ****       __asm volatile ("strex %0, %2, [%1]" : "=r" (result) : "r" (addr), "r" (value) );
+ 173:core.c        ****       return(result);
+ 174:core.c        **** }
+ 175:core.c        **** */
+ 176:core.c        **** 
+ 177:core.c        **** 
+ 178:core.c        **** unsigned int __get_MSP (void) __attribute__( ( naked ) );
+ 179:core.c        **** unsigned int __get_MSP (void)
+ 180:core.c        **** {
+  27              		.loc 1 180 1 view -0
+  28              		.cfi_startproc
+  29              		@ Naked Function: prologue and epilogue provided by programmer.
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+ 181:core.c        ****       unsigned int result=0;
+  32              		.loc 1 181 7 view .LVU1
+  33              	.LVL0:
+ 182:core.c        ****       __asm volatile ("MRS %0, msp\n\t" "MOV r0, %0 \n\t" "BX  lr     \n\t"  : "=r" (result) );
+  34              		.loc 1 182 7 view .LVU2
+  35              		.syntax unified
+  36              	@ 182 "core.c" 1
+  37 0000 EFF30880 		MRS r0, msp
+  38 0004 0046     		MOV r0, r0 
+  39 0006 7047     		BX  lr     
+  40              		
+  41              	@ 0 "" 2
+  42              	.LVL1:
+ 183:core.c        ****       return(result);
+  43              		.loc 1 183 7 view .LVU3
+ 184:core.c        **** }
+  44              		.loc 1 184 1 is_stmt 0 view .LVU4
+  45              		.thumb
+  46              		.syntax unified
+  47              		.cfi_endproc
+  48              	.LFE3:
+  50              		.section	.text._kill,"ax",%progbits
+  51              		.align	1
+  52              		.global	_kill
+  53              		.syntax unified
+  54              		.thumb
+  55              		.thumb_func
+  56              		.fpu softvfp
+  58              	_kill:
+  59              	.LVL2:
+  60              	.LFB4:
+ 185:core.c        **** 
+ 186:core.c        **** 
+ 187:core.c        **** int _kill (int pid, int sig)
+ 188:core.c        **** {
+  61              		.loc 1 188 1 is_stmt 1 view -0
+  62              		.cfi_startproc
+  63              		@ args = 0, pretend = 0, frame = 0
+  64              		@ frame_needed = 0, uses_anonymous_args = 0
+ 189:core.c        ****       pid = pid; sig = sig;		/* avoid warnings */
+  65              		.loc 1 189 7 view .LVU6
+  66              		.loc 1 189 18 view .LVU7
+ 190:core.c        ****       errno = EINVAL;
+  67              		.loc 1 190 7 view .LVU8
+ 188:core.c        ****       pid = pid; sig = sig;		/* avoid warnings */
+  68              		.loc 1 188 1 is_stmt 0 view .LVU9
+  69 0000 08B5     		push	{r3, lr}
+  70              		.cfi_def_cfa_offset 8
+  71              		.cfi_offset 3, -8
+  72              		.cfi_offset 14, -4
+  73              		.loc 1 190 7 view .LVU10
+  74 0002 FFF7FEFF 		bl	__errno
+  75              	.LVL3:
+  76              		.loc 1 190 13 view .LVU11
+  77 0006 1623     		movs	r3, #22
+  78 0008 0360     		str	r3, [r0]
+ 191:core.c        ****       return -1;
+  79              		.loc 1 191 7 is_stmt 1 view .LVU12
+ 192:core.c        **** }
+  80              		.loc 1 192 1 is_stmt 0 view .LVU13
+  81 000a 4FF0FF30 		mov	r0, #-1
+  82 000e 08BD     		pop	{r3, pc}
+  83              		.cfi_endproc
+  84              	.LFE4:
+  86              		.section	.rodata._exit.str1.1,"aMS",%progbits,1
+  87              	.LC0:
+  88 0000 5F657869 		.ascii	"_exit called with parameter %d \015\012\000"
+  88      74206361 
+  88      6C6C6564 
+  88      20776974 
+  88      68207061 
+  89              		.section	.text._exit,"ax",%progbits
+  90              		.align	1
+  91              		.global	_exit
+  92              		.syntax unified
+  93              		.thumb
+  94              		.thumb_func
+  95              		.fpu softvfp
+  97              	_exit:
+  98              	.LVL4:
+  99              	.LFB5:
+ 193:core.c        **** 
+ 194:core.c        **** 
+ 195:core.c        **** void _exit (int status)
+ 196:core.c        **** {
+ 100              		.loc 1 196 1 is_stmt 1 view -0
+ 101              		.cfi_startproc
+ 102              		@ Volatile: function does not return.
+ 103              		@ args = 0, pretend = 0, frame = 0
+ 104              		@ frame_needed = 0, uses_anonymous_args = 0
+ 197:core.c        ****       s_printf("_exit called with parameter %d \r\n", status);
+ 105              		.loc 1 197 7 view .LVU15
+ 196:core.c        ****       s_printf("_exit called with parameter %d \r\n", status);
+ 106              		.loc 1 196 1 is_stmt 0 view .LVU16
+ 107 0000 0146     		mov	r1, r0
+ 108 0002 08B5     		push	{r3, lr}
+ 109              		.cfi_def_cfa_offset 8
+ 110              		.cfi_offset 3, -8
+ 111              		.cfi_offset 14, -4
+ 112              		.loc 1 197 7 view .LVU17
+ 113 0004 0148     		ldr	r0, .L5
+ 114              	.LVL5:
+ 115              		.loc 1 197 7 view .LVU18
+ 116 0006 FFF7FEFF 		bl	s_printf
+ 117              	.LVL6:
+ 118              	.L4:
+ 198:core.c        ****       while(1) {;}
+ 119              		.loc 1 198 7 is_stmt 1 discriminator 1 view .LVU19
+ 120              		.loc 1 198 17 discriminator 1 view .LVU20
+ 121              		.loc 1 198 12 discriminator 1 view .LVU21
+ 122 000a FEE7     		b	.L4
+ 123              	.L6:
+ 124              		.align	2
+ 125              	.L5:
+ 126 000c 00000000 		.word	.LC0
+ 127              		.cfi_endproc
+ 128              	.LFE5:
+ 130              		.section	.text._getpid,"ax",%progbits
+ 131              		.align	1
+ 132              		.global	_getpid
+ 133              		.syntax unified
+ 134              		.thumb
+ 135              		.thumb_func
+ 136              		.fpu softvfp
+ 138              	_getpid:
+ 139              	.LFB6:
+ 199:core.c        **** }
+ 200:core.c        **** 
+ 201:core.c        **** 
+ 202:core.c        **** int _getpid (void)
+ 203:core.c        **** {
+ 140              		.loc 1 203 1 view -0
+ 141              		.cfi_startproc
+ 142              		@ args = 0, pretend = 0, frame = 0
+ 143              		@ frame_needed = 0, uses_anonymous_args = 0
+ 144              		@ link register save eliminated.
+ 204:core.c        ****       return 1;
+ 145              		.loc 1 204 7 view .LVU23
+ 205:core.c        **** }
+ 146              		.loc 1 205 1 is_stmt 0 view .LVU24
+ 147 0000 0120     		movs	r0, #1
+ 148 0002 7047     		bx	lr
+ 149              		.cfi_endproc
+ 150              	.LFE6:
+ 152              		.section	.text.get_heap_end,"ax",%progbits
+ 153              		.align	1
+ 154              		.global	get_heap_end
+ 155              		.syntax unified
+ 156              		.thumb
+ 157              		.thumb_func
+ 158              		.fpu softvfp
+ 160              	get_heap_end:
+ 161              	.LFB7:
+ 206:core.c        **** 
+ 207:core.c        **** 
+ 208:core.c        **** extern char _end;			/* Defined by the linker */
+ 209:core.c        **** static char *heap_end;
+ 210:core.c        **** 
+ 211:core.c        **** 
+ 212:core.c        **** char *get_heap_end (void)
+ 213:core.c        **** {
+ 162              		.loc 1 213 1 is_stmt 1 view -0
+ 163              		.cfi_startproc
+ 164              		@ args = 0, pretend = 0, frame = 0
+ 165              		@ frame_needed = 0, uses_anonymous_args = 0
+ 166              		@ link register save eliminated.
+ 214:core.c        ****       return (char*) heap_end;
+ 167              		.loc 1 214 7 view .LVU26
+ 215:core.c        **** }
+ 168              		.loc 1 215 1 is_stmt 0 view .LVU27
+ 169 0000 014B     		ldr	r3, .L9
+ 170 0002 1868     		ldr	r0, [r3]
+ 171 0004 7047     		bx	lr
+ 172              	.L10:
+ 173 0006 00BF     		.align	2
+ 174              	.L9:
+ 175 0008 00000000 		.word	.LANCHOR0
+ 176              		.cfi_endproc
+ 177              	.LFE7:
+ 179              		.section	.text.get_stack_top,"ax",%progbits
+ 180              		.align	1
+ 181              		.global	get_stack_top
+ 182              		.syntax unified
+ 183              		.thumb
+ 184              		.thumb_func
+ 185              		.fpu softvfp
+ 187              	get_stack_top:
+ 188              	.LFB8:
+ 216:core.c        **** 
+ 217:core.c        **** 
+ 218:core.c        **** char *get_stack_top (void)
+ 219:core.c        **** {
+ 189              		.loc 1 219 1 is_stmt 1 view -0
+ 190              		.cfi_startproc
+ 191              		@ args = 0, pretend = 0, frame = 0
+ 192              		@ frame_needed = 0, uses_anonymous_args = 0
+ 193              		@ link register save eliminated.
+ 220:core.c        ****       return (char*) __get_MSP();
+ 194              		.loc 1 220 7 view .LVU29
+ 195              		.loc 1 220 22 is_stmt 0 view .LVU30
+ 196 0000 FFF7FEBF 		b	__get_MSP
+ 197              	.LVL7:
+ 198              		.cfi_endproc
+ 199              	.LFE8:
+ 201              		.section	.rodata._sbrk.str1.1,"aMS",%progbits,1
+ 202              	.LC1:
+ 203 0000 5F736272 		.ascii	"_sbrk called with incr %d \015\012\000"
+ 203      6B206361 
+ 203      6C6C6564 
+ 203      20776974 
+ 203      6820696E 
+ 204              	.LC2:
+ 205 001d 48656170 		.ascii	"Heap and stack collision \015\012\000"
+ 205      20616E64 
+ 205      20737461 
+ 205      636B2063 
+ 205      6F6C6C69 
+ 206              		.section	.text._sbrk,"ax",%progbits
+ 207              		.align	1
+ 208              		.global	_sbrk
+ 209              		.syntax unified
+ 210              		.thumb
+ 211              		.thumb_func
+ 212              		.fpu softvfp
+ 214              	_sbrk:
+ 215              	.LVL8:
+ 216              	.LFB9:
+ 221:core.c        **** }
+ 222:core.c        **** 
+ 223:core.c        **** 
+ 224:core.c        **** caddr_t _sbrk (int incr)
+ 225:core.c        **** {
+ 217              		.loc 1 225 1 is_stmt 1 view -0
+ 218              		.cfi_startproc
+ 219              		@ args = 0, pretend = 0, frame = 0
+ 220              		@ frame_needed = 0, uses_anonymous_args = 0
+ 226:core.c        ****       char *prev_heap_end;
+ 221              		.loc 1 226 7 view .LVU32
+ 227:core.c        **** #if SBRK_VERBOSE
+ 228:core.c        ****       s_printf("_sbrk called with incr %d \r\n", incr);
+ 222              		.loc 1 228 7 view .LVU33
+ 225:core.c        ****       char *prev_heap_end;
+ 223              		.loc 1 225 1 is_stmt 0 view .LVU34
+ 224 0000 70B5     		push	{r4, r5, r6, lr}
+ 225              		.cfi_def_cfa_offset 16
+ 226              		.cfi_offset 4, -16
+ 227              		.cfi_offset 5, -12
+ 228              		.cfi_offset 6, -8
+ 229              		.cfi_offset 14, -4
+ 229:core.c        **** #endif
+ 230:core.c        ****       if (heap_end == 0) {
+ 230              		.loc 1 230 20 view .LVU35
+ 231 0002 0C4D     		ldr	r5, .L15
+ 228:core.c        **** #endif
+ 232              		.loc 1 228 7 view .LVU36
+ 233 0004 0146     		mov	r1, r0
+ 225:core.c        ****       char *prev_heap_end;
+ 234              		.loc 1 225 1 view .LVU37
+ 235 0006 0446     		mov	r4, r0
+ 228:core.c        **** #endif
+ 236              		.loc 1 228 7 view .LVU38
+ 237 0008 0B48     		ldr	r0, .L15+4
+ 238              	.LVL9:
+ 228:core.c        **** #endif
+ 239              		.loc 1 228 7 view .LVU39
+ 240 000a FFF7FEFF 		bl	s_printf
+ 241              	.LVL10:
+ 242              		.loc 1 230 7 is_stmt 1 view .LVU40
+ 243              		.loc 1 230 10 is_stmt 0 view .LVU41
+ 244 000e 2B68     		ldr	r3, [r5]
+ 245 0010 0BB9     		cbnz	r3, .L13
+ 231:core.c        **** 	 heap_end = &_end;
+ 246              		.loc 1 231 3 is_stmt 1 view .LVU42
+ 247              		.loc 1 231 12 is_stmt 0 view .LVU43
+ 248 0012 0A4B     		ldr	r3, .L15+8
+ 249 0014 2B60     		str	r3, [r5]
+ 250              	.L13:
+ 232:core.c        ****       }
+ 233:core.c        ****       prev_heap_end = heap_end;
+ 251              		.loc 1 233 7 is_stmt 1 view .LVU44
+ 252              		.loc 1 233 21 is_stmt 0 view .LVU45
+ 253 0016 2E68     		ldr	r6, [r5]
+ 254              	.LVL11:
+ 234:core.c        **** #if 1
+ 235:core.c        ****       if (heap_end + incr > get_stack_top()) {
+ 255              		.loc 1 235 7 is_stmt 1 view .LVU46
+ 256              	.LBB4:
+ 257              	.LBB5:
+ 220:core.c        **** }
+ 258              		.loc 1 220 22 is_stmt 0 view .LVU47
+ 259 0018 FFF7FEFF 		bl	__get_MSP
+ 260              	.LVL12:
+ 261              	.LBE5:
+ 262              	.LBE4:
+ 263              		.loc 1 235 20 view .LVU48
+ 264 001c 3444     		add	r4, r4, r6
+ 265              	.LVL13:
+ 266              	.LBB7:
+ 267              	.LBI4:
+ 218:core.c        **** {
+ 268              		.loc 1 218 7 is_stmt 1 view .LVU49
+ 269              	.LBB6:
+ 220:core.c        **** }
+ 270              		.loc 1 220 7 view .LVU50
+ 271              	.LBE6:
+ 272              	.LBE7:
+ 273              		.loc 1 235 10 is_stmt 0 view .LVU51
+ 274 001e 8442     		cmp	r4, r0
+ 275 0020 04D9     		bls	.L14
+ 236:core.c        **** 	  s_printf("Heap and stack collision \r\n");
+ 276              		.loc 1 236 4 is_stmt 1 view .LVU52
+ 277 0022 0748     		ldr	r0, .L15+12
+ 278 0024 FFF7FEFF 		bl	s_printf
+ 279              	.LVL14:
+ 237:core.c        ****          abort();
+ 280              		.loc 1 237 10 view .LVU53
+ 281 0028 FFF7FEFF 		bl	abort
+ 282              	.LVL15:
+ 283              	.L14:
+ 238:core.c        ****       }
+ 239:core.c        **** #endif
+ 240:core.c        ****       heap_end += incr;
+ 284              		.loc 1 240 7 view .LVU54
+ 241:core.c        ****       return (caddr_t) prev_heap_end;
+ 242:core.c        **** }
+ 285              		.loc 1 242 1 is_stmt 0 view .LVU55
+ 286 002c 3046     		mov	r0, r6
+ 240:core.c        ****       return (caddr_t) prev_heap_end;
+ 287              		.loc 1 240 16 view .LVU56
+ 288 002e 2C60     		str	r4, [r5]
+ 241:core.c        ****       return (caddr_t) prev_heap_end;
+ 289              		.loc 1 241 7 is_stmt 1 view .LVU57
+ 290              		.loc 1 242 1 is_stmt 0 view .LVU58
+ 291 0030 70BD     		pop	{r4, r5, r6, pc}
+ 292              	.LVL16:
+ 293              	.L16:
+ 294              		.loc 1 242 1 view .LVU59
+ 295 0032 00BF     		.align	2
+ 296              	.L15:
+ 297 0034 00000000 		.word	.LANCHOR0
+ 298 0038 00000000 		.word	.LC1
+ 299 003c 00000000 		.word	_end
+ 300 0040 1D000000 		.word	.LC2
+ 301              		.cfi_endproc
+ 302              	.LFE9:
+ 304              		.section	.text._close,"ax",%progbits
+ 305              		.align	1
+ 306              		.global	_close
+ 307              		.syntax unified
+ 308              		.thumb
+ 309              		.thumb_func
+ 310              		.fpu softvfp
+ 312              	_close:
+ 313              	.LVL17:
+ 314              	.LFB10:
+ 243:core.c        **** 
+ 244:core.c        **** 
+ 245:core.c        **** int _close (int file)
+ 246:core.c        **** {
+ 315              		.loc 1 246 1 is_stmt 1 view -0
+ 316              		.cfi_startproc
+ 317              		@ args = 0, pretend = 0, frame = 0
+ 318              		@ frame_needed = 0, uses_anonymous_args = 0
+ 319              		@ link register save eliminated.
+ 247:core.c        ****       file = file;			/* avoid warning */
+ 320              		.loc 1 247 7 view .LVU61
+ 248:core.c        ****       return -1;
+ 321              		.loc 1 248 7 view .LVU62
+ 249:core.c        **** }
+ 322              		.loc 1 249 1 is_stmt 0 view .LVU63
+ 323 0000 4FF0FF30 		mov	r0, #-1
+ 324              	.LVL18:
+ 325              		.loc 1 249 1 view .LVU64
+ 326 0004 7047     		bx	lr
+ 327              		.cfi_endproc
+ 328              	.LFE10:
+ 330              		.section	.text._fstat,"ax",%progbits
+ 331              		.align	1
+ 332              		.global	_fstat
+ 333              		.syntax unified
+ 334              		.thumb
+ 335              		.thumb_func
+ 336              		.fpu softvfp
+ 338              	_fstat:
+ 339              	.LVL19:
+ 340              	.LFB11:
+ 250:core.c        **** 
+ 251:core.c        **** 
+ 252:core.c        **** int _fstat (int file, struct stat *st)
+ 253:core.c        **** {
+ 341              		.loc 1 253 1 is_stmt 1 view -0
+ 342              		.cfi_startproc
+ 343              		@ args = 0, pretend = 0, frame = 0
+ 344              		@ frame_needed = 0, uses_anonymous_args = 0
+ 345              		@ link register save eliminated.
+ 254:core.c        ****       file = file;			/* avoid warning */
+ 346              		.loc 1 254 7 view .LVU66
+ 255:core.c        ****       st->st_mode = S_IFCHR;
+ 347              		.loc 1 255 7 view .LVU67
+ 348              		.loc 1 255 19 is_stmt 0 view .LVU68
+ 349 0000 4FF40053 		mov	r3, #8192
+ 256:core.c        **** 	return 0;
+ 257:core.c        **** }
+ 350              		.loc 1 257 1 view .LVU69
+ 351 0004 0020     		movs	r0, #0
+ 352              	.LVL20:
+ 255:core.c        ****       st->st_mode = S_IFCHR;
+ 353              		.loc 1 255 19 view .LVU70
+ 354 0006 4B60     		str	r3, [r1, #4]
+ 256:core.c        **** 	return 0;
+ 355              		.loc 1 256 2 is_stmt 1 view .LVU71
+ 356              		.loc 1 257 1 is_stmt 0 view .LVU72
+ 357 0008 7047     		bx	lr
+ 358              		.cfi_endproc
+ 359              	.LFE11:
+ 361              		.section	.text._isatty,"ax",%progbits
+ 362              		.align	1
+ 363              		.global	_isatty
+ 364              		.syntax unified
+ 365              		.thumb
+ 366              		.thumb_func
+ 367              		.fpu softvfp
+ 369              	_isatty:
+ 370              	.LVL21:
+ 371              	.LFB12:
+ 258:core.c        **** 
+ 259:core.c        **** 
+ 260:core.c        **** int _isatty (int file)
+ 261:core.c        **** {
+ 372              		.loc 1 261 1 is_stmt 1 view -0
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 0
+ 375              		@ frame_needed = 0, uses_anonymous_args = 0
+ 376              		@ link register save eliminated.
+ 262:core.c        ****       file = file;			/* avoid warning */
+ 377              		.loc 1 262 7 view .LVU74
+ 263:core.c        ****       return 1;
+ 378              		.loc 1 263 7 view .LVU75
+ 264:core.c        **** }
+ 379              		.loc 1 264 1 is_stmt 0 view .LVU76
+ 380 0000 0120     		movs	r0, #1
+ 381              	.LVL22:
+ 382              		.loc 1 264 1 view .LVU77
+ 383 0002 7047     		bx	lr
+ 384              		.cfi_endproc
+ 385              	.LFE12:
+ 387              		.section	.text._lseek,"ax",%progbits
+ 388              		.align	1
+ 389              		.global	_lseek
+ 390              		.syntax unified
+ 391              		.thumb
+ 392              		.thumb_func
+ 393              		.fpu softvfp
+ 395              	_lseek:
+ 396              	.LVL23:
+ 397              	.LFB13:
+ 265:core.c        **** 
+ 266:core.c        **** 
+ 267:core.c        **** int _lseek (int file, int ptr, int dir)
+ 268:core.c        **** {
+ 398              		.loc 1 268 1 is_stmt 1 view -0
+ 399              		.cfi_startproc
+ 400              		@ args = 0, pretend = 0, frame = 0
+ 401              		@ frame_needed = 0, uses_anonymous_args = 0
+ 402              		@ link register save eliminated.
+ 269:core.c        ****       file = file;			/* avoid warning */
+ 403              		.loc 1 269 7 view .LVU79
+ 270:core.c        ****       ptr = ptr;			/* avoid warning */
+ 404              		.loc 1 270 7 view .LVU80
+ 271:core.c        ****       dir = dir;			/* avoid warning */
+ 405              		.loc 1 271 7 view .LVU81
+ 272:core.c        ****       return 0;
+ 406              		.loc 1 272 7 view .LVU82
+ 273:core.c        **** }
+ 407              		.loc 1 273 1 is_stmt 0 view .LVU83
+ 408 0000 0020     		movs	r0, #0
+ 409              	.LVL24:
+ 410              		.loc 1 273 1 view .LVU84
+ 411 0002 7047     		bx	lr
+ 412              		.cfi_endproc
+ 413              	.LFE13:
+ 415              		.section	.text._read,"ax",%progbits
+ 416              		.align	1
+ 417              		.global	_read
+ 418              		.syntax unified
+ 419              		.thumb
+ 420              		.thumb_func
+ 421              		.fpu softvfp
+ 423              	_read:
+ 424              	.LVL25:
+ 425              	.LFB14:
+ 274:core.c        **** 
+ 275:core.c        **** 
+ 276:core.c        **** int _read (int file, char *ptr, int len)
+ 277:core.c        **** {
+ 426              		.loc 1 277 1 is_stmt 1 view -0
+ 427              		.cfi_startproc
+ 428              		@ args = 0, pretend = 0, frame = 0
+ 429              		@ frame_needed = 0, uses_anonymous_args = 0
+ 430              		@ link register save eliminated.
+ 278:core.c        ****       file = file;			/* avoid warning */
+ 431              		.loc 1 278 7 view .LVU86
+ 279:core.c        ****       ptr = ptr;			/* avoid warning */
+ 432              		.loc 1 279 7 view .LVU87
+ 280:core.c        ****       len = len;			/* avoid warning */
+ 433              		.loc 1 280 7 view .LVU88
+ 281:core.c        ****       return 0;
+ 434              		.loc 1 281 7 view .LVU89
+ 282:core.c        **** }
+ 435              		.loc 1 282 1 is_stmt 0 view .LVU90
+ 436 0000 0020     		movs	r0, #0
+ 437              	.LVL26:
+ 438              		.loc 1 282 1 view .LVU91
+ 439 0002 7047     		bx	lr
+ 440              		.cfi_endproc
+ 441              	.LFE14:
+ 443              		.section	.rodata._write.str1.1,"aMS",%progbits,1
+ 444              	.LC3:
+ 445 0000 256300   		.ascii	"%c\000"
+ 446              		.section	.text._write,"ax",%progbits
+ 447              		.align	1
+ 448              		.global	_write
+ 449              		.syntax unified
+ 450              		.thumb
+ 451              		.thumb_func
+ 452              		.fpu softvfp
+ 454              	_write:
+ 455              	.LVL27:
+ 456              	.LFB15:
+ 283:core.c        **** 
+ 284:core.c        **** 
+ 285:core.c        **** int _write (int file, char *ptr, int len)
+ 286:core.c        **** {
+ 457              		.loc 1 286 1 is_stmt 1 view -0
+ 458              		.cfi_startproc
+ 459              		@ args = 0, pretend = 0, frame = 0
+ 460              		@ frame_needed = 0, uses_anonymous_args = 0
+ 287:core.c        ****       int todo;
+ 461              		.loc 1 287 7 view .LVU93
+ 288:core.c        ****       file = file;			/* avoid warning */
+ 462              		.loc 1 288 7 view .LVU94
+ 289:core.c        ****       for (todo=0;todo<len;todo++) {
+ 463              		.loc 1 289 7 view .LVU95
+ 286:core.c        ****       int todo;
+ 464              		.loc 1 286 1 is_stmt 0 view .LVU96
+ 465 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 466              		.cfi_def_cfa_offset 24
+ 467              		.cfi_offset 3, -24
+ 468              		.cfi_offset 4, -20
+ 469              		.cfi_offset 5, -16
+ 470              		.cfi_offset 6, -12
+ 471              		.cfi_offset 7, -8
+ 472              		.cfi_offset 14, -4
+ 286:core.c        ****       int todo;
+ 473              		.loc 1 286 1 view .LVU97
+ 474 0002 0E46     		mov	r6, r1
+ 475 0004 1446     		mov	r4, r2
+ 476              		.loc 1 289 16 view .LVU98
+ 477 0006 0025     		movs	r5, #0
+ 290:core.c        ****           s_printf("%c",(*ptr++));
+ 478              		.loc 1 290 11 view .LVU99
+ 479 0008 054F     		ldr	r7, .L25
+ 480              	.LVL28:
+ 481              	.L23:
+ 289:core.c        ****       for (todo=0;todo<len;todo++) {
+ 482              		.loc 1 289 19 is_stmt 1 discriminator 1 view .LVU100
+ 289:core.c        ****       for (todo=0;todo<len;todo++) {
+ 483              		.loc 1 289 7 is_stmt 0 discriminator 1 view .LVU101
+ 484 000a A542     		cmp	r5, r4
+ 485 000c 01DB     		blt	.L24
+ 291:core.c        ****       }
+ 292:core.c        ****       return len;
+ 486              		.loc 1 292 7 is_stmt 1 view .LVU102
+ 293:core.c        **** }
+ 487              		.loc 1 293 1 is_stmt 0 view .LVU103
+ 488 000e 2046     		mov	r0, r4
+ 489 0010 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 490              	.LVL29:
+ 491              	.L24:
+ 290:core.c        ****           s_printf("%c",(*ptr++));
+ 492              		.loc 1 290 11 is_stmt 1 discriminator 3 view .LVU104
+ 290:core.c        ****           s_printf("%c",(*ptr++));
+ 493              		.loc 1 290 11 is_stmt 0 discriminator 3 view .LVU105
+ 494 0012 715D     		ldrb	r1, [r6, r5]	@ zero_extendqisi2
+ 495 0014 3846     		mov	r0, r7
+ 496 0016 FFF7FEFF 		bl	s_printf
+ 497              	.LVL30:
+ 289:core.c        ****           s_printf("%c",(*ptr++));
+ 498              		.loc 1 289 28 is_stmt 1 discriminator 3 view .LVU106
+ 289:core.c        ****           s_printf("%c",(*ptr++));
+ 499              		.loc 1 289 32 is_stmt 0 discriminator 3 view .LVU107
+ 500 001a 0135     		adds	r5, r5, #1
+ 501              	.LVL31:
+ 289:core.c        ****           s_printf("%c",(*ptr++));
+ 502              		.loc 1 289 32 discriminator 3 view .LVU108
+ 503 001c F5E7     		b	.L23
+ 504              	.L26:
+ 505 001e 00BF     		.align	2
+ 506              	.L25:
+ 507 0020 00000000 		.word	.LC3
+ 508              		.cfi_endproc
+ 509              	.LFE15:
+ 511              		.section	.bss.heap_end,"aw",%nobits
+ 512              		.align	2
+ 513              		.set	.LANCHOR0,. + 0
+ 516              	heap_end:
+ 517 0000 00000000 		.space	4
+ 518              		.text
+ 519              	.Letext0:
+ 520              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 521              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 522              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 523              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
+ 524              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 525              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 526              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 527              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 528              		.file 10 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 529              		.file 11 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 530              		.file 12 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+DEFINED SYMBOLS
+                            *ABS*:00000000 core.c
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:16     .text.__get_MSP:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:24     .text.__get_MSP:00000000 __get_MSP
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:51     .text._kill:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:58     .text._kill:00000000 _kill
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:90     .text._exit:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:97     .text._exit:00000000 _exit
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:126    .text._exit:0000000c $d
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:131    .text._getpid:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:138    .text._getpid:00000000 _getpid
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:153    .text.get_heap_end:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:160    .text.get_heap_end:00000000 get_heap_end
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:175    .text.get_heap_end:00000008 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:180    .text.get_stack_top:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:187    .text.get_stack_top:00000000 get_stack_top
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:207    .text._sbrk:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:214    .text._sbrk:00000000 _sbrk
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:297    .text._sbrk:00000034 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:305    .text._close:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:312    .text._close:00000000 _close
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:331    .text._fstat:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:338    .text._fstat:00000000 _fstat
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:362    .text._isatty:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:369    .text._isatty:00000000 _isatty
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:388    .text._lseek:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:395    .text._lseek:00000000 _lseek
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:416    .text._read:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:423    .text._read:00000000 _read
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:447    .text._write:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:454    .text._write:00000000 _write
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:507    .text._write:00000020 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:512    .bss.heap_end:00000000 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:516    .bss.heap_end:00000000 heap_end
+
+UNDEFINED SYMBOLS
+__errno
+s_printf
+abort
+_end
