@@ -149,6 +149,7 @@ public class GameBoardActivity extends AppCompatActivity {
         /*DB Read*/
         sqlDB=myScheduleDB.getReadableDatabase();
         Cursor cursor;
+        System.out.println("SELECT * FROM ScheduleDB WHERE date = '"+Integer.toString(year)+"/"+sMonth+"/"+sDay+"';");
         cursor = sqlDB.rawQuery("SELECT * FROM ScheduleDB WHERE date = '"+Integer.toString(year)+"/"+sMonth+"/"+sDay+"';",null);
 
         int i=0; //TextView배열참조를 위한 변수
@@ -223,11 +224,11 @@ public class GameBoardActivity extends AppCompatActivity {
         }
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE gameScheduleDB ( date TEXT,club1 TEXT,score1 TEXT,score2 TEXT,club2 TEXT,stadium TEXT);");
+            db.execSQL("CREATE TABLE ScheduleDB ( date TEXT,club1 TEXT,score1 TEXT,score2 TEXT,club2 TEXT,stadium TEXT);");
         }
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVerson) {
-            db.execSQL("DROP TABLE IF EXISTS gameScheduleDB");
+            db.execSQL("DROP TABLE IF EXISTS ScheduleDB");
             onCreate(db);
         }
     }

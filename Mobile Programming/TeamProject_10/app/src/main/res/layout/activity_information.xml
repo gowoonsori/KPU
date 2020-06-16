@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/kbo_offical_logo" />
-
     <TextView android:id="@+id/confirm_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

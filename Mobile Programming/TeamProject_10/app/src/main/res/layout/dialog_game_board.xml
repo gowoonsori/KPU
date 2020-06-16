@@ -111,19 +111,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="22" />
+                android:text="36" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="17" />
+                android:text="26" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="5" />
+                android:text="9" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -135,7 +135,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="0.773" />
+                android:text="0.743" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -169,19 +169,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
+                android:text="35" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="22" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="15" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="7" />
+                android:text="13" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -193,13 +193,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="0.682" />
+                android:text="0.629" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="2" />
+                android:text="4" />
         </TableRow>
 
         <!--3위팀 : 순위 팀명 경기 승 패 무 승률 게임차-->
@@ -227,7 +227,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="22" />
+                android:text="35" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="21" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -239,25 +245,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="8" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
                 android:text="0" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="0.636" />
+                android:text="0.600" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="3" />
+                android:text="5" />
         </TableRow>
 
         <!--4위팀 : 순위 팀명 경기 승 패 무 승률 게임차-->
@@ -285,19 +285,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="23" />
+                android:text="36" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="12" />
+                android:text="20" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="11" />
+                android:text="16" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -309,13 +309,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="0.522" />
+                android:text="0.556" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="5.5" />
+                android:text="6.5" />
         </TableRow>
 
         <!--5위팀 : 순위 팀명 경기 승 패 무 승률 게임차-->
@@ -343,19 +343,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="23" />
+                android:text="36" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="12" />
+                android:text="19" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="11" />
+                android:text="17" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -367,13 +367,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="0.522" />
+                android:text="0.528" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="5.5" />
+                android:text="7.5" />
         </TableRow>
 
         <!--6위팀 : 순위 팀명 경기 승 패 무 승률 게임차-->
@@ -401,19 +401,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="22" />
+                android:text="35" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="10" />
+                android:text="18" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="12" />
+                android:text="17" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -425,13 +425,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="0.455" />
+                android:text="0.514" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="7" />
+                android:text="8" />
         </TableRow>
 
         <!--7위팀 : 순위 팀명 경기 승 패 무 승률 게임차-->
@@ -459,19 +459,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="23" />
+                android:text="36" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="10" />
+                android:text="17" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="13" />
+                android:text="19" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -483,13 +483,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="0.435" />
+                android:text="0.472" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="7.5" />
+                android:text="9.5" />
         </TableRow>
 
         <!--8위팀 : 순위 팀명 경기 승 패 무 승률 게임차-->
@@ -517,13 +517,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="22" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="9" />
+                android:text="35" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -535,19 +529,25 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="22" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="0" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="0.409" />
+                android:text="0.0.371" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="8" />
+                android:text="13" />
         </TableRow>
 
         <!--9위팀 : 순위 팀명 경기 승 패 무 승률 게임차-->
@@ -569,25 +569,25 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="한화" />
+                android:text="SK" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
+                android:text="35" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="12" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="23" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="7" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="16" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -599,13 +599,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="0.304" />
+                android:text="0.343" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="10.5" />
+                android:text="14" />
         </TableRow>
 
         <!--10위팀 : 순위 팀명 경기 승 패 무 승률 게임차-->
@@ -627,25 +627,25 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="SK" />
+                android:text="한화" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="22" />
+                android:text="36" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="6" />
+                android:text="9" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="16" />
+                android:text="27" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -657,13 +657,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="0.273" />
+                android:text="0.250" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="11" />
+                android:text="17.5" />
         </TableRow>
     </TableLayout>
 </ScrollView>
