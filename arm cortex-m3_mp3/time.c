@@ -11,6 +11,9 @@ volatile unsigned int now_time;
 volatile unsigned char time_rtc_flag;
 const unsigned char month_length[12] = {31,29,31,30,31,30,31,31,30,31,30,31};
 extern volatile unsigned short jiffes;
+typedef enum {false, true} bool;
+bool time_update=true;
+long Cyear,month,day,hour,min,sec;
 
 
 void time_from_seconds (time_rtc *ptime, unsigned int ul_seconds)
@@ -79,10 +82,15 @@ void time_to_seconds (time_rtc *ptime, unsigned int *pul_seconds)
       *pul_seconds += (idx * 365) + ((idx + 1) / 4);
       // Convert the days to hours and add the current hour.
       *pul_seconds = (*pul_seconds * 24) + ptime->hour;
+	  hour=(*pul_seconds);
       // Convert the hours to minutes and add the current minute.
       *pul_seconds = (*pul_seconds * 60) + ptime->min;
+	  min=(*pul_seconds);
       // Convert the minutes to seconds and add the current second.
       *pul_seconds = (*pul_seconds * 60) + ptime->sec;
+	  sec=(*pul_seconds);
+	  month=ptime->month;
+	  Cyear=ptime->year;
 }
 
 
@@ -106,7 +114,7 @@ void set_time (time_rtc *p_time)
       RTC_SetCounter(real_time_second);
       /* Wait until last write operation on RTC registers has finished */
       RTC_WaitForLastTask();
-	  
+	  //time_display();
 	  
 }
 
@@ -127,7 +135,38 @@ void check_rtc (void)
       }
 }
 
-
+void time_display (void)
+{
+	long old_hour=0,old_min=0,old_sec=0;
+	unsigned char dh,dl;
+	if ((old_sec != sec) || (time_update)) {
+	   old_sec = sec;
+	   dh = (old_sec / 10) + 0x30;
+	   dl = (old_sec % 10) + 0x30;
+	   if (time_update) put_engxy(17,0,':');
+	   put_engxy(18,0,dh);
+	   put_engxy(19,0,dl);
+	   if ((old_min != min) || (time_update)) {
+	   	  old_min = min;
+	      dh = (old_min / 10) + 0x30;
+	      dl = (old_min % 10) + 0x30;
+	      if (time_update) put_engxy(14,0,':');
+	      put_engxy(15,0,dh);
+	      put_engxy(16,0,dl);
+	      if ((old_hour != hour) || (time_update)) {
+	         old_hour = hour;
+	         dh = (old_hour / 10) + 0x30;
+	         dl = (old_hour % 10) + 0x30;
+	         put_engxy(12,0,dh);
+	         put_engxy(13,0,dl);
+		  	 if ((old_hour == 0) || (time_update)) {
+		  	 	lcd_printf(0,0," %4d-%.2d-%.2d ",Cyear,month,day);
+		     }
+	      }				
+       }
+	}
+    time_update = false;	
+}
 void setup_rtc (void)
 {
       /* Enable PWR and BKP clocks */
@@ -175,6 +214,8 @@ void init_rtc (void)
       NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
       NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
       NVIC_Init(&NVIC_InitStructure);
+	  /* Enable PWR and BKP clocks */
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
       PWR_BackupAccessCmd(ENABLE);
       BKP_ClearFlag();
       if (BKP_ReadBackupRegister(BKP_DR1) != (unsigned short)0x0408) {

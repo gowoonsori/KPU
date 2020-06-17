@@ -1693,320 +1693,200 @@
  1067              	.LFE37:
  1069              		.section	.rodata.vs1003_get_mp3info.str1.1,"aMS",%progbits,1
  1070              	.LC0:
- 1071 0000 53616D70 		.ascii	"Sample_Rate 11KHz  \000"
- 1071      6C655F52 
- 1071      61746520 
- 1071      31314B48 
- 1071      7A202000 
- 1072              	.LC1:
- 1073 0014 53616D70 		.ascii	"Sample_Rate 12KHz  \000"
- 1073      6C655F52 
- 1073      61746520 
- 1073      31324B48 
- 1073      7A202000 
- 1074              	.LC2:
- 1075 0028 53616D70 		.ascii	"Sample_Rate  8KHz  \000"
- 1075      6C655F52 
- 1075      61746520 
- 1075      20384B48 
- 1075      7A202000 
- 1076              	.LC3:
- 1077 003c 53616D70 		.ascii	"Sample_Rate 22KHz  \000"
- 1077      6C655F52 
- 1077      61746520 
- 1077      32324B48 
- 1077      7A202000 
- 1078              	.LC4:
- 1079 0050 53616D70 		.ascii	"Sample_Rate 24KHz  \000"
- 1079      6C655F52 
- 1079      61746520 
- 1079      32344B48 
- 1079      7A202000 
- 1080              	.LC5:
- 1081 0064 53616D70 		.ascii	"Sample_Rate 16KHz  \000"
- 1081      6C655F52 
- 1081      61746520 
- 1081      31364B48 
- 1081      7A202000 
- 1082              	.LC6:
- 1083 0078 53616D70 		.ascii	"Sample_Rate 44KHz  \000"
- 1083      6C655F52 
- 1083      61746520 
- 1083      34344B48 
- 1083      7A202000 
- 1084              	.LC7:
- 1085 008c 53616D70 		.ascii	"Sample_Rate 48KHz  \000"
- 1085      6C655F52 
- 1085      61746520 
- 1085      34384B48 
- 1085      7A202000 
- 1086              	.LC8:
- 1087 00a0 53616D70 		.ascii	"Sample_Rate 32KHz  \000"
- 1087      6C655F52 
- 1087      61746520 
- 1087      33324B48 
- 1087      7A202000 
- 1088              	.LC9:
- 1089 00b4 4269745F 		.ascii	"Bit_Rate 40Kbps \000"
- 1089      52617465 
- 1089      2034304B 
- 1089      62707320 
- 1089      00
- 1090              	.LC10:
- 1091 00c5 4269745F 		.ascii	"Bit_Rate 48Kbps \000"
- 1091      52617465 
- 1091      2034384B 
- 1091      62707320 
- 1091      00
- 1092              	.LC11:
- 1093 00d6 4269745F 		.ascii	"Bit_Rate 56Kbps \000"
- 1093      52617465 
- 1093      2035364B 
- 1093      62707320 
- 1093      00
- 1094              	.LC12:
- 1095 00e7 4269745F 		.ascii	"Bit_Rate 64Kbps \000"
- 1095      52617465 
- 1095      2036344B 
- 1095      62707320 
- 1095      00
- 1096              	.LC13:
- 1097 00f8 4269745F 		.ascii	"Bit_Rate 80Kbps \000"
- 1097      52617465 
- 1097      2038304B 
- 1097      62707320 
- 1097      00
- 1098              	.LC14:
- 1099 0109 4269745F 		.ascii	"Bit_Rate 96Kbps \000"
- 1099      52617465 
- 1099      2039364B 
- 1099      62707320 
- 1099      00
- 1100              	.LC15:
- 1101 011a 4269745F 		.ascii	"Bit_Rate 112Kbps \000"
- 1101      52617465 
- 1101      20313132 
- 1101      4B627073 
- 1101      2000
- 1102              	.LC16:
- 1103 012c 4269745F 		.ascii	"Bit_Rate 128Kbps \000"
- 1103      52617465 
- 1103      20313238 
- 1103      4B627073 
- 1103      2000
- 1104              	.LC17:
- 1105 013e 4269745F 		.ascii	"Bit_Rate 160Kbps \000"
- 1105      52617465 
- 1105      20313630 
- 1105      4B627073 
- 1105      2000
- 1106              	.LC18:
- 1107 0150 4269745F 		.ascii	"Bit_Rate 192Kbps \000"
- 1107      52617465 
- 1107      20313932 
- 1107      4B627073 
- 1107      2000
- 1108              	.LC19:
- 1109 0162 4269745F 		.ascii	"Bit_Rate 224Kbps \000"
- 1109      52617465 
- 1109      20323234 
- 1109      4B627073 
- 1109      2000
- 1110              	.LC20:
- 1111 0174 4269745F 		.ascii	"Bit_Rate 256Kbps \000"
- 1111      52617465 
- 1111      20323536 
- 1111      4B627073 
- 1111      2000
- 1112              	.LC21:
- 1113 0186 4269745F 		.ascii	"Bit_Rate 320Kbps \000"
- 1113      52617465 
- 1113      20333230 
- 1113      4B627073 
- 1113      2000
- 1114              	.LC22:
- 1115 0198 4269745F 		.ascii	"Bit_Rate 8Kbps \000"
- 1115      52617465 
- 1115      20384B62 
- 1115      70732000 
- 1116              	.LC23:
- 1117 01a8 4269745F 		.ascii	"Bit_Rate 16Kbps \000"
- 1117      52617465 
- 1117      2031364B 
- 1117      62707320 
- 1117      00
- 1118              	.LC24:
- 1119 01b9 4269745F 		.ascii	"Bit_Rate 24Kbps \000"
- 1119      52617465 
- 1119      2032344B 
- 1119      62707320 
- 1119      00
- 1120              	.LC25:
- 1121 01ca 4269745F 		.ascii	"Bit_Rate 144Kbps \000"
- 1121      52617465 
- 1121      20313434 
- 1121      4B627073 
- 1121      2000
- 1122              		.section	.text.vs1003_get_mp3info,"ax",%progbits
- 1123              		.align	1
- 1124              		.global	vs1003_get_mp3info
- 1125              		.syntax unified
- 1126              		.thumb
- 1127              		.thumb_func
- 1128              		.fpu softvfp
- 1130              	vs1003_get_mp3info:
- 1131              	.LFB38:
+ 1071 0000 4269745F 		.ascii	"Bit_Rate 192Kbps \000"
+ 1071      52617465 
+ 1071      20313932 
+ 1071      4B627073 
+ 1071      2000
+ 1072              		.section	.text.vs1003_get_mp3info,"ax",%progbits
+ 1073              		.align	1
+ 1074              		.global	vs1003_get_mp3info
+ 1075              		.syntax unified
+ 1076              		.thumb
+ 1077              		.thumb_func
+ 1078              		.fpu softvfp
+ 1080              	vs1003_get_mp3info:
+ 1081              	.LFB38:
  431:vs1003.c      **** 
  432:vs1003.c      **** 
  433:vs1003.c      **** void vs1003_get_mp3info (void)
  434:vs1003.c      **** {
- 1132              		.loc 1 434 1 is_stmt 1 view -0
- 1133              		.cfi_startproc
- 1134              		@ args = 0, pretend = 0, frame = 0
- 1135              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1082              		.loc 1 434 1 is_stmt 1 view -0
+ 1083              		.cfi_startproc
+ 1084              		@ args = 0, pretend = 0, frame = 0
+ 1085              		@ frame_needed = 0, uses_anonymous_args = 0
  435:vs1003.c      ****       unsigned short temp = 0;
- 1136              		.loc 1 435 7 view .LVU296
- 1137              	.LVL116:
+ 1086              		.loc 1 435 7 view .LVU296
+ 1087              	.LVL116:
  436:vs1003.c      ****       unsigned char mp3_id,sample_rate,bit_rate;
- 1138              		.loc 1 436 7 view .LVU297
+ 1088              		.loc 1 436 7 view .LVU297
  437:vs1003.c      ****       temp = vs1003_reg_read(SPI_HDAT1);
- 1139              		.loc 1 437 7 view .LVU298
+ 1089              		.loc 1 437 7 view .LVU298
  434:vs1003.c      ****       unsigned short temp = 0;
- 1140              		.loc 1 434 1 is_stmt 0 view .LVU299
- 1141 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
- 1142              		.cfi_def_cfa_offset 24
- 1143              		.cfi_offset 3, -24
- 1144              		.cfi_offset 4, -20
- 1145              		.cfi_offset 5, -16
- 1146              		.cfi_offset 6, -12
- 1147              		.cfi_offset 7, -8
- 1148              		.cfi_offset 14, -4
- 1149              		.loc 1 437 14 view .LVU300
- 1150 0002 0920     		movs	r0, #9
- 1151 0004 FFF7FEFF 		bl	vs1003_reg_read
- 1152              	.LVL117:
+ 1090              		.loc 1 434 1 is_stmt 0 view .LVU299
+ 1091 0000 70B5     		push	{r4, r5, r6, lr}
+ 1092              		.cfi_def_cfa_offset 16
+ 1093              		.cfi_offset 4, -16
+ 1094              		.cfi_offset 5, -12
+ 1095              		.cfi_offset 6, -8
+ 1096              		.cfi_offset 14, -4
+ 1097              		.loc 1 437 14 view .LVU300
+ 1098 0002 0920     		movs	r0, #9
+ 1099 0004 FFF7FEFF 		bl	vs1003_reg_read
+ 1100              	.LVL117:
  438:vs1003.c      ****       mp3_id = (unsigned char)((temp & 0x0018) >> 3);
- 1153              		.loc 1 438 7 is_stmt 1 view .LVU301
- 1154              		.loc 1 438 16 is_stmt 0 view .LVU302
- 1155 0008 C0F3C707 		ubfx	r7, r0, #3, #8
- 1156              	.LVL118:
+ 1101              		.loc 1 438 7 is_stmt 1 view .LVU301
+ 1102              		.loc 1 438 16 is_stmt 0 view .LVU302
+ 1103 0008 C0F3C706 		ubfx	r6, r0, #3, #8
+ 1104              	.LVL118:
  439:vs1003.c      ****       temp = vs1003_reg_read(SPI_HDAT0);
- 1157              		.loc 1 439 7 is_stmt 1 view .LVU303
- 1158              		.loc 1 439 14 is_stmt 0 view .LVU304
- 1159 000c 0820     		movs	r0, #8
- 1160              	.LVL119:
- 1161              		.loc 1 439 14 view .LVU305
- 1162 000e FFF7FEFF 		bl	vs1003_reg_read
- 1163              	.LVL120:
- 1164 0012 0546     		mov	r5, r0
- 1165              	.LVL121:
+ 1105              		.loc 1 439 7 is_stmt 1 view .LVU303
+ 1106              		.loc 1 439 14 is_stmt 0 view .LVU304
+ 1107 000c 0820     		movs	r0, #8
+ 1108              	.LVL119:
+ 1109              		.loc 1 439 14 view .LVU305
+ 1110 000e FFF7FEFF 		bl	vs1003_reg_read
+ 1111              	.LVL120:
+ 1112 0012 0546     		mov	r5, r0
+ 1113              	.LVL121:
  440:vs1003.c      ****       sample_rate = (unsigned char)((temp & 0x0C00) >> 10);
- 1166              		.loc 1 440 7 is_stmt 1 view .LVU306
- 1167              		.loc 1 440 19 is_stmt 0 view .LVU307
- 1168 0014 C0F38126 		ubfx	r6, r0, #10, #2
- 1169              	.LVL122:
+ 1114              		.loc 1 440 7 is_stmt 1 view .LVU306
  441:vs1003.c      ****       bit_rate = (unsigned char)((temp & 0xF000) >> 12);
- 1170              		.loc 1 441 7 is_stmt 1 view .LVU308
+ 1115              		.loc 1 441 7 view .LVU307
  442:vs1003.c      ****       f_kbps = get_head_info();
- 1171              		.loc 1 442 7 view .LVU309
- 1172              		.loc 1 442 16 is_stmt 0 view .LVU310
- 1173 0018 FFF7FEFF 		bl	get_head_info
- 1174              	.LVL123:
- 1175              		.loc 1 442 14 view .LVU311
- 1176 001c 8E4C     		ldr	r4, .L130
+ 1116              		.loc 1 442 7 view .LVU308
+ 1117              		.loc 1 442 16 is_stmt 0 view .LVU309
+ 1118 0014 FFF7FEFF 		bl	get_head_info
+ 1119              	.LVL122:
+ 1120              		.loc 1 442 14 view .LVU310
+ 1121 0018 424C     		ldr	r4, .L115
  443:vs1003.c      ****       if (mp3_id == 0 || mp3_id == 1) {
- 1177              		.loc 1 443 10 view .LVU312
- 1178 001e BB07     		lsls	r3, r7, #30
+ 1122              		.loc 1 443 10 view .LVU311
+ 1123 001a B307     		lsls	r3, r6, #30
  442:vs1003.c      ****       f_kbps = get_head_info();
- 1179              		.loc 1 442 14 view .LVU313
- 1180 0020 2080     		strh	r0, [r4]	@ movhi
- 1181              		.loc 1 443 7 is_stmt 1 view .LVU314
- 1182              		.loc 1 443 10 is_stmt 0 view .LVU315
- 1183 0022 0ED4     		bmi	.L64
+ 1124              		.loc 1 442 14 view .LVU312
+ 1125 001c 2080     		strh	r0, [r4]	@ movhi
+ 1126              		.loc 1 443 7 is_stmt 1 view .LVU313
+ 1127              		.loc 1 443 10 is_stmt 0 view .LVU314
+ 1128 001e 16D5     		bpl	.L63
+ 438:vs1003.c      ****       temp = vs1003_reg_read(SPI_HDAT0);
+ 1129              		.loc 1 438 14 view .LVU315
+ 1130 0020 06F00306 		and	r6, r6, #3
+ 1131              	.LVL123:
  444:vs1003.c      ****          switch (sample_rate) {
- 1184              		.loc 1 444 10 is_stmt 1 view .LVU316
- 1185 0024 012E     		cmp	r6, #1
- 1186 0026 08D0     		beq	.L65
- 1187 0028 022E     		cmp	r6, #2
- 1188 002a 08D0     		beq	.L66
  445:vs1003.c      ****             default:
  446:vs1003.c      ****             case 0:
- 447:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 11KHz  ");
- 1189              		.loc 1 447 15 view .LVU317
- 1190 002c 8B4A     		ldr	r2, .L130+4
- 1191              	.L109:
- 1192 002e 0421     		movs	r1, #4
- 1193 0030 0220     		movs	r0, #2
- 1194              	.L110:
+ 447:vs1003.c      ****               //lcd_printf(2,4,"Sample_Rate 11KHz  ");
  448:vs1003.c      ****               break;
  449:vs1003.c      ****             case 1:
- 450:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 12KHz  ");
+ 450:vs1003.c      ****               //lcd_printf(2,4,"Sample_Rate 12KHz  ");
  451:vs1003.c      ****               break;
  452:vs1003.c      ****             case 2:
- 453:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate  8KHz  ");
+ 453:vs1003.c      ****               //lcd_printf(2,4,"Sample_Rate  8KHz  ");
  454:vs1003.c      ****               break;
  455:vs1003.c      ****          }
  456:vs1003.c      ****       } else if (mp3_id == 2) {
+ 1132              		.loc 1 456 14 is_stmt 1 view .LVU316
+ 1133              		.loc 1 456 17 is_stmt 0 view .LVU317
+ 1134 0024 022E     		cmp	r6, #2
+ 1135 0026 12D0     		beq	.L63
  457:vs1003.c      ****          switch(sample_rate) {
  458:vs1003.c      ****             default:
  459:vs1003.c      ****             case 0:
- 460:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 22KHz  ");
+ 460:vs1003.c      ****               //lcd_printf(2,4,"Sample_Rate 22KHz  ");
  461:vs1003.c      ****               break;
  462:vs1003.c      ****             case 1:
- 463:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 24KHz  ");
+ 463:vs1003.c      ****               //lcd_printf(2,4,"Sample_Rate 24KHz  ");
  464:vs1003.c      ****               break;
  465:vs1003.c      ****             case 2:
- 466:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 16KHz  ");
+ 466:vs1003.c      ****               //lcd_printf(2,4,"Sample_Rate 16KHz  ");
  467:vs1003.c      ****               break;
  468:vs1003.c      ****          }
  469:vs1003.c      ****       } else if (mp3_id == 3) {
+ 1136              		.loc 1 469 17 view .LVU318
+ 1137 0028 032E     		cmp	r6, #3
+ 441:vs1003.c      ****       f_kbps = get_head_info();
+ 1138              		.loc 1 441 16 view .LVU319
+ 1139 002a C5F30733 		ubfx	r3, r5, #12, #8
+ 1140              		.loc 1 469 14 is_stmt 1 view .LVU320
+ 1141              		.loc 1 469 17 is_stmt 0 view .LVU321
+ 1142 002e 27D1     		bne	.L67
  470:vs1003.c      ****          switch(sample_rate) {
+ 1143              		.loc 1 470 10 is_stmt 1 view .LVU322
  471:vs1003.c      ****             default:
  472:vs1003.c      ****             case 0:
- 473:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 44KHz  ");
+ 473:vs1003.c      ****               //lcd_printf(2,4,"Sample_Rate 44KHz  ");
  474:vs1003.c      ****               break;
  475:vs1003.c      ****             case 1:
- 476:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 48KHz  ");
+ 476:vs1003.c      ****               //lcd_printf(2,4,"Sample_Rate 48KHz  ");
  477:vs1003.c      ****               break;
  478:vs1003.c      ****             case 2:
- 479:vs1003.c      ****               lcd_printf(2,4,"Sample_Rate 32KHz  ");
+ 479:vs1003.c      ****               //lcd_printf(2,4,"Sample_Rate 32KHz  ");
  480:vs1003.c      ****               break;
  481:vs1003.c      ****          }
  482:vs1003.c      ****          switch (bit_rate) {
+ 1144              		.loc 1 482 10 view .LVU323
+ 1145 0030 023B     		subs	r3, r3, #2
+ 1146 0032 0C2B     		cmp	r3, #12
+ 1147 0034 0BD8     		bhi	.L63
+ 1148 0036 DFE803F0 		tbb	[pc, r3]
+ 1149              	.L69:
+ 1150 003a 51       		.byte	(.L91-.L69)/2
+ 1151 003b 55       		.byte	(.L90-.L69)/2
+ 1152 003c 59       		.byte	(.L89-.L69)/2
+ 1153 003d 5D       		.byte	(.L88-.L69)/2
+ 1154 003e 61       		.byte	(.L87-.L69)/2
+ 1155 003f 65       		.byte	(.L86-.L69)/2
+ 1156 0040 69       		.byte	(.L85-.L69)/2
+ 1157 0041 07       		.byte	(.L74-.L69)/2
+ 1158 0042 71       		.byte	(.L82-.L69)/2
+ 1159 0043 0B       		.byte	(.L72-.L69)/2
+ 1160 0044 15       		.byte	(.L71-.L69)/2
+ 1161 0045 19       		.byte	(.L70-.L69)/2
+ 1162 0046 1E       		.byte	(.L68-.L69)/2
+ 1163 0047 00       		.p2align 1
+ 1164              	.L74:
  483:vs1003.c      ****             case 2:
- 484:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 40Kbps ");
+ 484:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 40Kbps ");
  485:vs1003.c      ****               if (f_kbps == 0) f_kbps = 40;
  486:vs1003.c      ****               break;
  487:vs1003.c      ****             case 3:
- 488:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 48Kbps ");
+ 488:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 48Kbps ");
  489:vs1003.c      ****               if (f_kbps == 0) f_kbps = 48;
  490:vs1003.c      ****               break;
  491:vs1003.c      ****             case 4:
- 492:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 56Kbps ");
+ 492:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 56Kbps ");
  493:vs1003.c      ****               if (f_kbps == 0) f_kbps = 56;
  494:vs1003.c      ****               break;
  495:vs1003.c      ****             case 5:
- 496:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 64Kbps ");
+ 496:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 64Kbps ");
  497:vs1003.c      ****               if (f_kbps == 0) f_kbps = 64;
  498:vs1003.c      ****               break;
  499:vs1003.c      ****             case 6:
- 500:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 80Kbps ");
+ 500:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 80Kbps ");
  501:vs1003.c      ****               if (f_kbps == 0) f_kbps = 80;
  502:vs1003.c      ****               break;
  503:vs1003.c      ****             case 7:
- 504:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 96Kbps ");
+ 504:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 96Kbps ");
  505:vs1003.c      ****               if (f_kbps == 0) f_kbps = 96;
  506:vs1003.c      ****               break;
  507:vs1003.c      ****             case 8:
- 508:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 112Kbps ");
+ 508:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 112Kbps ");
  509:vs1003.c      ****               if (f_kbps == 0) f_kbps = 112;
  510:vs1003.c      ****               break;
  511:vs1003.c      ****             case 9:
- 512:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 128Kbps ");
+ 512:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 128Kbps ");
  513:vs1003.c      ****               if (f_kbps == 0) f_kbps = 128;
+ 1165              		.loc 1 513 15 view .LVU324
+ 1166              		.loc 1 513 18 is_stmt 0 view .LVU325
+ 1167 0048 08B9     		cbnz	r0, .L63
+ 1168              		.loc 1 513 32 is_stmt 1 discriminator 1 view .LVU326
+ 1169              		.loc 1 513 39 is_stmt 0 discriminator 1 view .LVU327
+ 1170 004a 8023     		movs	r3, #128
+ 1171              	.L98:
  514:vs1003.c      ****               break;
  515:vs1003.c      ****             case 10:
- 516:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 160Kbps ");
+ 516:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 160Kbps ");
  517:vs1003.c      ****               if (f_kbps == 0) f_kbps = 160;
  518:vs1003.c      ****               break;
  519:vs1003.c      ****             case 11:
@@ -2014,2488 +1894,2196 @@
  521:vs1003.c      ****               if (f_kbps == 0) f_kbps = 192;
  522:vs1003.c      ****               break;
  523:vs1003.c      ****             case 12:
- 524:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 224Kbps ");
+ 524:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 224Kbps ");
  525:vs1003.c      ****               if (f_kbps == 0) f_kbps = 224;
  526:vs1003.c      ****               break;
  527:vs1003.c      ****             case 13:
- 528:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 256Kbps ");
+ 528:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 256Kbps ");
  529:vs1003.c      ****               if (f_kbps == 0) f_kbps = 256;
  530:vs1003.c      ****               break;
  531:vs1003.c      ****             case 14:
- 532:vs1003.c      ****               lcd_printf(2,5,"Bit_Rate 320Kbps ");
+ 532:vs1003.c      ****               //lcd_printf(2,5,"Bit_Rate 320Kbps ");
  533:vs1003.c      ****               if (f_kbps == 0) f_kbps = 320;
  534:vs1003.c      ****               break;
  535:vs1003.c      ****          }
  536:vs1003.c      ****       } else if (mp3_id == 0 || mp3_id == 1 || mp3_id == 2) {
  537:vs1003.c      ****          switch (bit_rate) {
  538:vs1003.c      ****              case 1:
- 539:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 8Kbps ");
+ 539:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 8Kbps ");
  540:vs1003.c      ****                if (f_kbps == 0) f_kbps = 8;
  541:vs1003.c      ****                break;
  542:vs1003.c      ****              case 2:
- 543:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 16Kbps ");
+ 543:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 16Kbps ");
  544:vs1003.c      ****                if (f_kbps == 0) f_kbps = 16;
  545:vs1003.c      ****                break;
  546:vs1003.c      ****              case 3:
- 547:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 24Kbps ");
+ 547:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 24Kbps ");
  548:vs1003.c      ****                if (f_kbps == 0) f_kbps = 24;
  549:vs1003.c      ****                break;
  550:vs1003.c      ****              case 5:
- 551:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 40Kbps ");
+ 551:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 40Kbps ");
  552:vs1003.c      ****                if (f_kbps == 0) f_kbps = 40;
  553:vs1003.c      ****                break;
  554:vs1003.c      ****              case 6:
- 555:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 48Kbps ");
+ 555:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 48Kbps ");
  556:vs1003.c      ****                if (f_kbps == 0) f_kbps = 48;
  557:vs1003.c      ****                break;
  558:vs1003.c      ****              case 7:
- 559:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 56Kbps ");
+ 559:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 56Kbps ");
  560:vs1003.c      ****                if (f_kbps == 0) f_kbps = 56;
  561:vs1003.c      ****                break;
  562:vs1003.c      ****              case 8:
- 563:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 64Kbps ");
+ 563:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 64Kbps ");
  564:vs1003.c      ****                if (f_kbps == 0) f_kbps = 64;
  565:vs1003.c      ****                break;
  566:vs1003.c      ****              case 9:
- 567:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 80Kbps ");
+ 567:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 80Kbps ");
  568:vs1003.c      ****                if (f_kbps == 0) f_kbps = 80;
  569:vs1003.c      ****                break;
  570:vs1003.c      ****              case 10:
- 571:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 96Kbps ");
+ 571:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 96Kbps ");
  572:vs1003.c      ****                if (f_kbps == 0) f_kbps = 96;
  573:vs1003.c      ****                break;
  574:vs1003.c      ****              case 11:
- 575:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 112Kbps ");
+ 575:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 112Kbps ");
  576:vs1003.c      ****                if (f_kbps == 0) f_kbps = 112;
  577:vs1003.c      ****                break;
  578:vs1003.c      ****              case 12:
- 579:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 128Kbps ");
- 580:vs1003.c      ****                if (f_kbps == 0) f_kbps = 128;
+ 579:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 128Kbps ");
+ 580:vs1003.c      ****                //if (f_kbps == 0) f_kbps = 128;
  581:vs1003.c      ****                break;
  582:vs1003.c      ****              case 13:
- 583:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 144Kbps ");
+ 583:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 144Kbps ");
  584:vs1003.c      ****                if (f_kbps == 0) f_kbps = 144;
  585:vs1003.c      ****                break;
  586:vs1003.c      ****              case 14:
- 587:vs1003.c      ****                lcd_printf(2,5,"Bit_Rate 160Kbps ");
+ 587:vs1003.c      ****                //lcd_printf(2,5,"Bit_Rate 160Kbps ");
  588:vs1003.c      ****                if (f_kbps == 0) f_kbps = 160;
+ 1172              		.loc 1 588 40 discriminator 1 view .LVU328
+ 1173 004c 2380     		strh	r3, [r4]	@ movhi
+ 1174              	.L63:
  589:vs1003.c      ****                break;
  590:vs1003.c      ****          }
  591:vs1003.c      ****       }
  592:vs1003.c      **** }
- 1195              		.loc 1 592 1 is_stmt 0 view .LVU318
- 1196 0032 BDE8F840 		pop	{r3, r4, r5, r6, r7, lr}
- 1197              		.cfi_remember_state
- 1198              		.cfi_restore 14
- 1199              		.cfi_restore 7
- 1200              		.cfi_restore 6
- 1201              		.cfi_restore 5
- 1202              		.cfi_restore 4
- 1203              		.cfi_restore 3
- 1204              		.cfi_def_cfa_offset 0
- 1205              	.LVL124:
- 447:vs1003.c      ****               break;
- 1206              		.loc 1 447 15 view .LVU319
- 1207 0036 FFF7FEBF 		b	lcd_printf
- 1208              	.LVL125:
- 1209              	.L65:
- 1210              		.cfi_restore_state
- 450:vs1003.c      ****               break;
- 1211              		.loc 1 450 15 is_stmt 1 view .LVU320
- 1212 003a 894A     		ldr	r2, .L130+8
- 1213 003c F7E7     		b	.L109
- 1214              	.L66:
- 453:vs1003.c      ****               break;
- 1215              		.loc 1 453 15 view .LVU321
- 1216 003e 894A     		ldr	r2, .L130+12
- 1217 0040 F5E7     		b	.L109
- 1218              	.L64:
- 438:vs1003.c      ****       temp = vs1003_reg_read(SPI_HDAT0);
- 1219              		.loc 1 438 14 is_stmt 0 view .LVU322
- 1220 0042 07F00300 		and	r0, r7, #3
- 456:vs1003.c      ****          switch(sample_rate) {
- 1221              		.loc 1 456 14 is_stmt 1 view .LVU323
- 456:vs1003.c      ****          switch(sample_rate) {
- 1222              		.loc 1 456 17 is_stmt 0 view .LVU324
- 1223 0046 0228     		cmp	r0, #2
- 1224 0048 0AD1     		bne	.L67
- 457:vs1003.c      ****             default:
- 1225              		.loc 1 457 10 is_stmt 1 view .LVU325
- 1226 004a 012E     		cmp	r6, #1
- 1227 004c 04D0     		beq	.L68
- 1228 004e 022E     		cmp	r6, #2
- 1229 0050 04D0     		beq	.L69
- 460:vs1003.c      ****               break;
- 1230              		.loc 1 460 15 view .LVU326
- 1231 0052 854A     		ldr	r2, .L130+16
- 1232              	.L111:
- 463:vs1003.c      ****               break;
- 1233              		.loc 1 463 15 is_stmt 0 view .LVU327
- 1234 0054 0421     		movs	r1, #4
- 1235 0056 ECE7     		b	.L110
- 1236              	.L68:
- 463:vs1003.c      ****               break;
- 1237              		.loc 1 463 15 is_stmt 1 view .LVU328
- 1238 0058 844A     		ldr	r2, .L130+20
- 1239 005a FBE7     		b	.L111
- 1240              	.L69:
- 466:vs1003.c      ****               break;
- 1241              		.loc 1 466 15 view .LVU329
- 1242 005c 844A     		ldr	r2, .L130+24
- 1243 005e E6E7     		b	.L109
- 1244              	.L67:
- 469:vs1003.c      ****          switch(sample_rate) {
- 1245              		.loc 1 469 17 is_stmt 0 view .LVU330
- 1246 0060 0328     		cmp	r0, #3
- 441:vs1003.c      ****       f_kbps = get_head_info();
- 1247              		.loc 1 441 16 view .LVU331
- 1248 0062 C5F30735 		ubfx	r5, r5, #12, #8
- 1249              	.LVL126:
- 469:vs1003.c      ****          switch(sample_rate) {
- 1250              		.loc 1 469 14 is_stmt 1 view .LVU332
- 469:vs1003.c      ****          switch(sample_rate) {
- 1251              		.loc 1 469 17 is_stmt 0 view .LVU333
- 1252 0066 4AD1     		bne	.L70
- 470:vs1003.c      ****             default:
- 1253              		.loc 1 470 10 is_stmt 1 view .LVU334
- 1254 0068 012E     		cmp	r6, #1
- 1255 006a 18D0     		beq	.L71
- 1256 006c 022E     		cmp	r6, #2
- 1257 006e 18D0     		beq	.L72
- 473:vs1003.c      ****               break;
- 1258              		.loc 1 473 15 view .LVU335
- 1259 0070 804A     		ldr	r2, .L130+28
- 1260              	.L112:
- 476:vs1003.c      ****               break;
- 1261              		.loc 1 476 15 is_stmt 0 view .LVU336
- 1262 0072 0421     		movs	r1, #4
- 1263 0074 0220     		movs	r0, #2
- 1264              	.L106:
- 1265 0076 023D     		subs	r5, r5, #2
- 479:vs1003.c      ****               break;
- 1266              		.loc 1 479 15 view .LVU337
- 1267 0078 FFF7FEFF 		bl	lcd_printf
- 1268              	.LVL127:
- 480:vs1003.c      ****          }
- 1269              		.loc 1 480 15 is_stmt 1 view .LVU338
- 482:vs1003.c      ****             case 2:
- 1270              		.loc 1 482 10 view .LVU339
- 1271 007c 0C2D     		cmp	r5, #12
- 1272 007e 1DD8     		bhi	.L63
- 1273 0080 DFE815F0 		tbh	[pc, r5, lsl #1]
- 1274              	.L76:
- 1275 0084 7E00     		.2byte	(.L102-.L76)/2
- 1276 0086 8800     		.2byte	(.L101-.L76)/2
- 1277 0088 9200     		.2byte	(.L100-.L76)/2
- 1278 008a 9C00     		.2byte	(.L99-.L76)/2
- 1279 008c A700     		.2byte	(.L98-.L76)/2
- 1280 008e B200     		.2byte	(.L97-.L76)/2
- 1281 0090 BD00     		.2byte	(.L96-.L76)/2
- 1282 0092 C800     		.2byte	(.L95-.L76)/2
- 1283 0094 DE00     		.2byte	(.L92-.L76)/2
- 1284 0096 1300     		.2byte	(.L79-.L76)/2
- 1285 0098 1D00     		.2byte	(.L78-.L76)/2
- 1286 009a 2700     		.2byte	(.L77-.L76)/2
- 1287 009c 3200     		.2byte	(.L75-.L76)/2
- 1288              		.p2align 1
- 1289              	.L71:
- 476:vs1003.c      ****               break;
- 1290              		.loc 1 476 15 view .LVU340
- 1291 009e 764A     		ldr	r2, .L130+32
- 1292 00a0 E7E7     		b	.L112
- 1293              	.L72:
- 479:vs1003.c      ****               break;
- 1294              		.loc 1 479 15 view .LVU341
- 1295 00a2 0421     		movs	r1, #4
- 1296 00a4 3046     		mov	r0, r6
- 1297 00a6 754A     		ldr	r2, .L130+36
- 1298 00a8 E5E7     		b	.L106
- 1299              	.L79:
+ 1175              		.loc 1 592 1 view .LVU329
+ 1176 004e 70BD     		pop	{r4, r5, r6, pc}
+ 1177              	.LVL124:
+ 1178              	.L72:
  520:vs1003.c      ****               if (f_kbps == 0) f_kbps = 192;
- 1300              		.loc 1 520 15 view .LVU342
- 1301 00aa 0521     		movs	r1, #5
- 1302 00ac 0220     		movs	r0, #2
- 1303 00ae 744A     		ldr	r2, .L130+40
- 1304 00b0 FFF7FEFF 		bl	lcd_printf
- 1305              	.LVL128:
+ 1179              		.loc 1 520 15 is_stmt 1 view .LVU330
+ 1180 0050 0521     		movs	r1, #5
+ 1181 0052 0220     		movs	r0, #2
+ 1182 0054 344A     		ldr	r2, .L115+4
+ 1183 0056 FFF7FEFF 		bl	lcd_printf
+ 1184              	.LVL125:
  521:vs1003.c      ****               break;
- 1306              		.loc 1 521 15 view .LVU343
+ 1185              		.loc 1 521 15 view .LVU331
  521:vs1003.c      ****               break;
- 1307              		.loc 1 521 18 is_stmt 0 view .LVU344
- 1308 00b4 2388     		ldrh	r3, [r4]
- 1309 00b6 0BB9     		cbnz	r3, .L63
+ 1186              		.loc 1 521 18 is_stmt 0 view .LVU332
+ 1187 005a 2388     		ldrh	r3, [r4]
+ 1188 005c 002B     		cmp	r3, #0
+ 1189 005e F6D1     		bne	.L63
  521:vs1003.c      ****               break;
- 1310              		.loc 1 521 32 is_stmt 1 discriminator 1 view .LVU345
+ 1190              		.loc 1 521 32 is_stmt 1 discriminator 1 view .LVU333
  521:vs1003.c      ****               break;
- 1311              		.loc 1 521 39 is_stmt 0 discriminator 1 view .LVU346
- 1312 00b8 C023     		movs	r3, #192
- 1313              	.L107:
- 588:vs1003.c      ****                break;
- 1314              		.loc 1 588 40 discriminator 1 view .LVU347
- 1315 00ba 2380     		strh	r3, [r4]	@ movhi
- 1316              	.L63:
- 1317              		.loc 1 592 1 view .LVU348
- 1318 00bc F8BD     		pop	{r3, r4, r5, r6, r7, pc}
- 1319              	.LVL129:
- 1320              	.L78:
- 524:vs1003.c      ****               if (f_kbps == 0) f_kbps = 224;
- 1321              		.loc 1 524 15 is_stmt 1 view .LVU349
- 1322 00be 0521     		movs	r1, #5
- 1323 00c0 0220     		movs	r0, #2
- 1324 00c2 704A     		ldr	r2, .L130+44
- 1325 00c4 FFF7FEFF 		bl	lcd_printf
- 1326              	.LVL130:
+ 1191              		.loc 1 521 39 is_stmt 0 discriminator 1 view .LVU334
+ 1192 0060 C023     		movs	r3, #192
+ 1193 0062 F3E7     		b	.L98
+ 1194              	.L71:
  525:vs1003.c      ****               break;
- 1327              		.loc 1 525 15 view .LVU350
+ 1195              		.loc 1 525 15 is_stmt 1 view .LVU335
  525:vs1003.c      ****               break;
- 1328              		.loc 1 525 18 is_stmt 0 view .LVU351
- 1329 00c8 2388     		ldrh	r3, [r4]
- 1330 00ca 002B     		cmp	r3, #0
- 1331 00cc F6D1     		bne	.L63
+ 1196              		.loc 1 525 18 is_stmt 0 view .LVU336
+ 1197 0064 0028     		cmp	r0, #0
+ 1198 0066 F2D1     		bne	.L63
  525:vs1003.c      ****               break;
- 1332              		.loc 1 525 32 is_stmt 1 discriminator 1 view .LVU352
+ 1199              		.loc 1 525 32 is_stmt 1 discriminator 1 view .LVU337
  525:vs1003.c      ****               break;
- 1333              		.loc 1 525 39 is_stmt 0 discriminator 1 view .LVU353
- 1334 00ce E023     		movs	r3, #224
- 1335 00d0 F3E7     		b	.L107
- 1336              	.L77:
- 528:vs1003.c      ****               if (f_kbps == 0) f_kbps = 256;
- 1337              		.loc 1 528 15 is_stmt 1 view .LVU354
- 1338 00d2 0521     		movs	r1, #5
- 1339 00d4 0220     		movs	r0, #2
- 1340 00d6 6C4A     		ldr	r2, .L130+48
- 1341 00d8 FFF7FEFF 		bl	lcd_printf
- 1342              	.LVL131:
+ 1200              		.loc 1 525 39 is_stmt 0 discriminator 1 view .LVU338
+ 1201 0068 E023     		movs	r3, #224
+ 1202 006a EFE7     		b	.L98
+ 1203              	.L70:
  529:vs1003.c      ****               break;
- 1343              		.loc 1 529 15 view .LVU355
+ 1204              		.loc 1 529 15 is_stmt 1 view .LVU339
  529:vs1003.c      ****               break;
- 1344              		.loc 1 529 18 is_stmt 0 view .LVU356
- 1345 00dc 2388     		ldrh	r3, [r4]
- 1346 00de 002B     		cmp	r3, #0
- 1347 00e0 ECD1     		bne	.L63
+ 1205              		.loc 1 529 18 is_stmt 0 view .LVU340
+ 1206 006c 0028     		cmp	r0, #0
+ 1207 006e EED1     		bne	.L63
  529:vs1003.c      ****               break;
- 1348              		.loc 1 529 32 is_stmt 1 discriminator 1 view .LVU357
+ 1208              		.loc 1 529 32 is_stmt 1 discriminator 1 view .LVU341
  529:vs1003.c      ****               break;
- 1349              		.loc 1 529 39 is_stmt 0 discriminator 1 view .LVU358
- 1350 00e2 4FF48073 		mov	r3, #256
- 1351 00e6 E8E7     		b	.L107
- 1352              	.L75:
- 532:vs1003.c      ****               if (f_kbps == 0) f_kbps = 320;
- 1353              		.loc 1 532 15 is_stmt 1 view .LVU359
- 1354 00e8 0521     		movs	r1, #5
- 1355 00ea 0220     		movs	r0, #2
- 1356 00ec 674A     		ldr	r2, .L130+52
- 1357 00ee FFF7FEFF 		bl	lcd_printf
- 1358              	.LVL132:
+ 1209              		.loc 1 529 39 is_stmt 0 discriminator 1 view .LVU342
+ 1210 0070 4FF48073 		mov	r3, #256
+ 1211 0074 EAE7     		b	.L98
+ 1212              	.L68:
  533:vs1003.c      ****               break;
- 1359              		.loc 1 533 15 view .LVU360
+ 1213              		.loc 1 533 15 is_stmt 1 view .LVU343
  533:vs1003.c      ****               break;
- 1360              		.loc 1 533 18 is_stmt 0 view .LVU361
- 1361 00f2 2388     		ldrh	r3, [r4]
- 1362 00f4 002B     		cmp	r3, #0
- 1363 00f6 E1D1     		bne	.L63
+ 1214              		.loc 1 533 18 is_stmt 0 view .LVU344
+ 1215 0076 0028     		cmp	r0, #0
+ 1216 0078 E9D1     		bne	.L63
  533:vs1003.c      ****               break;
- 1364              		.loc 1 533 32 is_stmt 1 discriminator 1 view .LVU362
+ 1217              		.loc 1 533 32 is_stmt 1 discriminator 1 view .LVU345
  533:vs1003.c      ****               break;
- 1365              		.loc 1 533 39 is_stmt 0 discriminator 1 view .LVU363
- 1366 00f8 4FF4A073 		mov	r3, #320
- 1367 00fc DDE7     		b	.L107
- 1368              	.L70:
+ 1218              		.loc 1 533 39 is_stmt 0 discriminator 1 view .LVU346
+ 1219 007a 4FF4A073 		mov	r3, #320
+ 1220 007e E5E7     		b	.L98
+ 1221              	.L67:
  536:vs1003.c      ****          switch (bit_rate) {
- 1369              		.loc 1 536 14 is_stmt 1 view .LVU364
+ 1222              		.loc 1 536 14 is_stmt 1 view .LVU347
  537:vs1003.c      ****              case 1:
- 1370              		.loc 1 537 10 view .LVU365
- 1371 00fe 013D     		subs	r5, r5, #1
- 1372 0100 0D2D     		cmp	r5, #13
- 1373 0102 DBD8     		bhi	.L63
- 1374 0104 01A3     		adr	r3, .L93
- 1375 0106 53F825F0 		ldr	pc, [r3, r5, lsl #2]
- 1376 010a 00BF     		.p2align 2
- 1377              	.L93:
- 1378 010c 45010000 		.word	.L105+1
- 1379 0110 59010000 		.word	.L104+1
- 1380 0114 6D010000 		.word	.L103+1
- 1381 0118 BD000000 		.word	.L63+1
- 1382 011c 81010000 		.word	.L102+1
- 1383 0120 95010000 		.word	.L101+1
- 1384 0124 A9010000 		.word	.L100+1
- 1385 0128 BD010000 		.word	.L99+1
- 1386 012c D3010000 		.word	.L98+1
- 1387 0130 E9010000 		.word	.L97+1
- 1388 0134 FF010000 		.word	.L96+1
- 1389 0138 15020000 		.word	.L95+1
- 1390 013c 2B020000 		.word	.L94+1
- 1391 0140 41020000 		.word	.L92+1
- 1392              		.p2align 1
- 1393              	.L105:
- 539:vs1003.c      ****                if (f_kbps == 0) f_kbps = 8;
- 1394              		.loc 1 539 16 view .LVU366
- 1395 0144 0521     		movs	r1, #5
- 1396 0146 0220     		movs	r0, #2
- 1397 0148 514A     		ldr	r2, .L130+56
- 1398 014a FFF7FEFF 		bl	lcd_printf
- 1399              	.LVL133:
+ 1223              		.loc 1 537 10 view .LVU348
+ 1224 0080 013B     		subs	r3, r3, #1
+ 1225 0082 0D2B     		cmp	r3, #13
+ 1226 0084 E3D8     		bhi	.L63
+ 1227 0086 01A2     		adr	r2, .L83
+ 1228 0088 52F823F0 		ldr	pc, [r2, r3, lsl #2]
+ 1229              		.p2align 2
+ 1230              	.L83:
+ 1231 008c C5000000 		.word	.L94+1
+ 1232 0090 CD000000 		.word	.L93+1
+ 1233 0094 D5000000 		.word	.L92+1
+ 1234 0098 4F000000 		.word	.L63+1
+ 1235 009c DD000000 		.word	.L91+1
+ 1236 00a0 E5000000 		.word	.L90+1
+ 1237 00a4 ED000000 		.word	.L89+1
+ 1238 00a8 F5000000 		.word	.L88+1
+ 1239 00ac FD000000 		.word	.L87+1
+ 1240 00b0 05010000 		.word	.L86+1
+ 1241 00b4 0D010000 		.word	.L85+1
+ 1242 00b8 4F000000 		.word	.L63+1
+ 1243 00bc 15010000 		.word	.L84+1
+ 1244 00c0 1D010000 		.word	.L82+1
+ 1245              		.p2align 1
+ 1246              	.L94:
  540:vs1003.c      ****                break;
- 1400              		.loc 1 540 16 view .LVU367
+ 1247              		.loc 1 540 16 view .LVU349
  540:vs1003.c      ****                break;
- 1401              		.loc 1 540 19 is_stmt 0 view .LVU368
- 1402 014e 2388     		ldrh	r3, [r4]
- 1403 0150 002B     		cmp	r3, #0
- 1404 0152 B3D1     		bne	.L63
+ 1248              		.loc 1 540 19 is_stmt 0 view .LVU350
+ 1249 00c4 0028     		cmp	r0, #0
+ 1250 00c6 C2D1     		bne	.L63
  540:vs1003.c      ****                break;
- 1405              		.loc 1 540 33 is_stmt 1 discriminator 1 view .LVU369
+ 1251              		.loc 1 540 33 is_stmt 1 discriminator 1 view .LVU351
  540:vs1003.c      ****                break;
- 1406              		.loc 1 540 40 is_stmt 0 discriminator 1 view .LVU370
- 1407 0154 0823     		movs	r3, #8
- 1408 0156 B0E7     		b	.L107
- 1409              	.L104:
- 543:vs1003.c      ****                if (f_kbps == 0) f_kbps = 16;
- 1410              		.loc 1 543 16 is_stmt 1 view .LVU371
- 1411 0158 0521     		movs	r1, #5
- 1412 015a 0220     		movs	r0, #2
- 1413 015c 4D4A     		ldr	r2, .L130+60
- 1414 015e FFF7FEFF 		bl	lcd_printf
- 1415              	.LVL134:
+ 1252              		.loc 1 540 40 is_stmt 0 discriminator 1 view .LVU352
+ 1253 00c8 0823     		movs	r3, #8
+ 1254 00ca BFE7     		b	.L98
+ 1255              	.L93:
  544:vs1003.c      ****                break;
- 1416              		.loc 1 544 16 view .LVU372
+ 1256              		.loc 1 544 16 is_stmt 1 view .LVU353
  544:vs1003.c      ****                break;
- 1417              		.loc 1 544 19 is_stmt 0 view .LVU373
- 1418 0162 2388     		ldrh	r3, [r4]
- 1419 0164 002B     		cmp	r3, #0
- 1420 0166 A9D1     		bne	.L63
+ 1257              		.loc 1 544 19 is_stmt 0 view .LVU354
+ 1258 00cc 0028     		cmp	r0, #0
+ 1259 00ce BED1     		bne	.L63
  544:vs1003.c      ****                break;
- 1421              		.loc 1 544 33 is_stmt 1 discriminator 1 view .LVU374
+ 1260              		.loc 1 544 33 is_stmt 1 discriminator 1 view .LVU355
  544:vs1003.c      ****                break;
- 1422              		.loc 1 544 40 is_stmt 0 discriminator 1 view .LVU375
- 1423 0168 1023     		movs	r3, #16
- 1424 016a A6E7     		b	.L107
- 1425              	.L103:
- 547:vs1003.c      ****                if (f_kbps == 0) f_kbps = 24;
- 1426              		.loc 1 547 16 is_stmt 1 view .LVU376
- 1427 016c 0521     		movs	r1, #5
- 1428 016e 0220     		movs	r0, #2
- 1429 0170 494A     		ldr	r2, .L130+64
- 1430 0172 FFF7FEFF 		bl	lcd_printf
- 1431              	.LVL135:
+ 1261              		.loc 1 544 40 is_stmt 0 discriminator 1 view .LVU356
+ 1262 00d0 1023     		movs	r3, #16
+ 1263 00d2 BBE7     		b	.L98
+ 1264              	.L92:
  548:vs1003.c      ****                break;
- 1432              		.loc 1 548 16 view .LVU377
+ 1265              		.loc 1 548 16 is_stmt 1 view .LVU357
  548:vs1003.c      ****                break;
- 1433              		.loc 1 548 19 is_stmt 0 view .LVU378
- 1434 0176 2388     		ldrh	r3, [r4]
- 1435 0178 002B     		cmp	r3, #0
- 1436 017a 9FD1     		bne	.L63
+ 1266              		.loc 1 548 19 is_stmt 0 view .LVU358
+ 1267 00d4 0028     		cmp	r0, #0
+ 1268 00d6 BAD1     		bne	.L63
  548:vs1003.c      ****                break;
- 1437              		.loc 1 548 33 is_stmt 1 discriminator 1 view .LVU379
+ 1269              		.loc 1 548 33 is_stmt 1 discriminator 1 view .LVU359
  548:vs1003.c      ****                break;
- 1438              		.loc 1 548 40 is_stmt 0 discriminator 1 view .LVU380
- 1439 017c 1823     		movs	r3, #24
- 1440 017e 9CE7     		b	.L107
- 1441              	.L102:
- 551:vs1003.c      ****                if (f_kbps == 0) f_kbps = 40;
- 1442              		.loc 1 551 16 is_stmt 1 view .LVU381
- 1443 0180 0521     		movs	r1, #5
- 1444 0182 0220     		movs	r0, #2
- 1445 0184 454A     		ldr	r2, .L130+68
- 1446 0186 FFF7FEFF 		bl	lcd_printf
- 1447              	.LVL136:
+ 1270              		.loc 1 548 40 is_stmt 0 discriminator 1 view .LVU360
+ 1271 00d8 1823     		movs	r3, #24
+ 1272 00da B7E7     		b	.L98
+ 1273              	.L91:
  552:vs1003.c      ****                break;
- 1448              		.loc 1 552 16 view .LVU382
+ 1274              		.loc 1 552 16 is_stmt 1 view .LVU361
  552:vs1003.c      ****                break;
- 1449              		.loc 1 552 19 is_stmt 0 view .LVU383
- 1450 018a 2388     		ldrh	r3, [r4]
- 1451 018c 002B     		cmp	r3, #0
- 1452 018e 95D1     		bne	.L63
+ 1275              		.loc 1 552 19 is_stmt 0 view .LVU362
+ 1276 00dc 0028     		cmp	r0, #0
+ 1277 00de B6D1     		bne	.L63
  552:vs1003.c      ****                break;
- 1453              		.loc 1 552 33 is_stmt 1 discriminator 1 view .LVU384
+ 1278              		.loc 1 552 33 is_stmt 1 discriminator 1 view .LVU363
  552:vs1003.c      ****                break;
- 1454              		.loc 1 552 40 is_stmt 0 discriminator 1 view .LVU385
- 1455 0190 2823     		movs	r3, #40
- 1456 0192 92E7     		b	.L107
- 1457              	.L101:
- 555:vs1003.c      ****                if (f_kbps == 0) f_kbps = 48;
- 1458              		.loc 1 555 16 is_stmt 1 view .LVU386
- 1459 0194 0521     		movs	r1, #5
- 1460 0196 0220     		movs	r0, #2
- 1461 0198 414A     		ldr	r2, .L130+72
- 1462 019a FFF7FEFF 		bl	lcd_printf
- 1463              	.LVL137:
+ 1279              		.loc 1 552 40 is_stmt 0 discriminator 1 view .LVU364
+ 1280 00e0 2823     		movs	r3, #40
+ 1281 00e2 B3E7     		b	.L98
+ 1282              	.L90:
  556:vs1003.c      ****                break;
- 1464              		.loc 1 556 16 view .LVU387
+ 1283              		.loc 1 556 16 is_stmt 1 view .LVU365
  556:vs1003.c      ****                break;
- 1465              		.loc 1 556 19 is_stmt 0 view .LVU388
- 1466 019e 2388     		ldrh	r3, [r4]
- 1467 01a0 002B     		cmp	r3, #0
- 1468 01a2 8BD1     		bne	.L63
+ 1284              		.loc 1 556 19 is_stmt 0 view .LVU366
+ 1285 00e4 0028     		cmp	r0, #0
+ 1286 00e6 B2D1     		bne	.L63
  556:vs1003.c      ****                break;
- 1469              		.loc 1 556 33 is_stmt 1 discriminator 1 view .LVU389
+ 1287              		.loc 1 556 33 is_stmt 1 discriminator 1 view .LVU367
  556:vs1003.c      ****                break;
- 1470              		.loc 1 556 40 is_stmt 0 discriminator 1 view .LVU390
- 1471 01a4 3023     		movs	r3, #48
- 1472 01a6 88E7     		b	.L107
- 1473              	.L100:
- 559:vs1003.c      ****                if (f_kbps == 0) f_kbps = 56;
- 1474              		.loc 1 559 16 is_stmt 1 view .LVU391
- 1475 01a8 0521     		movs	r1, #5
- 1476 01aa 0220     		movs	r0, #2
- 1477 01ac 3D4A     		ldr	r2, .L130+76
- 1478 01ae FFF7FEFF 		bl	lcd_printf
- 1479              	.LVL138:
+ 1288              		.loc 1 556 40 is_stmt 0 discriminator 1 view .LVU368
+ 1289 00e8 3023     		movs	r3, #48
+ 1290 00ea AFE7     		b	.L98
+ 1291              	.L89:
  560:vs1003.c      ****                break;
- 1480              		.loc 1 560 16 view .LVU392
+ 1292              		.loc 1 560 16 is_stmt 1 view .LVU369
  560:vs1003.c      ****                break;
- 1481              		.loc 1 560 19 is_stmt 0 view .LVU393
- 1482 01b2 2388     		ldrh	r3, [r4]
- 1483 01b4 002B     		cmp	r3, #0
- 1484 01b6 81D1     		bne	.L63
+ 1293              		.loc 1 560 19 is_stmt 0 view .LVU370
+ 1294 00ec 0028     		cmp	r0, #0
+ 1295 00ee AED1     		bne	.L63
  560:vs1003.c      ****                break;
- 1485              		.loc 1 560 33 is_stmt 1 discriminator 1 view .LVU394
+ 1296              		.loc 1 560 33 is_stmt 1 discriminator 1 view .LVU371
  560:vs1003.c      ****                break;
- 1486              		.loc 1 560 40 is_stmt 0 discriminator 1 view .LVU395
- 1487 01b8 3823     		movs	r3, #56
- 1488 01ba 7EE7     		b	.L107
- 1489              	.L99:
- 563:vs1003.c      ****                if (f_kbps == 0) f_kbps = 64;
- 1490              		.loc 1 563 16 is_stmt 1 view .LVU396
- 1491 01bc 0521     		movs	r1, #5
- 1492 01be 0220     		movs	r0, #2
- 1493 01c0 394A     		ldr	r2, .L130+80
- 1494 01c2 FFF7FEFF 		bl	lcd_printf
- 1495              	.LVL139:
+ 1297              		.loc 1 560 40 is_stmt 0 discriminator 1 view .LVU372
+ 1298 00f0 3823     		movs	r3, #56
+ 1299 00f2 ABE7     		b	.L98
+ 1300              	.L88:
  564:vs1003.c      ****                break;
- 1496              		.loc 1 564 16 view .LVU397
+ 1301              		.loc 1 564 16 is_stmt 1 view .LVU373
  564:vs1003.c      ****                break;
- 1497              		.loc 1 564 19 is_stmt 0 view .LVU398
- 1498 01c6 2388     		ldrh	r3, [r4]
- 1499 01c8 002B     		cmp	r3, #0
- 1500 01ca 7FF477AF 		bne	.L63
+ 1302              		.loc 1 564 19 is_stmt 0 view .LVU374
+ 1303 00f4 0028     		cmp	r0, #0
+ 1304 00f6 AAD1     		bne	.L63
  564:vs1003.c      ****                break;
- 1501              		.loc 1 564 33 is_stmt 1 discriminator 1 view .LVU399
+ 1305              		.loc 1 564 33 is_stmt 1 discriminator 1 view .LVU375
  564:vs1003.c      ****                break;
- 1502              		.loc 1 564 40 is_stmt 0 discriminator 1 view .LVU400
- 1503 01ce 4023     		movs	r3, #64
- 1504 01d0 73E7     		b	.L107
- 1505              	.L98:
- 567:vs1003.c      ****                if (f_kbps == 0) f_kbps = 80;
- 1506              		.loc 1 567 16 is_stmt 1 view .LVU401
- 1507 01d2 0521     		movs	r1, #5
- 1508 01d4 0220     		movs	r0, #2
- 1509 01d6 354A     		ldr	r2, .L130+84
- 1510 01d8 FFF7FEFF 		bl	lcd_printf
- 1511              	.LVL140:
+ 1306              		.loc 1 564 40 is_stmt 0 discriminator 1 view .LVU376
+ 1307 00f8 4023     		movs	r3, #64
+ 1308 00fa A7E7     		b	.L98
+ 1309              	.L87:
  568:vs1003.c      ****                break;
- 1512              		.loc 1 568 16 view .LVU402
+ 1310              		.loc 1 568 16 is_stmt 1 view .LVU377
  568:vs1003.c      ****                break;
- 1513              		.loc 1 568 19 is_stmt 0 view .LVU403
- 1514 01dc 2388     		ldrh	r3, [r4]
- 1515 01de 002B     		cmp	r3, #0
- 1516 01e0 7FF46CAF 		bne	.L63
+ 1311              		.loc 1 568 19 is_stmt 0 view .LVU378
+ 1312 00fc 0028     		cmp	r0, #0
+ 1313 00fe A6D1     		bne	.L63
  568:vs1003.c      ****                break;
- 1517              		.loc 1 568 33 is_stmt 1 discriminator 1 view .LVU404
+ 1314              		.loc 1 568 33 is_stmt 1 discriminator 1 view .LVU379
  568:vs1003.c      ****                break;
- 1518              		.loc 1 568 40 is_stmt 0 discriminator 1 view .LVU405
- 1519 01e4 5023     		movs	r3, #80
- 1520 01e6 68E7     		b	.L107
- 1521              	.L97:
- 571:vs1003.c      ****                if (f_kbps == 0) f_kbps = 96;
- 1522              		.loc 1 571 16 is_stmt 1 view .LVU406
- 1523 01e8 0521     		movs	r1, #5
- 1524 01ea 0220     		movs	r0, #2
- 1525 01ec 304A     		ldr	r2, .L130+88
- 1526 01ee FFF7FEFF 		bl	lcd_printf
- 1527              	.LVL141:
+ 1315              		.loc 1 568 40 is_stmt 0 discriminator 1 view .LVU380
+ 1316 0100 5023     		movs	r3, #80
+ 1317 0102 A3E7     		b	.L98
+ 1318              	.L86:
  572:vs1003.c      ****                break;
- 1528              		.loc 1 572 16 view .LVU407
+ 1319              		.loc 1 572 16 is_stmt 1 view .LVU381
  572:vs1003.c      ****                break;
- 1529              		.loc 1 572 19 is_stmt 0 view .LVU408
- 1530 01f2 2388     		ldrh	r3, [r4]
- 1531 01f4 002B     		cmp	r3, #0
- 1532 01f6 7FF461AF 		bne	.L63
+ 1320              		.loc 1 572 19 is_stmt 0 view .LVU382
+ 1321 0104 0028     		cmp	r0, #0
+ 1322 0106 A2D1     		bne	.L63
  572:vs1003.c      ****                break;
- 1533              		.loc 1 572 33 is_stmt 1 discriminator 1 view .LVU409
+ 1323              		.loc 1 572 33 is_stmt 1 discriminator 1 view .LVU383
  572:vs1003.c      ****                break;
- 1534              		.loc 1 572 40 is_stmt 0 discriminator 1 view .LVU410
- 1535 01fa 6023     		movs	r3, #96
- 1536 01fc 5DE7     		b	.L107
- 1537              	.L96:
- 575:vs1003.c      ****                if (f_kbps == 0) f_kbps = 112;
- 1538              		.loc 1 575 16 is_stmt 1 view .LVU411
- 1539 01fe 0521     		movs	r1, #5
- 1540 0200 0220     		movs	r0, #2
- 1541 0202 2C4A     		ldr	r2, .L130+92
- 1542 0204 FFF7FEFF 		bl	lcd_printf
- 1543              	.LVL142:
+ 1324              		.loc 1 572 40 is_stmt 0 discriminator 1 view .LVU384
+ 1325 0108 6023     		movs	r3, #96
+ 1326 010a 9FE7     		b	.L98
+ 1327              	.L85:
  576:vs1003.c      ****                break;
- 1544              		.loc 1 576 16 view .LVU412
+ 1328              		.loc 1 576 16 is_stmt 1 view .LVU385
  576:vs1003.c      ****                break;
- 1545              		.loc 1 576 19 is_stmt 0 view .LVU413
- 1546 0208 2388     		ldrh	r3, [r4]
- 1547 020a 002B     		cmp	r3, #0
- 1548 020c 7FF456AF 		bne	.L63
+ 1329              		.loc 1 576 19 is_stmt 0 view .LVU386
+ 1330 010c 0028     		cmp	r0, #0
+ 1331 010e 9ED1     		bne	.L63
  576:vs1003.c      ****                break;
- 1549              		.loc 1 576 33 is_stmt 1 discriminator 1 view .LVU414
+ 1332              		.loc 1 576 33 is_stmt 1 discriminator 1 view .LVU387
  576:vs1003.c      ****                break;
- 1550              		.loc 1 576 40 is_stmt 0 discriminator 1 view .LVU415
- 1551 0210 7023     		movs	r3, #112
- 1552 0212 52E7     		b	.L107
- 1553              	.L95:
- 579:vs1003.c      ****                if (f_kbps == 0) f_kbps = 128;
- 1554              		.loc 1 579 16 is_stmt 1 view .LVU416
- 1555 0214 0521     		movs	r1, #5
- 1556 0216 0220     		movs	r0, #2
- 1557 0218 274A     		ldr	r2, .L130+96
- 1558 021a FFF7FEFF 		bl	lcd_printf
- 1559              	.LVL143:
- 580:vs1003.c      ****                break;
- 1560              		.loc 1 580 16 view .LVU417
- 580:vs1003.c      ****                break;
- 1561              		.loc 1 580 19 is_stmt 0 view .LVU418
- 1562 021e 2388     		ldrh	r3, [r4]
- 1563 0220 002B     		cmp	r3, #0
- 1564 0222 7FF44BAF 		bne	.L63
- 580:vs1003.c      ****                break;
- 1565              		.loc 1 580 33 is_stmt 1 discriminator 1 view .LVU419
- 580:vs1003.c      ****                break;
- 1566              		.loc 1 580 40 is_stmt 0 discriminator 1 view .LVU420
- 1567 0226 8023     		movs	r3, #128
- 1568 0228 47E7     		b	.L107
- 1569              	.L94:
- 583:vs1003.c      ****                if (f_kbps == 0) f_kbps = 144;
- 1570              		.loc 1 583 16 is_stmt 1 view .LVU421
- 1571 022a 0521     		movs	r1, #5
- 1572 022c 0220     		movs	r0, #2
- 1573 022e 234A     		ldr	r2, .L130+100
- 1574 0230 FFF7FEFF 		bl	lcd_printf
- 1575              	.LVL144:
+ 1333              		.loc 1 576 40 is_stmt 0 discriminator 1 view .LVU388
+ 1334 0110 7023     		movs	r3, #112
+ 1335 0112 9BE7     		b	.L98
+ 1336              	.L84:
  584:vs1003.c      ****                break;
- 1576              		.loc 1 584 16 view .LVU422
+ 1337              		.loc 1 584 16 is_stmt 1 view .LVU389
  584:vs1003.c      ****                break;
- 1577              		.loc 1 584 19 is_stmt 0 view .LVU423
- 1578 0234 2388     		ldrh	r3, [r4]
- 1579 0236 002B     		cmp	r3, #0
- 1580 0238 7FF440AF 		bne	.L63
+ 1338              		.loc 1 584 19 is_stmt 0 view .LVU390
+ 1339 0114 0028     		cmp	r0, #0
+ 1340 0116 9AD1     		bne	.L63
  584:vs1003.c      ****                break;
- 1581              		.loc 1 584 33 is_stmt 1 discriminator 1 view .LVU424
+ 1341              		.loc 1 584 33 is_stmt 1 discriminator 1 view .LVU391
  584:vs1003.c      ****                break;
- 1582              		.loc 1 584 40 is_stmt 0 discriminator 1 view .LVU425
- 1583 023c 9023     		movs	r3, #144
- 1584 023e 3CE7     		b	.L107
- 1585              	.L92:
- 587:vs1003.c      ****                if (f_kbps == 0) f_kbps = 160;
- 1586              		.loc 1 587 16 is_stmt 1 view .LVU426
- 1587 0240 0521     		movs	r1, #5
- 1588 0242 0220     		movs	r0, #2
- 1589 0244 1E4A     		ldr	r2, .L130+104
- 1590 0246 FFF7FEFF 		bl	lcd_printf
- 1591              	.LVL145:
+ 1342              		.loc 1 584 40 is_stmt 0 discriminator 1 view .LVU392
+ 1343 0118 9023     		movs	r3, #144
+ 1344 011a 97E7     		b	.L98
+ 1345              	.L82:
  588:vs1003.c      ****                break;
- 1592              		.loc 1 588 16 view .LVU427
+ 1346              		.loc 1 588 16 is_stmt 1 view .LVU393
  588:vs1003.c      ****                break;
- 1593              		.loc 1 588 19 is_stmt 0 view .LVU428
- 1594 024a 2388     		ldrh	r3, [r4]
- 1595 024c 002B     		cmp	r3, #0
- 1596 024e 7FF435AF 		bne	.L63
+ 1347              		.loc 1 588 19 is_stmt 0 view .LVU394
+ 1348 011c 0028     		cmp	r0, #0
+ 1349 011e 96D1     		bne	.L63
  588:vs1003.c      ****                break;
- 1597              		.loc 1 588 33 is_stmt 1 discriminator 1 view .LVU429
+ 1350              		.loc 1 588 33 is_stmt 1 discriminator 1 view .LVU395
  588:vs1003.c      ****                break;
- 1598              		.loc 1 588 40 is_stmt 0 discriminator 1 view .LVU430
- 1599 0252 A023     		movs	r3, #160
- 1600 0254 31E7     		b	.L107
- 1601              	.L131:
- 1602 0256 00BF     		.align	2
- 1603              	.L130:
- 1604 0258 00000000 		.word	f_kbps
- 1605 025c 00000000 		.word	.LC0
- 1606 0260 14000000 		.word	.LC1
- 1607 0264 28000000 		.word	.LC2
- 1608 0268 3C000000 		.word	.LC3
- 1609 026c 50000000 		.word	.LC4
- 1610 0270 64000000 		.word	.LC5
- 1611 0274 78000000 		.word	.LC6
- 1612 0278 8C000000 		.word	.LC7
- 1613 027c A0000000 		.word	.LC8
- 1614 0280 50010000 		.word	.LC18
- 1615 0284 62010000 		.word	.LC19
- 1616 0288 74010000 		.word	.LC20
- 1617 028c 86010000 		.word	.LC21
- 1618 0290 98010000 		.word	.LC22
- 1619 0294 A8010000 		.word	.LC23
- 1620 0298 B9010000 		.word	.LC24
- 1621 029c B4000000 		.word	.LC9
- 1622 02a0 C5000000 		.word	.LC10
- 1623 02a4 D6000000 		.word	.LC11
- 1624 02a8 E7000000 		.word	.LC12
- 1625 02ac F8000000 		.word	.LC13
- 1626 02b0 09010000 		.word	.LC14
- 1627 02b4 1A010000 		.word	.LC15
- 1628 02b8 2C010000 		.word	.LC16
- 1629 02bc CA010000 		.word	.LC25
- 1630 02c0 3E010000 		.word	.LC17
- 1631              		.cfi_endproc
- 1632              	.LFE38:
- 1634              		.section	.text.get_decode_time,"ax",%progbits
- 1635              		.align	1
- 1636              		.global	get_decode_time
- 1637              		.syntax unified
- 1638              		.thumb
- 1639              		.thumb_func
- 1640              		.fpu softvfp
- 1642              	get_decode_time:
- 1643              	.LFB39:
+ 1351              		.loc 1 588 40 is_stmt 0 discriminator 1 view .LVU396
+ 1352 0120 A023     		movs	r3, #160
+ 1353 0122 93E7     		b	.L98
+ 1354              	.L116:
+ 1355              		.align	2
+ 1356              	.L115:
+ 1357 0124 00000000 		.word	f_kbps
+ 1358 0128 00000000 		.word	.LC0
+ 1359              		.cfi_endproc
+ 1360              	.LFE38:
+ 1362              		.section	.text.get_decode_time,"ax",%progbits
+ 1363              		.align	1
+ 1364              		.global	get_decode_time
+ 1365              		.syntax unified
+ 1366              		.thumb
+ 1367              		.thumb_func
+ 1368              		.fpu softvfp
+ 1370              	get_decode_time:
+ 1371              	.LFB39:
  593:vs1003.c      **** 
  594:vs1003.c      **** 
  595:vs1003.c      **** unsigned short get_decode_time (void)
  596:vs1003.c      **** {
- 1644              		.loc 1 596 1 is_stmt 1 view -0
- 1645              		.cfi_startproc
- 1646              		@ args = 0, pretend = 0, frame = 0
- 1647              		@ frame_needed = 0, uses_anonymous_args = 0
- 1648              		@ link register save eliminated.
+ 1372              		.loc 1 596 1 is_stmt 1 view -0
+ 1373              		.cfi_startproc
+ 1374              		@ args = 0, pretend = 0, frame = 0
+ 1375              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1376              		@ link register save eliminated.
  597:vs1003.c      ****       return vs1003_reg_read(SPI_DECODE_TIME);
- 1649              		.loc 1 597 7 view .LVU432
- 1650              		.loc 1 597 14 is_stmt 0 view .LVU433
- 1651 0000 0420     		movs	r0, #4
- 1652 0002 FFF7FEBF 		b	vs1003_reg_read
- 1653              	.LVL146:
- 1654              		.cfi_endproc
- 1655              	.LFE39:
- 1657              		.section	.text.load_patch,"ax",%progbits
- 1658              		.align	1
- 1659              		.global	load_patch
- 1660              		.syntax unified
- 1661              		.thumb
- 1662              		.thumb_func
- 1663              		.fpu softvfp
- 1665              	load_patch:
- 1666              	.LFB40:
+ 1377              		.loc 1 597 7 view .LVU398
+ 1378              		.loc 1 597 14 is_stmt 0 view .LVU399
+ 1379 0000 0420     		movs	r0, #4
+ 1380 0002 FFF7FEBF 		b	vs1003_reg_read
+ 1381              	.LVL126:
+ 1382              		.cfi_endproc
+ 1383              	.LFE39:
+ 1385              		.section	.text.load_patch,"ax",%progbits
+ 1386              		.align	1
+ 1387              		.global	load_patch
+ 1388              		.syntax unified
+ 1389              		.thumb
+ 1390              		.thumb_func
+ 1391              		.fpu softvfp
+ 1393              	load_patch:
+ 1394              	.LFB40:
  598:vs1003.c      **** }
  599:vs1003.c      **** 
  600:vs1003.c      **** 
  601:vs1003.c      **** void load_patch (void)
  602:vs1003.c      **** {
- 1667              		.loc 1 602 1 is_stmt 1 view -0
- 1668              		.cfi_startproc
- 1669              		@ args = 0, pretend = 0, frame = 0
- 1670              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1395              		.loc 1 602 1 is_stmt 1 view -0
+ 1396              		.cfi_startproc
+ 1397              		@ args = 0, pretend = 0, frame = 0
+ 1398              		@ frame_needed = 0, uses_anonymous_args = 0
  603:vs1003.c      ****       unsigned short idx;
- 1671              		.loc 1 603 7 view .LVU435
+ 1399              		.loc 1 603 7 view .LVU401
  604:vs1003.c      ****       for (idx=0;idx<943;idx++) vs1003_cmd_write(atab[idx],dtab[idx]);
- 1672              		.loc 1 604 7 view .LVU436
- 1673              	.LVL147:
- 1674              		.loc 1 604 18 view .LVU437
+ 1400              		.loc 1 604 7 view .LVU402
+ 1401              	.LVL127:
+ 1402              		.loc 1 604 18 view .LVU403
  602:vs1003.c      ****       unsigned short idx;
- 1675              		.loc 1 602 1 is_stmt 0 view .LVU438
- 1676 0000 70B5     		push	{r4, r5, r6, lr}
- 1677              		.cfi_def_cfa_offset 16
- 1678              		.cfi_offset 4, -16
- 1679              		.cfi_offset 5, -12
- 1680              		.cfi_offset 6, -8
- 1681              		.cfi_offset 14, -4
+ 1403              		.loc 1 602 1 is_stmt 0 view .LVU404
+ 1404 0000 70B5     		push	{r4, r5, r6, lr}
+ 1405              		.cfi_def_cfa_offset 16
+ 1406              		.cfi_offset 4, -16
+ 1407              		.cfi_offset 5, -12
+ 1408              		.cfi_offset 6, -8
+ 1409              		.cfi_offset 14, -4
  602:vs1003.c      ****       unsigned short idx;
- 1682              		.loc 1 602 1 view .LVU439
- 1683 0002 40F2AF34 		movw	r4, #943
- 1684 0006 084D     		ldr	r5, .L136
- 1685 0008 084E     		ldr	r6, .L136+4
- 1686              	.LVL148:
- 1687              	.L134:
- 1688              		.loc 1 604 33 is_stmt 1 discriminator 3 view .LVU440
- 1689 000a 013C     		subs	r4, r4, #1
- 1690 000c 36F8021B 		ldrh	r1, [r6], #2
- 1691 0010 15F8010B 		ldrb	r0, [r5], #1	@ zero_extendqisi2
- 1692              	.LVL149:
- 1693              		.loc 1 604 33 is_stmt 0 discriminator 3 view .LVU441
- 1694 0014 A4B2     		uxth	r4, r4
- 1695 0016 FFF7FEFF 		bl	vs1003_cmd_write
- 1696              	.LVL150:
- 1697              		.loc 1 604 26 is_stmt 1 discriminator 3 view .LVU442
- 1698              		.loc 1 604 18 discriminator 3 view .LVU443
- 1699              		.loc 1 604 7 is_stmt 0 discriminator 3 view .LVU444
- 1700 001a 002C     		cmp	r4, #0
- 1701 001c F5D1     		bne	.L134
+ 1410              		.loc 1 602 1 view .LVU405
+ 1411 0002 40F2AF34 		movw	r4, #943
+ 1412 0006 084D     		ldr	r5, .L121
+ 1413 0008 084E     		ldr	r6, .L121+4
+ 1414              	.LVL128:
+ 1415              	.L119:
+ 1416              		.loc 1 604 33 is_stmt 1 discriminator 3 view .LVU406
+ 1417 000a 013C     		subs	r4, r4, #1
+ 1418 000c 36F8021B 		ldrh	r1, [r6], #2
+ 1419 0010 15F8010B 		ldrb	r0, [r5], #1	@ zero_extendqisi2
+ 1420              	.LVL129:
+ 1421              		.loc 1 604 33 is_stmt 0 discriminator 3 view .LVU407
+ 1422 0014 A4B2     		uxth	r4, r4
+ 1423 0016 FFF7FEFF 		bl	vs1003_cmd_write
+ 1424              	.LVL130:
+ 1425              		.loc 1 604 26 is_stmt 1 discriminator 3 view .LVU408
+ 1426              		.loc 1 604 18 discriminator 3 view .LVU409
+ 1427              		.loc 1 604 7 is_stmt 0 discriminator 3 view .LVU410
+ 1428 001a 002C     		cmp	r4, #0
+ 1429 001c F5D1     		bne	.L119
  605:vs1003.c      ****       delay_ms(10);
- 1702              		.loc 1 605 7 is_stmt 1 view .LVU445
- 1703              	.LVL151:
- 1704              	.LBB48:
- 1705              	.LBI48:
+ 1430              		.loc 1 605 7 is_stmt 1 view .LVU411
+ 1431              	.LVL131:
+ 1432              	.LBB48:
+ 1433              	.LBI48:
  241:vs1003.c      **** {
- 1706              		.loc 1 241 6 view .LVU446
- 1707              	.LBB49:
+ 1434              		.loc 1 241 6 view .LVU412
+ 1435              	.LBB49:
  243:vs1003.c      **** }
- 1708              		.loc 1 243 7 view .LVU447
- 1709 001e 0A20     		movs	r0, #10
- 1710              	.LBE49:
- 1711              	.LBE48:
+ 1436              		.loc 1 243 7 view .LVU413
+ 1437 001e 0A20     		movs	r0, #10
+ 1438              	.LBE49:
+ 1439              	.LBE48:
  606:vs1003.c      **** }
- 1712              		.loc 1 606 1 is_stmt 0 view .LVU448
- 1713 0020 BDE87040 		pop	{r4, r5, r6, lr}
- 1714              		.cfi_restore 14
- 1715              		.cfi_restore 6
- 1716              		.cfi_restore 5
- 1717              		.cfi_restore 4
- 1718              		.cfi_def_cfa_offset 0
- 1719              	.LVL152:
- 1720              	.LBB51:
- 1721              	.LBB50:
+ 1440              		.loc 1 606 1 is_stmt 0 view .LVU414
+ 1441 0020 BDE87040 		pop	{r4, r5, r6, lr}
+ 1442              		.cfi_restore 14
+ 1443              		.cfi_restore 6
+ 1444              		.cfi_restore 5
+ 1445              		.cfi_restore 4
+ 1446              		.cfi_def_cfa_offset 0
+ 1447              	.LVL132:
+ 1448              	.LBB51:
+ 1449              	.LBB50:
  243:vs1003.c      **** }
- 1722              		.loc 1 243 7 view .LVU449
- 1723 0024 FFF7FEBF 		b	wait_ms
- 1724              	.LVL153:
- 1725              	.L137:
- 1726              		.align	2
- 1727              	.L136:
- 1728 0028 00000000 		.word	.LANCHOR2
- 1729 002c 00000000 		.word	.LANCHOR3
- 1730              	.LBE50:
- 1731              	.LBE51:
- 1732              		.cfi_endproc
- 1733              	.LFE40:
- 1735              		.section	.text.get_spec,"ax",%progbits
- 1736              		.align	1
- 1737              		.global	get_spec
- 1738              		.syntax unified
- 1739              		.thumb
- 1740              		.thumb_func
- 1741              		.fpu softvfp
- 1743              	get_spec:
- 1744              	.LVL154:
- 1745              	.LFB41:
+ 1450              		.loc 1 243 7 view .LVU415
+ 1451 0024 FFF7FEBF 		b	wait_ms
+ 1452              	.LVL133:
+ 1453              	.L122:
+ 1454              		.align	2
+ 1455              	.L121:
+ 1456 0028 00000000 		.word	.LANCHOR2
+ 1457 002c 00000000 		.word	.LANCHOR3
+ 1458              	.LBE50:
+ 1459              	.LBE51:
+ 1460              		.cfi_endproc
+ 1461              	.LFE40:
+ 1463              		.section	.text.get_spec,"ax",%progbits
+ 1464              		.align	1
+ 1465              		.global	get_spec
+ 1466              		.syntax unified
+ 1467              		.thumb
+ 1468              		.thumb_func
+ 1469              		.fpu softvfp
+ 1471              	get_spec:
+ 1472              	.LVL134:
+ 1473              	.LFB41:
  607:vs1003.c      **** 
  608:vs1003.c      **** 
  609:vs1003.c      **** void get_spec (unsigned char *p)
  610:vs1003.c      **** {
- 1746              		.loc 1 610 1 is_stmt 1 view -0
- 1747              		.cfi_startproc
- 1748              		@ args = 0, pretend = 0, frame = 0
- 1749              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1474              		.loc 1 610 1 is_stmt 1 view -0
+ 1475              		.cfi_startproc
+ 1476              		@ args = 0, pretend = 0, frame = 0
+ 1477              		@ frame_needed = 0, uses_anonymous_args = 0
  611:vs1003.c      ****       unsigned char byteIndex = 0;
- 1750              		.loc 1 611 7 view .LVU451
+ 1478              		.loc 1 611 7 view .LVU417
  612:vs1003.c      ****       unsigned char temp;
- 1751              		.loc 1 612 7 view .LVU452
+ 1479              		.loc 1 612 7 view .LVU418
  613:vs1003.c      ****       vs1003_cmd_write(SPI_WRAMADDR,0x1804);
- 1752              		.loc 1 613 7 view .LVU453
+ 1480              		.loc 1 613 7 view .LVU419
  610:vs1003.c      ****       unsigned char byteIndex = 0;
- 1753              		.loc 1 610 1 is_stmt 0 view .LVU454
- 1754 0000 38B5     		push	{r3, r4, r5, lr}
- 1755              		.cfi_def_cfa_offset 16
- 1756              		.cfi_offset 3, -16
- 1757              		.cfi_offset 4, -12
- 1758              		.cfi_offset 5, -8
- 1759              		.cfi_offset 14, -4
- 1760              		.loc 1 613 7 view .LVU455
- 1761 0002 41F60401 		movw	r1, #6148
+ 1481              		.loc 1 610 1 is_stmt 0 view .LVU420
+ 1482 0000 38B5     		push	{r3, r4, r5, lr}
+ 1483              		.cfi_def_cfa_offset 16
+ 1484              		.cfi_offset 3, -16
+ 1485              		.cfi_offset 4, -12
+ 1486              		.cfi_offset 5, -8
+ 1487              		.cfi_offset 14, -4
+ 1488              		.loc 1 613 7 view .LVU421
+ 1489 0002 41F60401 		movw	r1, #6148
  610:vs1003.c      ****       unsigned char byteIndex = 0;
- 1762              		.loc 1 610 1 view .LVU456
- 1763 0006 0446     		mov	r4, r0
- 1764              		.loc 1 613 7 view .LVU457
- 1765 0008 0720     		movs	r0, #7
- 1766              	.LVL155:
- 1767              		.loc 1 613 7 view .LVU458
- 1768 000a FFF7FEFF 		bl	vs1003_cmd_write
- 1769              	.LVL156:
+ 1490              		.loc 1 610 1 view .LVU422
+ 1491 0006 0446     		mov	r4, r0
+ 1492              		.loc 1 613 7 view .LVU423
+ 1493 0008 0720     		movs	r0, #7
+ 1494              	.LVL135:
+ 1495              		.loc 1 613 7 view .LVU424
+ 1496 000a FFF7FEFF 		bl	vs1003_cmd_write
+ 1497              	.LVL136:
  614:vs1003.c      ****       for (byteIndex=0;byteIndex<14;byteIndex++) {
- 1770              		.loc 1 614 7 is_stmt 1 view .LVU459
- 1771              		.loc 1 614 24 view .LVU460
- 1772 000e 04F10E05 		add	r5, r4, #14
- 1773              	.L139:
+ 1498              		.loc 1 614 7 is_stmt 1 view .LVU425
+ 1499              		.loc 1 614 24 view .LVU426
+ 1500 000e 04F10E05 		add	r5, r4, #14
+ 1501              	.L124:
  615:vs1003.c      **** 	  temp = vs1003_reg_read(SPI_WRAM) & 0x63;
- 1774              		.loc 1 615 4 discriminator 3 view .LVU461
- 1775              		.loc 1 615 11 is_stmt 0 discriminator 3 view .LVU462
- 1776 0012 0620     		movs	r0, #6
- 1777 0014 FFF7FEFF 		bl	vs1003_reg_read
- 1778              	.LVL157:
+ 1502              		.loc 1 615 4 discriminator 3 view .LVU427
+ 1503              		.loc 1 615 11 is_stmt 0 discriminator 3 view .LVU428
+ 1504 0012 0620     		movs	r0, #6
+ 1505 0014 FFF7FEFF 		bl	vs1003_reg_read
+ 1506              	.LVL137:
  616:vs1003.c      **** 	  *p++ = temp;
- 1779              		.loc 1 616 4 is_stmt 1 discriminator 3 view .LVU463
+ 1507              		.loc 1 616 4 is_stmt 1 discriminator 3 view .LVU429
  615:vs1003.c      **** 	  temp = vs1003_reg_read(SPI_WRAM) & 0x63;
- 1780              		.loc 1 615 9 is_stmt 0 discriminator 3 view .LVU464
- 1781 0018 00F06300 		and	r0, r0, #99
- 1782              	.LVL158:
- 1783              		.loc 1 616 9 discriminator 3 view .LVU465
- 1784 001c 04F8010B 		strb	r0, [r4], #1
- 1785              	.LVL159:
+ 1508              		.loc 1 615 9 is_stmt 0 discriminator 3 view .LVU430
+ 1509 0018 00F06300 		and	r0, r0, #99
+ 1510              	.LVL138:
+ 1511              		.loc 1 616 9 discriminator 3 view .LVU431
+ 1512 001c 04F8010B 		strb	r0, [r4], #1
+ 1513              	.LVL139:
  614:vs1003.c      ****       for (byteIndex=0;byteIndex<14;byteIndex++) {
- 1786              		.loc 1 614 37 is_stmt 1 discriminator 3 view .LVU466
+ 1514              		.loc 1 614 37 is_stmt 1 discriminator 3 view .LVU432
  614:vs1003.c      ****       for (byteIndex=0;byteIndex<14;byteIndex++) {
- 1787              		.loc 1 614 24 discriminator 3 view .LVU467
+ 1515              		.loc 1 614 24 discriminator 3 view .LVU433
  614:vs1003.c      ****       for (byteIndex=0;byteIndex<14;byteIndex++) {
- 1788              		.loc 1 614 7 is_stmt 0 discriminator 3 view .LVU468
- 1789 0020 A542     		cmp	r5, r4
- 1790 0022 F6D1     		bne	.L139
+ 1516              		.loc 1 614 7 is_stmt 0 discriminator 3 view .LVU434
+ 1517 0020 A542     		cmp	r5, r4
+ 1518 0022 F6D1     		bne	.L124
  617:vs1003.c      ****       }
  618:vs1003.c      **** }
- 1791              		.loc 1 618 1 view .LVU469
- 1792 0024 38BD     		pop	{r3, r4, r5, pc}
- 1793              		.loc 1 618 1 view .LVU470
- 1794              		.cfi_endproc
- 1795              	.LFE41:
- 1797              		.section	.text.set_vs1003,"ax",%progbits
- 1798              		.align	1
- 1799              		.global	set_vs1003
- 1800              		.syntax unified
- 1801              		.thumb
- 1802              		.thumb_func
- 1803              		.fpu softvfp
- 1805              	set_vs1003:
- 1806              	.LFB42:
+ 1519              		.loc 1 618 1 view .LVU435
+ 1520 0024 38BD     		pop	{r3, r4, r5, pc}
+ 1521              		.loc 1 618 1 view .LVU436
+ 1522              		.cfi_endproc
+ 1523              	.LFE41:
+ 1525              		.section	.text.set_vs1003,"ax",%progbits
+ 1526              		.align	1
+ 1527              		.global	set_vs1003
+ 1528              		.syntax unified
+ 1529              		.thumb
+ 1530              		.thumb_func
+ 1531              		.fpu softvfp
+ 1533              	set_vs1003:
+ 1534              	.LFB42:
  619:vs1003.c      **** 
  620:vs1003.c      **** 
  621:vs1003.c      **** void set_vs1003 (void)
  622:vs1003.c      **** {
- 1807              		.loc 1 622 1 is_stmt 1 view -0
- 1808              		.cfi_startproc
- 1809              		@ args = 0, pretend = 0, frame = 0
- 1810              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1535              		.loc 1 622 1 is_stmt 1 view -0
+ 1536              		.cfi_startproc
+ 1537              		@ args = 0, pretend = 0, frame = 0
+ 1538              		@ frame_needed = 0, uses_anonymous_args = 0
  623:vs1003.c      ****       unsigned char t;
- 1811              		.loc 1 623 7 view .LVU472
+ 1539              		.loc 1 623 7 view .LVU438
  624:vs1003.c      ****       unsigned short bass = 0;
- 1812              		.loc 1 624 7 view .LVU473
- 1813              	.LVL160:
+ 1540              		.loc 1 624 7 view .LVU439
+ 1541              	.LVL140:
  625:vs1003.c      ****       unsigned short volt = 0;
- 1814              		.loc 1 625 7 view .LVU474
+ 1542              		.loc 1 625 7 view .LVU440
  626:vs1003.c      ****       unsigned char vset = 0;
- 1815              		.loc 1 626 7 view .LVU475
+ 1543              		.loc 1 626 7 view .LVU441
  627:vs1003.c      ****       vset = 255 - vs1003_ram[4];
- 1816              		.loc 1 627 7 view .LVU476
+ 1544              		.loc 1 627 7 view .LVU442
  628:vs1003.c      ****       volt = vset;
- 1817              		.loc 1 628 7 view .LVU477
+ 1545              		.loc 1 628 7 view .LVU443
  622:vs1003.c      ****       unsigned char t;
- 1818              		.loc 1 622 1 is_stmt 0 view .LVU478
- 1819 0000 10B5     		push	{r4, lr}
- 1820              		.cfi_def_cfa_offset 8
- 1821              		.cfi_offset 4, -8
- 1822              		.cfi_offset 14, -4
+ 1546              		.loc 1 622 1 is_stmt 0 view .LVU444
+ 1547 0000 10B5     		push	{r4, lr}
+ 1548              		.cfi_def_cfa_offset 8
+ 1549              		.cfi_offset 4, -8
+ 1550              		.cfi_offset 14, -4
  627:vs1003.c      ****       vset = 255 - vs1003_ram[4];
- 1823              		.loc 1 627 30 view .LVU479
- 1824 0002 0D4A     		ldr	r2, .L144
+ 1551              		.loc 1 627 30 view .LVU445
+ 1552 0002 0D4A     		ldr	r2, .L129
  629:vs1003.c      ****       volt <<= 8;
  630:vs1003.c      ****       volt += vset;
- 1825              		.loc 1 630 12 view .LVU480
- 1826 0004 0423     		movs	r3, #4
+ 1553              		.loc 1 630 12 view .LVU446
+ 1554 0004 0423     		movs	r3, #4
  627:vs1003.c      ****       volt = vset;
- 1827              		.loc 1 627 12 view .LVU481
- 1828 0006 1179     		ldrb	r1, [r2, #4]	@ zero_extendqisi2
- 1829 0008 C943     		mvns	r1, r1
+ 1555              		.loc 1 627 12 view .LVU447
+ 1556 0006 1179     		ldrb	r1, [r2, #4]	@ zero_extendqisi2
+ 1557 0008 C943     		mvns	r1, r1
  628:vs1003.c      ****       volt <<= 8;
- 1830              		.loc 1 628 12 view .LVU482
- 1831 000a C9B2     		uxtb	r1, r1
- 1832              	.LVL161:
+ 1558              		.loc 1 628 12 view .LVU448
+ 1559 000a C9B2     		uxtb	r1, r1
+ 1560              	.LVL141:
  629:vs1003.c      ****       volt <<= 8;
- 1833              		.loc 1 629 7 is_stmt 1 view .LVU483
- 1834              		.loc 1 630 7 view .LVU484
- 1835              		.loc 1 630 12 is_stmt 0 view .LVU485
- 1836 000c 01EB0121 		add	r1, r1, r1, lsl #8
- 1837              	.LVL162:
- 1838              		.loc 1 630 12 view .LVU486
- 1839 0010 8CB2     		uxth	r4, r1
- 1840              	.LVL163:
+ 1561              		.loc 1 629 7 is_stmt 1 view .LVU449
+ 1562              		.loc 1 630 7 view .LVU450
+ 1563              		.loc 1 630 12 is_stmt 0 view .LVU451
+ 1564 000c 01EB0121 		add	r1, r1, r1, lsl #8
+ 1565              	.LVL142:
+ 1566              		.loc 1 630 12 view .LVU452
+ 1567 0010 8CB2     		uxth	r4, r1
+ 1568              	.LVL143:
  631:vs1003.c      ****       for (t=0;t<4;t++) {
- 1841              		.loc 1 631 7 is_stmt 1 view .LVU487
- 1842              		.loc 1 631 16 view .LVU488
+ 1569              		.loc 1 631 7 is_stmt 1 view .LVU453
+ 1570              		.loc 1 631 16 view .LVU454
  624:vs1003.c      ****       unsigned short volt = 0;
- 1843              		.loc 1 624 22 is_stmt 0 view .LVU489
- 1844 0012 0021     		movs	r1, #0
- 1845              	.LVL164:
- 1846              	.L142:
+ 1571              		.loc 1 624 22 is_stmt 0 view .LVU455
+ 1572 0012 0021     		movs	r1, #0
+ 1573              	.LVL144:
+ 1574              	.L127:
  632:vs1003.c      ****           bass <<= 4;
- 1847              		.loc 1 632 11 is_stmt 1 discriminator 3 view .LVU490
+ 1575              		.loc 1 632 11 is_stmt 1 discriminator 3 view .LVU456
  633:vs1003.c      ****           bass += vs1003_ram[t];
- 1848              		.loc 1 633 11 discriminator 3 view .LVU491
- 1849              		.loc 1 633 29 is_stmt 0 discriminator 3 view .LVU492
- 1850 0014 12F8010B 		ldrb	r0, [r2], #1	@ zero_extendqisi2
- 1851              	.LVL165:
- 1852              		.loc 1 633 29 discriminator 3 view .LVU493
- 1853 0018 013B     		subs	r3, r3, #1
- 1854              		.loc 1 633 16 discriminator 3 view .LVU494
- 1855 001a 00EB0111 		add	r1, r0, r1, lsl #4
- 1856              	.LVL166:
+ 1576              		.loc 1 633 11 discriminator 3 view .LVU457
+ 1577              		.loc 1 633 29 is_stmt 0 discriminator 3 view .LVU458
+ 1578 0014 12F8010B 		ldrb	r0, [r2], #1	@ zero_extendqisi2
+ 1579              	.LVL145:
+ 1580              		.loc 1 633 29 discriminator 3 view .LVU459
+ 1581 0018 013B     		subs	r3, r3, #1
+ 1582              		.loc 1 633 16 discriminator 3 view .LVU460
+ 1583 001a 00EB0111 		add	r1, r0, r1, lsl #4
+ 1584              	.LVL146:
  631:vs1003.c      ****           bass <<= 4;
- 1857              		.loc 1 631 7 discriminator 3 view .LVU495
- 1858 001e 13F0FF03 		ands	r3, r3, #255
- 1859              		.loc 1 633 16 discriminator 3 view .LVU496
- 1860 0022 89B2     		uxth	r1, r1
- 1861              	.LVL167:
+ 1585              		.loc 1 631 7 discriminator 3 view .LVU461
+ 1586 001e 13F0FF03 		ands	r3, r3, #255
+ 1587              		.loc 1 633 16 discriminator 3 view .LVU462
+ 1588 0022 89B2     		uxth	r1, r1
+ 1589              	.LVL147:
  631:vs1003.c      ****           bass <<= 4;
- 1862              		.loc 1 631 20 is_stmt 1 discriminator 3 view .LVU497
+ 1590              		.loc 1 631 20 is_stmt 1 discriminator 3 view .LVU463
  631:vs1003.c      ****           bass <<= 4;
- 1863              		.loc 1 631 16 discriminator 3 view .LVU498
+ 1591              		.loc 1 631 16 discriminator 3 view .LVU464
  631:vs1003.c      ****           bass <<= 4;
- 1864              		.loc 1 631 7 is_stmt 0 discriminator 3 view .LVU499
- 1865 0024 F6D1     		bne	.L142
+ 1592              		.loc 1 631 7 is_stmt 0 discriminator 3 view .LVU465
+ 1593 0024 F6D1     		bne	.L127
  634:vs1003.c      ****       }
  635:vs1003.c      ****       vs1003_cmd_write(SPI_BASS,bass);
- 1866              		.loc 1 635 7 is_stmt 1 view .LVU500
- 1867 0026 0220     		movs	r0, #2
- 1868 0028 FFF7FEFF 		bl	vs1003_cmd_write
- 1869              	.LVL168:
+ 1594              		.loc 1 635 7 is_stmt 1 view .LVU466
+ 1595 0026 0220     		movs	r0, #2
+ 1596 0028 FFF7FEFF 		bl	vs1003_cmd_write
+ 1597              	.LVL148:
  636:vs1003.c      ****       vs1003_cmd_write(SPI_VOL,volt);
- 1870              		.loc 1 636 7 view .LVU501
- 1871 002c 2146     		mov	r1, r4
+ 1598              		.loc 1 636 7 view .LVU467
+ 1599 002c 2146     		mov	r1, r4
  637:vs1003.c      **** }
- 1872              		.loc 1 637 1 is_stmt 0 view .LVU502
- 1873 002e BDE81040 		pop	{r4, lr}
- 1874              		.cfi_restore 14
- 1875              		.cfi_restore 4
- 1876              		.cfi_def_cfa_offset 0
- 1877              	.LVL169:
+ 1600              		.loc 1 637 1 is_stmt 0 view .LVU468
+ 1601 002e BDE81040 		pop	{r4, lr}
+ 1602              		.cfi_restore 14
+ 1603              		.cfi_restore 4
+ 1604              		.cfi_def_cfa_offset 0
+ 1605              	.LVL149:
  636:vs1003.c      ****       vs1003_cmd_write(SPI_VOL,volt);
- 1878              		.loc 1 636 7 view .LVU503
- 1879 0032 0B20     		movs	r0, #11
- 1880 0034 FFF7FEBF 		b	vs1003_cmd_write
- 1881              	.LVL170:
- 1882              	.L145:
+ 1606              		.loc 1 636 7 view .LVU469
+ 1607 0032 0B20     		movs	r0, #11
+ 1608 0034 FFF7FEBF 		b	vs1003_cmd_write
+ 1609              	.LVL150:
+ 1610              	.L130:
  636:vs1003.c      ****       vs1003_cmd_write(SPI_VOL,volt);
- 1883              		.loc 1 636 7 view .LVU504
- 1884              		.align	2
- 1885              	.L144:
- 1886 0038 00000000 		.word	.LANCHOR4
- 1887              		.cfi_endproc
- 1888              	.LFE42:
- 1890              		.section	.text.vs1003_set_volume,"ax",%progbits
- 1891              		.align	1
- 1892              		.global	vs1003_set_volume
- 1893              		.syntax unified
- 1894              		.thumb
- 1895              		.thumb_func
- 1896              		.fpu softvfp
- 1898              	vs1003_set_volume:
- 1899              	.LVL171:
- 1900              	.LFB43:
+ 1611              		.loc 1 636 7 view .LVU470
+ 1612              		.align	2
+ 1613              	.L129:
+ 1614 0038 00000000 		.word	.LANCHOR4
+ 1615              		.cfi_endproc
+ 1616              	.LFE42:
+ 1618              		.section	.text.vs1003_set_volume,"ax",%progbits
+ 1619              		.align	1
+ 1620              		.global	vs1003_set_volume
+ 1621              		.syntax unified
+ 1622              		.thumb
+ 1623              		.thumb_func
+ 1624              		.fpu softvfp
+ 1626              	vs1003_set_volume:
+ 1627              	.LVL151:
+ 1628              	.LFB43:
  638:vs1003.c      **** 
  639:vs1003.c      **** 
  640:vs1003.c      **** void vs1003_set_volume (unsigned short volume)
  641:vs1003.c      **** {
- 1901              		.loc 1 641 1 is_stmt 1 view -0
- 1902              		.cfi_startproc
- 1903              		@ args = 0, pretend = 0, frame = 0
- 1904              		@ frame_needed = 0, uses_anonymous_args = 0
- 1905              		@ link register save eliminated.
+ 1629              		.loc 1 641 1 is_stmt 1 view -0
+ 1630              		.cfi_startproc
+ 1631              		@ args = 0, pretend = 0, frame = 0
+ 1632              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1633              		@ link register save eliminated.
  642:vs1003.c      ****       unsigned short volt = 0;
- 1906              		.loc 1 642 7 view .LVU506
+ 1634              		.loc 1 642 7 view .LVU472
  643:vs1003.c      ****       volt = volume;
- 1907              		.loc 1 643 7 view .LVU507
+ 1635              		.loc 1 643 7 view .LVU473
  644:vs1003.c      ****       volt <<= 8;
- 1908              		.loc 1 644 7 view .LVU508
+ 1636              		.loc 1 644 7 view .LVU474
  645:vs1003.c      ****       volt += volume;
- 1909              		.loc 1 645 7 view .LVU509
+ 1637              		.loc 1 645 7 view .LVU475
  646:vs1003.c      ****       vs1003_cmd_write(SPI_VOL,volt);
- 1910              		.loc 1 646 7 view .LVU510
+ 1638              		.loc 1 646 7 view .LVU476
  645:vs1003.c      ****       volt += volume;
- 1911              		.loc 1 645 12 is_stmt 0 view .LVU511
- 1912 0000 00EB0020 		add	r0, r0, r0, lsl #8
- 1913              	.LVL172:
- 1914              		.loc 1 646 7 view .LVU512
- 1915 0004 81B2     		uxth	r1, r0
- 1916 0006 0B20     		movs	r0, #11
- 1917 0008 FFF7FEBF 		b	vs1003_cmd_write
- 1918              	.LVL173:
- 1919              		.cfi_endproc
- 1920              	.LFE43:
- 1922              		.section	.text.vs1003_init,"ax",%progbits
- 1923              		.align	1
- 1924              		.global	vs1003_init
- 1925              		.syntax unified
- 1926              		.thumb
- 1927              		.thumb_func
- 1928              		.fpu softvfp
- 1930              	vs1003_init:
- 1931              	.LFB44:
+ 1639              		.loc 1 645 12 is_stmt 0 view .LVU477
+ 1640 0000 00EB0020 		add	r0, r0, r0, lsl #8
+ 1641              	.LVL152:
+ 1642              		.loc 1 646 7 view .LVU478
+ 1643 0004 81B2     		uxth	r1, r0
+ 1644 0006 0B20     		movs	r0, #11
+ 1645 0008 FFF7FEBF 		b	vs1003_cmd_write
+ 1646              	.LVL153:
+ 1647              		.cfi_endproc
+ 1648              	.LFE43:
+ 1650              		.section	.text.vs1003_init,"ax",%progbits
+ 1651              		.align	1
+ 1652              		.global	vs1003_init
+ 1653              		.syntax unified
+ 1654              		.thumb
+ 1655              		.thumb_func
+ 1656              		.fpu softvfp
+ 1658              	vs1003_init:
+ 1659              	.LFB44:
  647:vs1003.c      **** }
  648:vs1003.c      **** 
  649:vs1003.c      **** 
  650:vs1003.c      **** void vs1003_init (void)
  651:vs1003.c      **** {
- 1932              		.loc 1 651 1 is_stmt 1 view -0
- 1933              		.cfi_startproc
- 1934              		@ args = 0, pretend = 0, frame = 0
- 1935              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1660              		.loc 1 651 1 is_stmt 1 view -0
+ 1661              		.cfi_startproc
+ 1662              		@ args = 0, pretend = 0, frame = 0
+ 1663              		@ frame_needed = 0, uses_anonymous_args = 0
  652:vs1003.c      ****       GPIO_Init_Pin(GPIOC,GPIO_Pin_3,GPIO_Speed_50MHz,GPIO_Mode_IPU);
- 1936              		.loc 1 652 7 view .LVU514
+ 1664              		.loc 1 652 7 view .LVU480
  651:vs1003.c      ****       GPIO_Init_Pin(GPIOC,GPIO_Pin_3,GPIO_Speed_50MHz,GPIO_Mode_IPU);
- 1937              		.loc 1 651 1 is_stmt 0 view .LVU515
- 1938 0000 10B5     		push	{r4, lr}
- 1939              		.cfi_def_cfa_offset 8
- 1940              		.cfi_offset 4, -8
- 1941              		.cfi_offset 14, -4
- 1942              		.loc 1 652 7 view .LVU516
- 1943 0002 0F4C     		ldr	r4, .L148
- 1944 0004 4823     		movs	r3, #72
- 1945 0006 0322     		movs	r2, #3
- 1946 0008 0821     		movs	r1, #8
- 1947 000a 2046     		mov	r0, r4
- 1948 000c FFF7FEFF 		bl	GPIO_Init_Pin
- 1949              	.LVL174:
+ 1665              		.loc 1 651 1 is_stmt 0 view .LVU481
+ 1666 0000 10B5     		push	{r4, lr}
+ 1667              		.cfi_def_cfa_offset 8
+ 1668              		.cfi_offset 4, -8
+ 1669              		.cfi_offset 14, -4
+ 1670              		.loc 1 652 7 view .LVU482
+ 1671 0002 0F4C     		ldr	r4, .L133
+ 1672 0004 4823     		movs	r3, #72
+ 1673 0006 0322     		movs	r2, #3
+ 1674 0008 0821     		movs	r1, #8
+ 1675 000a 2046     		mov	r0, r4
+ 1676 000c FFF7FEFF 		bl	GPIO_Init_Pin
+ 1677              	.LVL154:
  653:vs1003.c      ****       GPIO_Init_Pin(GPIOC,GPIO_Pin_10,GPIO_Speed_50MHz,GPIO_Mode_Out_PP);
- 1950              		.loc 1 653 7 is_stmt 1 view .LVU517
- 1951 0010 1023     		movs	r3, #16
- 1952 0012 0322     		movs	r2, #3
- 1953 0014 4FF48061 		mov	r1, #1024
- 1954 0018 2046     		mov	r0, r4
- 1955 001a FFF7FEFF 		bl	GPIO_Init_Pin
- 1956              	.LVL175:
+ 1678              		.loc 1 653 7 is_stmt 1 view .LVU483
+ 1679 0010 1023     		movs	r3, #16
+ 1680 0012 0322     		movs	r2, #3
+ 1681 0014 4FF48061 		mov	r1, #1024
+ 1682 0018 2046     		mov	r0, r4
+ 1683 001a FFF7FEFF 		bl	GPIO_Init_Pin
+ 1684              	.LVL155:
  654:vs1003.c      ****       GPIO_Init_Pin(GPIOC,GPIO_Pin_11,GPIO_Speed_50MHz,GPIO_Mode_Out_PP);
- 1957              		.loc 1 654 7 view .LVU518
- 1958 001e 1023     		movs	r3, #16
- 1959 0020 0322     		movs	r2, #3
- 1960 0022 4FF40061 		mov	r1, #2048
- 1961 0026 2046     		mov	r0, r4
- 1962 0028 FFF7FEFF 		bl	GPIO_Init_Pin
- 1963              	.LVL176:
+ 1685              		.loc 1 654 7 view .LVU484
+ 1686 001e 1023     		movs	r3, #16
+ 1687 0020 0322     		movs	r2, #3
+ 1688 0022 4FF40061 		mov	r1, #2048
+ 1689 0026 2046     		mov	r0, r4
+ 1690 0028 FFF7FEFF 		bl	GPIO_Init_Pin
+ 1691              	.LVL156:
  655:vs1003.c      ****       MP3_DCS_SET(1);
- 1964              		.loc 1 655 7 view .LVU519
- 1965 002c E368     		ldr	r3, [r4, #12]
- 1966 002e 43F40063 		orr	r3, r3, #2048
- 1967 0032 E360     		str	r3, [r4, #12]
+ 1692              		.loc 1 655 7 view .LVU485
+ 1693 002c E368     		ldr	r3, [r4, #12]
+ 1694 002e 43F40063 		orr	r3, r3, #2048
+ 1695 0032 E360     		str	r3, [r4, #12]
  656:vs1003.c      ****       MP3_CCS_SET(1);
- 1968              		.loc 1 656 7 view .LVU520
- 1969 0034 E368     		ldr	r3, [r4, #12]
- 1970 0036 43F48063 		orr	r3, r3, #1024
- 1971 003a E360     		str	r3, [r4, #12]
+ 1696              		.loc 1 656 7 view .LVU486
+ 1697 0034 E368     		ldr	r3, [r4, #12]
+ 1698 0036 43F48063 		orr	r3, r3, #1024
+ 1699 003a E360     		str	r3, [r4, #12]
  657:vs1003.c      **** }
- 1972              		.loc 1 657 1 is_stmt 0 view .LVU521
- 1973 003c 10BD     		pop	{r4, pc}
- 1974              	.L149:
- 1975 003e 00BF     		.align	2
- 1976              	.L148:
- 1977 0040 00100140 		.word	1073811456
- 1978              		.cfi_endproc
- 1979              	.LFE44:
- 1981              		.section	.text.vs1003_data_write,"ax",%progbits
- 1982              		.align	1
- 1983              		.global	vs1003_data_write
- 1984              		.syntax unified
- 1985              		.thumb
- 1986              		.thumb_func
- 1987              		.fpu softvfp
- 1989              	vs1003_data_write:
- 1990              	.LVL177:
- 1991              	.LFB45:
+ 1700              		.loc 1 657 1 is_stmt 0 view .LVU487
+ 1701 003c 10BD     		pop	{r4, pc}
+ 1702              	.L134:
+ 1703 003e 00BF     		.align	2
+ 1704              	.L133:
+ 1705 0040 00100140 		.word	1073811456
+ 1706              		.cfi_endproc
+ 1707              	.LFE44:
+ 1709              		.section	.text.vs1003_data_write,"ax",%progbits
+ 1710              		.align	1
+ 1711              		.global	vs1003_data_write
+ 1712              		.syntax unified
+ 1713              		.thumb
+ 1714              		.thumb_func
+ 1715              		.fpu softvfp
+ 1717              	vs1003_data_write:
+ 1718              	.LVL157:
+ 1719              	.LFB45:
  658:vs1003.c      **** 
  659:vs1003.c      **** void vs1003_data_write (unsigned char * buff)
  660:vs1003.c      **** {
- 1992              		.loc 1 660 1 is_stmt 1 view -0
- 1993              		.cfi_startproc
- 1994              		@ args = 0, pretend = 0, frame = 0
- 1995              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1720              		.loc 1 660 1 is_stmt 1 view -0
+ 1721              		.cfi_startproc
+ 1722              		@ args = 0, pretend = 0, frame = 0
+ 1723              		@ frame_needed = 0, uses_anonymous_args = 0
  661:vs1003.c      ****       unsigned char n = 32;
- 1996              		.loc 1 661 7 view .LVU523
+ 1724              		.loc 1 661 7 view .LVU489
  662:vs1003.c      ****       MP3_DCS_SET(0);;
- 1997              		.loc 1 662 7 view .LVU524
+ 1725              		.loc 1 662 7 view .LVU490
  660:vs1003.c      ****       unsigned char n = 32;
- 1998              		.loc 1 660 1 is_stmt 0 view .LVU525
- 1999 0000 70B5     		push	{r4, r5, r6, lr}
- 2000              		.cfi_def_cfa_offset 16
- 2001              		.cfi_offset 4, -16
- 2002              		.cfi_offset 5, -12
- 2003              		.cfi_offset 6, -8
- 2004              		.cfi_offset 14, -4
+ 1726              		.loc 1 660 1 is_stmt 0 view .LVU491
+ 1727 0000 70B5     		push	{r4, r5, r6, lr}
+ 1728              		.cfi_def_cfa_offset 16
+ 1729              		.cfi_offset 4, -16
+ 1730              		.cfi_offset 5, -12
+ 1731              		.cfi_offset 6, -8
+ 1732              		.cfi_offset 14, -4
  660:vs1003.c      ****       unsigned char n = 32;
- 2005              		.loc 1 660 1 view .LVU526
- 2006 0002 0546     		mov	r5, r0
- 2007              		.loc 1 662 7 view .LVU527
- 2008 0004 0B4C     		ldr	r4, .L153
- 2009 0006 00F12006 		add	r6, r0, #32
- 2010 000a E368     		ldr	r3, [r4, #12]
- 2011 000c 23F40063 		bic	r3, r3, #2048
- 2012 0010 E360     		str	r3, [r4, #12]
- 2013              		.loc 1 662 22 is_stmt 1 view .LVU528
+ 1733              		.loc 1 660 1 view .LVU492
+ 1734 0002 0546     		mov	r5, r0
+ 1735              		.loc 1 662 7 view .LVU493
+ 1736 0004 0B4C     		ldr	r4, .L138
+ 1737 0006 00F12006 		add	r6, r0, #32
+ 1738 000a E368     		ldr	r3, [r4, #12]
+ 1739 000c 23F40063 		bic	r3, r3, #2048
+ 1740 0010 E360     		str	r3, [r4, #12]
+ 1741              		.loc 1 662 22 is_stmt 1 view .LVU494
  663:vs1003.c      ****       while (n--) {
- 2014              		.loc 1 663 7 view .LVU529
- 2015              	.LVL178:
- 2016              	.L151:
- 2017              		.loc 1 663 13 view .LVU530
- 2018              		.loc 1 663 13 is_stmt 0 view .LVU531
- 2019 0012 B542     		cmp	r5, r6
- 2020 0014 08D1     		bne	.L152
+ 1742              		.loc 1 663 7 view .LVU495
+ 1743              	.LVL158:
+ 1744              	.L136:
+ 1745              		.loc 1 663 13 view .LVU496
+ 1746              		.loc 1 663 13 is_stmt 0 view .LVU497
+ 1747 0012 B542     		cmp	r5, r6
+ 1748 0014 08D1     		bne	.L137
  664:vs1003.c      **** 	    SPI_read_write_byte(*buff++);
  665:vs1003.c      ****       }
  666:vs1003.c      ****       MP3_DCS_SET(1);
- 2021              		.loc 1 666 7 is_stmt 1 view .LVU532
- 2022 0016 E368     		ldr	r3, [r4, #12]
- 2023 0018 43F40063 		orr	r3, r3, #2048
- 2024 001c E360     		str	r3, [r4, #12]
+ 1749              		.loc 1 666 7 is_stmt 1 view .LVU498
+ 1750 0016 E368     		ldr	r3, [r4, #12]
+ 1751 0018 43F40063 		orr	r3, r3, #2048
+ 1752 001c E360     		str	r3, [r4, #12]
  667:vs1003.c      ****       MP3_CCS_SET(1);
- 2025              		.loc 1 667 7 view .LVU533
- 2026 001e E368     		ldr	r3, [r4, #12]
- 2027 0020 43F48063 		orr	r3, r3, #1024
- 2028 0024 E360     		str	r3, [r4, #12]
+ 1753              		.loc 1 667 7 view .LVU499
+ 1754 001e E368     		ldr	r3, [r4, #12]
+ 1755 0020 43F48063 		orr	r3, r3, #1024
+ 1756 0024 E360     		str	r3, [r4, #12]
  668:vs1003.c      **** }
- 2029              		.loc 1 668 1 is_stmt 0 view .LVU534
- 2030 0026 70BD     		pop	{r4, r5, r6, pc}
- 2031              	.LVL179:
- 2032              	.L152:
+ 1757              		.loc 1 668 1 is_stmt 0 view .LVU500
+ 1758 0026 70BD     		pop	{r4, r5, r6, pc}
+ 1759              	.LVL159:
+ 1760              	.L137:
  664:vs1003.c      **** 	    SPI_read_write_byte(*buff++);
- 2033              		.loc 1 664 6 is_stmt 1 view .LVU535
+ 1761              		.loc 1 664 6 is_stmt 1 view .LVU501
  664:vs1003.c      **** 	    SPI_read_write_byte(*buff++);
- 2034              		.loc 1 664 6 is_stmt 0 view .LVU536
- 2035 0028 15F8010B 		ldrb	r0, [r5], #1	@ zero_extendqisi2
- 2036              	.LVL180:
+ 1762              		.loc 1 664 6 is_stmt 0 view .LVU502
+ 1763 0028 15F8010B 		ldrb	r0, [r5], #1	@ zero_extendqisi2
+ 1764              	.LVL160:
  664:vs1003.c      **** 	    SPI_read_write_byte(*buff++);
- 2037              		.loc 1 664 6 view .LVU537
- 2038 002c FFF7FEFF 		bl	SPI_read_write_byte
- 2039              	.LVL181:
- 2040 0030 EFE7     		b	.L151
- 2041              	.L154:
- 2042 0032 00BF     		.align	2
- 2043              	.L153:
- 2044 0034 00100140 		.word	1073811456
- 2045              		.cfi_endproc
- 2046              	.LFE45:
- 2048              		.global	bitrate
- 2049              		.global	vs1003_ram
- 2050              		.global	regvalue
- 2051              		.global	dtab
- 2052              		.global	atab
- 2053              		.section	.bss.regvalue,"aw",%nobits
- 2054              		.align	1
- 2055              		.set	.LANCHOR0,. + 0
- 2058              	regvalue:
- 2059 0000 0000     		.space	2
- 2060              		.section	.data.vs1003_ram,"aw"
- 2061              		.set	.LANCHOR4,. + 0
- 2064              	vs1003_ram:
- 2065 0000 00000000 		.ascii	"\000\000\000\000\372"
- 2065      FA
- 2066              		.section	.rodata.atab,"a"
- 2067              		.set	.LANCHOR2,. + 0
- 2070              	atab:
- 2071 0000 07060606 		.ascii	"\007\006\006\006\006\006\006\006\006\006\006\006\006"
- 2071      06060606 
- 2071      06060606 
- 2071      06
- 2072 000d 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\007"
- 2072      06060606 
- 2072      06060606 
- 2072      07
- 2073 001a 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2073      06060606 
- 2073      06060606 
- 2073      06
- 2074 0027 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2074      06060606 
- 2074      06060606 
- 2074      06
- 2075 0034 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2075      06060606 
- 2075      06060606 
- 2075      06
- 2076 0041 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2076      06060606 
- 2076      06060606 
- 2076      06
- 2077 004e 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2077      06060606 
- 2077      06060606 
- 2077      06
- 2078 005b 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2078      06060606 
- 2078      06060606 
- 2078      06
- 2079 0068 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2079      06060606 
- 2079      06060606 
- 2079      06
- 2080 0075 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2080      06060606 
- 2080      06060606 
- 2080      06
- 2081 0082 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2081      06060606 
- 2081      06060606 
- 2081      06
- 2082 008f 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2082      06060606 
- 2082      06060606 
- 2082      06
- 2083 009c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2083      06060606 
- 2083      06060606 
- 2083      06
- 2084 00a9 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2084      06060606 
- 2084      06060606 
- 2084      06
- 2085 00b6 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2085      06060606 
- 2085      06060606 
- 2085      06
- 2086 00c3 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2086      06060606 
- 2086      06060606 
- 2086      06
- 2087 00d0 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2087      06060606 
- 2087      06060606 
- 2087      06
- 2088 00dd 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2088      06060606 
- 2088      06060606 
- 2088      06
- 2089 00ea 06060606 		.ascii	"\006\006\006\006\006\006\007\006\006\006\006\006\006"
- 2089      06060706 
- 2089      06060606 
- 2089      06
- 2090 00f7 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2090      06060606 
- 2090      06060606 
- 2090      06
- 2091 0104 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2091      06060606 
- 2091      06060606 
- 2091      06
- 2092 0111 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2092      06060606 
- 2092      06060606 
- 2092      06
- 2093 011e 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2093      06060606 
- 2093      06060606 
- 2093      06
- 2094 012b 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2094      06060606 
- 2094      06060606 
- 2094      06
- 2095 0138 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2095      06060606 
- 2095      06060606 
- 2095      06
- 2096 0145 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2096      06060606 
- 2096      06060606 
- 2096      06
- 2097 0152 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2097      06060606 
- 2097      06060606 
- 2097      06
- 2098 015f 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2098      06060606 
- 2098      06060606 
- 2098      06
- 2099 016c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2099      06060606 
- 2099      06060606 
- 2099      06
- 2100 0179 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2100      06060606 
- 2100      06060606 
- 2100      06
- 2101 0186 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2101      06060606 
- 2101      06060606 
- 2101      06
- 2102 0193 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2102      06060606 
- 2102      06060606 
- 2102      06
- 2103 01a0 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2103      06060606 
- 2103      06060606 
- 2103      06
- 2104 01ad 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2104      06060606 
- 2104      06060606 
- 2104      06
- 2105 01ba 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2105      06060606 
- 2105      06060606 
- 2105      06
- 2106 01c7 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2106      06060606 
- 2106      06060606 
- 2106      06
- 2107 01d4 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2107      06060606 
- 2107      06060606 
- 2107      06
- 2108 01e1 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2108      06060606 
- 2108      06060606 
- 2108      06
- 2109 01ee 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2109      06060606 
- 2109      06060606 
- 2109      06
- 2110 01fb 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2110      06060606 
- 2110      06060606 
- 2110      06
- 2111 0208 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2111      06060606 
- 2111      06060606 
- 2111      06
- 2112 0215 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2112      06060606 
- 2112      06060606 
- 2112      06
- 2113 0222 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2113      06060606 
- 2113      06060606 
- 2113      06
- 2114 022f 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2114      06060606 
- 2114      06060606 
- 2114      06
- 2115 023c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2115      06060606 
- 2115      06060606 
- 2115      06
- 2116 0249 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2116      06060606 
- 2116      06060606 
- 2116      06
- 2117 0256 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2117      06060606 
- 2117      06060606 
- 2117      06
- 2118 0263 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2118      06060606 
- 2118      06060606 
- 2118      06
- 2119 0270 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2119      06060606 
- 2119      06060606 
- 2119      06
- 2120 027d 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2120      06060606 
- 2120      06060606 
- 2120      06
- 2121 028a 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2121      06060606 
- 2121      06060606 
- 2121      06
- 2122 0297 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2122      06060606 
- 2122      06060606 
- 2122      06
- 2123 02a4 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2123      06060606 
- 2123      06060606 
- 2123      06
- 2124 02b1 07060606 		.ascii	"\007\006\006\006\006\006\006\006\006\006\006\006\006"
- 2124      06060606 
- 2124      06060606 
- 2124      06
- 2125 02be 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\007\006"
- 2125      06060606 
- 2125      06060607 
- 2125      06
- 2126 02cb 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2126      06060606 
- 2126      06060606 
- 2126      06
- 2127 02d8 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2127      06060606 
- 2127      06060606 
- 2127      06
- 2128 02e5 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2128      06060606 
- 2128      06060606 
- 2128      06
- 2129 02f2 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2129      06060606 
- 2129      06060606 
- 2129      06
- 2130 02ff 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2130      06060606 
- 2130      06060606 
- 2130      06
- 2131 030c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2131      06060606 
- 2131      06060606 
- 2131      06
- 2132 0319 06060606 		.ascii	"\006\006\006\006\006\007\006\006\006\006\006\006\006"
- 2132      06070606 
- 2132      06060606 
- 2132      06
- 2133 0326 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2133      06060606 
- 2133      06060606 
- 2133      06
- 2134 0333 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2134      06060606 
- 2134      06060606 
- 2134      06
- 2135 0340 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2135      06060606 
- 2135      06060606 
- 2135      06
- 2136 034d 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2136      06060606 
- 2136      06060606 
- 2136      06
- 2137 035a 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2137      06060606 
- 2137      06060606 
- 2137      06
- 2138 0367 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2138      06060606 
- 2138      06060606 
- 2138      06
- 2139 0374 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2139      06060606 
- 2139      06060606 
- 2139      06
- 2140 0381 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2140      06060606 
- 2140      06060606 
- 2140      06
- 2141 038e 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
- 2141      06060606 
- 2141      06060606 
- 2141      06
- 2142 039b 06060606 		.ascii	"\006\006\006\006\007\006\006\006\006\006\006\006\006"
- 2142      07060606 
- 2142      06060606 
- 2142      06
- 2143 03a8 06060606 		.ascii	"\006\006\006\006\006\006\012"
- 2143      06060A
- 2144              		.section	.rodata.bitrate,"a"
- 2145              		.align	1
- 2146              		.set	.LANCHOR1,. + 0
- 2149              	bitrate:
- 2150 0000 0000     		.short	0
- 2151 0002 0800     		.short	8
- 2152 0004 1000     		.short	16
- 2153 0006 1800     		.short	24
- 2154 0008 2000     		.short	32
- 2155 000a 2800     		.short	40
- 2156 000c 3000     		.short	48
- 2157 000e 3800     		.short	56
- 2158 0010 4000     		.short	64
- 2159 0012 5000     		.short	80
- 2160 0014 6000     		.short	96
- 2161 0016 7000     		.short	112
- 2162 0018 8000     		.short	128
- 2163 001a 9000     		.short	144
- 2164 001c A000     		.short	160
- 2165 001e 0000     		.short	0
- 2166 0020 0000     		.short	0
- 2167 0022 2000     		.short	32
- 2168 0024 2800     		.short	40
- 2169 0026 3000     		.short	48
- 2170 0028 3800     		.short	56
- 2171 002a 4000     		.short	64
- 2172 002c 5000     		.short	80
- 2173 002e 6000     		.short	96
- 2174 0030 7000     		.short	112
- 2175 0032 8000     		.short	128
- 2176 0034 A000     		.short	160
- 2177 0036 C000     		.short	192
- 2178 0038 E000     		.short	224
- 2179 003a 0001     		.short	256
- 2180 003c 4001     		.short	320
- 2181 003e 0000     		.short	0
- 2182              		.section	.rodata.dtab,"a"
- 2183              		.align	1
- 2184              		.set	.LANCHOR3,. + 0
- 2187              	dtab:
- 2188 0000 5080     		.short	-32688
- 2189 0002 1336     		.short	13843
- 2190 0004 2400     		.short	36
- 2191 0006 003E     		.short	15872
- 2192 0008 0138     		.short	14337
- 2193 000a 0000     		.short	0
- 2194 000c D716     		.short	5847
- 2195 000e 00F4     		.short	-3072
- 2196 0010 C055     		.short	21952
- 2197 0012 0000     		.short	0
- 2198 0014 170A     		.short	2583
- 2199 0016 00F4     		.short	-3072
- 2200 0018 C057     		.short	22464
- 2201 001a 0600     		.short	6
- 2202 001c 1750     		.short	20503
- 2203 001e 80B0     		.short	-20352
- 2204 0020 2400     		.short	36
- 2205 0022 003F     		.short	16128
- 2206 0024 2400     		.short	36
- 2207 0026 0020     		.short	8192
- 2208 0028 0000     		.short	0
- 2209 002a F036     		.short	14064
- 2210 002c 0118     		.short	6145
- 2211 002e 0028     		.short	10240
- 2212 0030 C031     		.short	12736
- 2213 0032 5C80     		.short	-32676
- 2214 0034 123E     		.short	15890
- 2215 0036 17B8     		.short	-18409
- 2216 0038 123E     		.short	15890
- 2217 003a 1538     		.short	14357
- 2218 003c 053E     		.short	15877
- 2219 003e 14B8     		.short	-18412
- 2220 0040 1536     		.short	13845
- 2221 0042 2400     		.short	36
- 2222 0044 0000     		.short	0
- 2223 0046 0A80     		.short	-32758
- 2224 0048 103E     		.short	15888
- 2225 004a 0138     		.short	14337
- 2226 004c 0600     		.short	6
- 2227 004e 0000     		.short	0
- 2228 0050 103E     		.short	15888
- 2229 0052 03B8     		.short	-18429
- 2230 0054 0000     		.short	0
- 2231 0056 0303     		.short	771
- 2232 0058 113E     		.short	15889
- 2233 005a 0538     		.short	14341
- 2234 005c 113E     		.short	15889
- 2235 005e 07B8     		.short	-18425
- 2236 0060 143E     		.short	15892
- 2237 0062 1238     		.short	14354
- 2238 0064 84B8     		.short	-18300
- 2239 0066 0C13     		.short	4876
- 2240 0068 1034     		.short	13328
- 2241 006a 2440     		.short	16420
- 2242 006c 1241     		.short	16658
- 2243 006e D010     		.short	4304
- 2244 0070 1040     		.short	16400
- 2245 0072 8C00     		.short	140
- 2246 0074 1040     		.short	16400
- 2247 0076 2400     		.short	36
- 2248 0078 00F4     		.short	-3072
- 2249 007a 1240     		.short	16402
- 2250 007c 0030     		.short	12288
- 2251 007e 4038     		.short	14400
- 2252 0080 0930     		.short	12297
- 2253 0082 0138     		.short	14337
- 2254 0084 0000     		.short	0
- 2255 0086 4100     		.short	65
- 2256 0088 02FE     		.short	-510
- 2257 008a 2400     		.short	36
- 2258 008c 0029     		.short	10496
- 2259 008e 4084     		.short	-31680
- 2260 0090 B248     		.short	18610
- 2261 0092 2400     		.short	36
- 2262 0094 F336     		.short	14067
- 2263 0096 4408     		.short	2116
- 2264 0098 0663     		.short	25350
- 2265 009a 4588     		.short	-30651
- 2266 009c 3AAE     		.short	-20934
- 2267 009e 4088     		.short	-30656
- 2268 00a0 8EBF     		.short	-16498
- 2269 00a2 418B     		.short	-29887
- 2270 00a4 32AC     		.short	-21454
- 2271 00a6 46A8     		.short	-22458
- 2272 00a8 C8FF     		.short	-56
- 2273 00aa C7AB     		.short	-21561
- 2274 00ac 013E     		.short	15873
- 2275 00ae 0078     		.short	30720
- 2276 00b0 00F4     		.short	-3072
- 2277 00b2 8044     		.short	17536
- 2278 00b4 9060     		.short	24720
- 2279 00b6 2400     		.short	36
- 2280 00b8 9060     		.short	24720
- 2281 00ba 2400     		.short	36
- 2282 00bc 00F4     		.short	-3072
- 2283 00be 1540     		.short	16405
- 2284 00c0 0930     		.short	12297
- 2285 00c2 4634     		.short	13382
- 2286 00c4 0930     		.short	12297
- 2287 00c6 C737     		.short	14279
- 2288 00c8 0930     		.short	12297
- 2289 00ca 0018     		.short	6144
- 2290 00cc 0930     		.short	12297
- 2291 00ce 4438     		.short	14404
- 2292 00d0 B348     		.short	18611
- 2293 00d2 E0E1     		.short	-7712
- 2294 00d4 8248     		.short	18562
- 2295 00d6 4040     		.short	16448
- 2296 00d8 CAFE     		.short	-310
- 2297 00da 2400     		.short	36
- 2298 00dc C25A     		.short	23234
- 2299 00de 2400     		.short	36
- 2300 00e0 525A     		.short	23122
- 2301 00e2 2400     		.short	36
- 2302 00e4 C24C     		.short	19650
- 2303 00e6 2400     		.short	36
- 2304 00e8 BA48     		.short	18618
- 2305 00ea 4040     		.short	16448
- 2306 00ec EA4E     		.short	20202
- 2307 00ee 0148     		.short	18433
- 2308 00f0 CA4E     		.short	20170
- 2309 00f2 0098     		.short	-26624
- 2310 00f4 80FF     		.short	-128
- 2311 00f6 C11B     		.short	7105
- 2312 00f8 EBF1     		.short	-3605
- 2313 00fa E2E3     		.short	-7198
- 2314 00fc EAF1     		.short	-3606
- 2315 00fe 4C18     		.short	6220
- 2316 0100 8B4C     		.short	19595
- 2317 0102 E4E5     		.short	-6684
- 2318 0104 BE48     		.short	18622
- 2319 0106 0498     		.short	-26620
- 2320 0108 8E48     		.short	18574
- 2321 010a C641     		.short	16838
- 2322 010c 82FE     		.short	-382
- 2323 010e 2400     		.short	36
- 2324 0110 8E5A     		.short	23182
- 2325 0112 2400     		.short	36
- 2326 0114 5E52     		.short	21086
- 2327 0116 851B     		.short	7045
- 2328 0118 FE4F     		.short	20478
- 2329 011a 2400     		.short	36
- 2330 011c B648     		.short	18614
- 2331 011e C641     		.short	16838
- 2332 0120 D64D     		.short	19926
- 2333 0122 C748     		.short	18631
- 2334 0124 F64D     		.short	19958
- 2335 0126 2400     		.short	36
- 2336 0128 D6F1     		.short	-3626
- 2337 012a 2400     		.short	36
- 2338 012c D6F1     		.short	-3626
- 2339 012e 2400     		.short	36
- 2340 0130 DA4E     		.short	20186
- 2341 0132 2400     		.short	36
- 2342 0134 0000     		.short	0
- 2343 0136 C30F     		.short	4035
- 2344 0138 0029     		.short	10496
- 2345 013a 4084     		.short	-31680
- 2346 013c 824E     		.short	20098
- 2347 013e 2400     		.short	36
- 2348 0140 8440     		.short	16516
- 2349 0142 0C13     		.short	4876
- 2350 0144 0600     		.short	6
- 2351 0146 0001     		.short	256
- 2352 0148 4034     		.short	13376
- 2353 014a 2440     		.short	16420
- 2354 014c 1040     		.short	16400
- 2355 014e 2400     		.short	36
- 2356 0150 00F4     		.short	-3072
- 2357 0152 1240     		.short	16402
- 2358 0154 0032     		.short	12800
- 2359 0156 2440     		.short	16420
- 2360 0158 32B1     		.short	-20174
- 2361 015a 2400     		.short	36
- 2362 015c 1442     		.short	16916
- 2363 015e 2400     		.short	36
- 2364 0160 24F2     		.short	-3548
- 2365 0162 2400     		.short	36
- 2366 0164 3062     		.short	25136
- 2367 0166 2400     		.short	36
- 2368 0168 0100     		.short	1
- 2369 016a 0100     		.short	1
- 2370 016c 0028     		.short	10240
- 2371 016e 492B     		.short	11081
- 2372 0170 0000     		.short	0
- 2373 0172 2400     		.short	36
- 2374 0174 00F4     		.short	-3072
- 2375 0176 C240     		.short	16578
- 2376 0178 0032     		.short	12800
- 2377 017a 2400     		.short	36
- 2378 017c 82FF     		.short	-126
- 2379 017e 2400     		.short	36
- 2380 0180 B248     		.short	18610
- 2381 0182 2400     		.short	36
- 2382 0184 30B1     		.short	-20176
- 2383 0186 2400     		.short	36
- 2384 0188 0262     		.short	25090
- 2385 018a 2400     		.short	36
- 2386 018c 3F00     		.short	63
- 2387 018e 01F0     		.short	-4095
- 2388 0190 0028     		.short	10240
- 2389 0192 512E     		.short	11857
- 2390 0194 0000     		.short	0
- 2391 0196 4610     		.short	4166
- 2392 0198 64FE     		.short	-412
- 2393 019a 2400     		.short	36
- 2394 019c BE48     		.short	18622
- 2395 019e 2400     		.short	36
- 2396 01a0 0028     		.short	10240
- 2397 01a2 402F     		.short	12096
- 2398 01a4 013A     		.short	14849
- 2399 01a6 2480     		.short	-32732
- 2400 01a8 0032     		.short	12800
- 2401 01aa 2400     		.short	36
- 2402 01ac 10B0     		.short	-20464
- 2403 01ae 2400     		.short	36
- 2404 01b0 20C0     		.short	-16352
- 2405 01b2 2400     		.short	36
- 2406 01b4 003A     		.short	14848
- 2407 01b6 2400     		.short	36
- 2408 01b8 F436     		.short	14068
- 2409 01ba 1218     		.short	6162
- 2410 01bc F136     		.short	14065
- 2411 01be 0798     		.short	-26617
- 2412 01c0 F136     		.short	14065
- 2413 01c2 0518     		.short	6149
- 2414 01c4 F036     		.short	14064
- 2415 01c6 0398     		.short	-26621
- 2416 01c8 F036     		.short	14064
- 2417 01ca 0118     		.short	6145
- 2418 01cc 0534     		.short	13317
- 2419 01ce 1490     		.short	-28652
- 2420 01d0 F336     		.short	14067
- 2421 01d2 2400     		.short	36
- 2422 01d4 F236     		.short	14066
- 2423 01d6 1518     		.short	6165
- 2424 01d8 0020     		.short	8192
- 2425 01da 0000     		.short	0
- 2426 01dc F236     		.short	14066
- 2427 01de 1798     		.short	-26601
- 2428 01e0 C780     		.short	-32569
- 2429 01e2 123E     		.short	15890
- 2430 01e4 17B8     		.short	-18409
- 2431 01e6 123E     		.short	15890
- 2432 01e8 1538     		.short	14357
- 2433 01ea 053E     		.short	15877
- 2434 01ec 14B8     		.short	-18412
- 2435 01ee 2536     		.short	13861
- 2436 01f0 2400     		.short	36
- 2437 01f2 0000     		.short	0
- 2438 01f4 0A80     		.short	-32758
- 2439 01f6 103E     		.short	15888
- 2440 01f8 0278     		.short	30722
- 2441 01fa 103E     		.short	15888
- 2442 01fc 04F8     		.short	-2044
- 2443 01fe 113E     		.short	15889
- 2444 0200 1078     		.short	30736
- 2445 0202 143E     		.short	15892
- 2446 0204 1378     		.short	30739
- 2447 0206 0600     		.short	6
- 2448 0208 5100     		.short	81
- 2449 020a 133E     		.short	15891
- 2450 020c 0EF8     		.short	-2034
- 2451 020e 133E     		.short	15891
- 2452 0210 2440     		.short	16420
- 2453 0212 0930     		.short	12297
- 2454 0214 4038     		.short	14400
- 2455 0216 0930     		.short	12297
- 2456 0218 5238     		.short	14418
- 2457 021a 1929     		.short	10521
- 2458 021c C064     		.short	25792
- 2459 021e 0600     		.short	6
- 2460 0220 D006     		.short	1744
- 2461 0222 0031     		.short	12544
- 2462 0224 D25B     		.short	23506
- 2463 0226 0600     		.short	6
- 2464 0228 D155     		.short	21969
- 2465 022a 0930     		.short	12297
- 2466 022c 0018     		.short	6144
- 2467 022e 0930     		.short	12297
- 2468 0230 0204     		.short	1026
- 2469 0232 2661     		.short	24870
- 2470 0234 2400     		.short	36
- 2471 0236 0600     		.short	6
- 2472 0238 D100     		.short	209
- 2473 023a 0028     		.short	10240
- 2474 023c 054D     		.short	19717
- 2475 023e 82B8     		.short	-18302
- 2476 0240 2400     		.short	36
- 2477 0242 0600     		.short	6
- 2478 0244 1100     		.short	17
- 2479 0246 0930     		.short	12297
- 2480 0248 5038     		.short	14416
- 2481 024a 0600     		.short	6
- 2482 024c 1000     		.short	16
- 2483 024e 0930     		.short	12297
- 2484 0250 0038     		.short	14336
- 2485 0252 1D29     		.short	10525
- 2486 0254 0058     		.short	22528
- 2487 0256 0000     		.short	0
- 2488 0258 0018     		.short	6144
- 2489 025a 0600     		.short	6
- 2490 025c 1000     		.short	16
- 2491 025e 82B8     		.short	-18302
- 2492 0260 2400     		.short	36
- 2493 0262 1D29     		.short	10525
- 2494 0264 005B     		.short	23296
- 2495 0266 0000     		.short	0
- 2496 0268 0017     		.short	5888
- 2497 026a 0000     		.short	0
- 2498 026c 0103     		.short	769
- 2499 026e 0039     		.short	14592
- 2500 0270 C05B     		.short	23488
- 2501 0272 0600     		.short	6
- 2502 0274 D155     		.short	21969
- 2503 0276 0930     		.short	12297
- 2504 0278 D01B     		.short	7120
- 2505 027a 0930     		.short	12297
- 2506 027c 0404     		.short	1028
- 2507 027e 0600     		.short	6
- 2508 0280 5100     		.short	81
- 2509 0282 0028     		.short	10240
- 2510 0284 003D     		.short	15616
- 2511 0286 0139     		.short	14593
- 2512 0288 2400     		.short	36
- 2513 028a 4844     		.short	17480
- 2514 028c 0104     		.short	1025
- 2515 028e 9241     		.short	16786
- 2516 0290 2400     		.short	36
- 2517 0292 9864     		.short	25752
- 2518 0294 0124     		.short	9217
- 2519 0296 1F00     		.short	31
- 2520 0298 0140     		.short	16385
- 2521 029a 1264     		.short	25618
- 2522 029c 2400     		.short	36
- 2523 029e 0600     		.short	6
- 2524 02a0 1100     		.short	17
- 2525 02a2 0028     		.short	10240
- 2526 02a4 513C     		.short	15441
- 2527 02a6 0000     		.short	0
- 2528 02a8 8E05     		.short	1422
- 2529 02aa 0024     		.short	9216
- 2530 02ac 0E4C     		.short	19470
- 2531 02ae 0000     		.short	0
- 2532 02b0 1300     		.short	19
- 2533 02b2 0600     		.short	6
- 2534 02b4 5100     		.short	81
- 2535 02b6 0600     		.short	6
- 2536 02b8 031A     		.short	6659
- 2537 02ba 0031     		.short	12544
- 2538 02bc 2440     		.short	16420
- 2539 02be 12F2     		.short	-3566
- 2540 02c0 C444     		.short	17604
- 2541 02c2 4643     		.short	17222
- 2542 02c4 2400     		.short	36
- 2543 02c6 00F4     		.short	-3072
- 2544 02c8 D540     		.short	16597
- 2545 02ca 0035     		.short	13568
- 2546 02cc 2480     		.short	-32732
- 2547 02ce 2A61     		.short	24874
- 2548 02d0 2400     		.short	36
- 2549 02d2 0000     		.short	0
- 2550 02d4 2400     		.short	36
- 2551 02d6 0028     		.short	10240
- 2552 02d8 514C     		.short	19537
- 2553 02da 0000     		.short	0
- 2554 02dc 2400     		.short	36
- 2555 02de 1336     		.short	13843
- 2556 02e0 2400     		.short	36
- 2557 02e2 0031     		.short	12544
- 2558 02e4 0038     		.short	14336
- 2559 02e6 1D29     		.short	10525
- 2560 02e8 0080     		.short	-32768
- 2561 02ea 00F2     		.short	-3584
- 2562 02ec 2400     		.short	36
- 2563 02ee 3F00     		.short	63
- 2564 02f0 C2FE     		.short	-318
- 2565 02f2 8240     		.short	16514
- 2566 02f4 1144     		.short	17425
- 2567 02f6 1331     		.short	12563
- 2568 02f8 C01B     		.short	7104
- 2569 02fa 22A1     		.short	-24286
- 2570 02fc 2400     		.short	36
- 2571 02fe 0000     		.short	0
- 2572 0300 0220     		.short	8194
- 2573 0302 2461     		.short	24868
- 2574 0304 0124     		.short	9217
- 2575 0306 0000     		.short	0
- 2576 0308 0210     		.short	4098
- 2577 030a 0028     		.short	10240
- 2578 030c 0846     		.short	17928
- 2579 030e 0000     		.short	0
- 2580 0310 2400     		.short	36
- 2581 0312 3F00     		.short	63
- 2582 0314 02F8     		.short	-2046
- 2583 0316 0031     		.short	12544
- 2584 0318 2440     		.short	16420
- 2585 031a 24B1     		.short	-20188
- 2586 031c 2400     		.short	36
- 2587 031e 0028     		.short	10240
- 2588 0320 C04B     		.short	19392
- 2589 0322 0039     		.short	14592
- 2590 0324 2480     		.short	-32732
- 2591 0326 2461     		.short	24868
- 2592 0328 2400     		.short	36
- 2593 032a 0000     		.short	0
- 2594 032c 0208     		.short	2050
- 2595 032e 0028     		.short	10240
- 2596 0330 4848     		.short	18504
- 2597 0332 0000     		.short	0
- 2598 0334 2400     		.short	36
- 2599 0336 3F00     		.short	63
- 2600 0338 02FE     		.short	-510
- 2601 033a 0031     		.short	12544
- 2602 033c 2440     		.short	16420
- 2603 033e 24B1     		.short	-20188
- 2604 0340 2400     		.short	36
- 2605 0342 0028     		.short	10240
- 2606 0344 C04B     		.short	19392
- 2607 0346 0039     		.short	14592
- 2608 0348 2480     		.short	-32732
- 2609 034a 2461     		.short	24868
- 2610 034c 2400     		.short	36
- 2611 034e 0000     		.short	0
- 2612 0350 0204     		.short	1026
- 2613 0352 0028     		.short	10240
- 2614 0354 884A     		.short	19080
- 2615 0356 0000     		.short	0
- 2616 0358 2400     		.short	36
- 2617 035a 3F00     		.short	63
- 2618 035c 02FF     		.short	-254
- 2619 035e 0031     		.short	12544
- 2620 0360 2440     		.short	16420
- 2621 0362 24B1     		.short	-20188
- 2622 0364 2400     		.short	36
- 2623 0366 0028     		.short	10240
- 2624 0368 C04B     		.short	19392
- 2625 036a 0039     		.short	14592
- 2626 036c 2480     		.short	-32732
- 2627 036e 2461     		.short	24868
- 2628 0370 0104     		.short	1025
- 2629 0372 3F00     		.short	63
- 2630 0374 82FF     		.short	-126
- 2631 0376 0028     		.short	10240
- 2632 0378 C84B     		.short	19400
- 2633 037a 24B1     		.short	-20188
- 2634 037c 2400     		.short	36
- 2635 037e 0039     		.short	14592
- 2636 0380 2480     		.short	-32732
- 2637 0382 82B8     		.short	-18302
- 2638 0384 4C8C     		.short	-29620
- 2639 0386 3038     		.short	14384
- 2640 0388 2440     		.short	16420
- 2641 038a 0600     		.short	6
- 2642 038c 9100     		.short	145
- 2643 038e 0439     		.short	14596
- 2644 0390 4CD8     		.short	-10164
- 2645 0392 0600     		.short	6
- 2646 0394 D100     		.short	209
- 2647 0396 0000     		.short	0
- 2648 0398 1300     		.short	19
- 2649 039a 0031     		.short	12544
- 2650 039c 4C90     		.short	-28596
- 2651 039e 0242     		.short	16898
- 2652 03a0 CC9B     		.short	-25652
- 2653 03a2 F039     		.short	14832
- 2654 03a4 2440     		.short	16420
- 2655 03a6 0031     		.short	12544
- 2656 03a8 2440     		.short	16420
- 2657 03aa 003C     		.short	15360
- 2658 03ac 2440     		.short	16420
- 2659 03ae 00F4     		.short	-3072
- 2660 03b0 C144     		.short	17601
- 2661 03b2 F034     		.short	13552
- 2662 03b4 2480     		.short	-32732
- 2663 03b6 2661     		.short	24870
- 2664 03b8 2400     		.short	36
- 2665 03ba 0600     		.short	6
- 2666 03bc D006     		.short	1744
- 2667 03be 0028     		.short	10240
- 2668 03c0 D85D     		.short	24024
- 2669 03c2 9442     		.short	17044
- 2670 03c4 2400     		.short	36
- 2671 03c6 0024     		.short	9216
- 2672 03c8 825D     		.short	23938
- 2673 03ca 0000     		.short	0
- 2674 03cc 2400     		.short	36
- 2675 03ce 00F4     		.short	-3072
- 2676 03d0 1144     		.short	17425
- 2677 03d2 2331     		.short	12579
- 2678 03d4 2400     		.short	36
- 2679 03d6 0031     		.short	12544
- 2680 03d8 2480     		.short	-32732
- 2681 03da 0242     		.short	16898
- 2682 03dc 2400     		.short	36
- 2683 03de 8241     		.short	16770
- 2684 03e0 0124     		.short	9217
- 2685 03e2 0000     		.short	0
- 2686 03e4 0220     		.short	8194
- 2687 03e6 0028     		.short	10240
- 2688 03e8 895D     		.short	23945
- 2689 03ea 0000     		.short	0
- 2690 03ec 2400     		.short	36
- 2691 03ee 1330     		.short	12307
- 2692 03f0 4C18     		.short	6220
- 2693 03f2 F030     		.short	12528
- 2694 03f4 5278     		.short	30802
- 2695 03f6 2461     		.short	24868
- 2696 03f8 50B8     		.short	-18352
- 2697 03fa 0600     		.short	6
- 2698 03fc 0100     		.short	1
- 2699 03fe 0028     		.short	10240
- 2700 0400 8855     		.short	21896
- 2701 0402 8840     		.short	16520
- 2702 0404 C244     		.short	17602
- 2703 0406 2442     		.short	16932
- 2704 0408 2400     		.short	36
- 2705 040a 2241     		.short	16674
- 2706 040c 2400     		.short	36
- 2707 040e 2241     		.short	16674
- 2708 0410 2400     		.short	36
- 2709 0412 00F4     		.short	-3072
- 2710 0414 5140     		.short	16465
- 2711 0416 0029     		.short	10496
- 2712 0418 4074     		.short	29760
- 2713 041a 0000     		.short	0
- 2714 041c C856     		.short	22216
- 2715 041e 2442     		.short	16932
- 2716 0420 2400     		.short	36
- 2717 0422 2241     		.short	16674
- 2718 0424 2400     		.short	36
- 2719 0426 2241     		.short	16674
- 2720 0428 2400     		.short	36
- 2721 042a 0029     		.short	10496
- 2722 042c C069     		.short	27072
- 2723 042e 00F4     		.short	-3072
- 2724 0430 5140     		.short	16465
- 2725 0432 0400     		.short	4
- 2726 0434 0200     		.short	2
- 2727 0436 0930     		.short	12297
- 2728 0438 D01B     		.short	7120
- 2729 043a 2330     		.short	12323
- 2730 043c D21B     		.short	7122
- 2731 043e E030     		.short	12512
- 2732 0440 2440     		.short	16420
- 2733 0442 2461     		.short	24868
- 2734 0444 2400     		.short	36
- 2735 0446 0000     		.short	0
- 2736 0448 0240     		.short	16386
- 2737 044a 0028     		.short	10240
- 2738 044c 8859     		.short	22920
- 2739 044e 0000     		.short	0
- 2740 0450 2400     		.short	36
- 2741 0452 0000     		.short	0
- 2742 0454 0100     		.short	1
- 2743 0456 2038     		.short	14368
- 2744 0458 2440     		.short	16420
- 2745 045a E030     		.short	12512
- 2746 045c 2440     		.short	16420
- 2747 045e 2461     		.short	24868
- 2748 0460 0100     		.short	1
- 2749 0462 3F00     		.short	63
- 2750 0464 42FF     		.short	-190
- 2751 0466 0028     		.short	10240
- 2752 0468 885D     		.short	23944
- 2753 046a 8241     		.short	16770
- 2754 046c 2400     		.short	36
- 2755 046e 0000     		.short	0
- 2756 0470 2400     		.short	36
- 2757 0472 0028     		.short	10240
- 2758 0474 955D     		.short	23957
- 2759 0476 0000     		.short	0
- 2760 0478 2400     		.short	36
- 2761 047a 1336     		.short	13843
- 2762 047c 2400     		.short	36
- 2763 047e 143E     		.short	15892
- 2764 0480 24C0     		.short	-16348
- 2765 0482 0029     		.short	10496
- 2766 0484 0017     		.short	5888
- 2767 0486 143E     		.short	15892
- 2768 0488 2400     		.short	36
- 2769 048a E336     		.short	14051
- 2770 048c 8C00     		.short	140
- 2771 048e E030     		.short	12512
- 2772 0490 2440     		.short	16420
- 2773 0492 22FE     		.short	-478
- 2774 0494 1144     		.short	17425
- 2775 0496 B648     		.short	18614
- 2776 0498 8C04     		.short	1164
- 2777 049a 0039     		.short	14592
- 2778 049c 2480     		.short	-32732
- 2779 049e 3330     		.short	12339
- 2780 04a0 4C0C     		.short	3148
- 2781 04a2 0600     		.short	6
- 2782 04a4 1100     		.short	17
- 2783 04a6 9268     		.short	26770
- 2784 04a8 C204     		.short	1218
- 2785 04aa 22A1     		.short	-24286
- 2786 04ac 0204     		.short	1026
- 2787 04ae 2661     		.short	24870
- 2788 04b0 2400     		.short	36
- 2789 04b2 0600     		.short	6
- 2790 04b4 9300     		.short	147
- 2791 04b6 0028     		.short	10240
- 2792 04b8 0167     		.short	26369
- 2793 04ba 0000     		.short	0
- 2794 04bc 2400     		.short	36
- 2795 04be 82B8     		.short	-18302
- 2796 04c0 4C18     		.short	6220
- 2797 04c2 1334     		.short	13331
- 2798 04c4 1238     		.short	14354
- 2799 04c6 0600     		.short	6
- 2800 04c8 D200     		.short	210
- 2801 04ca 003A     		.short	14848
- 2802 04cc D25B     		.short	23506
- 2803 04ce 0033     		.short	13056
- 2804 04d0 2440     		.short	16420
- 2805 04d2 0000     		.short	0
- 2806 04d4 1300     		.short	19
- 2807 04d6 003C     		.short	15360
- 2808 04d8 2440     		.short	16420
- 2809 04da 00F4     		.short	-3072
- 2810 04dc C144     		.short	17601
- 2811 04de F034     		.short	13552
- 2812 04e0 2480     		.short	-32732
- 2813 04e2 2661     		.short	24870
- 2814 04e4 2400     		.short	36
- 2815 04e6 0600     		.short	6
- 2816 04e8 1101     		.short	273
- 2817 04ea 0028     		.short	10240
- 2818 04ec 1867     		.short	26392
- 2819 04ee 9442     		.short	17044
- 2820 04f0 2400     		.short	36
- 2821 04f2 0024     		.short	9216
- 2822 04f4 C266     		.short	26306
- 2823 04f6 0000     		.short	0
- 2824 04f8 2400     		.short	36
- 2825 04fa 0300     		.short	3
- 2826 04fc 01F0     		.short	-4095
- 2827 04fe 0131     		.short	12545
- 2828 0500 2400     		.short	36
- 2829 0502 12B4     		.short	-19438
- 2830 0504 2400     		.short	36
- 2831 0506 2800     		.short	40
- 2832 0508 0100     		.short	1
- 2833 050a 0028     		.short	10240
- 2834 050c C566     		.short	26309
- 2835 050e 4461     		.short	24900
- 2836 0510 2400     		.short	36
- 2837 0512 0400     		.short	4
- 2838 0514 0200     		.short	2
- 2839 0516 0028     		.short	10240
- 2840 0518 8166     		.short	26241
- 2841 051a 2244     		.short	17442
- 2842 051c 2400     		.short	36
- 2843 051e 0000     		.short	0
- 2844 0520 0210     		.short	4098
- 2845 0522 2264     		.short	25634
- 2846 0524 2400     		.short	36
- 2847 0526 0028     		.short	10240
- 2848 0528 C066     		.short	26304
- 2849 052a 0039     		.short	14592
- 2850 052c 2440     		.short	16420
- 2851 052e 0039     		.short	14592
- 2852 0530 2440     		.short	16420
- 2853 0532 1331     		.short	12563
- 2854 0534 4C0C     		.short	3148
- 2855 0536 F336     		.short	14067
- 2856 0538 2440     		.short	16420
- 2857 053a F336     		.short	14067
- 2858 053c 0ED8     		.short	-10226
- 2859 053e F436     		.short	14068
- 2860 0540 1358     		.short	22547
- 2861 0542 F136     		.short	14065
- 2862 0544 1058     		.short	22544
- 2863 0546 F036     		.short	14064
- 2864 0548 04D8     		.short	-10236
- 2865 054a F036     		.short	14064
- 2866 054c 0258     		.short	22530
- 2867 054e 0534     		.short	13317
- 2868 0550 1490     		.short	-28652
- 2869 0552 F336     		.short	14067
- 2870 0554 2400     		.short	36
- 2871 0556 F236     		.short	14066
- 2872 0558 1518     		.short	6165
- 2873 055a 0020     		.short	8192
- 2874 055c 0000     		.short	0
- 2875 055e F236     		.short	14066
- 2876 0560 1798     		.short	-26601
- 2877 0562 6818     		.short	6248
- 2878 0564 3200     		.short	50
- 2879 0566 4F00     		.short	79
- 2880 0568 7E00     		.short	126
- 2881 056a C800     		.short	200
- 2882 056c 3D01     		.short	317
- 2883 056e F801     		.short	504
- 2884 0570 2003     		.short	800
- 2885 0572 F604     		.short	1270
- 2886 0574 E007     		.short	2016
- 2887 0576 800C     		.short	3200
- 2888 0578 D813     		.short	5080
- 2889 057a 7F1F     		.short	8063
- 2890 057c 0032     		.short	12800
- 2891 057e 5F4F     		.short	20319
- 2892 0580 A861     		.short	25000
- 2893 0582 0000     		.short	0
- 2894 0584 0000     		.short	0
- 2895 0586 0000     		.short	0
- 2896 0588 0000     		.short	0
- 2897 058a 0000     		.short	0
- 2898 058c 0000     		.short	0
- 2899 058e 0000     		.short	0
- 2900 0590 0000     		.short	0
- 2901 0592 A781     		.short	-32345
- 2902 0594 123E     		.short	15890
- 2903 0596 14B8     		.short	-18412
- 2904 0598 0000     		.short	0
- 2905 059a 0A80     		.short	-32758
- 2906 059c 103E     		.short	15888
- 2907 059e 0138     		.short	14337
- 2908 05a0 103E     		.short	15888
- 2909 05a2 03B8     		.short	-18429
- 2910 05a4 113E     		.short	15889
- 2911 05a6 0678     		.short	30726
- 2912 05a8 113E     		.short	15889
- 2913 05aa 13F8     		.short	-2029
- 2914 05ac 133E     		.short	15891
- 2915 05ae 0EF8     		.short	-2034
- 2916 05b0 133E     		.short	15891
- 2917 05b2 2440     		.short	16420
- 2918 05b4 043E     		.short	15876
- 2919 05b6 1078     		.short	30736
- 2920 05b8 9A44     		.short	17562
- 2921 05ba 4000     		.short	64
- 2922 05bc 0100     		.short	1
- 2923 05be 0300     		.short	3
- 2924 05c0 0028     		.short	10240
- 2925 05c2 0473     		.short	29444
- 2926 05c4 3640     		.short	16438
- 2927 05c6 C103     		.short	961
- 2928 05c8 0300     		.short	3
- 2929 05ca C2FF     		.short	-62
- 2930 05cc 26B3     		.short	-19674
- 2931 05ce 2400     		.short	36
- 2932 05d0 1800     		.short	24
- 2933 05d2 4200     		.short	66
- 2934 05d4 2643     		.short	17190
- 2935 05d6 9544     		.short	17557
- 2936 05d8 2440     		.short	16420
- 2937 05da D240     		.short	16594
- 2938 05dc 0000     		.short	0
- 2939 05de 8001     		.short	384
- 2940 05e0 00A1     		.short	-24320
- 2941 05e2 9040     		.short	16528
- 2942 05e4 1000     		.short	16
- 2943 05e6 C20F     		.short	4034
- 2944 05e8 0442     		.short	16900
- 2945 05ea 2400     		.short	36
- 2946 05ec 82BC     		.short	-17278
- 2947 05ee 9140     		.short	16529
- 2948 05f0 9A45     		.short	17818
- 2949 05f2 2400     		.short	36
- 2950 05f4 0000     		.short	0
- 2951 05f6 5400     		.short	84
- 2952 05f8 0028     		.short	10240
- 2953 05fa 0472     		.short	29188
- 2954 05fc 86BD     		.short	-17018
- 2955 05fe 9340     		.short	16531
- 2956 0600 0024     		.short	9216
- 2957 0602 C571     		.short	29125
- 2958 0604 01FE     		.short	-511
- 2959 0606 0C5E     		.short	24076
- 2960 0608 435C     		.short	23619
- 2961 060a 2D5F     		.short	24365
- 2962 060c 465E     		.short	24134
- 2963 060e 0C02     		.short	524
- 2964 0610 565C     		.short	23638
- 2965 0612 0C8A     		.short	-30196
- 2966 0614 535E     		.short	24147
- 2967 0616 0C5E     		.short	24076
- 2968 0618 435C     		.short	23619
- 2969 061a 2D5F     		.short	24365
- 2970 061c 465E     		.short	24134
- 2971 061e 0C02     		.short	524
- 2972 0620 565C     		.short	23638
- 2973 0622 0C8A     		.short	-30196
- 2974 0624 525E     		.short	24146
- 2975 0626 2400     		.short	36
- 2976 0628 B24C     		.short	19634
- 2977 062a 0544     		.short	17413
- 2978 062c 1800     		.short	24
- 2979 062e 4400     		.short	68
- 2980 0630 4A65     		.short	25930
- 2981 0632 2400     		.short	36
- 2982 0634 0028     		.short	10240
- 2983 0636 0080     		.short	-32768
- 2984 0638 F436     		.short	14068
- 2985 063a 1058     		.short	22544
- 2986 063c D181     		.short	-32303
- 2987 063e 123E     		.short	15890
- 2988 0640 14B8     		.short	-18412
- 2989 0642 0000     		.short	0
- 2990 0644 0A80     		.short	-32758
- 2991 0646 103E     		.short	15888
- 2992 0648 0138     		.short	14337
- 2993 064a 103E     		.short	15888
- 2994 064c 03B8     		.short	-18429
- 2995 064e 113E     		.short	15889
- 2996 0650 0678     		.short	30726
- 2997 0652 113E     		.short	15889
- 2998 0654 13F8     		.short	-2029
- 2999 0656 133E     		.short	15891
- 3000 0658 0EF8     		.short	-2034
- 3001 065a 133E     		.short	15891
- 3002 065c 2440     		.short	16420
- 3003 065e 043E     		.short	15876
- 3004 0660 1078     		.short	30736
- 3005 0662 9A44     		.short	17562
- 3006 0664 4000     		.short	64
- 3007 0666 0000     		.short	0
- 3008 0668 0308     		.short	2051
- 3009 066a 0028     		.short	10240
- 3010 066c C47E     		.short	32452
- 3011 066e F030     		.short	12528
- 3012 0670 2440     		.short	16420
- 3013 0672 FF0F     		.short	4095
- 3014 0674 C2FE     		.short	-318
- 3015 0676 20A0     		.short	-24544
- 3016 0678 2400     		.short	36
- 3017 067a FF0F     		.short	4095
- 3018 067c 02FF     		.short	-254
- 3019 067e 22A1     		.short	-24286
- 3020 0680 2400     		.short	36
- 3021 0682 3640     		.short	16438
- 3022 0684 2400     		.short	36
- 3023 0686 0000     		.short	0
- 3024 0688 C21F     		.short	8130
- 3025 068a 26B3     		.short	-19674
- 3026 068c 2400     		.short	36
- 3027 068e 1000     		.short	16
- 3028 0690 0240     		.short	16386
- 3029 0692 2643     		.short	17190
- 3030 0694 9544     		.short	17557
- 3031 0696 2440     		.short	16420
- 3032 0698 D240     		.short	16594
- 3033 069a 0000     		.short	0
- 3034 069c 8001     		.short	384
- 3035 069e 00A1     		.short	-24320
- 3036 06a0 9040     		.short	16528
- 3037 06a2 1000     		.short	16
- 3038 06a4 4200     		.short	66
- 3039 06a6 0442     		.short	16900
- 3040 06a8 2400     		.short	36
- 3041 06aa 82BC     		.short	-17278
- 3042 06ac 9140     		.short	16529
- 3043 06ae 9A45     		.short	17818
- 3044 06b0 2400     		.short	36
- 3045 06b2 0000     		.short	0
- 3046 06b4 5400     		.short	84
- 3047 06b6 0028     		.short	10240
- 3048 06b8 C47D     		.short	32196
- 3049 06ba 86BD     		.short	-17018
- 3050 06bc 9340     		.short	16531
- 3051 06be 0024     		.short	9216
- 3052 06c0 857D     		.short	32133
- 3053 06c2 01FE     		.short	-511
- 3054 06c4 0C5E     		.short	24076
- 3055 06c6 435C     		.short	23619
- 3056 06c8 2D5F     		.short	24365
- 3057 06ca 465E     		.short	24134
- 3058 06cc 2400     		.short	36
- 3059 06ce 565C     		.short	23638
- 3060 06d0 2400     		.short	36
- 3061 06d2 535E     		.short	24147
- 3062 06d4 0C5E     		.short	24076
- 3063 06d6 435C     		.short	23619
- 3064 06d8 2D5F     		.short	24365
- 3065 06da 465E     		.short	24134
- 3066 06dc 2400     		.short	36
- 3067 06de 565C     		.short	23638
- 3068 06e0 2400     		.short	36
- 3069 06e2 525E     		.short	24146
- 3070 06e4 2400     		.short	36
- 3071 06e6 B24C     		.short	19634
- 3072 06e8 0544     		.short	17413
- 3073 06ea 1000     		.short	16
- 3074 06ec 0440     		.short	16388
- 3075 06ee 4A65     		.short	25930
- 3076 06f0 1098     		.short	-26608
- 3077 06f2 0000     		.short	0
- 3078 06f4 4401     		.short	324
- 3079 06f6 4AA5     		.short	-23222
- 3080 06f8 D11B     		.short	7121
- 3081 06fa 0600     		.short	6
- 3082 06fc 1300     		.short	19
- 3083 06fe 0133     		.short	13057
- 3084 0700 44C4     		.short	-15292
- 3085 0702 7E68     		.short	26750
- 3086 0704 0520     		.short	8197
- 3087 0706 76AD     		.short	-21130
- 3088 0708 4584     		.short	-31675
- 3089 070a D64E     		.short	20182
- 3090 070c 8487     		.short	-30844
- 3091 070e F336     		.short	14067
- 3092 0710 C264     		.short	25794
- 3093 0712 72AC     		.short	-21390
- 3094 0714 8587     		.short	-30843
- 3095 0716 C24E     		.short	20162
- 3096 0718 43A4     		.short	-23485
- 3097 071a 0930     		.short	12297
- 3098 071c 4024     		.short	9280
- 3099 071e 0930     		.short	12297
- 3100 0720 4127     		.short	10049
- 3101 0722 F336     		.short	14067
- 3102 0724 0ED8     		.short	-10226
- 3103 0726 F136     		.short	14065
- 3104 0728 13D8     		.short	-10221
- 3105 072a F136     		.short	14065
- 3106 072c 0658     		.short	22534
- 3107 072e F036     		.short	14064
- 3108 0730 0398     		.short	-26621
- 3109 0732 F036     		.short	14064
- 3110 0734 0118     		.short	6145
- 3111 0736 0020     		.short	8192
- 3112 0738 0000     		.short	0
- 3113 073a F236     		.short	14066
- 3114 073c 1498     		.short	-26604
- 3115 073e 1182     		.short	-32239
- 3116 0740 824C     		.short	19586
- 3117 0742 2400     		.short	36
- 3118 0744 0000     		.short	0
- 3119 0746 2400     		.short	36
- 3120 0748 0020     		.short	8192
- 3121 074a 0500     		.short	5
- 3122 074c C2F5     		.short	-2622
- 3123 074e 2400     		.short	36
- 3124 0750 0000     		.short	0
- 3125 0752 8009     		.short	2432
- 3126 0754 0020     		.short	8192
- 3127 0756 0000     		.short	0
- 3128 0758 1060     		.short	24592
- 3129 075a 2400     		.short	36
- 3130 075c 5000     		.short	80
- 3131              		.text
- 3132              	.Letext0:
- 3133              		.file 2 "c:\\project\\stm32fx_lib\\stm32f1x_iolib\\include\\core.h"
- 3134              		.file 3 "/project/stm32fx_lib/stm32f1x_iolib/include/cmsis/stm32f1xx.h"
- 3135              		.file 4 "/project/stm32fx_lib/stm32f1x_iolib/include/gpio.h"
- 3136              		.file 5 "userdefs.h"
- 3137              		.file 6 "/project/stm32fx_lib/stm32f1x_iolib/include/fundefs.h"
+ 1765              		.loc 1 664 6 view .LVU503
+ 1766 002c FFF7FEFF 		bl	SPI_read_write_byte
+ 1767              	.LVL161:
+ 1768 0030 EFE7     		b	.L136
+ 1769              	.L139:
+ 1770 0032 00BF     		.align	2
+ 1771              	.L138:
+ 1772 0034 00100140 		.word	1073811456
+ 1773              		.cfi_endproc
+ 1774              	.LFE45:
+ 1776              		.global	bitrate
+ 1777              		.global	vs1003_ram
+ 1778              		.global	regvalue
+ 1779              		.global	dtab
+ 1780              		.global	atab
+ 1781              		.section	.bss.regvalue,"aw",%nobits
+ 1782              		.align	1
+ 1783              		.set	.LANCHOR0,. + 0
+ 1786              	regvalue:
+ 1787 0000 0000     		.space	2
+ 1788              		.section	.data.vs1003_ram,"aw"
+ 1789              		.set	.LANCHOR4,. + 0
+ 1792              	vs1003_ram:
+ 1793 0000 00000000 		.ascii	"\000\000\000\000\372"
+ 1793      FA
+ 1794              		.section	.rodata.atab,"a"
+ 1795              		.set	.LANCHOR2,. + 0
+ 1798              	atab:
+ 1799 0000 07060606 		.ascii	"\007\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1799      06060606 
+ 1799      06060606 
+ 1799      06
+ 1800 000d 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\007"
+ 1800      06060606 
+ 1800      06060606 
+ 1800      07
+ 1801 001a 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1801      06060606 
+ 1801      06060606 
+ 1801      06
+ 1802 0027 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1802      06060606 
+ 1802      06060606 
+ 1802      06
+ 1803 0034 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1803      06060606 
+ 1803      06060606 
+ 1803      06
+ 1804 0041 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1804      06060606 
+ 1804      06060606 
+ 1804      06
+ 1805 004e 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1805      06060606 
+ 1805      06060606 
+ 1805      06
+ 1806 005b 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1806      06060606 
+ 1806      06060606 
+ 1806      06
+ 1807 0068 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1807      06060606 
+ 1807      06060606 
+ 1807      06
+ 1808 0075 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1808      06060606 
+ 1808      06060606 
+ 1808      06
+ 1809 0082 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1809      06060606 
+ 1809      06060606 
+ 1809      06
+ 1810 008f 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1810      06060606 
+ 1810      06060606 
+ 1810      06
+ 1811 009c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1811      06060606 
+ 1811      06060606 
+ 1811      06
+ 1812 00a9 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1812      06060606 
+ 1812      06060606 
+ 1812      06
+ 1813 00b6 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1813      06060606 
+ 1813      06060606 
+ 1813      06
+ 1814 00c3 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1814      06060606 
+ 1814      06060606 
+ 1814      06
+ 1815 00d0 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1815      06060606 
+ 1815      06060606 
+ 1815      06
+ 1816 00dd 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1816      06060606 
+ 1816      06060606 
+ 1816      06
+ 1817 00ea 06060606 		.ascii	"\006\006\006\006\006\006\007\006\006\006\006\006\006"
+ 1817      06060706 
+ 1817      06060606 
+ 1817      06
+ 1818 00f7 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1818      06060606 
+ 1818      06060606 
+ 1818      06
+ 1819 0104 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1819      06060606 
+ 1819      06060606 
+ 1819      06
+ 1820 0111 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1820      06060606 
+ 1820      06060606 
+ 1820      06
+ 1821 011e 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1821      06060606 
+ 1821      06060606 
+ 1821      06
+ 1822 012b 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1822      06060606 
+ 1822      06060606 
+ 1822      06
+ 1823 0138 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1823      06060606 
+ 1823      06060606 
+ 1823      06
+ 1824 0145 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1824      06060606 
+ 1824      06060606 
+ 1824      06
+ 1825 0152 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1825      06060606 
+ 1825      06060606 
+ 1825      06
+ 1826 015f 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1826      06060606 
+ 1826      06060606 
+ 1826      06
+ 1827 016c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1827      06060606 
+ 1827      06060606 
+ 1827      06
+ 1828 0179 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1828      06060606 
+ 1828      06060606 
+ 1828      06
+ 1829 0186 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1829      06060606 
+ 1829      06060606 
+ 1829      06
+ 1830 0193 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1830      06060606 
+ 1830      06060606 
+ 1830      06
+ 1831 01a0 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1831      06060606 
+ 1831      06060606 
+ 1831      06
+ 1832 01ad 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1832      06060606 
+ 1832      06060606 
+ 1832      06
+ 1833 01ba 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1833      06060606 
+ 1833      06060606 
+ 1833      06
+ 1834 01c7 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1834      06060606 
+ 1834      06060606 
+ 1834      06
+ 1835 01d4 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1835      06060606 
+ 1835      06060606 
+ 1835      06
+ 1836 01e1 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1836      06060606 
+ 1836      06060606 
+ 1836      06
+ 1837 01ee 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1837      06060606 
+ 1837      06060606 
+ 1837      06
+ 1838 01fb 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1838      06060606 
+ 1838      06060606 
+ 1838      06
+ 1839 0208 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1839      06060606 
+ 1839      06060606 
+ 1839      06
+ 1840 0215 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1840      06060606 
+ 1840      06060606 
+ 1840      06
+ 1841 0222 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1841      06060606 
+ 1841      06060606 
+ 1841      06
+ 1842 022f 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1842      06060606 
+ 1842      06060606 
+ 1842      06
+ 1843 023c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1843      06060606 
+ 1843      06060606 
+ 1843      06
+ 1844 0249 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1844      06060606 
+ 1844      06060606 
+ 1844      06
+ 1845 0256 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1845      06060606 
+ 1845      06060606 
+ 1845      06
+ 1846 0263 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1846      06060606 
+ 1846      06060606 
+ 1846      06
+ 1847 0270 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1847      06060606 
+ 1847      06060606 
+ 1847      06
+ 1848 027d 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1848      06060606 
+ 1848      06060606 
+ 1848      06
+ 1849 028a 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1849      06060606 
+ 1849      06060606 
+ 1849      06
+ 1850 0297 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1850      06060606 
+ 1850      06060606 
+ 1850      06
+ 1851 02a4 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1851      06060606 
+ 1851      06060606 
+ 1851      06
+ 1852 02b1 07060606 		.ascii	"\007\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1852      06060606 
+ 1852      06060606 
+ 1852      06
+ 1853 02be 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\007\006"
+ 1853      06060606 
+ 1853      06060607 
+ 1853      06
+ 1854 02cb 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1854      06060606 
+ 1854      06060606 
+ 1854      06
+ 1855 02d8 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1855      06060606 
+ 1855      06060606 
+ 1855      06
+ 1856 02e5 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1856      06060606 
+ 1856      06060606 
+ 1856      06
+ 1857 02f2 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1857      06060606 
+ 1857      06060606 
+ 1857      06
+ 1858 02ff 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1858      06060606 
+ 1858      06060606 
+ 1858      06
+ 1859 030c 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1859      06060606 
+ 1859      06060606 
+ 1859      06
+ 1860 0319 06060606 		.ascii	"\006\006\006\006\006\007\006\006\006\006\006\006\006"
+ 1860      06070606 
+ 1860      06060606 
+ 1860      06
+ 1861 0326 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1861      06060606 
+ 1861      06060606 
+ 1861      06
+ 1862 0333 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1862      06060606 
+ 1862      06060606 
+ 1862      06
+ 1863 0340 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1863      06060606 
+ 1863      06060606 
+ 1863      06
+ 1864 034d 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1864      06060606 
+ 1864      06060606 
+ 1864      06
+ 1865 035a 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1865      06060606 
+ 1865      06060606 
+ 1865      06
+ 1866 0367 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1866      06060606 
+ 1866      06060606 
+ 1866      06
+ 1867 0374 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1867      06060606 
+ 1867      06060606 
+ 1867      06
+ 1868 0381 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1868      06060606 
+ 1868      06060606 
+ 1868      06
+ 1869 038e 06060606 		.ascii	"\006\006\006\006\006\006\006\006\006\006\006\006\006"
+ 1869      06060606 
+ 1869      06060606 
+ 1869      06
+ 1870 039b 06060606 		.ascii	"\006\006\006\006\007\006\006\006\006\006\006\006\006"
+ 1870      07060606 
+ 1870      06060606 
+ 1870      06
+ 1871 03a8 06060606 		.ascii	"\006\006\006\006\006\006\012"
+ 1871      06060A
+ 1872              		.section	.rodata.bitrate,"a"
+ 1873              		.align	1
+ 1874              		.set	.LANCHOR1,. + 0
+ 1877              	bitrate:
+ 1878 0000 0000     		.short	0
+ 1879 0002 0800     		.short	8
+ 1880 0004 1000     		.short	16
+ 1881 0006 1800     		.short	24
+ 1882 0008 2000     		.short	32
+ 1883 000a 2800     		.short	40
+ 1884 000c 3000     		.short	48
+ 1885 000e 3800     		.short	56
+ 1886 0010 4000     		.short	64
+ 1887 0012 5000     		.short	80
+ 1888 0014 6000     		.short	96
+ 1889 0016 7000     		.short	112
+ 1890 0018 8000     		.short	128
+ 1891 001a 9000     		.short	144
+ 1892 001c A000     		.short	160
+ 1893 001e 0000     		.short	0
+ 1894 0020 0000     		.short	0
+ 1895 0022 2000     		.short	32
+ 1896 0024 2800     		.short	40
+ 1897 0026 3000     		.short	48
+ 1898 0028 3800     		.short	56
+ 1899 002a 4000     		.short	64
+ 1900 002c 5000     		.short	80
+ 1901 002e 6000     		.short	96
+ 1902 0030 7000     		.short	112
+ 1903 0032 8000     		.short	128
+ 1904 0034 A000     		.short	160
+ 1905 0036 C000     		.short	192
+ 1906 0038 E000     		.short	224
+ 1907 003a 0001     		.short	256
+ 1908 003c 4001     		.short	320
+ 1909 003e 0000     		.short	0
+ 1910              		.section	.rodata.dtab,"a"
+ 1911              		.align	1
+ 1912              		.set	.LANCHOR3,. + 0
+ 1915              	dtab:
+ 1916 0000 5080     		.short	-32688
+ 1917 0002 1336     		.short	13843
+ 1918 0004 2400     		.short	36
+ 1919 0006 003E     		.short	15872
+ 1920 0008 0138     		.short	14337
+ 1921 000a 0000     		.short	0
+ 1922 000c D716     		.short	5847
+ 1923 000e 00F4     		.short	-3072
+ 1924 0010 C055     		.short	21952
+ 1925 0012 0000     		.short	0
+ 1926 0014 170A     		.short	2583
+ 1927 0016 00F4     		.short	-3072
+ 1928 0018 C057     		.short	22464
+ 1929 001a 0600     		.short	6
+ 1930 001c 1750     		.short	20503
+ 1931 001e 80B0     		.short	-20352
+ 1932 0020 2400     		.short	36
+ 1933 0022 003F     		.short	16128
+ 1934 0024 2400     		.short	36
+ 1935 0026 0020     		.short	8192
+ 1936 0028 0000     		.short	0
+ 1937 002a F036     		.short	14064
+ 1938 002c 0118     		.short	6145
+ 1939 002e 0028     		.short	10240
+ 1940 0030 C031     		.short	12736
+ 1941 0032 5C80     		.short	-32676
+ 1942 0034 123E     		.short	15890
+ 1943 0036 17B8     		.short	-18409
+ 1944 0038 123E     		.short	15890
+ 1945 003a 1538     		.short	14357
+ 1946 003c 053E     		.short	15877
+ 1947 003e 14B8     		.short	-18412
+ 1948 0040 1536     		.short	13845
+ 1949 0042 2400     		.short	36
+ 1950 0044 0000     		.short	0
+ 1951 0046 0A80     		.short	-32758
+ 1952 0048 103E     		.short	15888
+ 1953 004a 0138     		.short	14337
+ 1954 004c 0600     		.short	6
+ 1955 004e 0000     		.short	0
+ 1956 0050 103E     		.short	15888
+ 1957 0052 03B8     		.short	-18429
+ 1958 0054 0000     		.short	0
+ 1959 0056 0303     		.short	771
+ 1960 0058 113E     		.short	15889
+ 1961 005a 0538     		.short	14341
+ 1962 005c 113E     		.short	15889
+ 1963 005e 07B8     		.short	-18425
+ 1964 0060 143E     		.short	15892
+ 1965 0062 1238     		.short	14354
+ 1966 0064 84B8     		.short	-18300
+ 1967 0066 0C13     		.short	4876
+ 1968 0068 1034     		.short	13328
+ 1969 006a 2440     		.short	16420
+ 1970 006c 1241     		.short	16658
+ 1971 006e D010     		.short	4304
+ 1972 0070 1040     		.short	16400
+ 1973 0072 8C00     		.short	140
+ 1974 0074 1040     		.short	16400
+ 1975 0076 2400     		.short	36
+ 1976 0078 00F4     		.short	-3072
+ 1977 007a 1240     		.short	16402
+ 1978 007c 0030     		.short	12288
+ 1979 007e 4038     		.short	14400
+ 1980 0080 0930     		.short	12297
+ 1981 0082 0138     		.short	14337
+ 1982 0084 0000     		.short	0
+ 1983 0086 4100     		.short	65
+ 1984 0088 02FE     		.short	-510
+ 1985 008a 2400     		.short	36
+ 1986 008c 0029     		.short	10496
+ 1987 008e 4084     		.short	-31680
+ 1988 0090 B248     		.short	18610
+ 1989 0092 2400     		.short	36
+ 1990 0094 F336     		.short	14067
+ 1991 0096 4408     		.short	2116
+ 1992 0098 0663     		.short	25350
+ 1993 009a 4588     		.short	-30651
+ 1994 009c 3AAE     		.short	-20934
+ 1995 009e 4088     		.short	-30656
+ 1996 00a0 8EBF     		.short	-16498
+ 1997 00a2 418B     		.short	-29887
+ 1998 00a4 32AC     		.short	-21454
+ 1999 00a6 46A8     		.short	-22458
+ 2000 00a8 C8FF     		.short	-56
+ 2001 00aa C7AB     		.short	-21561
+ 2002 00ac 013E     		.short	15873
+ 2003 00ae 0078     		.short	30720
+ 2004 00b0 00F4     		.short	-3072
+ 2005 00b2 8044     		.short	17536
+ 2006 00b4 9060     		.short	24720
+ 2007 00b6 2400     		.short	36
+ 2008 00b8 9060     		.short	24720
+ 2009 00ba 2400     		.short	36
+ 2010 00bc 00F4     		.short	-3072
+ 2011 00be 1540     		.short	16405
+ 2012 00c0 0930     		.short	12297
+ 2013 00c2 4634     		.short	13382
+ 2014 00c4 0930     		.short	12297
+ 2015 00c6 C737     		.short	14279
+ 2016 00c8 0930     		.short	12297
+ 2017 00ca 0018     		.short	6144
+ 2018 00cc 0930     		.short	12297
+ 2019 00ce 4438     		.short	14404
+ 2020 00d0 B348     		.short	18611
+ 2021 00d2 E0E1     		.short	-7712
+ 2022 00d4 8248     		.short	18562
+ 2023 00d6 4040     		.short	16448
+ 2024 00d8 CAFE     		.short	-310
+ 2025 00da 2400     		.short	36
+ 2026 00dc C25A     		.short	23234
+ 2027 00de 2400     		.short	36
+ 2028 00e0 525A     		.short	23122
+ 2029 00e2 2400     		.short	36
+ 2030 00e4 C24C     		.short	19650
+ 2031 00e6 2400     		.short	36
+ 2032 00e8 BA48     		.short	18618
+ 2033 00ea 4040     		.short	16448
+ 2034 00ec EA4E     		.short	20202
+ 2035 00ee 0148     		.short	18433
+ 2036 00f0 CA4E     		.short	20170
+ 2037 00f2 0098     		.short	-26624
+ 2038 00f4 80FF     		.short	-128
+ 2039 00f6 C11B     		.short	7105
+ 2040 00f8 EBF1     		.short	-3605
+ 2041 00fa E2E3     		.short	-7198
+ 2042 00fc EAF1     		.short	-3606
+ 2043 00fe 4C18     		.short	6220
+ 2044 0100 8B4C     		.short	19595
+ 2045 0102 E4E5     		.short	-6684
+ 2046 0104 BE48     		.short	18622
+ 2047 0106 0498     		.short	-26620
+ 2048 0108 8E48     		.short	18574
+ 2049 010a C641     		.short	16838
+ 2050 010c 82FE     		.short	-382
+ 2051 010e 2400     		.short	36
+ 2052 0110 8E5A     		.short	23182
+ 2053 0112 2400     		.short	36
+ 2054 0114 5E52     		.short	21086
+ 2055 0116 851B     		.short	7045
+ 2056 0118 FE4F     		.short	20478
+ 2057 011a 2400     		.short	36
+ 2058 011c B648     		.short	18614
+ 2059 011e C641     		.short	16838
+ 2060 0120 D64D     		.short	19926
+ 2061 0122 C748     		.short	18631
+ 2062 0124 F64D     		.short	19958
+ 2063 0126 2400     		.short	36
+ 2064 0128 D6F1     		.short	-3626
+ 2065 012a 2400     		.short	36
+ 2066 012c D6F1     		.short	-3626
+ 2067 012e 2400     		.short	36
+ 2068 0130 DA4E     		.short	20186
+ 2069 0132 2400     		.short	36
+ 2070 0134 0000     		.short	0
+ 2071 0136 C30F     		.short	4035
+ 2072 0138 0029     		.short	10496
+ 2073 013a 4084     		.short	-31680
+ 2074 013c 824E     		.short	20098
+ 2075 013e 2400     		.short	36
+ 2076 0140 8440     		.short	16516
+ 2077 0142 0C13     		.short	4876
+ 2078 0144 0600     		.short	6
+ 2079 0146 0001     		.short	256
+ 2080 0148 4034     		.short	13376
+ 2081 014a 2440     		.short	16420
+ 2082 014c 1040     		.short	16400
+ 2083 014e 2400     		.short	36
+ 2084 0150 00F4     		.short	-3072
+ 2085 0152 1240     		.short	16402
+ 2086 0154 0032     		.short	12800
+ 2087 0156 2440     		.short	16420
+ 2088 0158 32B1     		.short	-20174
+ 2089 015a 2400     		.short	36
+ 2090 015c 1442     		.short	16916
+ 2091 015e 2400     		.short	36
+ 2092 0160 24F2     		.short	-3548
+ 2093 0162 2400     		.short	36
+ 2094 0164 3062     		.short	25136
+ 2095 0166 2400     		.short	36
+ 2096 0168 0100     		.short	1
+ 2097 016a 0100     		.short	1
+ 2098 016c 0028     		.short	10240
+ 2099 016e 492B     		.short	11081
+ 2100 0170 0000     		.short	0
+ 2101 0172 2400     		.short	36
+ 2102 0174 00F4     		.short	-3072
+ 2103 0176 C240     		.short	16578
+ 2104 0178 0032     		.short	12800
+ 2105 017a 2400     		.short	36
+ 2106 017c 82FF     		.short	-126
+ 2107 017e 2400     		.short	36
+ 2108 0180 B248     		.short	18610
+ 2109 0182 2400     		.short	36
+ 2110 0184 30B1     		.short	-20176
+ 2111 0186 2400     		.short	36
+ 2112 0188 0262     		.short	25090
+ 2113 018a 2400     		.short	36
+ 2114 018c 3F00     		.short	63
+ 2115 018e 01F0     		.short	-4095
+ 2116 0190 0028     		.short	10240
+ 2117 0192 512E     		.short	11857
+ 2118 0194 0000     		.short	0
+ 2119 0196 4610     		.short	4166
+ 2120 0198 64FE     		.short	-412
+ 2121 019a 2400     		.short	36
+ 2122 019c BE48     		.short	18622
+ 2123 019e 2400     		.short	36
+ 2124 01a0 0028     		.short	10240
+ 2125 01a2 402F     		.short	12096
+ 2126 01a4 013A     		.short	14849
+ 2127 01a6 2480     		.short	-32732
+ 2128 01a8 0032     		.short	12800
+ 2129 01aa 2400     		.short	36
+ 2130 01ac 10B0     		.short	-20464
+ 2131 01ae 2400     		.short	36
+ 2132 01b0 20C0     		.short	-16352
+ 2133 01b2 2400     		.short	36
+ 2134 01b4 003A     		.short	14848
+ 2135 01b6 2400     		.short	36
+ 2136 01b8 F436     		.short	14068
+ 2137 01ba 1218     		.short	6162
+ 2138 01bc F136     		.short	14065
+ 2139 01be 0798     		.short	-26617
+ 2140 01c0 F136     		.short	14065
+ 2141 01c2 0518     		.short	6149
+ 2142 01c4 F036     		.short	14064
+ 2143 01c6 0398     		.short	-26621
+ 2144 01c8 F036     		.short	14064
+ 2145 01ca 0118     		.short	6145
+ 2146 01cc 0534     		.short	13317
+ 2147 01ce 1490     		.short	-28652
+ 2148 01d0 F336     		.short	14067
+ 2149 01d2 2400     		.short	36
+ 2150 01d4 F236     		.short	14066
+ 2151 01d6 1518     		.short	6165
+ 2152 01d8 0020     		.short	8192
+ 2153 01da 0000     		.short	0
+ 2154 01dc F236     		.short	14066
+ 2155 01de 1798     		.short	-26601
+ 2156 01e0 C780     		.short	-32569
+ 2157 01e2 123E     		.short	15890
+ 2158 01e4 17B8     		.short	-18409
+ 2159 01e6 123E     		.short	15890
+ 2160 01e8 1538     		.short	14357
+ 2161 01ea 053E     		.short	15877
+ 2162 01ec 14B8     		.short	-18412
+ 2163 01ee 2536     		.short	13861
+ 2164 01f0 2400     		.short	36
+ 2165 01f2 0000     		.short	0
+ 2166 01f4 0A80     		.short	-32758
+ 2167 01f6 103E     		.short	15888
+ 2168 01f8 0278     		.short	30722
+ 2169 01fa 103E     		.short	15888
+ 2170 01fc 04F8     		.short	-2044
+ 2171 01fe 113E     		.short	15889
+ 2172 0200 1078     		.short	30736
+ 2173 0202 143E     		.short	15892
+ 2174 0204 1378     		.short	30739
+ 2175 0206 0600     		.short	6
+ 2176 0208 5100     		.short	81
+ 2177 020a 133E     		.short	15891
+ 2178 020c 0EF8     		.short	-2034
+ 2179 020e 133E     		.short	15891
+ 2180 0210 2440     		.short	16420
+ 2181 0212 0930     		.short	12297
+ 2182 0214 4038     		.short	14400
+ 2183 0216 0930     		.short	12297
+ 2184 0218 5238     		.short	14418
+ 2185 021a 1929     		.short	10521
+ 2186 021c C064     		.short	25792
+ 2187 021e 0600     		.short	6
+ 2188 0220 D006     		.short	1744
+ 2189 0222 0031     		.short	12544
+ 2190 0224 D25B     		.short	23506
+ 2191 0226 0600     		.short	6
+ 2192 0228 D155     		.short	21969
+ 2193 022a 0930     		.short	12297
+ 2194 022c 0018     		.short	6144
+ 2195 022e 0930     		.short	12297
+ 2196 0230 0204     		.short	1026
+ 2197 0232 2661     		.short	24870
+ 2198 0234 2400     		.short	36
+ 2199 0236 0600     		.short	6
+ 2200 0238 D100     		.short	209
+ 2201 023a 0028     		.short	10240
+ 2202 023c 054D     		.short	19717
+ 2203 023e 82B8     		.short	-18302
+ 2204 0240 2400     		.short	36
+ 2205 0242 0600     		.short	6
+ 2206 0244 1100     		.short	17
+ 2207 0246 0930     		.short	12297
+ 2208 0248 5038     		.short	14416
+ 2209 024a 0600     		.short	6
+ 2210 024c 1000     		.short	16
+ 2211 024e 0930     		.short	12297
+ 2212 0250 0038     		.short	14336
+ 2213 0252 1D29     		.short	10525
+ 2214 0254 0058     		.short	22528
+ 2215 0256 0000     		.short	0
+ 2216 0258 0018     		.short	6144
+ 2217 025a 0600     		.short	6
+ 2218 025c 1000     		.short	16
+ 2219 025e 82B8     		.short	-18302
+ 2220 0260 2400     		.short	36
+ 2221 0262 1D29     		.short	10525
+ 2222 0264 005B     		.short	23296
+ 2223 0266 0000     		.short	0
+ 2224 0268 0017     		.short	5888
+ 2225 026a 0000     		.short	0
+ 2226 026c 0103     		.short	769
+ 2227 026e 0039     		.short	14592
+ 2228 0270 C05B     		.short	23488
+ 2229 0272 0600     		.short	6
+ 2230 0274 D155     		.short	21969
+ 2231 0276 0930     		.short	12297
+ 2232 0278 D01B     		.short	7120
+ 2233 027a 0930     		.short	12297
+ 2234 027c 0404     		.short	1028
+ 2235 027e 0600     		.short	6
+ 2236 0280 5100     		.short	81
+ 2237 0282 0028     		.short	10240
+ 2238 0284 003D     		.short	15616
+ 2239 0286 0139     		.short	14593
+ 2240 0288 2400     		.short	36
+ 2241 028a 4844     		.short	17480
+ 2242 028c 0104     		.short	1025
+ 2243 028e 9241     		.short	16786
+ 2244 0290 2400     		.short	36
+ 2245 0292 9864     		.short	25752
+ 2246 0294 0124     		.short	9217
+ 2247 0296 1F00     		.short	31
+ 2248 0298 0140     		.short	16385
+ 2249 029a 1264     		.short	25618
+ 2250 029c 2400     		.short	36
+ 2251 029e 0600     		.short	6
+ 2252 02a0 1100     		.short	17
+ 2253 02a2 0028     		.short	10240
+ 2254 02a4 513C     		.short	15441
+ 2255 02a6 0000     		.short	0
+ 2256 02a8 8E05     		.short	1422
+ 2257 02aa 0024     		.short	9216
+ 2258 02ac 0E4C     		.short	19470
+ 2259 02ae 0000     		.short	0
+ 2260 02b0 1300     		.short	19
+ 2261 02b2 0600     		.short	6
+ 2262 02b4 5100     		.short	81
+ 2263 02b6 0600     		.short	6
+ 2264 02b8 031A     		.short	6659
+ 2265 02ba 0031     		.short	12544
+ 2266 02bc 2440     		.short	16420
+ 2267 02be 12F2     		.short	-3566
+ 2268 02c0 C444     		.short	17604
+ 2269 02c2 4643     		.short	17222
+ 2270 02c4 2400     		.short	36
+ 2271 02c6 00F4     		.short	-3072
+ 2272 02c8 D540     		.short	16597
+ 2273 02ca 0035     		.short	13568
+ 2274 02cc 2480     		.short	-32732
+ 2275 02ce 2A61     		.short	24874
+ 2276 02d0 2400     		.short	36
+ 2277 02d2 0000     		.short	0
+ 2278 02d4 2400     		.short	36
+ 2279 02d6 0028     		.short	10240
+ 2280 02d8 514C     		.short	19537
+ 2281 02da 0000     		.short	0
+ 2282 02dc 2400     		.short	36
+ 2283 02de 1336     		.short	13843
+ 2284 02e0 2400     		.short	36
+ 2285 02e2 0031     		.short	12544
+ 2286 02e4 0038     		.short	14336
+ 2287 02e6 1D29     		.short	10525
+ 2288 02e8 0080     		.short	-32768
+ 2289 02ea 00F2     		.short	-3584
+ 2290 02ec 2400     		.short	36
+ 2291 02ee 3F00     		.short	63
+ 2292 02f0 C2FE     		.short	-318
+ 2293 02f2 8240     		.short	16514
+ 2294 02f4 1144     		.short	17425
+ 2295 02f6 1331     		.short	12563
+ 2296 02f8 C01B     		.short	7104
+ 2297 02fa 22A1     		.short	-24286
+ 2298 02fc 2400     		.short	36
+ 2299 02fe 0000     		.short	0
+ 2300 0300 0220     		.short	8194
+ 2301 0302 2461     		.short	24868
+ 2302 0304 0124     		.short	9217
+ 2303 0306 0000     		.short	0
+ 2304 0308 0210     		.short	4098
+ 2305 030a 0028     		.short	10240
+ 2306 030c 0846     		.short	17928
+ 2307 030e 0000     		.short	0
+ 2308 0310 2400     		.short	36
+ 2309 0312 3F00     		.short	63
+ 2310 0314 02F8     		.short	-2046
+ 2311 0316 0031     		.short	12544
+ 2312 0318 2440     		.short	16420
+ 2313 031a 24B1     		.short	-20188
+ 2314 031c 2400     		.short	36
+ 2315 031e 0028     		.short	10240
+ 2316 0320 C04B     		.short	19392
+ 2317 0322 0039     		.short	14592
+ 2318 0324 2480     		.short	-32732
+ 2319 0326 2461     		.short	24868
+ 2320 0328 2400     		.short	36
+ 2321 032a 0000     		.short	0
+ 2322 032c 0208     		.short	2050
+ 2323 032e 0028     		.short	10240
+ 2324 0330 4848     		.short	18504
+ 2325 0332 0000     		.short	0
+ 2326 0334 2400     		.short	36
+ 2327 0336 3F00     		.short	63
+ 2328 0338 02FE     		.short	-510
+ 2329 033a 0031     		.short	12544
+ 2330 033c 2440     		.short	16420
+ 2331 033e 24B1     		.short	-20188
+ 2332 0340 2400     		.short	36
+ 2333 0342 0028     		.short	10240
+ 2334 0344 C04B     		.short	19392
+ 2335 0346 0039     		.short	14592
+ 2336 0348 2480     		.short	-32732
+ 2337 034a 2461     		.short	24868
+ 2338 034c 2400     		.short	36
+ 2339 034e 0000     		.short	0
+ 2340 0350 0204     		.short	1026
+ 2341 0352 0028     		.short	10240
+ 2342 0354 884A     		.short	19080
+ 2343 0356 0000     		.short	0
+ 2344 0358 2400     		.short	36
+ 2345 035a 3F00     		.short	63
+ 2346 035c 02FF     		.short	-254
+ 2347 035e 0031     		.short	12544
+ 2348 0360 2440     		.short	16420
+ 2349 0362 24B1     		.short	-20188
+ 2350 0364 2400     		.short	36
+ 2351 0366 0028     		.short	10240
+ 2352 0368 C04B     		.short	19392
+ 2353 036a 0039     		.short	14592
+ 2354 036c 2480     		.short	-32732
+ 2355 036e 2461     		.short	24868
+ 2356 0370 0104     		.short	1025
+ 2357 0372 3F00     		.short	63
+ 2358 0374 82FF     		.short	-126
+ 2359 0376 0028     		.short	10240
+ 2360 0378 C84B     		.short	19400
+ 2361 037a 24B1     		.short	-20188
+ 2362 037c 2400     		.short	36
+ 2363 037e 0039     		.short	14592
+ 2364 0380 2480     		.short	-32732
+ 2365 0382 82B8     		.short	-18302
+ 2366 0384 4C8C     		.short	-29620
+ 2367 0386 3038     		.short	14384
+ 2368 0388 2440     		.short	16420
+ 2369 038a 0600     		.short	6
+ 2370 038c 9100     		.short	145
+ 2371 038e 0439     		.short	14596
+ 2372 0390 4CD8     		.short	-10164
+ 2373 0392 0600     		.short	6
+ 2374 0394 D100     		.short	209
+ 2375 0396 0000     		.short	0
+ 2376 0398 1300     		.short	19
+ 2377 039a 0031     		.short	12544
+ 2378 039c 4C90     		.short	-28596
+ 2379 039e 0242     		.short	16898
+ 2380 03a0 CC9B     		.short	-25652
+ 2381 03a2 F039     		.short	14832
+ 2382 03a4 2440     		.short	16420
+ 2383 03a6 0031     		.short	12544
+ 2384 03a8 2440     		.short	16420
+ 2385 03aa 003C     		.short	15360
+ 2386 03ac 2440     		.short	16420
+ 2387 03ae 00F4     		.short	-3072
+ 2388 03b0 C144     		.short	17601
+ 2389 03b2 F034     		.short	13552
+ 2390 03b4 2480     		.short	-32732
+ 2391 03b6 2661     		.short	24870
+ 2392 03b8 2400     		.short	36
+ 2393 03ba 0600     		.short	6
+ 2394 03bc D006     		.short	1744
+ 2395 03be 0028     		.short	10240
+ 2396 03c0 D85D     		.short	24024
+ 2397 03c2 9442     		.short	17044
+ 2398 03c4 2400     		.short	36
+ 2399 03c6 0024     		.short	9216
+ 2400 03c8 825D     		.short	23938
+ 2401 03ca 0000     		.short	0
+ 2402 03cc 2400     		.short	36
+ 2403 03ce 00F4     		.short	-3072
+ 2404 03d0 1144     		.short	17425
+ 2405 03d2 2331     		.short	12579
+ 2406 03d4 2400     		.short	36
+ 2407 03d6 0031     		.short	12544
+ 2408 03d8 2480     		.short	-32732
+ 2409 03da 0242     		.short	16898
+ 2410 03dc 2400     		.short	36
+ 2411 03de 8241     		.short	16770
+ 2412 03e0 0124     		.short	9217
+ 2413 03e2 0000     		.short	0
+ 2414 03e4 0220     		.short	8194
+ 2415 03e6 0028     		.short	10240
+ 2416 03e8 895D     		.short	23945
+ 2417 03ea 0000     		.short	0
+ 2418 03ec 2400     		.short	36
+ 2419 03ee 1330     		.short	12307
+ 2420 03f0 4C18     		.short	6220
+ 2421 03f2 F030     		.short	12528
+ 2422 03f4 5278     		.short	30802
+ 2423 03f6 2461     		.short	24868
+ 2424 03f8 50B8     		.short	-18352
+ 2425 03fa 0600     		.short	6
+ 2426 03fc 0100     		.short	1
+ 2427 03fe 0028     		.short	10240
+ 2428 0400 8855     		.short	21896
+ 2429 0402 8840     		.short	16520
+ 2430 0404 C244     		.short	17602
+ 2431 0406 2442     		.short	16932
+ 2432 0408 2400     		.short	36
+ 2433 040a 2241     		.short	16674
+ 2434 040c 2400     		.short	36
+ 2435 040e 2241     		.short	16674
+ 2436 0410 2400     		.short	36
+ 2437 0412 00F4     		.short	-3072
+ 2438 0414 5140     		.short	16465
+ 2439 0416 0029     		.short	10496
+ 2440 0418 4074     		.short	29760
+ 2441 041a 0000     		.short	0
+ 2442 041c C856     		.short	22216
+ 2443 041e 2442     		.short	16932
+ 2444 0420 2400     		.short	36
+ 2445 0422 2241     		.short	16674
+ 2446 0424 2400     		.short	36
+ 2447 0426 2241     		.short	16674
+ 2448 0428 2400     		.short	36
+ 2449 042a 0029     		.short	10496
+ 2450 042c C069     		.short	27072
+ 2451 042e 00F4     		.short	-3072
+ 2452 0430 5140     		.short	16465
+ 2453 0432 0400     		.short	4
+ 2454 0434 0200     		.short	2
+ 2455 0436 0930     		.short	12297
+ 2456 0438 D01B     		.short	7120
+ 2457 043a 2330     		.short	12323
+ 2458 043c D21B     		.short	7122
+ 2459 043e E030     		.short	12512
+ 2460 0440 2440     		.short	16420
+ 2461 0442 2461     		.short	24868
+ 2462 0444 2400     		.short	36
+ 2463 0446 0000     		.short	0
+ 2464 0448 0240     		.short	16386
+ 2465 044a 0028     		.short	10240
+ 2466 044c 8859     		.short	22920
+ 2467 044e 0000     		.short	0
+ 2468 0450 2400     		.short	36
+ 2469 0452 0000     		.short	0
+ 2470 0454 0100     		.short	1
+ 2471 0456 2038     		.short	14368
+ 2472 0458 2440     		.short	16420
+ 2473 045a E030     		.short	12512
+ 2474 045c 2440     		.short	16420
+ 2475 045e 2461     		.short	24868
+ 2476 0460 0100     		.short	1
+ 2477 0462 3F00     		.short	63
+ 2478 0464 42FF     		.short	-190
+ 2479 0466 0028     		.short	10240
+ 2480 0468 885D     		.short	23944
+ 2481 046a 8241     		.short	16770
+ 2482 046c 2400     		.short	36
+ 2483 046e 0000     		.short	0
+ 2484 0470 2400     		.short	36
+ 2485 0472 0028     		.short	10240
+ 2486 0474 955D     		.short	23957
+ 2487 0476 0000     		.short	0
+ 2488 0478 2400     		.short	36
+ 2489 047a 1336     		.short	13843
+ 2490 047c 2400     		.short	36
+ 2491 047e 143E     		.short	15892
+ 2492 0480 24C0     		.short	-16348
+ 2493 0482 0029     		.short	10496
+ 2494 0484 0017     		.short	5888
+ 2495 0486 143E     		.short	15892
+ 2496 0488 2400     		.short	36
+ 2497 048a E336     		.short	14051
+ 2498 048c 8C00     		.short	140
+ 2499 048e E030     		.short	12512
+ 2500 0490 2440     		.short	16420
+ 2501 0492 22FE     		.short	-478
+ 2502 0494 1144     		.short	17425
+ 2503 0496 B648     		.short	18614
+ 2504 0498 8C04     		.short	1164
+ 2505 049a 0039     		.short	14592
+ 2506 049c 2480     		.short	-32732
+ 2507 049e 3330     		.short	12339
+ 2508 04a0 4C0C     		.short	3148
+ 2509 04a2 0600     		.short	6
+ 2510 04a4 1100     		.short	17
+ 2511 04a6 9268     		.short	26770
+ 2512 04a8 C204     		.short	1218
+ 2513 04aa 22A1     		.short	-24286
+ 2514 04ac 0204     		.short	1026
+ 2515 04ae 2661     		.short	24870
+ 2516 04b0 2400     		.short	36
+ 2517 04b2 0600     		.short	6
+ 2518 04b4 9300     		.short	147
+ 2519 04b6 0028     		.short	10240
+ 2520 04b8 0167     		.short	26369
+ 2521 04ba 0000     		.short	0
+ 2522 04bc 2400     		.short	36
+ 2523 04be 82B8     		.short	-18302
+ 2524 04c0 4C18     		.short	6220
+ 2525 04c2 1334     		.short	13331
+ 2526 04c4 1238     		.short	14354
+ 2527 04c6 0600     		.short	6
+ 2528 04c8 D200     		.short	210
+ 2529 04ca 003A     		.short	14848
+ 2530 04cc D25B     		.short	23506
+ 2531 04ce 0033     		.short	13056
+ 2532 04d0 2440     		.short	16420
+ 2533 04d2 0000     		.short	0
+ 2534 04d4 1300     		.short	19
+ 2535 04d6 003C     		.short	15360
+ 2536 04d8 2440     		.short	16420
+ 2537 04da 00F4     		.short	-3072
+ 2538 04dc C144     		.short	17601
+ 2539 04de F034     		.short	13552
+ 2540 04e0 2480     		.short	-32732
+ 2541 04e2 2661     		.short	24870
+ 2542 04e4 2400     		.short	36
+ 2543 04e6 0600     		.short	6
+ 2544 04e8 1101     		.short	273
+ 2545 04ea 0028     		.short	10240
+ 2546 04ec 1867     		.short	26392
+ 2547 04ee 9442     		.short	17044
+ 2548 04f0 2400     		.short	36
+ 2549 04f2 0024     		.short	9216
+ 2550 04f4 C266     		.short	26306
+ 2551 04f6 0000     		.short	0
+ 2552 04f8 2400     		.short	36
+ 2553 04fa 0300     		.short	3
+ 2554 04fc 01F0     		.short	-4095
+ 2555 04fe 0131     		.short	12545
+ 2556 0500 2400     		.short	36
+ 2557 0502 12B4     		.short	-19438
+ 2558 0504 2400     		.short	36
+ 2559 0506 2800     		.short	40
+ 2560 0508 0100     		.short	1
+ 2561 050a 0028     		.short	10240
+ 2562 050c C566     		.short	26309
+ 2563 050e 4461     		.short	24900
+ 2564 0510 2400     		.short	36
+ 2565 0512 0400     		.short	4
+ 2566 0514 0200     		.short	2
+ 2567 0516 0028     		.short	10240
+ 2568 0518 8166     		.short	26241
+ 2569 051a 2244     		.short	17442
+ 2570 051c 2400     		.short	36
+ 2571 051e 0000     		.short	0
+ 2572 0520 0210     		.short	4098
+ 2573 0522 2264     		.short	25634
+ 2574 0524 2400     		.short	36
+ 2575 0526 0028     		.short	10240
+ 2576 0528 C066     		.short	26304
+ 2577 052a 0039     		.short	14592
+ 2578 052c 2440     		.short	16420
+ 2579 052e 0039     		.short	14592
+ 2580 0530 2440     		.short	16420
+ 2581 0532 1331     		.short	12563
+ 2582 0534 4C0C     		.short	3148
+ 2583 0536 F336     		.short	14067
+ 2584 0538 2440     		.short	16420
+ 2585 053a F336     		.short	14067
+ 2586 053c 0ED8     		.short	-10226
+ 2587 053e F436     		.short	14068
+ 2588 0540 1358     		.short	22547
+ 2589 0542 F136     		.short	14065
+ 2590 0544 1058     		.short	22544
+ 2591 0546 F036     		.short	14064
+ 2592 0548 04D8     		.short	-10236
+ 2593 054a F036     		.short	14064
+ 2594 054c 0258     		.short	22530
+ 2595 054e 0534     		.short	13317
+ 2596 0550 1490     		.short	-28652
+ 2597 0552 F336     		.short	14067
+ 2598 0554 2400     		.short	36
+ 2599 0556 F236     		.short	14066
+ 2600 0558 1518     		.short	6165
+ 2601 055a 0020     		.short	8192
+ 2602 055c 0000     		.short	0
+ 2603 055e F236     		.short	14066
+ 2604 0560 1798     		.short	-26601
+ 2605 0562 6818     		.short	6248
+ 2606 0564 3200     		.short	50
+ 2607 0566 4F00     		.short	79
+ 2608 0568 7E00     		.short	126
+ 2609 056a C800     		.short	200
+ 2610 056c 3D01     		.short	317
+ 2611 056e F801     		.short	504
+ 2612 0570 2003     		.short	800
+ 2613 0572 F604     		.short	1270
+ 2614 0574 E007     		.short	2016
+ 2615 0576 800C     		.short	3200
+ 2616 0578 D813     		.short	5080
+ 2617 057a 7F1F     		.short	8063
+ 2618 057c 0032     		.short	12800
+ 2619 057e 5F4F     		.short	20319
+ 2620 0580 A861     		.short	25000
+ 2621 0582 0000     		.short	0
+ 2622 0584 0000     		.short	0
+ 2623 0586 0000     		.short	0
+ 2624 0588 0000     		.short	0
+ 2625 058a 0000     		.short	0
+ 2626 058c 0000     		.short	0
+ 2627 058e 0000     		.short	0
+ 2628 0590 0000     		.short	0
+ 2629 0592 A781     		.short	-32345
+ 2630 0594 123E     		.short	15890
+ 2631 0596 14B8     		.short	-18412
+ 2632 0598 0000     		.short	0
+ 2633 059a 0A80     		.short	-32758
+ 2634 059c 103E     		.short	15888
+ 2635 059e 0138     		.short	14337
+ 2636 05a0 103E     		.short	15888
+ 2637 05a2 03B8     		.short	-18429
+ 2638 05a4 113E     		.short	15889
+ 2639 05a6 0678     		.short	30726
+ 2640 05a8 113E     		.short	15889
+ 2641 05aa 13F8     		.short	-2029
+ 2642 05ac 133E     		.short	15891
+ 2643 05ae 0EF8     		.short	-2034
+ 2644 05b0 133E     		.short	15891
+ 2645 05b2 2440     		.short	16420
+ 2646 05b4 043E     		.short	15876
+ 2647 05b6 1078     		.short	30736
+ 2648 05b8 9A44     		.short	17562
+ 2649 05ba 4000     		.short	64
+ 2650 05bc 0100     		.short	1
+ 2651 05be 0300     		.short	3
+ 2652 05c0 0028     		.short	10240
+ 2653 05c2 0473     		.short	29444
+ 2654 05c4 3640     		.short	16438
+ 2655 05c6 C103     		.short	961
+ 2656 05c8 0300     		.short	3
+ 2657 05ca C2FF     		.short	-62
+ 2658 05cc 26B3     		.short	-19674
+ 2659 05ce 2400     		.short	36
+ 2660 05d0 1800     		.short	24
+ 2661 05d2 4200     		.short	66
+ 2662 05d4 2643     		.short	17190
+ 2663 05d6 9544     		.short	17557
+ 2664 05d8 2440     		.short	16420
+ 2665 05da D240     		.short	16594
+ 2666 05dc 0000     		.short	0
+ 2667 05de 8001     		.short	384
+ 2668 05e0 00A1     		.short	-24320
+ 2669 05e2 9040     		.short	16528
+ 2670 05e4 1000     		.short	16
+ 2671 05e6 C20F     		.short	4034
+ 2672 05e8 0442     		.short	16900
+ 2673 05ea 2400     		.short	36
+ 2674 05ec 82BC     		.short	-17278
+ 2675 05ee 9140     		.short	16529
+ 2676 05f0 9A45     		.short	17818
+ 2677 05f2 2400     		.short	36
+ 2678 05f4 0000     		.short	0
+ 2679 05f6 5400     		.short	84
+ 2680 05f8 0028     		.short	10240
+ 2681 05fa 0472     		.short	29188
+ 2682 05fc 86BD     		.short	-17018
+ 2683 05fe 9340     		.short	16531
+ 2684 0600 0024     		.short	9216
+ 2685 0602 C571     		.short	29125
+ 2686 0604 01FE     		.short	-511
+ 2687 0606 0C5E     		.short	24076
+ 2688 0608 435C     		.short	23619
+ 2689 060a 2D5F     		.short	24365
+ 2690 060c 465E     		.short	24134
+ 2691 060e 0C02     		.short	524
+ 2692 0610 565C     		.short	23638
+ 2693 0612 0C8A     		.short	-30196
+ 2694 0614 535E     		.short	24147
+ 2695 0616 0C5E     		.short	24076
+ 2696 0618 435C     		.short	23619
+ 2697 061a 2D5F     		.short	24365
+ 2698 061c 465E     		.short	24134
+ 2699 061e 0C02     		.short	524
+ 2700 0620 565C     		.short	23638
+ 2701 0622 0C8A     		.short	-30196
+ 2702 0624 525E     		.short	24146
+ 2703 0626 2400     		.short	36
+ 2704 0628 B24C     		.short	19634
+ 2705 062a 0544     		.short	17413
+ 2706 062c 1800     		.short	24
+ 2707 062e 4400     		.short	68
+ 2708 0630 4A65     		.short	25930
+ 2709 0632 2400     		.short	36
+ 2710 0634 0028     		.short	10240
+ 2711 0636 0080     		.short	-32768
+ 2712 0638 F436     		.short	14068
+ 2713 063a 1058     		.short	22544
+ 2714 063c D181     		.short	-32303
+ 2715 063e 123E     		.short	15890
+ 2716 0640 14B8     		.short	-18412
+ 2717 0642 0000     		.short	0
+ 2718 0644 0A80     		.short	-32758
+ 2719 0646 103E     		.short	15888
+ 2720 0648 0138     		.short	14337
+ 2721 064a 103E     		.short	15888
+ 2722 064c 03B8     		.short	-18429
+ 2723 064e 113E     		.short	15889
+ 2724 0650 0678     		.short	30726
+ 2725 0652 113E     		.short	15889
+ 2726 0654 13F8     		.short	-2029
+ 2727 0656 133E     		.short	15891
+ 2728 0658 0EF8     		.short	-2034
+ 2729 065a 133E     		.short	15891
+ 2730 065c 2440     		.short	16420
+ 2731 065e 043E     		.short	15876
+ 2732 0660 1078     		.short	30736
+ 2733 0662 9A44     		.short	17562
+ 2734 0664 4000     		.short	64
+ 2735 0666 0000     		.short	0
+ 2736 0668 0308     		.short	2051
+ 2737 066a 0028     		.short	10240
+ 2738 066c C47E     		.short	32452
+ 2739 066e F030     		.short	12528
+ 2740 0670 2440     		.short	16420
+ 2741 0672 FF0F     		.short	4095
+ 2742 0674 C2FE     		.short	-318
+ 2743 0676 20A0     		.short	-24544
+ 2744 0678 2400     		.short	36
+ 2745 067a FF0F     		.short	4095
+ 2746 067c 02FF     		.short	-254
+ 2747 067e 22A1     		.short	-24286
+ 2748 0680 2400     		.short	36
+ 2749 0682 3640     		.short	16438
+ 2750 0684 2400     		.short	36
+ 2751 0686 0000     		.short	0
+ 2752 0688 C21F     		.short	8130
+ 2753 068a 26B3     		.short	-19674
+ 2754 068c 2400     		.short	36
+ 2755 068e 1000     		.short	16
+ 2756 0690 0240     		.short	16386
+ 2757 0692 2643     		.short	17190
+ 2758 0694 9544     		.short	17557
+ 2759 0696 2440     		.short	16420
+ 2760 0698 D240     		.short	16594
+ 2761 069a 0000     		.short	0
+ 2762 069c 8001     		.short	384
+ 2763 069e 00A1     		.short	-24320
+ 2764 06a0 9040     		.short	16528
+ 2765 06a2 1000     		.short	16
+ 2766 06a4 4200     		.short	66
+ 2767 06a6 0442     		.short	16900
+ 2768 06a8 2400     		.short	36
+ 2769 06aa 82BC     		.short	-17278
+ 2770 06ac 9140     		.short	16529
+ 2771 06ae 9A45     		.short	17818
+ 2772 06b0 2400     		.short	36
+ 2773 06b2 0000     		.short	0
+ 2774 06b4 5400     		.short	84
+ 2775 06b6 0028     		.short	10240
+ 2776 06b8 C47D     		.short	32196
+ 2777 06ba 86BD     		.short	-17018
+ 2778 06bc 9340     		.short	16531
+ 2779 06be 0024     		.short	9216
+ 2780 06c0 857D     		.short	32133
+ 2781 06c2 01FE     		.short	-511
+ 2782 06c4 0C5E     		.short	24076
+ 2783 06c6 435C     		.short	23619
+ 2784 06c8 2D5F     		.short	24365
+ 2785 06ca 465E     		.short	24134
+ 2786 06cc 2400     		.short	36
+ 2787 06ce 565C     		.short	23638
+ 2788 06d0 2400     		.short	36
+ 2789 06d2 535E     		.short	24147
+ 2790 06d4 0C5E     		.short	24076
+ 2791 06d6 435C     		.short	23619
+ 2792 06d8 2D5F     		.short	24365
+ 2793 06da 465E     		.short	24134
+ 2794 06dc 2400     		.short	36
+ 2795 06de 565C     		.short	23638
+ 2796 06e0 2400     		.short	36
+ 2797 06e2 525E     		.short	24146
+ 2798 06e4 2400     		.short	36
+ 2799 06e6 B24C     		.short	19634
+ 2800 06e8 0544     		.short	17413
+ 2801 06ea 1000     		.short	16
+ 2802 06ec 0440     		.short	16388
+ 2803 06ee 4A65     		.short	25930
+ 2804 06f0 1098     		.short	-26608
+ 2805 06f2 0000     		.short	0
+ 2806 06f4 4401     		.short	324
+ 2807 06f6 4AA5     		.short	-23222
+ 2808 06f8 D11B     		.short	7121
+ 2809 06fa 0600     		.short	6
+ 2810 06fc 1300     		.short	19
+ 2811 06fe 0133     		.short	13057
+ 2812 0700 44C4     		.short	-15292
+ 2813 0702 7E68     		.short	26750
+ 2814 0704 0520     		.short	8197
+ 2815 0706 76AD     		.short	-21130
+ 2816 0708 4584     		.short	-31675
+ 2817 070a D64E     		.short	20182
+ 2818 070c 8487     		.short	-30844
+ 2819 070e F336     		.short	14067
+ 2820 0710 C264     		.short	25794
+ 2821 0712 72AC     		.short	-21390
+ 2822 0714 8587     		.short	-30843
+ 2823 0716 C24E     		.short	20162
+ 2824 0718 43A4     		.short	-23485
+ 2825 071a 0930     		.short	12297
+ 2826 071c 4024     		.short	9280
+ 2827 071e 0930     		.short	12297
+ 2828 0720 4127     		.short	10049
+ 2829 0722 F336     		.short	14067
+ 2830 0724 0ED8     		.short	-10226
+ 2831 0726 F136     		.short	14065
+ 2832 0728 13D8     		.short	-10221
+ 2833 072a F136     		.short	14065
+ 2834 072c 0658     		.short	22534
+ 2835 072e F036     		.short	14064
+ 2836 0730 0398     		.short	-26621
+ 2837 0732 F036     		.short	14064
+ 2838 0734 0118     		.short	6145
+ 2839 0736 0020     		.short	8192
+ 2840 0738 0000     		.short	0
+ 2841 073a F236     		.short	14066
+ 2842 073c 1498     		.short	-26604
+ 2843 073e 1182     		.short	-32239
+ 2844 0740 824C     		.short	19586
+ 2845 0742 2400     		.short	36
+ 2846 0744 0000     		.short	0
+ 2847 0746 2400     		.short	36
+ 2848 0748 0020     		.short	8192
+ 2849 074a 0500     		.short	5
+ 2850 074c C2F5     		.short	-2622
+ 2851 074e 2400     		.short	36
+ 2852 0750 0000     		.short	0
+ 2853 0752 8009     		.short	2432
+ 2854 0754 0020     		.short	8192
+ 2855 0756 0000     		.short	0
+ 2856 0758 1060     		.short	24592
+ 2857 075a 2400     		.short	36
+ 2858 075c 5000     		.short	80
+ 2859              		.text
+ 2860              	.Letext0:
+ 2861              		.file 2 "c:\\project\\stm32fx_lib\\stm32f1x_iolib\\include\\core.h"
+ 2862              		.file 3 "/project/stm32fx_lib/stm32f1x_iolib/include/cmsis/stm32f1xx.h"
+ 2863              		.file 4 "/project/stm32fx_lib/stm32f1x_iolib/include/gpio.h"
+ 2864              		.file 5 "userdefs.h"
+ 2865              		.file 6 "/project/stm32fx_lib/stm32f1x_iolib/include/fundefs.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 vs1003.c
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:16     .text.delay_ms:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:24     .text.delay_ms:00000000 delay_ms
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:41     .text.mp3_reset:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:48     .text.mp3_reset:00000000 mp3_reset
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:122    .text.mp3_reset:00000030 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:129    .text.vs1003_cmd_write:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:136    .text.vs1003_cmd_write:00000000 vs1003_cmd_write
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:217    .text.vs1003_cmd_write:00000050 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:222    .text.vs1003_reset_decode_time:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:229    .text.vs1003_reset_decode_time:00000000 vs1003_reset_decode_time
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:261    .text.vs1003_sine_test:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:268    .text.vs1003_sine_test:00000000 vs1003_sine_test
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:522    .text.vs1003_sine_test:00000138 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:527    .text.vs1003_reg_read:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:534    .text.vs1003_reg_read:00000000 vs1003_reg_read
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:631    .text.vs1003_reg_read:00000058 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:636    .text.vs1003_soft_reset:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:643    .text.vs1003_soft_reset:00000000 vs1003_soft_reset
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:838    .text.vs1003_soft_reset:000000c4 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:845    .text.vs1003_ram_test:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:852    .text.vs1003_ram_test:00000000 vs1003_ram_test
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:952    .text.vs1003_ram_test:0000006c $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:958    .text.get_head_info:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:965    .text.get_head_info:00000000 get_head_info
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1065   .text.get_head_info:00000068 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1123   .text.vs1003_get_mp3info:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1130   .text.vs1003_get_mp3info:00000000 vs1003_get_mp3info
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1275   .text.vs1003_get_mp3info:00000084 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1288   .text.vs1003_get_mp3info:0000009e $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1378   .text.vs1003_get_mp3info:0000010c $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1392   .text.vs1003_get_mp3info:00000144 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1604   .text.vs1003_get_mp3info:00000258 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1635   .text.get_decode_time:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1642   .text.get_decode_time:00000000 get_decode_time
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1658   .text.load_patch:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1665   .text.load_patch:00000000 load_patch
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1728   .text.load_patch:00000028 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1736   .text.get_spec:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1743   .text.get_spec:00000000 get_spec
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1798   .text.set_vs1003:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1805   .text.set_vs1003:00000000 set_vs1003
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1886   .text.set_vs1003:00000038 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1891   .text.vs1003_set_volume:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1898   .text.vs1003_set_volume:00000000 vs1003_set_volume
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1923   .text.vs1003_init:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1930   .text.vs1003_init:00000000 vs1003_init
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1977   .text.vs1003_init:00000040 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1982   .text.vs1003_data_write:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:1989   .text.vs1003_data_write:00000000 vs1003_data_write
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2044   .text.vs1003_data_write:00000034 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2149   .rodata.bitrate:00000000 bitrate
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2064   .data.vs1003_ram:00000000 vs1003_ram
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2058   .bss.regvalue:00000000 regvalue
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2187   .rodata.dtab:00000000 dtab
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2070   .rodata.atab:00000000 atab
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2054   .bss.regvalue:00000000 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2145   .rodata.bitrate:00000000 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZ3BWjZ.s:2183   .rodata.dtab:00000000 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:16     .text.delay_ms:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:24     .text.delay_ms:00000000 delay_ms
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:41     .text.mp3_reset:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:48     .text.mp3_reset:00000000 mp3_reset
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:122    .text.mp3_reset:00000030 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:129    .text.vs1003_cmd_write:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:136    .text.vs1003_cmd_write:00000000 vs1003_cmd_write
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:217    .text.vs1003_cmd_write:00000050 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:222    .text.vs1003_reset_decode_time:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:229    .text.vs1003_reset_decode_time:00000000 vs1003_reset_decode_time
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:261    .text.vs1003_sine_test:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:268    .text.vs1003_sine_test:00000000 vs1003_sine_test
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:522    .text.vs1003_sine_test:00000138 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:527    .text.vs1003_reg_read:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:534    .text.vs1003_reg_read:00000000 vs1003_reg_read
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:631    .text.vs1003_reg_read:00000058 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:636    .text.vs1003_soft_reset:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:643    .text.vs1003_soft_reset:00000000 vs1003_soft_reset
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:838    .text.vs1003_soft_reset:000000c4 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:845    .text.vs1003_ram_test:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:852    .text.vs1003_ram_test:00000000 vs1003_ram_test
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:952    .text.vs1003_ram_test:0000006c $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:958    .text.get_head_info:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:965    .text.get_head_info:00000000 get_head_info
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1065   .text.get_head_info:00000068 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1073   .text.vs1003_get_mp3info:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1080   .text.vs1003_get_mp3info:00000000 vs1003_get_mp3info
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1150   .text.vs1003_get_mp3info:0000003a $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1231   .text.vs1003_get_mp3info:0000008c $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1245   .text.vs1003_get_mp3info:000000c4 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1357   .text.vs1003_get_mp3info:00000124 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1363   .text.get_decode_time:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1370   .text.get_decode_time:00000000 get_decode_time
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1386   .text.load_patch:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1393   .text.load_patch:00000000 load_patch
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1456   .text.load_patch:00000028 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1464   .text.get_spec:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1471   .text.get_spec:00000000 get_spec
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1526   .text.set_vs1003:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1533   .text.set_vs1003:00000000 set_vs1003
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1614   .text.set_vs1003:00000038 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1619   .text.vs1003_set_volume:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1626   .text.vs1003_set_volume:00000000 vs1003_set_volume
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1651   .text.vs1003_init:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1658   .text.vs1003_init:00000000 vs1003_init
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1705   .text.vs1003_init:00000040 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1710   .text.vs1003_data_write:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1717   .text.vs1003_data_write:00000000 vs1003_data_write
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1772   .text.vs1003_data_write:00000034 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1877   .rodata.bitrate:00000000 bitrate
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1792   .data.vs1003_ram:00000000 vs1003_ram
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1786   .bss.regvalue:00000000 regvalue
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1915   .rodata.dtab:00000000 dtab
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1798   .rodata.atab:00000000 atab
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1782   .bss.regvalue:00000000 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1873   .rodata.bitrate:00000000 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1911   .rodata.dtab:00000000 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1163   .text.vs1003_get_mp3info:00000047 $d
+C:\Users\gowoo\AppData\Local\Temp\ccUBY5lP.s:1163   .text.vs1003_get_mp3info:00000048 $t
 
 UNDEFINED SYMBOLS
 wait_ms

@@ -330,7 +330,63 @@ unsigned short lcd_read_data(void)
       lcd_data_port_output();
       return value;
 }
-
+void draw_apple_logo(unsigned short x,unsigned short y){
+	lcd_draw_line(x+32,y,x+34,y);
+	lcd_draw_line(x+30,y+1,x+34,y+1);
+	lcd_draw_line(x+28,y+2,x+34,y+2);
+	lcd_draw_line(x+27,y+3,x+33,y+3);
+	lcd_draw_line(x+26,y+4,x+33,y+4);
+	lcd_draw_line(x+26,y+5,x+33,y+5);
+	lcd_draw_line(x+25,y+6,x+32,y+6);
+	lcd_draw_line(x+25,y+7,x+32,y+7);
+	lcd_draw_line(x+24,y+8,x+31,y+8);
+	lcd_draw_line(x+24,y+9,x+30,y+9);
+	lcd_draw_line(x+24,y+10,x+29,y+10);
+	lcd_draw_line(x+24,y+11,x+28,y+11);
+	lcd_draw_line(x+24,y+12,x+27,y+12);
+	lcd_draw_line(x+13,y+13,x+15,y+13);lcd_draw_line(x+31,y+13,x+37,y+13);
+	lcd_draw_line(x+9,y+14,x+19,y+14);lcd_draw_line(x+29,y+14,x+39,y+14);
+	lcd_draw_line(x+8,y+15,x+22,y+15);lcd_draw_line(x+26,y+15,x+41,y+15);
+	lcd_draw_line(x+6,y+16,x+42,y+16);
+	lcd_draw_line(x+5,y+17,x+43,y+17);
+	lcd_draw_line(x+5,y+18,x+43,y+18);
+	lcd_draw_line(x+4,y+19,x+43,y+19);
+	lcd_draw_line(x+3,y+20,x+41,y+20);
+	lcd_draw_line(x+3,y+21,x+40,y+21);
+	lcd_draw_line(x+2,y+22,x+40,y+22);
+	lcd_draw_line(x+2,y+23,x+39,y+23);
+	lcd_draw_line(x+2,y+24,x+39,y+24);
+	lcd_draw_line(x+1,y+25,x+38,y+25);
+	lcd_draw_line(x+1,y+26,x+38,y+26);
+	lcd_draw_line(x+1,y+27,x+38,y+27);	
+	lcd_draw_line(x+1,y+28,x+38,y+28);
+	lcd_draw_line(x+1,y+29,x+38,y+29);
+	lcd_draw_line(x+1,y+30,x+38,y+30);
+	lcd_draw_line(x+1,y+31,x+38,y+31);
+	lcd_draw_line(x+1,y+32,x+38,y+32);
+	lcd_draw_line(x+1,y+33,x+39,y+33);
+	lcd_draw_line(x+2,y+34,x+39,y+34);
+	lcd_draw_line(x+2,y+35,x+40,y+35);
+	lcd_draw_line(x+2,y+36,x+40,y+36);
+	lcd_draw_line(x+2,y+37,x+41,y+37);
+	lcd_draw_line(x+3,y+38,x+42,y+38);
+	lcd_draw_line(x+3,y+39,x+44,y+39);
+	lcd_draw_line(x+3,y+40,x+45,y+40);
+	lcd_draw_line(x+3,y+41,x+45,y+41);
+	lcd_draw_line(x+4,y+42,x+45,y+42);
+	lcd_draw_line(x+4,y+43,x+44,y+43);
+	lcd_draw_line(x+5,y+44,x+44,y+44);
+	lcd_draw_line(x+5,y+45,x+43,y+45);
+	lcd_draw_line(x+6,y+46,x+43,y+46);
+	lcd_draw_line(x+6,y+47,x+42,y+47);
+	lcd_draw_line(x+7,y+48,x+42,y+48);
+	lcd_draw_line(x+8,y+49,x+41,y+49);
+	lcd_draw_line(x+9,y+50,x+40,y+50);
+	lcd_draw_line(x+10,y+51,x+39,y+51);
+	lcd_draw_line(x+11,y+52,x+38,y+52);
+	lcd_draw_line(x+12,y+53,x+19,y+53);lcd_draw_line(x+30,y+53,x+37,y+53);
+	lcd_draw_line(x+13,y+54,x+18,y+54);lcd_draw_line(x+32,y+54,x+36,y+54);
+}
 
 void lcd_write_ram_prepare (void)
 {
@@ -355,7 +411,7 @@ unsigned short lcd_bgr_to_rgb (unsigned short c)
 }
 
 
-__inline void lcd_set_cursor (unsigned char xpos, unsigned short ypos)
+void lcd_set_cursor (unsigned char xpos, unsigned short ypos)
 {
       if ((device_code == 0x8999) || (device_code == 0x8989) || (device_code == 0x9919)) {
 	 lcd_write_register(0x004E,xpos);

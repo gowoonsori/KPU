@@ -444,76 +444,76 @@ void vs1003_get_mp3info (void)
          switch (sample_rate) {
             default:
             case 0:
-              lcd_printf(2,4,"Sample_Rate 11KHz  ");
+              //lcd_printf(2,4,"Sample_Rate 11KHz  ");
               break;
             case 1:
-              lcd_printf(2,4,"Sample_Rate 12KHz  ");
+              //lcd_printf(2,4,"Sample_Rate 12KHz  ");
               break;
             case 2:
-              lcd_printf(2,4,"Sample_Rate  8KHz  ");
+              //lcd_printf(2,4,"Sample_Rate  8KHz  ");
               break;
          }
       } else if (mp3_id == 2) {
          switch(sample_rate) {
             default:
             case 0:
-              lcd_printf(2,4,"Sample_Rate 22KHz  ");
+              //lcd_printf(2,4,"Sample_Rate 22KHz  ");
               break;
             case 1:
-              lcd_printf(2,4,"Sample_Rate 24KHz  ");
+              //lcd_printf(2,4,"Sample_Rate 24KHz  ");
               break;
             case 2:
-              lcd_printf(2,4,"Sample_Rate 16KHz  ");
+              //lcd_printf(2,4,"Sample_Rate 16KHz  ");
               break;
          }
       } else if (mp3_id == 3) {
          switch(sample_rate) {
             default:
             case 0:
-              lcd_printf(2,4,"Sample_Rate 44KHz  ");
+              //lcd_printf(2,4,"Sample_Rate 44KHz  ");
               break;
             case 1:
-              lcd_printf(2,4,"Sample_Rate 48KHz  ");
+              //lcd_printf(2,4,"Sample_Rate 48KHz  ");
               break;
             case 2:
-              lcd_printf(2,4,"Sample_Rate 32KHz  ");
+              //lcd_printf(2,4,"Sample_Rate 32KHz  ");
               break;
          }
          switch (bit_rate) {
             case 2:
-              lcd_printf(2,5,"Bit_Rate 40Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 40Kbps ");
               if (f_kbps == 0) f_kbps = 40;
               break;
             case 3:
-              lcd_printf(2,5,"Bit_Rate 48Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 48Kbps ");
               if (f_kbps == 0) f_kbps = 48;
               break;
             case 4:
-              lcd_printf(2,5,"Bit_Rate 56Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 56Kbps ");
               if (f_kbps == 0) f_kbps = 56;
               break;
             case 5:
-              lcd_printf(2,5,"Bit_Rate 64Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 64Kbps ");
               if (f_kbps == 0) f_kbps = 64;
               break;
             case 6:
-              lcd_printf(2,5,"Bit_Rate 80Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 80Kbps ");
               if (f_kbps == 0) f_kbps = 80;
               break;
             case 7:
-              lcd_printf(2,5,"Bit_Rate 96Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 96Kbps ");
               if (f_kbps == 0) f_kbps = 96;
               break;
             case 8:
-              lcd_printf(2,5,"Bit_Rate 112Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 112Kbps ");
               if (f_kbps == 0) f_kbps = 112;
               break;
             case 9:
-              lcd_printf(2,5,"Bit_Rate 128Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 128Kbps ");
               if (f_kbps == 0) f_kbps = 128;
               break;
             case 10:
-              lcd_printf(2,5,"Bit_Rate 160Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 160Kbps ");
               if (f_kbps == 0) f_kbps = 160;
               break;
             case 11:
@@ -521,70 +521,70 @@ void vs1003_get_mp3info (void)
               if (f_kbps == 0) f_kbps = 192;
               break;
             case 12:
-              lcd_printf(2,5,"Bit_Rate 224Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 224Kbps ");
               if (f_kbps == 0) f_kbps = 224;
               break;
             case 13:
-              lcd_printf(2,5,"Bit_Rate 256Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 256Kbps ");
               if (f_kbps == 0) f_kbps = 256;
               break;
             case 14:
-              lcd_printf(2,5,"Bit_Rate 320Kbps ");
+              //lcd_printf(2,5,"Bit_Rate 320Kbps ");
               if (f_kbps == 0) f_kbps = 320;
               break;
          }
       } else if (mp3_id == 0 || mp3_id == 1 || mp3_id == 2) {
          switch (bit_rate) {
              case 1:
-               lcd_printf(2,5,"Bit_Rate 8Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 8Kbps ");
                if (f_kbps == 0) f_kbps = 8;
                break;
              case 2:
-               lcd_printf(2,5,"Bit_Rate 16Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 16Kbps ");
                if (f_kbps == 0) f_kbps = 16;
                break;
              case 3:
-               lcd_printf(2,5,"Bit_Rate 24Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 24Kbps ");
                if (f_kbps == 0) f_kbps = 24;
                break;
              case 5:
-               lcd_printf(2,5,"Bit_Rate 40Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 40Kbps ");
                if (f_kbps == 0) f_kbps = 40;
                break;
              case 6:
-               lcd_printf(2,5,"Bit_Rate 48Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 48Kbps ");
                if (f_kbps == 0) f_kbps = 48;
                break;
              case 7:
-               lcd_printf(2,5,"Bit_Rate 56Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 56Kbps ");
                if (f_kbps == 0) f_kbps = 56;
                break;
              case 8:
-               lcd_printf(2,5,"Bit_Rate 64Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 64Kbps ");
                if (f_kbps == 0) f_kbps = 64;
                break;
              case 9:
-               lcd_printf(2,5,"Bit_Rate 80Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 80Kbps ");
                if (f_kbps == 0) f_kbps = 80;
                break;
              case 10:
-               lcd_printf(2,5,"Bit_Rate 96Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 96Kbps ");
                if (f_kbps == 0) f_kbps = 96;
                break;
              case 11:
-               lcd_printf(2,5,"Bit_Rate 112Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 112Kbps ");
                if (f_kbps == 0) f_kbps = 112;
                break;
              case 12:
-               lcd_printf(2,5,"Bit_Rate 128Kbps ");
-               if (f_kbps == 0) f_kbps = 128;
+               //lcd_printf(2,5,"Bit_Rate 128Kbps ");
+               //if (f_kbps == 0) f_kbps = 128;
                break;
              case 13:
-               lcd_printf(2,5,"Bit_Rate 144Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 144Kbps ");
                if (f_kbps == 0) f_kbps = 144;
                break;
              case 14:
-               lcd_printf(2,5,"Bit_Rate 160Kbps ");
+               //lcd_printf(2,5,"Bit_Rate 160Kbps ");
                if (f_kbps == 0) f_kbps = 160;
                break;
          }

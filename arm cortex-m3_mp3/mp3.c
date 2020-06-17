@@ -111,7 +111,7 @@ void mp3_prog_bar (unsigned int pos,unsigned int lenth)
 	 time = (((float)lenth / f_kbps) / 125) * propos;
 	 playtime = time;
 	 if (new_play) {
-	    lput_char_xy(2,2,"PLAY ");
+	    //lput_char_xy(2,2,"PLAY ");
 	 }
 	 if (time >= 3600) time = 3599;
 	 dig3 = (time / 600);
@@ -126,7 +126,7 @@ void mp3_prog_bar (unsigned int pos,unsigned int lenth)
 	 buff[5] = '/';
 	 if (new_play == 0) {
 	    buff[6] = 0;
-	    lput_char_xy(7,2,buff);
+	    lput_char_xy(9,8,buff);
 	 }
 	 if (new_play) {
 	    if (f_kbps) time = (lenth / f_kbps) / 125;else time = 0;
@@ -145,7 +145,7 @@ void mp3_prog_bar (unsigned int pos,unsigned int lenth)
             mp3.mp3time[7] = dec2hex(dig2);
             mp3.mp3time[9] = dec2hex(dig1);
             mp3.mp3time[10] = dec2hex(dig0);
-            lput_char_xy(13,2,buff+6);
+            lput_char_xy(15,8,buff+6);
             new_play = 0;
          }
       }
@@ -540,7 +540,7 @@ void read_lrc_file_data (void)
 	       t++;
 	 }
 	 lbuf[t] = '\0';
-         if (t > 2) lcd_printf(2,10," %s ",lbuf);
+         if (t > 2) lcd_printf(9,10," %s ",lbuf);
       }
       lyric.first = 0;
       while (1) {
@@ -841,83 +841,64 @@ void copy_lrc_to_ram (void)
 void display_id3v1_tag (void)
 {
       unsigned char i, buff[128];
-	  lcd_printf(1,1,"                              ");
-	  lcd_printf(1,2,"                              ");
-	  lcd_printf(1,3,"                              ");
-	  lcd_printf(1,4,"                              ");
-	  lcd_printf(1,5,"                              ");
-	  lcd_printf(1,6,"                              ");
-	  lcd_printf(1,7,"                              ");
-	  lcd_printf(1,8,"                              ");
-	  lcd_printf(1,9,"                              ");
-      lcd_printf(1,10,"                              ");
-      lcd_printf(1,11,"                              ");
-      lcd_printf(1,12,"                              ");
-      lcd_printf(1,13,"                              ");
-      lcd_printf(1,14,"                              ");
-      lcd_printf(1,15,"                              ");
+	  lcd_printf(0,0,"                                     ");
+	  lcd_printf(0,1,"                                     ");
+	  lcd_printf(0,2,"                                     ");
+	  lcd_printf(0,3,"                              ");
+	  lcd_printf(0,4,"                              ");
+	  lcd_printf(0,5,"                              ");
+	  lcd_printf(0,6,"                              ");
+	  lcd_printf(0,7,"                              ");
+	  lcd_printf(0,8,"                              ");
+	  lcd_printf(0,9,"                              ");
+      lcd_printf(0,10,"                              ");
+      lcd_printf(0,11,"                              ");
+      lcd_printf(0,12,"                              ");
+      lcd_printf(0,13,"                              ");
+      lcd_printf(0,14,"                              ");
+      lcd_printf(0,15,"                              ");
       f_lseek(&fsrc, fsrc.fsize - 128);
       f_read(&fsrc,buff,128,&br);
       if ((buff[0] == 'T') && (buff[1] == 'A') && (buff[2] == 'G')) {
          for (i=0;i<30;i++) ID3V1_Buf.Title[i] = buff[3 + i];
          for (i=0;i<30;i++) ID3V1_Buf.Artist[i] = buff[33 + i];
          for (i=0;i<30;i++) ID3V1_Buf.Album[i] = buff[63 + i];
-         lcd_printf(1,10,"Tttle: %s ",ID3V1_Buf.Title);
-         lcd_printf(1,12,"Artist: %s ",ID3V1_Buf.Artist);
-         lcd_printf(1,14,"Album: %s ",ID3V1_Buf.Album);
+         //lcd_printf(1,10,"Tttle: %s ",ID3V1_Buf.Title);
+         //lcd_printf(1,12,"Artist: %s ",ID3V1_Buf.Artist);
+         //lcd_printf(1,14,"Album: %s ",ID3V1_Buf.Album);
       }
       f_lseek(&fsrc,0);
 }
 
-void mp3_displaylist(void){
-	int i =0;
-	for(i=0;i<18;i++){
-		lcd_printf(0,i,"                             ");
-	}
-	for(i=0;i<5;i++){
-		lcd_printf(2,i+4,"%d. %s      ",i+1,head->filename);
-		head=head->next;
-		bw = f_open(&fsrc,head->filename, FA_OPEN_EXISTING | FA_READ);
-	}
-}
 
 void mp3_displayinit (void){
 	lcd_printf(1,1,"                              ");
-	lcd_printf(2,0,"MP3 Init OK!!! %d  ",ftemp);
-      lcd_printf(2,3,"MP3 Open %d Size %d ",music_number,fsrc.fsize);
-      lcd_printf(2,6,"%2d: %s    ",music_number,head->filename);
+      //lcd_printf(2,3,"MP3 Open %d Size %d ",music_number,fsrc.fsize);
+      lcd_printf(7,2,"%2d: %s    ",music_number,head->filename);
 	  
 }
 
 void mp3_init (void)
 {
       SPI_configuration();
-      lcd_printf(2,0,"SPI Init OK  ");
       SD_init();
-      lcd_printf(2,0,"SD Init OK  ");
       vs1003_init();
-      lcd_printf(2,0,"VS1003 Init OK  ");
       mp3_reset();
-      lcd_printf(2,0,"VS1003 Reset1 OK  ");
       vs1003_soft_reset();
       load_patch();
-      lcd_printf(2,0,"VS1003 Reset2 OK  ");
       f_mount(0,&fs);
-      lcd_printf(2,0,"FAT Mount OK     ");
       ftemp = find_music();
-      lcd_printf(2,0,"MP3 List %d    ",ftemp);
       music_number = ftemp;
       f_chdir("0:/Music");
       bw = f_open(&fsrc,head->filename, FA_OPEN_EXISTING | FA_READ);
       set_vs1003();
-      lcd_printf(2,0,"MP3 Set ");
       vs1003_sine_test();
       play_prev();
-      lcd_printf(2,0,"MP3 Init OK!!! %d  ",ftemp);
-      lcd_printf(2,3,"MP3 Open %d Size %d ",music_number,fsrc.fsize);
-      lcd_printf(2,6,"%2d: %s    ",music_number,head->filename);
+      //lcd_printf(2,3,"MP3 Open %d Size %d ",music_number,fsrc.fsize);
+      lcd_printf(7,2,"%2d: %s    ",music_number,head->filename);
       //display_id3v1_tag();
       new_play = 1;
+	  
 }
 
 
@@ -937,8 +918,8 @@ void play_next (void)
          fdx = 0;
          f_kbps = 0xffff;
          memset((char *)buffer,0,1024);
-	 lcd_printf(2,3,"MP3 Open %d Size %d ",music_number,fsrc.fsize);
-	 lcd_printf(2,6,"%2d: %s    ",music_number,head->filename);
+	 //lcd_printf(2,3,"MP3 Open %d Size %d ",music_number,fsrc.fsize);
+	 lcd_printf(7,2,"%2d: %s    ",music_number,head->filename);
 	 //display_id3v1_tag();
       }
 }
@@ -965,6 +946,23 @@ void play_prev (void)
       }
       music_number++;
       play_next();
+}
+
+void show_playlist(){
+	int i=2;
+	int nMusic=1;
+	
+	mp3_init();
+	lcd_printf(0,2,"                         ");
+	lcd_printf(5,0,"Number of Music : %d",ftemp);
+	
+	while(head->back!=NULL){
+		lcd_printf(4,i,"%d : %s ",nMusic,head->filename);
+		head=head->back;
+		i+=2;
+		nMusic++;
+	}
+	lcd_printf(4,i,"%d : %s ",nMusic,head->filename);
 }
 
 
@@ -1004,8 +1002,8 @@ void mp3_play (void)
 	    f_kbps = 0xffff;
 	    new_play = 1;
             memset((char *)buffer,0,1024);
-	    lcd_printf(2,3,"MP3 Open %d Size %d ",music_number,fsrc.fsize);
-	    lcd_printf(2,6,"%2d: %s    ",music_number,head->filename);
+	    //lcd_printf(2,3,"MP3 Open %d Size %d ",music_number,fsrc.fsize);
+	    lcd_printf(7,2,"%2d: %s    ",music_number,head->filename);
 	    //display_id3v1_tag();
 	 }
       }

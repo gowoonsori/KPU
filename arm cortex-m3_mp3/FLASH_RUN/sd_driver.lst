@@ -1971,809 +1971,850 @@
  1415              		.cfi_offset 14, -4
  345:sd_driver.c   ****       unsigned char r1;
  1416              		.loc 1 345 1 view .LVU448
- 1417 0002 0546     		mov	r5, r0
+ 1417 0002 0446     		mov	r4, r0
  1418              		.loc 1 347 7 view .LVU449
  1419 0004 0120     		movs	r0, #1
  1420              	.LVL162:
  345:sd_driver.c   ****       unsigned char r1;
  1421              		.loc 1 345 1 view .LVU450
- 1422 0006 0C46     		mov	r4, r1
+ 1422 0006 0D46     		mov	r5, r1
  1423              		.loc 1 347 7 view .LVU451
  1424 0008 FFF7FEFF 		bl	SPI_set_speed
  1425              	.LVL163:
- 348:sd_driver.c   ****       sector = sector << 9;
- 1426              		.loc 1 348 7 is_stmt 1 view .LVU452
- 349:sd_driver.c   ****       r1 = SD_send_command(CMD17, sector, 0);
- 1427              		.loc 1 349 7 view .LVU453
- 1428              		.loc 1 349 12 is_stmt 0 view .LVU454
- 1429 000c 0022     		movs	r2, #0
- 1430 000e 1120     		movs	r0, #17
- 1431 0010 6902     		lsls	r1, r5, #9
- 1432              	.LVL164:
- 1433              		.loc 1 349 12 view .LVU455
- 1434 0012 FFF7FEFF 		bl	SD_send_command
- 1435              	.LVL165:
- 350:sd_driver.c   ****       if (r1 != 0x00) {
- 1436              		.loc 1 350 7 is_stmt 1 view .LVU456
- 1437              		.loc 1 350 10 is_stmt 0 view .LVU457
- 1438 0016 38B9     		cbnz	r0, .L96
- 351:sd_driver.c   ****          return r1;
- 352:sd_driver.c   ****       }
- 353:sd_driver.c   ****       r1 = SD_receive_data(buffer, 512, RELEASE);
- 1439              		.loc 1 353 7 is_stmt 1 view .LVU458
- 1440              		.loc 1 353 12 is_stmt 0 view .LVU459
- 1441 0018 2046     		mov	r0, r4
- 1442              	.LVL166:
- 354:sd_driver.c   ****       if (r1 != 0) {
- 355:sd_driver.c   ****          return r1;
- 356:sd_driver.c   ****       } else {
- 357:sd_driver.c   ****          return 0;
- 358:sd_driver.c   ****       }
- 359:sd_driver.c   **** }
- 1443              		.loc 1 359 1 view .LVU460
- 1444 001a BDE83840 		pop	{r3, r4, r5, lr}
- 1445              		.cfi_remember_state
- 1446              		.cfi_restore 14
- 1447              		.cfi_restore 5
- 1448              		.cfi_restore 4
- 1449              		.cfi_restore 3
- 1450              		.cfi_def_cfa_offset 0
- 1451              	.LVL167:
- 353:sd_driver.c   ****       if (r1 != 0) {
- 1452              		.loc 1 353 12 view .LVU461
- 1453 001e 0122     		movs	r2, #1
- 1454 0020 4FF40071 		mov	r1, #512
- 1455 0024 FFF7FEBF 		b	SD_receive_data
- 1456              	.LVL168:
- 1457              	.L96:
- 1458              		.cfi_restore_state
- 1459              		.loc 1 359 1 view .LVU462
- 1460 0028 38BD     		pop	{r3, r4, r5, pc}
- 1461              		.loc 1 359 1 view .LVU463
- 1462              		.cfi_endproc
- 1463              	.LFE40:
- 1465              		.section	.text.SD_write_single_block,"ax",%progbits
- 1466              		.align	1
- 1467              		.global	SD_write_single_block
- 1468              		.syntax unified
- 1469              		.thumb
- 1470              		.thumb_func
- 1471              		.fpu softvfp
- 1473              	SD_write_single_block:
- 1474              	.LVL169:
- 1475              	.LFB41:
- 360:sd_driver.c   **** 
- 361:sd_driver.c   **** 
- 362:sd_driver.c   **** unsigned char SD_write_single_block (unsigned int sector, const unsigned char *data)
- 363:sd_driver.c   **** {
- 1476              		.loc 1 363 1 is_stmt 1 view -0
- 1477              		.cfi_startproc
- 1478              		@ args = 0, pretend = 0, frame = 0
- 1479              		@ frame_needed = 0, uses_anonymous_args = 0
- 364:sd_driver.c   ****       unsigned char r1;
- 1480              		.loc 1 364 7 view .LVU465
- 365:sd_driver.c   ****       unsigned short i;
- 1481              		.loc 1 365 7 view .LVU466
- 366:sd_driver.c   ****       unsigned short retry;
- 1482              		.loc 1 366 7 view .LVU467
- 367:sd_driver.c   ****       SPI_set_speed(SPI_SPEED_HIGH);
- 1483              		.loc 1 367 7 view .LVU468
- 363:sd_driver.c   ****       unsigned char r1;
- 1484              		.loc 1 363 1 is_stmt 0 view .LVU469
- 1485 0000 70B5     		push	{r4, r5, r6, lr}
- 1486              		.cfi_def_cfa_offset 16
- 1487              		.cfi_offset 4, -16
- 1488              		.cfi_offset 5, -12
- 1489              		.cfi_offset 6, -8
- 1490              		.cfi_offset 14, -4
- 363:sd_driver.c   ****       unsigned char r1;
- 1491              		.loc 1 363 1 view .LVU470
- 1492 0002 0446     		mov	r4, r0
- 1493              		.loc 1 367 7 view .LVU471
- 1494 0004 0120     		movs	r0, #1
- 1495              	.LVL170:
- 363:sd_driver.c   ****       unsigned char r1;
- 1496              		.loc 1 363 1 view .LVU472
- 1497 0006 0D46     		mov	r5, r1
- 1498              		.loc 1 367 7 view .LVU473
- 1499 0008 FFF7FEFF 		bl	SPI_set_speed
- 1500              	.LVL171:
- 368:sd_driver.c   ****       if (SD_type != SD_TYPE_V2HC) {
- 1501              		.loc 1 368 7 is_stmt 1 view .LVU474
- 1502              		.loc 1 368 19 is_stmt 0 view .LVU475
- 1503 000c 294B     		ldr	r3, .L109
- 369:sd_driver.c   ****          sector = sector << 9;
- 370:sd_driver.c   ****       }
- 371:sd_driver.c   ****       r1 = SD_send_command(CMD24, sector, 0x00);
- 1504              		.loc 1 371 12 view .LVU476
- 1505 000e 0022     		movs	r2, #0
- 368:sd_driver.c   ****       if (SD_type != SD_TYPE_V2HC) {
- 1506              		.loc 1 368 10 view .LVU477
- 1507 0010 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 1508              		.loc 1 371 12 view .LVU478
- 1509 0012 1820     		movs	r0, #24
- 368:sd_driver.c   ****       if (SD_type != SD_TYPE_V2HC) {
- 1510              		.loc 1 368 10 view .LVU479
- 1511 0014 042B     		cmp	r3, #4
- 369:sd_driver.c   ****          sector = sector << 9;
- 1512              		.loc 1 369 10 is_stmt 1 view .LVU480
- 369:sd_driver.c   ****          sector = sector << 9;
- 1513              		.loc 1 369 17 is_stmt 0 view .LVU481
- 1514 0016 18BF     		it	ne
- 1515 0018 6402     		lslne	r4, r4, #9
+ 348:sd_driver.c   **** 	  if (SD_type != SD_TYPE_V2HC) {
+ 1426              		.loc 1 348 4 is_stmt 1 view .LVU452
+ 1427              		.loc 1 348 16 is_stmt 0 view .LVU453
+ 1428 000c 094B     		ldr	r3, .L101
+ 349:sd_driver.c   ****          sector = sector << 9;
+ 350:sd_driver.c   **** 	  }
+ 351:sd_driver.c   ****       r1 = SD_send_command(CMD17, sector, 0);
+ 1429              		.loc 1 351 12 view .LVU454
+ 1430 000e 0022     		movs	r2, #0
+ 348:sd_driver.c   **** 	  if (SD_type != SD_TYPE_V2HC) {
+ 1431              		.loc 1 348 7 view .LVU455
+ 1432 0010 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1433              		.loc 1 351 12 view .LVU456
+ 1434 0012 1120     		movs	r0, #17
+ 348:sd_driver.c   **** 	  if (SD_type != SD_TYPE_V2HC) {
+ 1435              		.loc 1 348 7 view .LVU457
+ 1436 0014 042B     		cmp	r3, #4
+ 349:sd_driver.c   ****          sector = sector << 9;
+ 1437              		.loc 1 349 10 is_stmt 1 view .LVU458
+ 349:sd_driver.c   ****          sector = sector << 9;
+ 1438              		.loc 1 349 17 is_stmt 0 view .LVU459
+ 1439 0016 18BF     		it	ne
+ 1440 0018 6402     		lslne	r4, r4, #9
+ 1441              	.LVL164:
+ 1442              		.loc 1 351 7 is_stmt 1 view .LVU460
+ 1443              		.loc 1 351 12 is_stmt 0 view .LVU461
+ 1444 001a 2146     		mov	r1, r4
+ 1445 001c FFF7FEFF 		bl	SD_send_command
+ 1446              	.LVL165:
+ 352:sd_driver.c   ****       if (r1 != 0x00) {
+ 1447              		.loc 1 352 7 is_stmt 1 view .LVU462
+ 1448              		.loc 1 352 10 is_stmt 0 view .LVU463
+ 1449 0020 38B9     		cbnz	r0, .L97
+ 353:sd_driver.c   ****          return r1;
+ 354:sd_driver.c   ****       }
+ 355:sd_driver.c   ****       r1 = SD_receive_data(buffer, 512, RELEASE);
+ 1450              		.loc 1 355 7 is_stmt 1 view .LVU464
+ 1451              		.loc 1 355 12 is_stmt 0 view .LVU465
+ 1452 0022 2846     		mov	r0, r5
+ 1453              	.LVL166:
+ 356:sd_driver.c   ****       if (r1 != 0) {
+ 357:sd_driver.c   ****          return r1;
+ 358:sd_driver.c   ****       } else {
+ 359:sd_driver.c   ****          return 0;
+ 360:sd_driver.c   ****       }
+ 361:sd_driver.c   **** }
+ 1454              		.loc 1 361 1 view .LVU466
+ 1455 0024 BDE83840 		pop	{r3, r4, r5, lr}
+ 1456              		.cfi_remember_state
+ 1457              		.cfi_restore 14
+ 1458              		.cfi_restore 5
+ 1459              		.cfi_restore 4
+ 1460              		.cfi_restore 3
+ 1461              		.cfi_def_cfa_offset 0
+ 1462              	.LVL167:
+ 355:sd_driver.c   ****       if (r1 != 0) {
+ 1463              		.loc 1 355 12 view .LVU467
+ 1464 0028 0122     		movs	r2, #1
+ 1465 002a 4FF40071 		mov	r1, #512
+ 1466 002e FFF7FEBF 		b	SD_receive_data
+ 1467              	.LVL168:
+ 1468              	.L97:
+ 1469              		.cfi_restore_state
+ 1470              		.loc 1 361 1 view .LVU468
+ 1471 0032 38BD     		pop	{r3, r4, r5, pc}
+ 1472              	.LVL169:
+ 1473              	.L102:
+ 1474              		.loc 1 361 1 view .LVU469
+ 1475              		.align	2
+ 1476              	.L101:
+ 1477 0034 00000000 		.word	.LANCHOR0
+ 1478              		.cfi_endproc
+ 1479              	.LFE40:
+ 1481              		.section	.text.SD_write_single_block,"ax",%progbits
+ 1482              		.align	1
+ 1483              		.global	SD_write_single_block
+ 1484              		.syntax unified
+ 1485              		.thumb
+ 1486              		.thumb_func
+ 1487              		.fpu softvfp
+ 1489              	SD_write_single_block:
+ 1490              	.LVL170:
+ 1491              	.LFB41:
+ 362:sd_driver.c   **** 
+ 363:sd_driver.c   **** 
+ 364:sd_driver.c   **** unsigned char SD_write_single_block (unsigned int sector, const unsigned char *data)
+ 365:sd_driver.c   **** {
+ 1492              		.loc 1 365 1 is_stmt 1 view -0
+ 1493              		.cfi_startproc
+ 1494              		@ args = 0, pretend = 0, frame = 0
+ 1495              		@ frame_needed = 0, uses_anonymous_args = 0
+ 366:sd_driver.c   ****       unsigned char r1;
+ 1496              		.loc 1 366 7 view .LVU471
+ 367:sd_driver.c   ****       unsigned short i;
+ 1497              		.loc 1 367 7 view .LVU472
+ 368:sd_driver.c   ****       unsigned short retry;
+ 1498              		.loc 1 368 7 view .LVU473
+ 369:sd_driver.c   ****       SPI_set_speed(SPI_SPEED_HIGH);
+ 1499              		.loc 1 369 7 view .LVU474
+ 365:sd_driver.c   ****       unsigned char r1;
+ 1500              		.loc 1 365 1 is_stmt 0 view .LVU475
+ 1501 0000 70B5     		push	{r4, r5, r6, lr}
+ 1502              		.cfi_def_cfa_offset 16
+ 1503              		.cfi_offset 4, -16
+ 1504              		.cfi_offset 5, -12
+ 1505              		.cfi_offset 6, -8
+ 1506              		.cfi_offset 14, -4
+ 365:sd_driver.c   ****       unsigned char r1;
+ 1507              		.loc 1 365 1 view .LVU476
+ 1508 0002 0446     		mov	r4, r0
+ 1509              		.loc 1 369 7 view .LVU477
+ 1510 0004 0120     		movs	r0, #1
+ 1511              	.LVL171:
+ 365:sd_driver.c   ****       unsigned char r1;
+ 1512              		.loc 1 365 1 view .LVU478
+ 1513 0006 0D46     		mov	r5, r1
+ 1514              		.loc 1 369 7 view .LVU479
+ 1515 0008 FFF7FEFF 		bl	SPI_set_speed
  1516              	.LVL172:
- 1517              		.loc 1 371 7 is_stmt 1 view .LVU482
- 1518              		.loc 1 371 12 is_stmt 0 view .LVU483
- 1519 001a 2146     		mov	r1, r4
- 1520 001c FFF7FEFF 		bl	SD_send_command
- 1521              	.LVL173:
- 372:sd_driver.c   ****       if (r1 != 0x00) {
- 1522              		.loc 1 372 7 is_stmt 1 view .LVU484
- 1523              		.loc 1 372 10 is_stmt 0 view .LVU485
- 1524 0020 0446     		mov	r4, r0
- 1525              	.LVL174:
- 1526              		.loc 1 372 10 view .LVU486
- 1527 0022 58BB     		cbnz	r0, .L99
- 373:sd_driver.c   ****          return r1;
- 374:sd_driver.c   ****       }
- 375:sd_driver.c   ****       SD_CS_ENABLE();
- 1528              		.loc 1 375 7 is_stmt 1 view .LVU487
- 1529 0024 244A     		ldr	r2, .L109+4
- 376:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1530              		.loc 1 376 7 is_stmt 0 view .LVU488
- 1531 0026 FF20     		movs	r0, #255
- 1532              	.LVL175:
- 375:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1533              		.loc 1 375 7 view .LVU489
- 1534 0028 D368     		ldr	r3, [r2, #12]
- 1535 002a 05F50076 		add	r6, r5, #512
- 1536 002e 23F48053 		bic	r3, r3, #4096
- 1537 0032 D360     		str	r3, [r2, #12]
- 1538              		.loc 1 376 7 is_stmt 1 view .LVU490
- 1539 0034 FFF7FEFF 		bl	SPI_read_write_byte
- 1540              	.LVL176:
- 377:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1541              		.loc 1 377 7 view .LVU491
- 1542 0038 FF20     		movs	r0, #255
- 1543 003a FFF7FEFF 		bl	SPI_read_write_byte
- 1544              	.LVL177:
+ 370:sd_driver.c   ****       if (SD_type != SD_TYPE_V2HC) {
+ 1517              		.loc 1 370 7 is_stmt 1 view .LVU480
+ 1518              		.loc 1 370 19 is_stmt 0 view .LVU481
+ 1519 000c 294B     		ldr	r3, .L115
+ 371:sd_driver.c   ****          sector = sector << 9;
+ 372:sd_driver.c   ****       }
+ 373:sd_driver.c   ****       r1 = SD_send_command(CMD24, sector, 0x00);
+ 1520              		.loc 1 373 12 view .LVU482
+ 1521 000e 0022     		movs	r2, #0
+ 370:sd_driver.c   ****       if (SD_type != SD_TYPE_V2HC) {
+ 1522              		.loc 1 370 10 view .LVU483
+ 1523 0010 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1524              		.loc 1 373 12 view .LVU484
+ 1525 0012 1820     		movs	r0, #24
+ 370:sd_driver.c   ****       if (SD_type != SD_TYPE_V2HC) {
+ 1526              		.loc 1 370 10 view .LVU485
+ 1527 0014 042B     		cmp	r3, #4
+ 371:sd_driver.c   ****          sector = sector << 9;
+ 1528              		.loc 1 371 10 is_stmt 1 view .LVU486
+ 371:sd_driver.c   ****          sector = sector << 9;
+ 1529              		.loc 1 371 17 is_stmt 0 view .LVU487
+ 1530 0016 18BF     		it	ne
+ 1531 0018 6402     		lslne	r4, r4, #9
+ 1532              	.LVL173:
+ 1533              		.loc 1 373 7 is_stmt 1 view .LVU488
+ 1534              		.loc 1 373 12 is_stmt 0 view .LVU489
+ 1535 001a 2146     		mov	r1, r4
+ 1536 001c FFF7FEFF 		bl	SD_send_command
+ 1537              	.LVL174:
+ 374:sd_driver.c   ****       if (r1 != 0x00) {
+ 1538              		.loc 1 374 7 is_stmt 1 view .LVU490
+ 1539              		.loc 1 374 10 is_stmt 0 view .LVU491
+ 1540 0020 0446     		mov	r4, r0
+ 1541              	.LVL175:
+ 1542              		.loc 1 374 10 view .LVU492
+ 1543 0022 58BB     		cbnz	r0, .L105
+ 375:sd_driver.c   ****          return r1;
+ 376:sd_driver.c   ****       }
+ 377:sd_driver.c   ****       SD_CS_ENABLE();
+ 1544              		.loc 1 377 7 is_stmt 1 view .LVU493
+ 1545 0024 244A     		ldr	r2, .L115+4
  378:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1545              		.loc 1 378 7 view .LVU492
- 1546 003e FF20     		movs	r0, #255
- 1547 0040 FFF7FEFF 		bl	SPI_read_write_byte
- 1548              	.LVL178:
- 379:sd_driver.c   ****       SPI_read_write_byte(0xFE);
- 1549              		.loc 1 379 7 view .LVU493
- 1550 0044 FE20     		movs	r0, #254
- 1551 0046 FFF7FEFF 		bl	SPI_read_write_byte
- 1552              	.LVL179:
- 380:sd_driver.c   ****       for (i=0;i<512;i++) {
- 1553              		.loc 1 380 7 view .LVU494
- 1554              		.loc 1 380 16 view .LVU495
- 1555              	.L100:
- 381:sd_driver.c   ****           SPI_read_write_byte(*data++);
- 1556              		.loc 1 381 11 discriminator 3 view .LVU496
- 1557              		.loc 1 381 11 is_stmt 0 discriminator 3 view .LVU497
- 1558 004a 15F8010B 		ldrb	r0, [r5], #1	@ zero_extendqisi2
- 1559              	.LVL180:
- 1560              		.loc 1 381 11 discriminator 3 view .LVU498
- 1561 004e FFF7FEFF 		bl	SPI_read_write_byte
- 1562              	.LVL181:
- 380:sd_driver.c   ****       for (i=0;i<512;i++) {
- 1563              		.loc 1 380 22 is_stmt 1 discriminator 3 view .LVU499
- 380:sd_driver.c   ****       for (i=0;i<512;i++) {
- 1564              		.loc 1 380 16 discriminator 3 view .LVU500
- 380:sd_driver.c   ****       for (i=0;i<512;i++) {
- 1565              		.loc 1 380 7 is_stmt 0 discriminator 3 view .LVU501
- 1566 0052 B542     		cmp	r5, r6
- 1567 0054 F9D1     		bne	.L100
- 382:sd_driver.c   ****       }
- 383:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1568              		.loc 1 383 7 is_stmt 1 view .LVU502
- 1569 0056 FF20     		movs	r0, #255
- 1570 0058 FFF7FEFF 		bl	SPI_read_write_byte
- 1571              	.LVL182:
- 384:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1572              		.loc 1 384 7 view .LVU503
- 1573 005c FF20     		movs	r0, #255
- 1574 005e FFF7FEFF 		bl	SPI_read_write_byte
- 1575              	.LVL183:
- 385:sd_driver.c   ****       r1 = SPI_read_write_byte(0xff);
- 1576              		.loc 1 385 7 view .LVU504
- 1577              		.loc 1 385 12 is_stmt 0 view .LVU505
- 1578 0062 FF20     		movs	r0, #255
- 1579 0064 FFF7FEFF 		bl	SPI_read_write_byte
- 1580              	.LVL184:
- 386:sd_driver.c   ****       if ((r1 & 0x1F) != 0x05) {
- 1581              		.loc 1 386 7 is_stmt 1 view .LVU506
- 1582              		.loc 1 386 10 is_stmt 0 view .LVU507
- 1583 0068 00F01F03 		and	r3, r0, #31
- 1584 006c 052B     		cmp	r3, #5
- 1585 006e 11D0     		beq	.L103
- 387:sd_driver.c   ****          SD_CS_DISABLE();
- 1586              		.loc 1 387 10 is_stmt 1 view .LVU508
- 385:sd_driver.c   ****       r1 = SPI_read_write_byte(0xff);
- 1587              		.loc 1 385 12 is_stmt 0 view .LVU509
- 1588 0070 0446     		mov	r4, r0
- 1589              		.loc 1 387 10 view .LVU510
- 1590 0072 114A     		ldr	r2, .L109+4
- 1591 0074 D368     		ldr	r3, [r2, #12]
- 1592 0076 43F48053 		orr	r3, r3, #4096
- 1593 007a D360     		str	r3, [r2, #12]
- 388:sd_driver.c   ****          return r1;
- 1594              		.loc 1 388 10 is_stmt 1 view .LVU511
- 1595              	.LVL185:
- 1596              	.L99:
- 389:sd_driver.c   ****       }
- 390:sd_driver.c   ****       retry = 0;
- 391:sd_driver.c   ****       while (!SPI_read_write_byte(0xff)) {
- 392:sd_driver.c   ****             retry++;
- 393:sd_driver.c   ****             if (retry > 0xfffe) {
- 394:sd_driver.c   ****                SD_CS_DISABLE();
- 395:sd_driver.c   ****                return 1;
- 396:sd_driver.c   ****             }
- 397:sd_driver.c   ****       }
- 398:sd_driver.c   ****       SD_CS_DISABLE();
- 399:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 400:sd_driver.c   ****       return 0;
- 401:sd_driver.c   **** }
- 1597              		.loc 1 401 1 is_stmt 0 view .LVU512
- 1598 007c 2046     		mov	r0, r4
- 1599 007e 70BD     		pop	{r4, r5, r6, pc}
- 1600              	.LVL186:
- 1601              	.L102:
- 392:sd_driver.c   ****             if (retry > 0xfffe) {
- 1602              		.loc 1 392 13 is_stmt 1 view .LVU513
- 393:sd_driver.c   ****                SD_CS_DISABLE();
- 1603              		.loc 1 393 13 view .LVU514
- 1604 0080 013D     		subs	r5, r5, #1
- 1605              	.LVL187:
- 393:sd_driver.c   ****                SD_CS_DISABLE();
- 1606              		.loc 1 393 13 is_stmt 0 view .LVU515
- 1607 0082 ADB2     		uxth	r5, r5
- 393:sd_driver.c   ****                SD_CS_DISABLE();
- 1608              		.loc 1 393 16 view .LVU516
- 1609 0084 45B9     		cbnz	r5, .L101
- 394:sd_driver.c   ****                return 1;
- 1610              		.loc 1 394 16 is_stmt 1 view .LVU517
- 1611 0086 0C4A     		ldr	r2, .L109+4
- 395:sd_driver.c   ****             }
- 1612              		.loc 1 395 23 is_stmt 0 view .LVU518
- 1613 0088 0124     		movs	r4, #1
- 394:sd_driver.c   ****                return 1;
- 1614              		.loc 1 394 16 view .LVU519
- 1615 008a D368     		ldr	r3, [r2, #12]
- 1616 008c 43F48053 		orr	r3, r3, #4096
- 1617 0090 D360     		str	r3, [r2, #12]
- 395:sd_driver.c   ****             }
- 1618              		.loc 1 395 16 is_stmt 1 view .LVU520
- 395:sd_driver.c   ****             }
- 1619              		.loc 1 395 23 is_stmt 0 view .LVU521
- 1620 0092 F3E7     		b	.L99
+ 1546              		.loc 1 378 7 is_stmt 0 view .LVU494
+ 1547 0026 FF20     		movs	r0, #255
+ 1548              	.LVL176:
+ 377:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1549              		.loc 1 377 7 view .LVU495
+ 1550 0028 D368     		ldr	r3, [r2, #12]
+ 1551 002a 05F50076 		add	r6, r5, #512
+ 1552 002e 23F48053 		bic	r3, r3, #4096
+ 1553 0032 D360     		str	r3, [r2, #12]
+ 1554              		.loc 1 378 7 is_stmt 1 view .LVU496
+ 1555 0034 FFF7FEFF 		bl	SPI_read_write_byte
+ 1556              	.LVL177:
+ 379:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1557              		.loc 1 379 7 view .LVU497
+ 1558 0038 FF20     		movs	r0, #255
+ 1559 003a FFF7FEFF 		bl	SPI_read_write_byte
+ 1560              	.LVL178:
+ 380:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1561              		.loc 1 380 7 view .LVU498
+ 1562 003e FF20     		movs	r0, #255
+ 1563 0040 FFF7FEFF 		bl	SPI_read_write_byte
+ 1564              	.LVL179:
+ 381:sd_driver.c   ****       SPI_read_write_byte(0xFE);
+ 1565              		.loc 1 381 7 view .LVU499
+ 1566 0044 FE20     		movs	r0, #254
+ 1567 0046 FFF7FEFF 		bl	SPI_read_write_byte
+ 1568              	.LVL180:
+ 382:sd_driver.c   ****       for (i=0;i<512;i++) {
+ 1569              		.loc 1 382 7 view .LVU500
+ 1570              		.loc 1 382 16 view .LVU501
+ 1571              	.L106:
+ 383:sd_driver.c   ****           SPI_read_write_byte(*data++);
+ 1572              		.loc 1 383 11 discriminator 3 view .LVU502
+ 1573              		.loc 1 383 11 is_stmt 0 discriminator 3 view .LVU503
+ 1574 004a 15F8010B 		ldrb	r0, [r5], #1	@ zero_extendqisi2
+ 1575              	.LVL181:
+ 1576              		.loc 1 383 11 discriminator 3 view .LVU504
+ 1577 004e FFF7FEFF 		bl	SPI_read_write_byte
+ 1578              	.LVL182:
+ 382:sd_driver.c   ****       for (i=0;i<512;i++) {
+ 1579              		.loc 1 382 22 is_stmt 1 discriminator 3 view .LVU505
+ 382:sd_driver.c   ****       for (i=0;i<512;i++) {
+ 1580              		.loc 1 382 16 discriminator 3 view .LVU506
+ 382:sd_driver.c   ****       for (i=0;i<512;i++) {
+ 1581              		.loc 1 382 7 is_stmt 0 discriminator 3 view .LVU507
+ 1582 0052 B542     		cmp	r5, r6
+ 1583 0054 F9D1     		bne	.L106
+ 384:sd_driver.c   ****       }
+ 385:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1584              		.loc 1 385 7 is_stmt 1 view .LVU508
+ 1585 0056 FF20     		movs	r0, #255
+ 1586 0058 FFF7FEFF 		bl	SPI_read_write_byte
+ 1587              	.LVL183:
+ 386:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1588              		.loc 1 386 7 view .LVU509
+ 1589 005c FF20     		movs	r0, #255
+ 1590 005e FFF7FEFF 		bl	SPI_read_write_byte
+ 1591              	.LVL184:
+ 387:sd_driver.c   ****       r1 = SPI_read_write_byte(0xff);
+ 1592              		.loc 1 387 7 view .LVU510
+ 1593              		.loc 1 387 12 is_stmt 0 view .LVU511
+ 1594 0062 FF20     		movs	r0, #255
+ 1595 0064 FFF7FEFF 		bl	SPI_read_write_byte
+ 1596              	.LVL185:
+ 388:sd_driver.c   ****       if ((r1 & 0x1F) != 0x05) {
+ 1597              		.loc 1 388 7 is_stmt 1 view .LVU512
+ 1598              		.loc 1 388 10 is_stmt 0 view .LVU513
+ 1599 0068 00F01F03 		and	r3, r0, #31
+ 1600 006c 052B     		cmp	r3, #5
+ 1601 006e 11D0     		beq	.L109
+ 389:sd_driver.c   ****          SD_CS_DISABLE();
+ 1602              		.loc 1 389 10 is_stmt 1 view .LVU514
+ 387:sd_driver.c   ****       r1 = SPI_read_write_byte(0xff);
+ 1603              		.loc 1 387 12 is_stmt 0 view .LVU515
+ 1604 0070 0446     		mov	r4, r0
+ 1605              		.loc 1 389 10 view .LVU516
+ 1606 0072 114A     		ldr	r2, .L115+4
+ 1607 0074 D368     		ldr	r3, [r2, #12]
+ 1608 0076 43F48053 		orr	r3, r3, #4096
+ 1609 007a D360     		str	r3, [r2, #12]
+ 390:sd_driver.c   ****          return r1;
+ 1610              		.loc 1 390 10 is_stmt 1 view .LVU517
+ 1611              	.LVL186:
+ 1612              	.L105:
+ 391:sd_driver.c   ****       }
+ 392:sd_driver.c   ****       retry = 0;
+ 393:sd_driver.c   ****       while (!SPI_read_write_byte(0xff)) {
+ 394:sd_driver.c   ****             retry++;
+ 395:sd_driver.c   ****             if (retry > 0xfffe) {
+ 396:sd_driver.c   ****                SD_CS_DISABLE();
+ 397:sd_driver.c   ****                return 1;
+ 398:sd_driver.c   ****             }
+ 399:sd_driver.c   ****       }
+ 400:sd_driver.c   ****       SD_CS_DISABLE();
+ 401:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 402:sd_driver.c   ****       return 0;
+ 403:sd_driver.c   **** }
+ 1613              		.loc 1 403 1 is_stmt 0 view .LVU518
+ 1614 007c 2046     		mov	r0, r4
+ 1615 007e 70BD     		pop	{r4, r5, r6, pc}
+ 1616              	.LVL187:
+ 1617              	.L108:
+ 394:sd_driver.c   ****             if (retry > 0xfffe) {
+ 1618              		.loc 1 394 13 is_stmt 1 view .LVU519
+ 395:sd_driver.c   ****                SD_CS_DISABLE();
+ 1619              		.loc 1 395 13 view .LVU520
+ 1620 0080 013D     		subs	r5, r5, #1
  1621              	.LVL188:
- 1622              	.L103:
- 395:sd_driver.c   ****             }
- 1623              		.loc 1 395 23 view .LVU522
- 1624 0094 4FF6FF75 		movw	r5, #65535
- 1625              	.LVL189:
- 1626              	.L101:
- 391:sd_driver.c   ****             retry++;
- 1627              		.loc 1 391 13 is_stmt 1 view .LVU523
- 391:sd_driver.c   ****             retry++;
- 1628              		.loc 1 391 15 is_stmt 0 view .LVU524
- 1629 0098 FF20     		movs	r0, #255
- 1630 009a FFF7FEFF 		bl	SPI_read_write_byte
- 1631              	.LVL190:
- 391:sd_driver.c   ****             retry++;
- 1632              		.loc 1 391 13 view .LVU525
- 1633 009e 0028     		cmp	r0, #0
- 1634 00a0 EED0     		beq	.L102
- 398:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1635              		.loc 1 398 7 is_stmt 1 view .LVU526
- 1636 00a2 054A     		ldr	r2, .L109+4
- 399:sd_driver.c   ****       return 0;
- 1637              		.loc 1 399 7 is_stmt 0 view .LVU527
- 1638 00a4 FF20     		movs	r0, #255
- 398:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1639              		.loc 1 398 7 view .LVU528
- 1640 00a6 D368     		ldr	r3, [r2, #12]
- 1641 00a8 43F48053 		orr	r3, r3, #4096
- 1642 00ac D360     		str	r3, [r2, #12]
- 399:sd_driver.c   ****       return 0;
- 1643              		.loc 1 399 7 is_stmt 1 view .LVU529
- 1644 00ae FFF7FEFF 		bl	SPI_read_write_byte
- 1645              	.LVL191:
- 400:sd_driver.c   **** }
- 1646              		.loc 1 400 7 view .LVU530
- 400:sd_driver.c   **** }
- 1647              		.loc 1 400 14 is_stmt 0 view .LVU531
- 1648 00b2 E3E7     		b	.L99
- 1649              	.L110:
- 1650              		.align	2
- 1651              	.L109:
- 1652 00b4 00000000 		.word	.LANCHOR0
- 1653 00b8 000C0140 		.word	1073810432
- 1654              		.cfi_endproc
- 1655              	.LFE41:
- 1657              		.section	.text.SD_read_multi_block,"ax",%progbits
- 1658              		.align	1
- 1659              		.global	SD_read_multi_block
- 1660              		.syntax unified
- 1661              		.thumb
- 1662              		.thumb_func
- 1663              		.fpu softvfp
- 1665              	SD_read_multi_block:
- 1666              	.LVL192:
- 1667              	.LFB42:
- 402:sd_driver.c   **** 
- 403:sd_driver.c   **** 
- 404:sd_driver.c   **** unsigned char SD_read_multi_block (unsigned int sector, unsigned char *buffer, unsigned char count)
- 405:sd_driver.c   **** {
- 1668              		.loc 1 405 1 is_stmt 1 view -0
- 1669              		.cfi_startproc
- 1670              		@ args = 0, pretend = 0, frame = 0
- 1671              		@ frame_needed = 0, uses_anonymous_args = 0
- 406:sd_driver.c   ****       unsigned char r1;
- 1672              		.loc 1 406 7 view .LVU533
- 407:sd_driver.c   ****       SPI_set_speed(SPI_SPEED_HIGH);
- 1673              		.loc 1 407 7 view .LVU534
- 405:sd_driver.c   ****       unsigned char r1;
- 1674              		.loc 1 405 1 is_stmt 0 view .LVU535
- 1675 0000 70B5     		push	{r4, r5, r6, lr}
- 1676              		.cfi_def_cfa_offset 16
- 1677              		.cfi_offset 4, -16
- 1678              		.cfi_offset 5, -12
- 1679              		.cfi_offset 6, -8
- 1680              		.cfi_offset 14, -4
- 405:sd_driver.c   ****       unsigned char r1;
- 1681              		.loc 1 405 1 view .LVU536
- 1682 0002 0646     		mov	r6, r0
- 1683              		.loc 1 407 7 view .LVU537
- 1684 0004 0120     		movs	r0, #1
- 1685              	.LVL193:
- 405:sd_driver.c   ****       unsigned char r1;
- 1686              		.loc 1 405 1 view .LVU538
- 1687 0006 0D46     		mov	r5, r1
- 1688 0008 1446     		mov	r4, r2
- 1689              		.loc 1 407 7 view .LVU539
- 1690 000a FFF7FEFF 		bl	SPI_set_speed
- 1691              	.LVL194:
- 408:sd_driver.c   ****       sector = sector << 9;
- 1692              		.loc 1 408 7 is_stmt 1 view .LVU540
- 409:sd_driver.c   ****       r1 = SD_send_command(CMD18, sector, 0);
- 1693              		.loc 1 409 7 view .LVU541
- 1694              		.loc 1 409 12 is_stmt 0 view .LVU542
- 1695 000e 0022     		movs	r2, #0
- 1696 0010 1220     		movs	r0, #18
- 1697 0012 7102     		lsls	r1, r6, #9
- 1698              	.LVL195:
- 1699              		.loc 1 409 12 view .LVU543
- 1700 0014 FFF7FEFF 		bl	SD_send_command
- 1701              	.LVL196:
- 410:sd_driver.c   ****       if (r1 != 0x00) {
- 1702              		.loc 1 410 7 is_stmt 1 view .LVU544
- 1703              		.loc 1 410 10 is_stmt 0 view .LVU545
- 1704 0018 D0B9     		cbnz	r0, .L112
- 1705              	.LVL197:
- 1706              	.L114:
- 411:sd_driver.c   ****          return r1;
- 412:sd_driver.c   ****       }
- 413:sd_driver.c   ****       do {
- 1707              		.loc 1 413 7 is_stmt 1 view .LVU546
- 414:sd_driver.c   ****           if (SD_receive_data(buffer, 512, NO_RELEASE) != 0x00) {
- 1708              		.loc 1 414 11 view .LVU547
- 1709              		.loc 1 414 15 is_stmt 0 view .LVU548
- 1710 001a 0022     		movs	r2, #0
- 1711 001c 4FF40071 		mov	r1, #512
- 1712 0020 2846     		mov	r0, r5
- 1713 0022 FFF7FEFF 		bl	SD_receive_data
- 1714              	.LVL198:
- 1715              		.loc 1 414 14 view .LVU549
- 1716 0026 28B9     		cbnz	r0, .L113
- 415:sd_driver.c   ****              break;
- 416:sd_driver.c   ****           }
- 417:sd_driver.c   ****           buffer += 512;
- 1717              		.loc 1 417 11 is_stmt 1 view .LVU550
- 418:sd_driver.c   ****       } while (--count);
- 1718              		.loc 1 418 7 is_stmt 0 view .LVU551
- 1719 0028 013C     		subs	r4, r4, #1
- 1720              	.LVL199:
- 1721              		.loc 1 418 7 view .LVU552
- 1722 002a 14F0FF04 		ands	r4, r4, #255
- 417:sd_driver.c   ****       } while (--count);
- 1723              		.loc 1 417 18 view .LVU553
- 1724 002e 05F50075 		add	r5, r5, #512
- 1725              	.LVL200:
- 1726              		.loc 1 418 15 is_stmt 1 view .LVU554
- 1727              		.loc 1 418 7 is_stmt 0 view .LVU555
- 1728 0032 F2D1     		bne	.L114
- 1729              	.L113:
- 1730              	.LVL201:
- 419:sd_driver.c   ****       SD_send_command(CMD12, 0, 0);
- 1731              		.loc 1 419 7 is_stmt 1 view .LVU556
- 1732 0034 0022     		movs	r2, #0
- 1733 0036 0C20     		movs	r0, #12
- 1734 0038 1146     		mov	r1, r2
- 1735 003a FFF7FEFF 		bl	SD_send_command
- 1736              	.LVL202:
- 420:sd_driver.c   ****       SD_CS_DISABLE();
- 1737              		.loc 1 420 7 view .LVU557
- 1738 003e 054A     		ldr	r2, .L116
- 421:sd_driver.c   ****       SPI_read_write_byte(0xFF);
- 1739              		.loc 1 421 7 is_stmt 0 view .LVU558
- 1740 0040 FF20     		movs	r0, #255
- 420:sd_driver.c   ****       SD_CS_DISABLE();
- 1741              		.loc 1 420 7 view .LVU559
- 1742 0042 D368     		ldr	r3, [r2, #12]
- 1743 0044 43F48053 		orr	r3, r3, #4096
- 1744 0048 D360     		str	r3, [r2, #12]
- 1745              		.loc 1 421 7 is_stmt 1 view .LVU560
- 1746 004a FFF7FEFF 		bl	SPI_read_write_byte
- 1747              	.LVL203:
- 422:sd_driver.c   ****       if (count != 0) {
- 1748              		.loc 1 422 7 view .LVU561
- 423:sd_driver.c   ****          return count;
- 424:sd_driver.c   ****       } else {
- 425:sd_driver.c   ****          return 0;
- 1749              		.loc 1 425 17 is_stmt 0 view .LVU562
- 1750 004e 2046     		mov	r0, r4
- 1751              	.LVL204:
- 1752              	.L112:
- 426:sd_driver.c   ****       }
- 427:sd_driver.c   **** }
- 1753              		.loc 1 427 1 view .LVU563
- 1754 0050 70BD     		pop	{r4, r5, r6, pc}
- 1755              	.LVL205:
- 1756              	.L117:
- 1757              		.loc 1 427 1 view .LVU564
- 1758 0052 00BF     		.align	2
- 1759              	.L116:
- 1760 0054 000C0140 		.word	1073810432
- 1761              		.cfi_endproc
- 1762              	.LFE42:
- 1764              		.section	.text.SD_write_multi_block,"ax",%progbits
- 1765              		.align	1
- 1766              		.global	SD_write_multi_block
- 1767              		.syntax unified
- 1768              		.thumb
- 1769              		.thumb_func
- 1770              		.fpu softvfp
- 1772              	SD_write_multi_block:
- 1773              	.LVL206:
- 1774              	.LFB43:
- 428:sd_driver.c   **** 
- 429:sd_driver.c   **** 
- 430:sd_driver.c   **** unsigned char SD_write_multi_block (unsigned int sector, const unsigned char *data, unsigned char c
- 431:sd_driver.c   **** {
- 1775              		.loc 1 431 1 is_stmt 1 view -0
- 1776              		.cfi_startproc
- 1777              		@ args = 0, pretend = 0, frame = 0
- 1778              		@ frame_needed = 0, uses_anonymous_args = 0
- 432:sd_driver.c   ****       unsigned char r1;
- 1779              		.loc 1 432 7 view .LVU566
- 433:sd_driver.c   ****       unsigned short i;
- 1780              		.loc 1 433 7 view .LVU567
- 434:sd_driver.c   ****       SPI_set_speed(SPI_SPEED_HIGH);
- 1781              		.loc 1 434 7 view .LVU568
- 431:sd_driver.c   ****       unsigned char r1;
- 1782              		.loc 1 431 1 is_stmt 0 view .LVU569
- 1783 0000 70B5     		push	{r4, r5, r6, lr}
- 1784              		.cfi_def_cfa_offset 16
- 1785              		.cfi_offset 4, -16
- 1786              		.cfi_offset 5, -12
- 1787              		.cfi_offset 6, -8
- 1788              		.cfi_offset 14, -4
- 431:sd_driver.c   ****       unsigned char r1;
- 1789              		.loc 1 431 1 view .LVU570
- 1790 0002 0646     		mov	r6, r0
- 1791              		.loc 1 434 7 view .LVU571
- 1792 0004 0120     		movs	r0, #1
- 1793              	.LVL207:
- 431:sd_driver.c   ****       unsigned char r1;
- 1794              		.loc 1 431 1 view .LVU572
- 1795 0006 0D46     		mov	r5, r1
- 1796 0008 1446     		mov	r4, r2
- 1797              		.loc 1 434 7 view .LVU573
- 1798 000a FFF7FEFF 		bl	SPI_set_speed
- 1799              	.LVL208:
- 435:sd_driver.c   ****       if (SD_type != SD_TYPE_V2HC) {
- 1800              		.loc 1 435 7 is_stmt 1 view .LVU574
- 1801              		.loc 1 435 19 is_stmt 0 view .LVU575
- 1802 000e 2D4B     		ldr	r3, .L138
- 1803 0010 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 1804              		.loc 1 435 10 view .LVU576
- 1805 0012 042B     		cmp	r3, #4
- 1806 0014 01D0     		beq	.L119
- 436:sd_driver.c   ****          sector = sector << 9;
- 1807              		.loc 1 436 10 is_stmt 1 view .LVU577
- 1808              		.loc 1 436 17 is_stmt 0 view .LVU578
- 1809 0016 7602     		lsls	r6, r6, #9
- 1810              	.LVL209:
- 437:sd_driver.c   ****       }
- 438:sd_driver.c   ****       if (SD_type != SD_TYPE_MMC) {
- 1811              		.loc 1 438 7 is_stmt 1 view .LVU579
- 1812              		.loc 1 438 10 is_stmt 0 view .LVU580
- 1813 0018 23B1     		cbz	r3, .L120
- 1814              	.L119:
- 439:sd_driver.c   ****          r1 = SD_send_command(ACMD23, count, 0x00);
- 1815              		.loc 1 439 10 is_stmt 1 view .LVU581
- 1816              		.loc 1 439 15 is_stmt 0 view .LVU582
- 1817 001a 0022     		movs	r2, #0
- 1818 001c 2146     		mov	r1, r4
- 1819 001e 1720     		movs	r0, #23
- 1820 0020 FFF7FEFF 		bl	SD_send_command
- 1821              	.LVL210:
- 1822              	.L120:
- 440:sd_driver.c   ****       }
- 441:sd_driver.c   ****       r1 = SD_send_command(CMD25, sector, 0x00);
- 1823              		.loc 1 441 7 is_stmt 1 view .LVU583
- 1824              		.loc 1 441 12 is_stmt 0 view .LVU584
- 1825 0024 0022     		movs	r2, #0
- 1826 0026 3146     		mov	r1, r6
- 1827 0028 1920     		movs	r0, #25
- 1828 002a FFF7FEFF 		bl	SD_send_command
- 1829              	.LVL211:
- 442:sd_driver.c   ****       if (r1 != 0x00) {
- 1830              		.loc 1 442 7 is_stmt 1 view .LVU585
- 1831              		.loc 1 442 10 is_stmt 0 view .LVU586
- 1832 002e 48BB     		cbnz	r0, .L121
- 443:sd_driver.c   ****          return r1;
+ 395:sd_driver.c   ****                SD_CS_DISABLE();
+ 1622              		.loc 1 395 13 is_stmt 0 view .LVU521
+ 1623 0082 ADB2     		uxth	r5, r5
+ 395:sd_driver.c   ****                SD_CS_DISABLE();
+ 1624              		.loc 1 395 16 view .LVU522
+ 1625 0084 45B9     		cbnz	r5, .L107
+ 396:sd_driver.c   ****                return 1;
+ 1626              		.loc 1 396 16 is_stmt 1 view .LVU523
+ 1627 0086 0C4A     		ldr	r2, .L115+4
+ 397:sd_driver.c   ****             }
+ 1628              		.loc 1 397 23 is_stmt 0 view .LVU524
+ 1629 0088 0124     		movs	r4, #1
+ 396:sd_driver.c   ****                return 1;
+ 1630              		.loc 1 396 16 view .LVU525
+ 1631 008a D368     		ldr	r3, [r2, #12]
+ 1632 008c 43F48053 		orr	r3, r3, #4096
+ 1633 0090 D360     		str	r3, [r2, #12]
+ 397:sd_driver.c   ****             }
+ 1634              		.loc 1 397 16 is_stmt 1 view .LVU526
+ 397:sd_driver.c   ****             }
+ 1635              		.loc 1 397 23 is_stmt 0 view .LVU527
+ 1636 0092 F3E7     		b	.L105
+ 1637              	.LVL189:
+ 1638              	.L109:
+ 397:sd_driver.c   ****             }
+ 1639              		.loc 1 397 23 view .LVU528
+ 1640 0094 4FF6FF75 		movw	r5, #65535
+ 1641              	.LVL190:
+ 1642              	.L107:
+ 393:sd_driver.c   ****             retry++;
+ 1643              		.loc 1 393 13 is_stmt 1 view .LVU529
+ 393:sd_driver.c   ****             retry++;
+ 1644              		.loc 1 393 15 is_stmt 0 view .LVU530
+ 1645 0098 FF20     		movs	r0, #255
+ 1646 009a FFF7FEFF 		bl	SPI_read_write_byte
+ 1647              	.LVL191:
+ 393:sd_driver.c   ****             retry++;
+ 1648              		.loc 1 393 13 view .LVU531
+ 1649 009e 0028     		cmp	r0, #0
+ 1650 00a0 EED0     		beq	.L108
+ 400:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1651              		.loc 1 400 7 is_stmt 1 view .LVU532
+ 1652 00a2 054A     		ldr	r2, .L115+4
+ 401:sd_driver.c   ****       return 0;
+ 1653              		.loc 1 401 7 is_stmt 0 view .LVU533
+ 1654 00a4 FF20     		movs	r0, #255
+ 400:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1655              		.loc 1 400 7 view .LVU534
+ 1656 00a6 D368     		ldr	r3, [r2, #12]
+ 1657 00a8 43F48053 		orr	r3, r3, #4096
+ 1658 00ac D360     		str	r3, [r2, #12]
+ 401:sd_driver.c   ****       return 0;
+ 1659              		.loc 1 401 7 is_stmt 1 view .LVU535
+ 1660 00ae FFF7FEFF 		bl	SPI_read_write_byte
+ 1661              	.LVL192:
+ 402:sd_driver.c   **** }
+ 1662              		.loc 1 402 7 view .LVU536
+ 402:sd_driver.c   **** }
+ 1663              		.loc 1 402 14 is_stmt 0 view .LVU537
+ 1664 00b2 E3E7     		b	.L105
+ 1665              	.L116:
+ 1666              		.align	2
+ 1667              	.L115:
+ 1668 00b4 00000000 		.word	.LANCHOR0
+ 1669 00b8 000C0140 		.word	1073810432
+ 1670              		.cfi_endproc
+ 1671              	.LFE41:
+ 1673              		.section	.text.SD_read_multi_block,"ax",%progbits
+ 1674              		.align	1
+ 1675              		.global	SD_read_multi_block
+ 1676              		.syntax unified
+ 1677              		.thumb
+ 1678              		.thumb_func
+ 1679              		.fpu softvfp
+ 1681              	SD_read_multi_block:
+ 1682              	.LVL193:
+ 1683              	.LFB42:
+ 404:sd_driver.c   **** 
+ 405:sd_driver.c   **** 
+ 406:sd_driver.c   **** unsigned char SD_read_multi_block (unsigned int sector, unsigned char *buffer, unsigned char count)
+ 407:sd_driver.c   **** {
+ 1684              		.loc 1 407 1 is_stmt 1 view -0
+ 1685              		.cfi_startproc
+ 1686              		@ args = 0, pretend = 0, frame = 0
+ 1687              		@ frame_needed = 0, uses_anonymous_args = 0
+ 408:sd_driver.c   ****       unsigned char r1;
+ 1688              		.loc 1 408 7 view .LVU539
+ 409:sd_driver.c   ****       SPI_set_speed(SPI_SPEED_HIGH);
+ 1689              		.loc 1 409 7 view .LVU540
+ 407:sd_driver.c   ****       unsigned char r1;
+ 1690              		.loc 1 407 1 is_stmt 0 view .LVU541
+ 1691 0000 70B5     		push	{r4, r5, r6, lr}
+ 1692              		.cfi_def_cfa_offset 16
+ 1693              		.cfi_offset 4, -16
+ 1694              		.cfi_offset 5, -12
+ 1695              		.cfi_offset 6, -8
+ 1696              		.cfi_offset 14, -4
+ 407:sd_driver.c   ****       unsigned char r1;
+ 1697              		.loc 1 407 1 view .LVU542
+ 1698 0002 0646     		mov	r6, r0
+ 1699              		.loc 1 409 7 view .LVU543
+ 1700 0004 0120     		movs	r0, #1
+ 1701              	.LVL194:
+ 407:sd_driver.c   ****       unsigned char r1;
+ 1702              		.loc 1 407 1 view .LVU544
+ 1703 0006 0D46     		mov	r5, r1
+ 1704 0008 1446     		mov	r4, r2
+ 1705              		.loc 1 409 7 view .LVU545
+ 1706 000a FFF7FEFF 		bl	SPI_set_speed
+ 1707              	.LVL195:
+ 410:sd_driver.c   **** 	  if (SD_type != SD_TYPE_V2HC) {
+ 1708              		.loc 1 410 4 is_stmt 1 view .LVU546
+ 1709              		.loc 1 410 16 is_stmt 0 view .LVU547
+ 1710 000e 134B     		ldr	r3, .L126
+ 411:sd_driver.c   ****          sector = sector << 9;
+ 412:sd_driver.c   **** 	  }
+ 413:sd_driver.c   ****       r1 = SD_send_command(CMD18, sector, 0);
+ 1711              		.loc 1 413 12 view .LVU548
+ 1712 0010 0022     		movs	r2, #0
+ 410:sd_driver.c   **** 	  if (SD_type != SD_TYPE_V2HC) {
+ 1713              		.loc 1 410 7 view .LVU549
+ 1714 0012 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1715              		.loc 1 413 12 view .LVU550
+ 1716 0014 1220     		movs	r0, #18
+ 410:sd_driver.c   **** 	  if (SD_type != SD_TYPE_V2HC) {
+ 1717              		.loc 1 410 7 view .LVU551
+ 1718 0016 042B     		cmp	r3, #4
+ 411:sd_driver.c   ****          sector = sector << 9;
+ 1719              		.loc 1 411 10 is_stmt 1 view .LVU552
+ 411:sd_driver.c   ****          sector = sector << 9;
+ 1720              		.loc 1 411 17 is_stmt 0 view .LVU553
+ 1721 0018 18BF     		it	ne
+ 1722 001a 7602     		lslne	r6, r6, #9
+ 1723              	.LVL196:
+ 1724              		.loc 1 413 7 is_stmt 1 view .LVU554
+ 1725              		.loc 1 413 12 is_stmt 0 view .LVU555
+ 1726 001c 3146     		mov	r1, r6
+ 1727 001e FFF7FEFF 		bl	SD_send_command
+ 1728              	.LVL197:
+ 414:sd_driver.c   ****       if (r1 != 0x00) {
+ 1729              		.loc 1 414 7 is_stmt 1 view .LVU556
+ 1730              		.loc 1 414 10 is_stmt 0 view .LVU557
+ 1731 0022 D0B9     		cbnz	r0, .L119
+ 1732              	.LVL198:
+ 1733              	.L121:
+ 415:sd_driver.c   ****          return r1;
+ 416:sd_driver.c   ****       }
+ 417:sd_driver.c   ****       do {
+ 1734              		.loc 1 417 7 is_stmt 1 view .LVU558
+ 418:sd_driver.c   ****           if (SD_receive_data(buffer, 512, NO_RELEASE) != 0x00) {
+ 1735              		.loc 1 418 11 view .LVU559
+ 1736              		.loc 1 418 15 is_stmt 0 view .LVU560
+ 1737 0024 0022     		movs	r2, #0
+ 1738 0026 4FF40071 		mov	r1, #512
+ 1739 002a 2846     		mov	r0, r5
+ 1740 002c FFF7FEFF 		bl	SD_receive_data
+ 1741              	.LVL199:
+ 1742              		.loc 1 418 14 view .LVU561
+ 1743 0030 28B9     		cbnz	r0, .L120
+ 419:sd_driver.c   ****              break;
+ 420:sd_driver.c   ****           }
+ 421:sd_driver.c   ****           buffer += 512;
+ 1744              		.loc 1 421 11 is_stmt 1 view .LVU562
+ 422:sd_driver.c   ****       } while (--count);
+ 1745              		.loc 1 422 7 is_stmt 0 view .LVU563
+ 1746 0032 013C     		subs	r4, r4, #1
+ 1747              	.LVL200:
+ 1748              		.loc 1 422 7 view .LVU564
+ 1749 0034 14F0FF04 		ands	r4, r4, #255
+ 421:sd_driver.c   ****       } while (--count);
+ 1750              		.loc 1 421 18 view .LVU565
+ 1751 0038 05F50075 		add	r5, r5, #512
+ 1752              	.LVL201:
+ 1753              		.loc 1 422 15 is_stmt 1 view .LVU566
+ 1754              		.loc 1 422 7 is_stmt 0 view .LVU567
+ 1755 003c F2D1     		bne	.L121
+ 1756              	.L120:
+ 1757              	.LVL202:
+ 423:sd_driver.c   ****       SD_send_command(CMD12, 0, 0);
+ 1758              		.loc 1 423 7 is_stmt 1 view .LVU568
+ 1759 003e 0022     		movs	r2, #0
+ 1760 0040 0C20     		movs	r0, #12
+ 1761 0042 1146     		mov	r1, r2
+ 1762 0044 FFF7FEFF 		bl	SD_send_command
+ 1763              	.LVL203:
+ 424:sd_driver.c   ****       SD_CS_DISABLE();
+ 1764              		.loc 1 424 7 view .LVU569
+ 1765 0048 054A     		ldr	r2, .L126+4
+ 425:sd_driver.c   ****       SPI_read_write_byte(0xFF);
+ 1766              		.loc 1 425 7 is_stmt 0 view .LVU570
+ 1767 004a FF20     		movs	r0, #255
+ 424:sd_driver.c   ****       SD_CS_DISABLE();
+ 1768              		.loc 1 424 7 view .LVU571
+ 1769 004c D368     		ldr	r3, [r2, #12]
+ 1770 004e 43F48053 		orr	r3, r3, #4096
+ 1771 0052 D360     		str	r3, [r2, #12]
+ 1772              		.loc 1 425 7 is_stmt 1 view .LVU572
+ 1773 0054 FFF7FEFF 		bl	SPI_read_write_byte
+ 1774              	.LVL204:
+ 426:sd_driver.c   ****       if (count != 0) {
+ 1775              		.loc 1 426 7 view .LVU573
+ 427:sd_driver.c   ****          return count;
+ 428:sd_driver.c   ****       } else {
+ 429:sd_driver.c   ****          return 0;
+ 1776              		.loc 1 429 17 is_stmt 0 view .LVU574
+ 1777 0058 2046     		mov	r0, r4
+ 1778              	.LVL205:
+ 1779              	.L119:
+ 430:sd_driver.c   ****       }
+ 431:sd_driver.c   **** }
+ 1780              		.loc 1 431 1 view .LVU575
+ 1781 005a 70BD     		pop	{r4, r5, r6, pc}
+ 1782              	.LVL206:
+ 1783              	.L127:
+ 1784              		.loc 1 431 1 view .LVU576
+ 1785              		.align	2
+ 1786              	.L126:
+ 1787 005c 00000000 		.word	.LANCHOR0
+ 1788 0060 000C0140 		.word	1073810432
+ 1789              		.cfi_endproc
+ 1790              	.LFE42:
+ 1792              		.section	.text.SD_write_multi_block,"ax",%progbits
+ 1793              		.align	1
+ 1794              		.global	SD_write_multi_block
+ 1795              		.syntax unified
+ 1796              		.thumb
+ 1797              		.thumb_func
+ 1798              		.fpu softvfp
+ 1800              	SD_write_multi_block:
+ 1801              	.LVL207:
+ 1802              	.LFB43:
+ 432:sd_driver.c   **** 
+ 433:sd_driver.c   **** 
+ 434:sd_driver.c   **** unsigned char SD_write_multi_block (unsigned int sector, const unsigned char *data, unsigned char c
+ 435:sd_driver.c   **** {
+ 1803              		.loc 1 435 1 is_stmt 1 view -0
+ 1804              		.cfi_startproc
+ 1805              		@ args = 0, pretend = 0, frame = 0
+ 1806              		@ frame_needed = 0, uses_anonymous_args = 0
+ 436:sd_driver.c   ****       unsigned char r1;
+ 1807              		.loc 1 436 7 view .LVU578
+ 437:sd_driver.c   ****       unsigned short i;
+ 1808              		.loc 1 437 7 view .LVU579
+ 438:sd_driver.c   ****       SPI_set_speed(SPI_SPEED_HIGH);
+ 1809              		.loc 1 438 7 view .LVU580
+ 435:sd_driver.c   ****       unsigned char r1;
+ 1810              		.loc 1 435 1 is_stmt 0 view .LVU581
+ 1811 0000 70B5     		push	{r4, r5, r6, lr}
+ 1812              		.cfi_def_cfa_offset 16
+ 1813              		.cfi_offset 4, -16
+ 1814              		.cfi_offset 5, -12
+ 1815              		.cfi_offset 6, -8
+ 1816              		.cfi_offset 14, -4
+ 435:sd_driver.c   ****       unsigned char r1;
+ 1817              		.loc 1 435 1 view .LVU582
+ 1818 0002 0646     		mov	r6, r0
+ 1819              		.loc 1 438 7 view .LVU583
+ 1820 0004 0120     		movs	r0, #1
+ 1821              	.LVL208:
+ 435:sd_driver.c   ****       unsigned char r1;
+ 1822              		.loc 1 435 1 view .LVU584
+ 1823 0006 0D46     		mov	r5, r1
+ 1824 0008 1446     		mov	r4, r2
+ 1825              		.loc 1 438 7 view .LVU585
+ 1826 000a FFF7FEFF 		bl	SPI_set_speed
+ 1827              	.LVL209:
+ 439:sd_driver.c   ****       if (SD_type != SD_TYPE_V2HC) {
+ 1828              		.loc 1 439 7 is_stmt 1 view .LVU586
+ 1829              		.loc 1 439 19 is_stmt 0 view .LVU587
+ 1830 000e 2D4B     		ldr	r3, .L148
+ 1831 0010 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1832              		.loc 1 439 10 view .LVU588
+ 1833 0012 042B     		cmp	r3, #4
+ 1834 0014 01D0     		beq	.L129
+ 440:sd_driver.c   ****          sector = sector << 9;
+ 1835              		.loc 1 440 10 is_stmt 1 view .LVU589
+ 1836              		.loc 1 440 17 is_stmt 0 view .LVU590
+ 1837 0016 7602     		lsls	r6, r6, #9
+ 1838              	.LVL210:
+ 441:sd_driver.c   ****       }
+ 442:sd_driver.c   ****       if (SD_type != SD_TYPE_MMC) {
+ 1839              		.loc 1 442 7 is_stmt 1 view .LVU591
+ 1840              		.loc 1 442 10 is_stmt 0 view .LVU592
+ 1841 0018 23B1     		cbz	r3, .L130
+ 1842              	.L129:
+ 443:sd_driver.c   ****          r1 = SD_send_command(ACMD23, count, 0x00);
+ 1843              		.loc 1 443 10 is_stmt 1 view .LVU593
+ 1844              		.loc 1 443 15 is_stmt 0 view .LVU594
+ 1845 001a 0022     		movs	r2, #0
+ 1846 001c 2146     		mov	r1, r4
+ 1847 001e 1720     		movs	r0, #23
+ 1848 0020 FFF7FEFF 		bl	SD_send_command
+ 1849              	.LVL211:
+ 1850              	.L130:
  444:sd_driver.c   ****       }
- 445:sd_driver.c   ****       SD_CS_ENABLE();
- 1833              		.loc 1 445 7 is_stmt 1 view .LVU587
- 1834 0030 254A     		ldr	r2, .L138+4
- 446:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1835              		.loc 1 446 7 is_stmt 0 view .LVU588
- 1836 0032 FF20     		movs	r0, #255
- 1837              	.LVL212:
- 445:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1838              		.loc 1 445 7 view .LVU589
- 1839 0034 D368     		ldr	r3, [r2, #12]
- 1840 0036 05F50075 		add	r5, r5, #512
- 1841              	.LVL213:
- 445:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1842              		.loc 1 445 7 view .LVU590
- 1843 003a 23F48053 		bic	r3, r3, #4096
- 1844 003e D360     		str	r3, [r2, #12]
- 1845              		.loc 1 446 7 is_stmt 1 view .LVU591
- 1846 0040 FFF7FEFF 		bl	SPI_read_write_byte
- 1847              	.LVL214:
- 447:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1848              		.loc 1 447 7 view .LVU592
- 1849 0044 FF20     		movs	r0, #255
- 1850 0046 FFF7FEFF 		bl	SPI_read_write_byte
- 1851              	.LVL215:
- 1852              	.L125:
- 448:sd_driver.c   ****       do {
- 449:sd_driver.c   ****           SPI_read_write_byte(0xFC);
- 1853              		.loc 1 449 11 is_stmt 0 view .LVU593
- 1854 004a FC20     		movs	r0, #252
- 1855 004c A5F50076 		sub	r6, r5, #512
- 1856              	.LVL216:
- 448:sd_driver.c   ****       do {
- 1857              		.loc 1 448 7 is_stmt 1 view .LVU594
- 1858              		.loc 1 449 11 view .LVU595
- 1859 0050 FFF7FEFF 		bl	SPI_read_write_byte
- 1860              	.LVL217:
- 450:sd_driver.c   ****           for (i=0;i<512;i++) {
- 1861              		.loc 1 450 11 view .LVU596
- 1862              		.loc 1 450 20 view .LVU597
- 1863              	.L122:
- 451:sd_driver.c   ****               SPI_read_write_byte(*data++);
- 1864              		.loc 1 451 15 discriminator 3 view .LVU598
- 1865              		.loc 1 451 15 is_stmt 0 discriminator 3 view .LVU599
- 1866 0054 16F8010B 		ldrb	r0, [r6], #1	@ zero_extendqisi2
- 1867              	.LVL218:
- 1868              		.loc 1 451 15 discriminator 3 view .LVU600
- 1869 0058 FFF7FEFF 		bl	SPI_read_write_byte
- 1870              	.LVL219:
- 450:sd_driver.c   ****           for (i=0;i<512;i++) {
- 1871              		.loc 1 450 26 is_stmt 1 discriminator 3 view .LVU601
- 450:sd_driver.c   ****           for (i=0;i<512;i++) {
- 1872              		.loc 1 450 20 discriminator 3 view .LVU602
- 450:sd_driver.c   ****           for (i=0;i<512;i++) {
- 1873              		.loc 1 450 11 is_stmt 0 discriminator 3 view .LVU603
- 1874 005c AE42     		cmp	r6, r5
- 1875 005e F9D1     		bne	.L122
- 452:sd_driver.c   ****           }
- 453:sd_driver.c   ****           SPI_read_write_byte(0xff);
- 1876              		.loc 1 453 11 is_stmt 1 view .LVU604
- 1877 0060 FF20     		movs	r0, #255
- 1878 0062 FFF7FEFF 		bl	SPI_read_write_byte
- 1879              	.LVL220:
- 454:sd_driver.c   ****           SPI_read_write_byte(0xff);
- 1880              		.loc 1 454 11 view .LVU605
- 1881 0066 FF20     		movs	r0, #255
- 1882 0068 FFF7FEFF 		bl	SPI_read_write_byte
- 1883              	.LVL221:
- 455:sd_driver.c   ****           r1 = SPI_read_write_byte(0xff);
- 1884              		.loc 1 455 11 view .LVU606
- 1885              		.loc 1 455 16 is_stmt 0 view .LVU607
- 1886 006c FF20     		movs	r0, #255
- 1887 006e FFF7FEFF 		bl	SPI_read_write_byte
- 1888              	.LVL222:
- 456:sd_driver.c   ****           if ((r1 & 0x1F) != 0x05) {
- 1889              		.loc 1 456 11 is_stmt 1 view .LVU608
- 1890              		.loc 1 456 14 is_stmt 0 view .LVU609
- 1891 0072 00F01F03 		and	r3, r0, #31
- 1892 0076 052B     		cmp	r3, #5
- 1893 0078 05D0     		beq	.L123
- 1894              	.LVL223:
- 1895              	.L137:
- 457:sd_driver.c   ****              SD_CS_DISABLE();
- 458:sd_driver.c   ****              return r1;
- 459:sd_driver.c   ****           }
- 460:sd_driver.c   ****           if (SD_wait_ready() == 1) {
+ 445:sd_driver.c   ****       r1 = SD_send_command(CMD25, sector, 0x00);
+ 1851              		.loc 1 445 7 is_stmt 1 view .LVU595
+ 1852              		.loc 1 445 12 is_stmt 0 view .LVU596
+ 1853 0024 0022     		movs	r2, #0
+ 1854 0026 3146     		mov	r1, r6
+ 1855 0028 1920     		movs	r0, #25
+ 1856 002a FFF7FEFF 		bl	SD_send_command
+ 1857              	.LVL212:
+ 446:sd_driver.c   ****       if (r1 != 0x00) {
+ 1858              		.loc 1 446 7 is_stmt 1 view .LVU597
+ 1859              		.loc 1 446 10 is_stmt 0 view .LVU598
+ 1860 002e 48BB     		cbnz	r0, .L131
+ 447:sd_driver.c   ****          return r1;
+ 448:sd_driver.c   ****       }
+ 449:sd_driver.c   ****       SD_CS_ENABLE();
+ 1861              		.loc 1 449 7 is_stmt 1 view .LVU599
+ 1862 0030 254A     		ldr	r2, .L148+4
+ 450:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1863              		.loc 1 450 7 is_stmt 0 view .LVU600
+ 1864 0032 FF20     		movs	r0, #255
+ 1865              	.LVL213:
+ 449:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1866              		.loc 1 449 7 view .LVU601
+ 1867 0034 D368     		ldr	r3, [r2, #12]
+ 1868 0036 05F50075 		add	r5, r5, #512
+ 1869              	.LVL214:
+ 449:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1870              		.loc 1 449 7 view .LVU602
+ 1871 003a 23F48053 		bic	r3, r3, #4096
+ 1872 003e D360     		str	r3, [r2, #12]
+ 1873              		.loc 1 450 7 is_stmt 1 view .LVU603
+ 1874 0040 FFF7FEFF 		bl	SPI_read_write_byte
+ 1875              	.LVL215:
+ 451:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1876              		.loc 1 451 7 view .LVU604
+ 1877 0044 FF20     		movs	r0, #255
+ 1878 0046 FFF7FEFF 		bl	SPI_read_write_byte
+ 1879              	.LVL216:
+ 1880              	.L135:
+ 452:sd_driver.c   ****       do {
+ 453:sd_driver.c   ****           SPI_read_write_byte(0xFC);
+ 1881              		.loc 1 453 11 is_stmt 0 view .LVU605
+ 1882 004a FC20     		movs	r0, #252
+ 1883 004c A5F50076 		sub	r6, r5, #512
+ 1884              	.LVL217:
+ 452:sd_driver.c   ****       do {
+ 1885              		.loc 1 452 7 is_stmt 1 view .LVU606
+ 1886              		.loc 1 453 11 view .LVU607
+ 1887 0050 FFF7FEFF 		bl	SPI_read_write_byte
+ 1888              	.LVL218:
+ 454:sd_driver.c   ****           for (i=0;i<512;i++) {
+ 1889              		.loc 1 454 11 view .LVU608
+ 1890              		.loc 1 454 20 view .LVU609
+ 1891              	.L132:
+ 455:sd_driver.c   ****               SPI_read_write_byte(*data++);
+ 1892              		.loc 1 455 15 discriminator 3 view .LVU610
+ 1893              		.loc 1 455 15 is_stmt 0 discriminator 3 view .LVU611
+ 1894 0054 16F8010B 		ldrb	r0, [r6], #1	@ zero_extendqisi2
+ 1895              	.LVL219:
+ 1896              		.loc 1 455 15 discriminator 3 view .LVU612
+ 1897 0058 FFF7FEFF 		bl	SPI_read_write_byte
+ 1898              	.LVL220:
+ 454:sd_driver.c   ****           for (i=0;i<512;i++) {
+ 1899              		.loc 1 454 26 is_stmt 1 discriminator 3 view .LVU613
+ 454:sd_driver.c   ****           for (i=0;i<512;i++) {
+ 1900              		.loc 1 454 20 discriminator 3 view .LVU614
+ 454:sd_driver.c   ****           for (i=0;i<512;i++) {
+ 1901              		.loc 1 454 11 is_stmt 0 discriminator 3 view .LVU615
+ 1902 005c AE42     		cmp	r6, r5
+ 1903 005e F9D1     		bne	.L132
+ 456:sd_driver.c   ****           }
+ 457:sd_driver.c   ****           SPI_read_write_byte(0xff);
+ 1904              		.loc 1 457 11 is_stmt 1 view .LVU616
+ 1905 0060 FF20     		movs	r0, #255
+ 1906 0062 FFF7FEFF 		bl	SPI_read_write_byte
+ 1907              	.LVL221:
+ 458:sd_driver.c   ****           SPI_read_write_byte(0xff);
+ 1908              		.loc 1 458 11 view .LVU617
+ 1909 0066 FF20     		movs	r0, #255
+ 1910 0068 FFF7FEFF 		bl	SPI_read_write_byte
+ 1911              	.LVL222:
+ 459:sd_driver.c   ****           r1 = SPI_read_write_byte(0xff);
+ 1912              		.loc 1 459 11 view .LVU618
+ 1913              		.loc 1 459 16 is_stmt 0 view .LVU619
+ 1914 006c FF20     		movs	r0, #255
+ 1915 006e FFF7FEFF 		bl	SPI_read_write_byte
+ 1916              	.LVL223:
+ 460:sd_driver.c   ****           if ((r1 & 0x1F) != 0x05) {
+ 1917              		.loc 1 460 11 is_stmt 1 view .LVU620
+ 1918              		.loc 1 460 14 is_stmt 0 view .LVU621
+ 1919 0072 00F01F03 		and	r3, r0, #31
+ 1920 0076 052B     		cmp	r3, #5
+ 1921 0078 05D0     		beq	.L133
+ 1922              	.LVL224:
+ 1923              	.L147:
  461:sd_driver.c   ****              SD_CS_DISABLE();
- 1896              		.loc 1 461 14 is_stmt 1 view .LVU610
- 1897 007a 134A     		ldr	r2, .L138+4
- 1898 007c D368     		ldr	r3, [r2, #12]
- 1899 007e 43F48053 		orr	r3, r3, #4096
- 1900 0082 D360     		str	r3, [r2, #12]
- 462:sd_driver.c   ****              return 1;
- 1901              		.loc 1 462 14 view .LVU611
- 1902              	.LVL224:
- 1903              	.L121:
+ 462:sd_driver.c   ****              return r1;
  463:sd_driver.c   ****           }
- 464:sd_driver.c   ****       } while (--count);
- 465:sd_driver.c   ****       r1 = SPI_read_write_byte(0xFD);
- 466:sd_driver.c   ****       if (r1 == 0x00) {
- 467:sd_driver.c   ****          count =  0xfe;
- 468:sd_driver.c   ****       }
- 469:sd_driver.c   ****       if (SD_wait_ready()) {
- 470:sd_driver.c   ****          while (1) {
- 471:sd_driver.c   ****                //
- 472:sd_driver.c   ****          }
- 473:sd_driver.c   ****       }
- 474:sd_driver.c   ****       SD_CS_DISABLE();
- 475:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 476:sd_driver.c   ****       return count;
- 477:sd_driver.c   **** }
- 1904              		.loc 1 477 1 is_stmt 0 view .LVU612
- 1905 0084 70BD     		pop	{r4, r5, r6, pc}
- 1906              	.LVL225:
- 1907              	.L123:
- 460:sd_driver.c   ****              SD_CS_DISABLE();
- 1908              		.loc 1 460 11 is_stmt 1 view .LVU613
- 460:sd_driver.c   ****              SD_CS_DISABLE();
- 1909              		.loc 1 460 15 is_stmt 0 view .LVU614
- 1910 0086 FFF7FEFF 		bl	SD_wait_ready
- 1911              	.LVL226:
- 460:sd_driver.c   ****              SD_CS_DISABLE();
- 1912              		.loc 1 460 14 view .LVU615
- 1913 008a 0128     		cmp	r0, #1
- 1914 008c F5D0     		beq	.L137
- 464:sd_driver.c   ****       r1 = SPI_read_write_byte(0xFD);
- 1915              		.loc 1 464 15 is_stmt 1 view .LVU616
- 464:sd_driver.c   ****       r1 = SPI_read_write_byte(0xFD);
- 1916              		.loc 1 464 7 is_stmt 0 view .LVU617
- 1917 008e 013C     		subs	r4, r4, #1
- 1918              	.LVL227:
- 464:sd_driver.c   ****       r1 = SPI_read_write_byte(0xFD);
- 1919              		.loc 1 464 7 view .LVU618
- 1920 0090 14F0FF04 		ands	r4, r4, #255
- 1921              	.LVL228:
- 464:sd_driver.c   ****       r1 = SPI_read_write_byte(0xFD);
- 1922              		.loc 1 464 7 view .LVU619
- 1923 0094 06F50075 		add	r5, r6, #512
- 1924 0098 D7D1     		bne	.L125
- 465:sd_driver.c   ****       if (r1 == 0x00) {
- 1925              		.loc 1 465 7 is_stmt 1 view .LVU620
- 465:sd_driver.c   ****       if (r1 == 0x00) {
- 1926              		.loc 1 465 12 is_stmt 0 view .LVU621
- 1927 009a FD20     		movs	r0, #253
- 1928 009c FFF7FEFF 		bl	SPI_read_write_byte
- 1929              	.LVL229:
- 466:sd_driver.c   ****          count =  0xfe;
- 1930              		.loc 1 466 7 is_stmt 1 view .LVU622
- 467:sd_driver.c   ****       }
- 1931              		.loc 1 467 16 is_stmt 0 view .LVU623
- 1932 00a0 0028     		cmp	r0, #0
- 1933 00a2 08BF     		it	eq
- 1934 00a4 FE24     		moveq	r4, #254
- 1935              	.LVL230:
- 469:sd_driver.c   ****          while (1) {
- 1936              		.loc 1 469 7 is_stmt 1 view .LVU624
- 469:sd_driver.c   ****          while (1) {
- 1937              		.loc 1 469 11 is_stmt 0 view .LVU625
- 1938 00a6 FFF7FEFF 		bl	SD_wait_ready
- 1939              	.LVL231:
- 469:sd_driver.c   ****          while (1) {
- 1940              		.loc 1 469 10 view .LVU626
- 1941 00aa 00B1     		cbz	r0, .L127
- 1942              	.L128:
- 470:sd_driver.c   ****                //
- 1943              		.loc 1 470 10 is_stmt 1 discriminator 1 view .LVU627
+ 464:sd_driver.c   ****           if (SD_wait_ready() == 1) {
+ 465:sd_driver.c   ****              SD_CS_DISABLE();
+ 1924              		.loc 1 465 14 is_stmt 1 view .LVU622
+ 1925 007a 134A     		ldr	r2, .L148+4
+ 1926 007c D368     		ldr	r3, [r2, #12]
+ 1927 007e 43F48053 		orr	r3, r3, #4096
+ 1928 0082 D360     		str	r3, [r2, #12]
+ 466:sd_driver.c   ****              return 1;
+ 1929              		.loc 1 466 14 view .LVU623
+ 1930              	.LVL225:
+ 1931              	.L131:
+ 467:sd_driver.c   ****           }
+ 468:sd_driver.c   ****       } while (--count);
+ 469:sd_driver.c   ****       r1 = SPI_read_write_byte(0xFD);
+ 470:sd_driver.c   ****       if (r1 == 0x00) {
+ 471:sd_driver.c   ****          count =  0xfe;
  472:sd_driver.c   ****       }
- 1944              		.loc 1 472 10 discriminator 1 view .LVU628
- 470:sd_driver.c   ****                //
- 1945              		.loc 1 470 16 discriminator 1 view .LVU629
- 1946 00ac FEE7     		b	.L128
- 1947              	.L127:
- 474:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1948              		.loc 1 474 7 view .LVU630
- 1949 00ae 064A     		ldr	r2, .L138+4
- 475:sd_driver.c   ****       return count;
- 1950              		.loc 1 475 7 is_stmt 0 view .LVU631
- 1951 00b0 FF20     		movs	r0, #255
- 474:sd_driver.c   ****       SPI_read_write_byte(0xff);
- 1952              		.loc 1 474 7 view .LVU632
- 1953 00b2 D368     		ldr	r3, [r2, #12]
- 1954 00b4 43F48053 		orr	r3, r3, #4096
- 1955 00b8 D360     		str	r3, [r2, #12]
- 475:sd_driver.c   ****       return count;
- 1956              		.loc 1 475 7 is_stmt 1 view .LVU633
- 1957 00ba FFF7FEFF 		bl	SPI_read_write_byte
- 1958              	.LVL232:
- 476:sd_driver.c   **** }
- 1959              		.loc 1 476 7 view .LVU634
- 476:sd_driver.c   **** }
- 1960              		.loc 1 476 14 is_stmt 0 view .LVU635
- 1961 00be 2046     		mov	r0, r4
- 1962 00c0 E0E7     		b	.L121
- 1963              	.L139:
- 1964 00c2 00BF     		.align	2
- 1965              	.L138:
- 1966 00c4 00000000 		.word	.LANCHOR0
- 1967 00c8 000C0140 		.word	1073810432
- 1968              		.cfi_endproc
- 1969              	.LFE43:
- 1971              		.global	SD_type
- 1972              		.section	.bss.SD_type,"aw",%nobits
- 1973              		.set	.LANCHOR0,. + 0
- 1976              	SD_type:
- 1977 0000 00       		.space	1
- 1978              		.text
- 1979              	.Letext0:
- 1980              		.file 2 "c:\\project\\stm32fx_lib\\stm32f1x_iolib\\include\\core.h"
- 1981              		.file 3 "/project/stm32fx_lib/stm32f1x_iolib/include/cmsis/stm32f1xx.h"
- 1982              		.file 4 "/project/stm32fx_lib/stm32f1x_iolib/include/spi.h"
- 1983              		.file 5 "/project/stm32fx_lib/stm32f1x_iolib/include/gpio.h"
- 1984              		.file 6 "/project/stm32fx_lib/stm32f1x_iolib/include/fundefs.h"
+ 473:sd_driver.c   ****       if (SD_wait_ready()) {
+ 474:sd_driver.c   ****          while (1) {
+ 475:sd_driver.c   ****                //
+ 476:sd_driver.c   ****          }
+ 477:sd_driver.c   ****       }
+ 478:sd_driver.c   ****       SD_CS_DISABLE();
+ 479:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 480:sd_driver.c   ****       return count;
+ 481:sd_driver.c   **** }
+ 1932              		.loc 1 481 1 is_stmt 0 view .LVU624
+ 1933 0084 70BD     		pop	{r4, r5, r6, pc}
+ 1934              	.LVL226:
+ 1935              	.L133:
+ 464:sd_driver.c   ****              SD_CS_DISABLE();
+ 1936              		.loc 1 464 11 is_stmt 1 view .LVU625
+ 464:sd_driver.c   ****              SD_CS_DISABLE();
+ 1937              		.loc 1 464 15 is_stmt 0 view .LVU626
+ 1938 0086 FFF7FEFF 		bl	SD_wait_ready
+ 1939              	.LVL227:
+ 464:sd_driver.c   ****              SD_CS_DISABLE();
+ 1940              		.loc 1 464 14 view .LVU627
+ 1941 008a 0128     		cmp	r0, #1
+ 1942 008c F5D0     		beq	.L147
+ 468:sd_driver.c   ****       r1 = SPI_read_write_byte(0xFD);
+ 1943              		.loc 1 468 15 is_stmt 1 view .LVU628
+ 468:sd_driver.c   ****       r1 = SPI_read_write_byte(0xFD);
+ 1944              		.loc 1 468 7 is_stmt 0 view .LVU629
+ 1945 008e 013C     		subs	r4, r4, #1
+ 1946              	.LVL228:
+ 468:sd_driver.c   ****       r1 = SPI_read_write_byte(0xFD);
+ 1947              		.loc 1 468 7 view .LVU630
+ 1948 0090 14F0FF04 		ands	r4, r4, #255
+ 1949              	.LVL229:
+ 468:sd_driver.c   ****       r1 = SPI_read_write_byte(0xFD);
+ 1950              		.loc 1 468 7 view .LVU631
+ 1951 0094 06F50075 		add	r5, r6, #512
+ 1952 0098 D7D1     		bne	.L135
+ 469:sd_driver.c   ****       if (r1 == 0x00) {
+ 1953              		.loc 1 469 7 is_stmt 1 view .LVU632
+ 469:sd_driver.c   ****       if (r1 == 0x00) {
+ 1954              		.loc 1 469 12 is_stmt 0 view .LVU633
+ 1955 009a FD20     		movs	r0, #253
+ 1956 009c FFF7FEFF 		bl	SPI_read_write_byte
+ 1957              	.LVL230:
+ 470:sd_driver.c   ****          count =  0xfe;
+ 1958              		.loc 1 470 7 is_stmt 1 view .LVU634
+ 471:sd_driver.c   ****       }
+ 1959              		.loc 1 471 16 is_stmt 0 view .LVU635
+ 1960 00a0 0028     		cmp	r0, #0
+ 1961 00a2 08BF     		it	eq
+ 1962 00a4 FE24     		moveq	r4, #254
+ 1963              	.LVL231:
+ 473:sd_driver.c   ****          while (1) {
+ 1964              		.loc 1 473 7 is_stmt 1 view .LVU636
+ 473:sd_driver.c   ****          while (1) {
+ 1965              		.loc 1 473 11 is_stmt 0 view .LVU637
+ 1966 00a6 FFF7FEFF 		bl	SD_wait_ready
+ 1967              	.LVL232:
+ 473:sd_driver.c   ****          while (1) {
+ 1968              		.loc 1 473 10 view .LVU638
+ 1969 00aa 00B1     		cbz	r0, .L137
+ 1970              	.L138:
+ 474:sd_driver.c   ****                //
+ 1971              		.loc 1 474 10 is_stmt 1 discriminator 1 view .LVU639
+ 476:sd_driver.c   ****       }
+ 1972              		.loc 1 476 10 discriminator 1 view .LVU640
+ 474:sd_driver.c   ****                //
+ 1973              		.loc 1 474 16 discriminator 1 view .LVU641
+ 1974 00ac FEE7     		b	.L138
+ 1975              	.L137:
+ 478:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1976              		.loc 1 478 7 view .LVU642
+ 1977 00ae 064A     		ldr	r2, .L148+4
+ 479:sd_driver.c   ****       return count;
+ 1978              		.loc 1 479 7 is_stmt 0 view .LVU643
+ 1979 00b0 FF20     		movs	r0, #255
+ 478:sd_driver.c   ****       SPI_read_write_byte(0xff);
+ 1980              		.loc 1 478 7 view .LVU644
+ 1981 00b2 D368     		ldr	r3, [r2, #12]
+ 1982 00b4 43F48053 		orr	r3, r3, #4096
+ 1983 00b8 D360     		str	r3, [r2, #12]
+ 479:sd_driver.c   ****       return count;
+ 1984              		.loc 1 479 7 is_stmt 1 view .LVU645
+ 1985 00ba FFF7FEFF 		bl	SPI_read_write_byte
+ 1986              	.LVL233:
+ 480:sd_driver.c   **** }
+ 1987              		.loc 1 480 7 view .LVU646
+ 480:sd_driver.c   **** }
+ 1988              		.loc 1 480 14 is_stmt 0 view .LVU647
+ 1989 00be 2046     		mov	r0, r4
+ 1990 00c0 E0E7     		b	.L131
+ 1991              	.L149:
+ 1992 00c2 00BF     		.align	2
+ 1993              	.L148:
+ 1994 00c4 00000000 		.word	.LANCHOR0
+ 1995 00c8 000C0140 		.word	1073810432
+ 1996              		.cfi_endproc
+ 1997              	.LFE43:
+ 1999              		.global	SD_type
+ 2000              		.section	.bss.SD_type,"aw",%nobits
+ 2001              		.set	.LANCHOR0,. + 0
+ 2004              	SD_type:
+ 2005 0000 00       		.space	1
+ 2006              		.text
+ 2007              	.Letext0:
+ 2008              		.file 2 "c:\\project\\stm32fx_lib\\stm32f1x_iolib\\include\\core.h"
+ 2009              		.file 3 "/project/stm32fx_lib/stm32f1x_iolib/include/cmsis/stm32f1xx.h"
+ 2010              		.file 4 "/project/stm32fx_lib/stm32f1x_iolib/include/spi.h"
+ 2011              		.file 5 "/project/stm32fx_lib/stm32f1x_iolib/include/gpio.h"
+ 2012              		.file 6 "/project/stm32fx_lib/stm32f1x_iolib/include/fundefs.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 sd_driver.c
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:16     .text.SPI_configuration:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:24     .text.SPI_configuration:00000000 SPI_configuration
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:139    .text.SPI_configuration:000000a0 $d
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:145    .text.SPI_set_speed:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:152    .text.SPI_set_speed:00000000 SPI_set_speed
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:211    .text.SPI_set_speed:00000038 $d
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:217    .text.SPI_read_write_byte:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:224    .text.SPI_read_write_byte:00000000 SPI_read_write_byte
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:285    .text.SPI_read_write_byte:00000034 $d
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:290    .text.SD_wait_ready:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:297    .text.SD_wait_ready:00000000 SD_wait_ready
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:351    .text.SD_send_command:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:358    .text.SD_send_command:00000000 SD_send_command
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:461    .text.SD_send_command:0000006c $d
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:466    .text.SD_send_command_no_deassert:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:473    .text.SD_send_command_no_deassert:00000000 SD_send_command_no_deassert
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:559    .text.SD_send_command_no_deassert:00000058 $d
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:564    .text.SD_init:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:571    .text.SD_init:00000000 SD_init
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:969    .text.SD_init:00000184 $d
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:975    .text.SD_receive_data:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:982    .text.SD_receive_data:00000000 SD_receive_data
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1107   .text.SD_receive_data:0000006c $d
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1112   .text.SD_get_cid:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1119   .text.SD_get_cid:00000000 SD_get_cid
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1168   .text.SD_get_csd:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1175   .text.SD_get_csd:00000000 SD_get_csd
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1232   .text.SD_get_capacity:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1239   .text.SD_get_capacity:00000000 SD_get_capacity
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1393   .text.SD_read_single_block:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1400   .text.SD_read_single_block:00000000 SD_read_single_block
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1466   .text.SD_write_single_block:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1473   .text.SD_write_single_block:00000000 SD_write_single_block
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1652   .text.SD_write_single_block:000000b4 $d
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1658   .text.SD_read_multi_block:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1665   .text.SD_read_multi_block:00000000 SD_read_multi_block
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1760   .text.SD_read_multi_block:00000054 $d
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1765   .text.SD_write_multi_block:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1772   .text.SD_write_multi_block:00000000 SD_write_multi_block
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1966   .text.SD_write_multi_block:000000c4 $d
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1976   .bss.SD_type:00000000 SD_type
-C:\Users\gowoo\AppData\Local\Temp\ccf8p7ea.s:1977   .bss.SD_type:00000000 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:16     .text.SPI_configuration:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:24     .text.SPI_configuration:00000000 SPI_configuration
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:139    .text.SPI_configuration:000000a0 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:145    .text.SPI_set_speed:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:152    .text.SPI_set_speed:00000000 SPI_set_speed
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:211    .text.SPI_set_speed:00000038 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:217    .text.SPI_read_write_byte:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:224    .text.SPI_read_write_byte:00000000 SPI_read_write_byte
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:285    .text.SPI_read_write_byte:00000034 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:290    .text.SD_wait_ready:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:297    .text.SD_wait_ready:00000000 SD_wait_ready
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:351    .text.SD_send_command:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:358    .text.SD_send_command:00000000 SD_send_command
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:461    .text.SD_send_command:0000006c $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:466    .text.SD_send_command_no_deassert:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:473    .text.SD_send_command_no_deassert:00000000 SD_send_command_no_deassert
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:559    .text.SD_send_command_no_deassert:00000058 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:564    .text.SD_init:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:571    .text.SD_init:00000000 SD_init
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:969    .text.SD_init:00000184 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:975    .text.SD_receive_data:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:982    .text.SD_receive_data:00000000 SD_receive_data
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1107   .text.SD_receive_data:0000006c $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1112   .text.SD_get_cid:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1119   .text.SD_get_cid:00000000 SD_get_cid
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1168   .text.SD_get_csd:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1175   .text.SD_get_csd:00000000 SD_get_csd
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1232   .text.SD_get_capacity:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1239   .text.SD_get_capacity:00000000 SD_get_capacity
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1393   .text.SD_read_single_block:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1400   .text.SD_read_single_block:00000000 SD_read_single_block
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1477   .text.SD_read_single_block:00000034 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1482   .text.SD_write_single_block:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1489   .text.SD_write_single_block:00000000 SD_write_single_block
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1668   .text.SD_write_single_block:000000b4 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1674   .text.SD_read_multi_block:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1681   .text.SD_read_multi_block:00000000 SD_read_multi_block
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1787   .text.SD_read_multi_block:0000005c $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1793   .text.SD_write_multi_block:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1800   .text.SD_write_multi_block:00000000 SD_write_multi_block
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:1994   .text.SD_write_multi_block:000000c4 $d
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:2004   .bss.SD_type:00000000 SD_type
+C:\Users\gowoo\AppData\Local\Temp\ccZgBohf.s:2005   .bss.SD_type:00000000 $d
 
 UNDEFINED SYMBOLS
 RCC_APB1PeriphClockCmd

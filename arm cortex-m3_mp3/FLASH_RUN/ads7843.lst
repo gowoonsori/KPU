@@ -2960,7 +2960,7 @@
  2101              		.loc 1 423 5 view .LVU664
  2102 0040 2B80     		strh	r3, [r5]	@ movhi
  2103              	.L107:
- 424:ads7843.c     **** 	    //lcd_printf(5,3,"X:%5d Y%5d ",pen_point.x0,pen_point.y0);
+ 424:ads7843.c     **** 	    //lcd_printf(8,5,"X:%5d Y%5d ",pen_point.x0,pen_point.y0);
  425:ads7843.c     **** 	    //draw_point(pen_point.x0,pen_point.y0);
  426:ads7843.c     ****          }
  427:ads7843.c     ****          if (PEN) {
@@ -3105,51 +3105,51 @@
  2221              		.file 14 "/project/stm32fx_lib/stm32f1x_iolib/include/fundefs.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 ads7843.c
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:16     .text.pen_interrupt_set.part.0:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:23     .text.pen_interrupt_set.part.0:00000000 pen_interrupt_set.part.0
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:43     .text.pen_interrupt_set.part.0:0000000c $d
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:48     .text.ads7843_write_byte:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:55     .text.ads7843_write_byte:00000000 ads7843_write_byte
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:123    .text.ads7843_write_byte:00000030 $d
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:129    .text.ads7843_read_adc:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:136    .text.ads7843_read_adc:00000000 ads7843_read_adc
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:240    .text.ads7843_read_adc:00000040 $d
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:247    .text.ads7843_read_xy:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:254    .text.ads7843_read_xy:00000000 ads7843_read_xy
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:398    .text.read_ads7843:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:405    .text.read_ads7843:00000000 read_ads7843
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:470    .text.read_ads7843_2:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:477    .text.read_ads7843_2:00000000 read_ads7843_2
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:603    .text.pen_interrupt_set:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:610    .text.pen_interrupt_set:00000000 pen_interrupt_set
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:635    .text.pen_interrupt_set:00000014 $d
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:640    .text.read_tp_once:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:647    .text.read_tp_once:00000000 read_tp_once
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:748    .text.read_tp_once:00000054 $d
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:16     .text.pen_interrupt_set.part.0:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:23     .text.pen_interrupt_set.part.0:00000000 pen_interrupt_set.part.0
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:43     .text.pen_interrupt_set.part.0:0000000c $d
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:48     .text.ads7843_write_byte:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:55     .text.ads7843_write_byte:00000000 ads7843_write_byte
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:123    .text.ads7843_write_byte:00000030 $d
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:129    .text.ads7843_read_adc:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:136    .text.ads7843_read_adc:00000000 ads7843_read_adc
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:240    .text.ads7843_read_adc:00000040 $d
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:247    .text.ads7843_read_xy:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:254    .text.ads7843_read_xy:00000000 ads7843_read_xy
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:398    .text.read_ads7843:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:405    .text.read_ads7843:00000000 read_ads7843
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:470    .text.read_ads7843_2:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:477    .text.read_ads7843_2:00000000 read_ads7843_2
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:603    .text.pen_interrupt_set:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:610    .text.pen_interrupt_set:00000000 pen_interrupt_set
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:635    .text.pen_interrupt_set:00000014 $d
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:640    .text.read_tp_once:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:647    .text.read_tp_once:00000000 read_tp_once
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:748    .text.read_tp_once:00000054 $d
                             *COM*:00000001 pen_status
                             *COM*:00000010 pen_point
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:755    .text.drow_touch_point:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:762    .text.drow_touch_point:00000000 drow_touch_point
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:888    .text.touch_adjust:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:895    .text.touch_adjust:00000000 touch_adjust
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1070   .text.touch_adjust:0000009c $d
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1074   .text.touch_adjust:000000a0 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1564   .text.touch_adjust:0000031c $d
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:755    .text.drow_touch_point:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:762    .text.drow_touch_point:00000000 drow_touch_point
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:888    .text.touch_adjust:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:895    .text.touch_adjust:00000000 touch_adjust
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1070   .text.touch_adjust:0000009c $d
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1074   .text.touch_adjust:000000a0 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1564   .text.touch_adjust:0000031c $d
                             *COM*:00000001 pen_enable
                             *COM*:00000001 pen_count
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1583   .text.touch_adjust:00000358 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1742   .text.touch_adjust:00000430 $d
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1759   .text.touch_init:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1766   .text.touch_init:00000000 touch_init
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1888   .text.touch_init:00000090 $d
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1895   .text.EXTI4_IRQHandler:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1902   .text.EXTI4_IRQHandler:00000000 EXTI4_IRQHandler
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1952   .text.EXTI4_IRQHandler:0000002c $d
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1958   .text.draw_point:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:1965   .text.draw_point:00000000 draw_point
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:2025   .text.touch_process:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:2032   .text.touch_process:00000000 touch_process
-C:\Users\gowoo\AppData\Local\Temp\ccV1Kija.s:2193   .text.touch_process:0000008c $d
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1583   .text.touch_adjust:00000358 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1742   .text.touch_adjust:00000430 $d
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1759   .text.touch_init:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1766   .text.touch_init:00000000 touch_init
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1888   .text.touch_init:00000090 $d
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1895   .text.EXTI4_IRQHandler:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1902   .text.EXTI4_IRQHandler:00000000 EXTI4_IRQHandler
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1952   .text.EXTI4_IRQHandler:0000002c $d
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1958   .text.draw_point:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:1965   .text.draw_point:00000000 draw_point
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:2025   .text.touch_process:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:2032   .text.touch_process:00000000 touch_process
+C:\Users\gowoo\AppData\Local\Temp\ccimS0zp.s:2193   .text.touch_process:0000008c $d
 
 UNDEFINED SYMBOLS
 wait_ms

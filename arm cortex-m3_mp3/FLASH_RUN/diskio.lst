@@ -493,19 +493,19 @@
  356              		.file 5 "diskio.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 diskio.c
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:16     .text.disk_initialize:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:24     .text.disk_initialize:00000000 disk_initialize
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:70     .text.disk_status:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:77     .text.disk_status:00000000 disk_status
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:97     .text.disk_read:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:104    .text.disk_read:00000000 disk_read
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:167    .text.disk_write:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:174    .text.disk_write:00000000 disk_write
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:237    .text.disk_ioctl:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:244    .text.disk_ioctl:00000000 disk_ioctl
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:325    .text.disk_ioctl:00000048 $d
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:330    .text.get_fattime:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\cchpUVs4.s:337    .text.get_fattime:00000000 get_fattime
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:16     .text.disk_initialize:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:24     .text.disk_initialize:00000000 disk_initialize
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:70     .text.disk_status:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:77     .text.disk_status:00000000 disk_status
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:97     .text.disk_read:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:104    .text.disk_read:00000000 disk_read
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:167    .text.disk_write:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:174    .text.disk_write:00000000 disk_write
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:237    .text.disk_ioctl:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:244    .text.disk_ioctl:00000000 disk_ioctl
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:325    .text.disk_ioctl:00000048 $d
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:330    .text.get_fattime:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\cceqGkp8.s:337    .text.get_fattime:00000000 get_fattime
 
 UNDEFINED SYMBOLS
 SD_init

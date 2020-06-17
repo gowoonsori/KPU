@@ -421,7 +421,7 @@ void touch_process (unsigned short *x,unsigned short *y)
 	    pen_point.y0 = pen_point.y;
 		*x=pen_point.x0;
 		*y=pen_point.y0;
-	    //lcd_printf(5,3,"X:%5d Y%5d ",pen_point.x0,pen_point.y0);
+	    //lcd_printf(8,5,"X:%5d Y%5d ",pen_point.x0,pen_point.y0);
 	    //draw_point(pen_point.x0,pen_point.y0);
          }
          if (PEN) {

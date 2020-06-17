@@ -11,7 +11,7 @@
 int option_value;
 FLASH_Status FLASHStatus = FLASH_COMPLETE;
 
-volatile unsigned short tick,jiffes,sec_tick,second,volume;
+volatile unsigned short tick,jiffes,sec_tick,second,volume=64;
 volatile unsigned char sw_value,sw_cnt1,sw_cnt2,sw_cnt3,sw_cnt4,sw_cnt5;
 volatile unsigned char play_mp3,volume_flag;
 
@@ -20,7 +20,7 @@ extern volatile unsigned char rxck1,rxck2,rxled,txled;
 
 unsigned char fileBuff[512];
 unsigned short xLoc, yLoc;
-
+unsigned short old_volume;
 
 int go_back(unsigned short x,unsigned short y);
 
@@ -283,31 +283,45 @@ void main_display(){
       //timer4_init();
       serial_init();
       lcd_init();
-      lcd_printf(2,0,"MP3 Init ");
 	  touch_init();
       adc_init();
 	  mp3_init();
-	  init_rtc();
+	  //init_rtc();
+	  draw_apple_logo(350,570);
+	  lcd_draw_rectangle(10,0,1000,150);
 	  
 	  lcd_printf(2,14,"<");
-	  lcd_printf(25,14,">");
-	  lcd_printf(13,14,"II");
-	  lcd_printf(13,10,">>");
-	  lcd_printf(13,18,"<<");
+	  lcd_printf(26,14,">");
+	  if (play_mp3) lcd_printf(14,14,"II");
+	  else lcd_printf(14,14,"I>");
+	  lcd_printf(14,10,">>");
+	  //lcd_printf(13,18,"<<");
+	  lcd_printf(26,10,"+");
+	  lcd_printf(2,10,"-");
 	  lcd_printf(1,18,"list");
-	  lcd_printf(25,18,"+");
+	  lcd_printf(25,18,"inf");
 
 }
 
-void touch_read (unsigned short x,unsigned short y){
+void touch_read (unsigned short *x,unsigned short *y){
 
-	if ((x>=600&&x<=1000)&&(y>=600&&y<=800)) {	// Select
+	
+	if ((*x>=600&&*x<=1050)&&(*y>=600&&*y<=800)) {	// Select
         sw_cnt1++;
         if (sw_cnt1 >= 40) {
             sw_cnt1 = 0;
             if ((sw_value & 0x01) == 0)	{
                sw_value |= 0x01;
-               if (play_mp3) play_mp3 = 0;else play_mp3 = 1;
+               if (play_mp3) {
+			   play_mp3 = 0;
+			   lcd_printf(14,14,"I>");
+			   }
+			   
+			   else {
+			   play_mp3 = 1;
+			   lcd_printf(14,14,"II");
+			   }
+			   
             }
         }
     } 
@@ -315,7 +329,7 @@ void touch_read (unsigned short x,unsigned short y){
       	sw_cnt1 = 0;
       	sw_value &= ~(0x01);
     }
-    if ((x>=1300&&x<=1800)&&(y>=600&&y<=800)) {	// Right
+    if ((*x>=1300&&*x<=1800)&&(*y>=600&&*y<=800)) {	// Right
          sw_cnt2++;
          if (sw_cnt2 >= 40) {
             sw_cnt2 = 0;
@@ -329,7 +343,8 @@ void touch_read (unsigned short x,unsigned short y){
       	sw_cnt2 = 0;
       	sw_value &= ~(0x02);
     }
-    if ((x>=600&&x<=1000)&&(y>=200&&y<=520)) {	// -2���
+	
+    if ((*x==3000)&&(*y==3000)) {	// -2���
         sw_cnt3++;
         if (sw_cnt3 >= 40) {
             sw_cnt3 = 0;
@@ -343,7 +358,8 @@ void touch_read (unsigned short x,unsigned short y){
         sw_cnt3 = 0;
       	sw_value &= ~(0x04);
     }
-    if ((x>=600&&x<=1000)&&(y>=900&&y<=1150)) {	// x2���
+	
+    if ((*x>=600&&*x<=1000)&&(*y>=900&&*y<=1150)) {	// x2���
         sw_cnt4++;
         if (sw_cnt4 >= 40) {
             sw_cnt4 = 0;
@@ -357,7 +373,7 @@ void touch_read (unsigned short x,unsigned short y){
         sw_cnt4 = 0;
       	sw_value &= ~(0x08);
     }
-    if ((x>=100&&x<=400)&&(y>=600&&y<=800)) {	// Left
+    if ((*x>=100&&*x<=400)&&(*y>=600&&*y<=800)) {	// Left
         sw_cnt5++;
         if (sw_cnt5 >= 40) {
             sw_cnt5 = 0;
@@ -370,56 +386,69 @@ void touch_read (unsigned short x,unsigned short y){
 	else {
         sw_cnt5 = 0;
       	sw_value &= ~(0x10);
-    }
-	
-	if ((x>=100&&x<=400)&&(y>=200&&y<=400)) {	// playlist
-		unsigned short x2,y2;
-		mp3_displaylist();
-		lcd_printf(1,18,"                         <--");
-		while(1){
-			touch_process(&x2,&y2);
-			if(1==go_back(x2,y2)){
-				xLoc=1,yLoc=1;
-				break;
-			}
-		}
+    }	
+	if ((*x>=1300&&*x<=1800)&&(*y>=900&&*y<=1150)) {	// volume up
+		volume--;
+		if(volume==0)volume++;
 	} 
-	else{
-	}
 	
 	
-	
-	if ((x>=1300&&x<=1800)&&(y>=200&&y<=400)) {	// information
+	if ((*x>=100&&*x<=400)&&(*y>=900&&*y<=1150)) {	//volume down
+		volume++;
+		if(volume>127)volume=127;
+	} 
+	if ((*x>=1300&&*x<=1800)&&(*y>=200&&*y<=400)) {	// information
 		unsigned short x2,y2;
 		display_id3v1_tag();
 		lcd_printf(1,18,"                         <--");
 		while(1){
 			touch_process(&x2,&y2);
-			if(1==go_back(x2,y2)){
+			if(go_back(x2,y2)){
 				xLoc=1,yLoc=1;
 				break;
 			}
 		}
 	} 
-	else{
-	}
+	if ((*x>=100&&*x<=400)&&(*y>=200&&*y<=400)) {	// playlist
+		unsigned short x2,y2;
+		display_id3v1_tag();
+		show_playlist();
+		lcd_printf(1,18,"                         <--");
+		while(1){
+			touch_process(&x2,&y2);
+			if(go_back(x2,y2)){
+				xLoc=1,yLoc=1;
+				break;
+			}
+		}
+	} 
+	
+	xLoc=0;
+	yLoc=0;
+			   		   
 }
 
+int select_music(unsigned short x,unsigned short y){
+	if ((x>=1300&&x<=1800)&&(y>=200&&y<=400)) {	// go back
+       main_display();
+	   mp3_displayinit();
+	   return 1;
+	}
+	return 0;
+}
 int go_back(unsigned short x,unsigned short y){
 	if ((x>=1300&&x<=1800)&&(y>=200&&y<=400)) {	// go back
        main_display();
 	   mp3_displayinit();
-	   lcd_printf(2,1,"Volume %d ",255 - (volume + 127));
 	   return 1;
 	}
 	return 0;
-	
 }
 
 int main (void)
 {
       int count,sec,msec,sum_adc,adc_count;
-      unsigned short ad_value,old_volume;
+      //unsigned short ad_value;
       /* System Clocks Configuration */
       Periph_Configuration();
       /* NVIC configuration */
@@ -449,8 +478,7 @@ int main (void)
       old_volume = -1;
       sum_adc = 0;
       adc_count = 0;
-      ad_value = 0;
-	  
+      //ad_value = 0;
 	  
       while (1) {
       	    mp3_play();
@@ -459,7 +487,7 @@ int main (void)
                count++;
                msec++;
                touch_process(&xLoc,&yLoc);
-			   touch_read(xLoc,yLoc);
+			   touch_read(&xLoc,&yLoc);
 			   
                //sw_read();
                if (count == 100) {
@@ -494,15 +522,19 @@ int main (void)
                   adc_count++;
                }
                if (adc_count >= 50) {
-               	  ad_value = sum_adc / adc_count;          	  
+			   /*  
+               	  ad_value = sum_adc / adc_count;      	  
                	  adc_count = 0;
                	  sum_adc = 0;
 	     	  ad_value = (ad_value * 330) / 4096;
 		  volume = (ad_value * 255) / 330;
 		  volume = abs(volume - 255) / 2;
+		  */
 		  if (volume != old_volume) {
 		     old_volume = volume;
 		     volume_flag = 1;
+					
+			 
                      lcd_printf(2,1,"Volume %d ",255 - (volume + 127));
                   }
 	       }

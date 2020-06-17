@@ -345,7 +345,9 @@ unsigned char SD_read_single_block (unsigned int sector, unsigned char *buffer)
 {
       unsigned char r1;
       SPI_set_speed(SPI_SPEED_HIGH);
-      sector = sector << 9;
+	  if (SD_type != SD_TYPE_V2HC) {
+         sector = sector << 9;
+	  }
       r1 = SD_send_command(CMD17, sector, 0);
       if (r1 != 0x00) {
          return r1;
@@ -405,7 +407,9 @@ unsigned char SD_read_multi_block (unsigned int sector, unsigned char *buffer, u
 {
       unsigned char r1;
       SPI_set_speed(SPI_SPEED_HIGH);
-      sector = sector << 9;
+	  if (SD_type != SD_TYPE_V2HC) {
+         sector = sector << 9;
+	  }
       r1 = SD_send_command(CMD18, sector, 0);
       if (r1 != 0x00) {
          return r1;

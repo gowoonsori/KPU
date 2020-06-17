@@ -830,38 +830,38 @@
  530              		.file 12 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
 DEFINED SYMBOLS
                             *ABS*:00000000 core.c
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:16     .text.__get_MSP:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:24     .text.__get_MSP:00000000 __get_MSP
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:51     .text._kill:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:58     .text._kill:00000000 _kill
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:90     .text._exit:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:97     .text._exit:00000000 _exit
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:126    .text._exit:0000000c $d
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:131    .text._getpid:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:138    .text._getpid:00000000 _getpid
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:153    .text.get_heap_end:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:160    .text.get_heap_end:00000000 get_heap_end
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:175    .text.get_heap_end:00000008 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:180    .text.get_stack_top:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:187    .text.get_stack_top:00000000 get_stack_top
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:207    .text._sbrk:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:214    .text._sbrk:00000000 _sbrk
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:297    .text._sbrk:00000034 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:305    .text._close:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:312    .text._close:00000000 _close
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:331    .text._fstat:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:338    .text._fstat:00000000 _fstat
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:362    .text._isatty:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:369    .text._isatty:00000000 _isatty
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:388    .text._lseek:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:395    .text._lseek:00000000 _lseek
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:416    .text._read:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:423    .text._read:00000000 _read
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:447    .text._write:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:454    .text._write:00000000 _write
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:507    .text._write:00000020 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:512    .bss.heap_end:00000000 $d
-C:\Users\gowoo\AppData\Local\Temp\ccZyyaR8.s:516    .bss.heap_end:00000000 heap_end
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:16     .text.__get_MSP:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:24     .text.__get_MSP:00000000 __get_MSP
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:51     .text._kill:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:58     .text._kill:00000000 _kill
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:90     .text._exit:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:97     .text._exit:00000000 _exit
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:126    .text._exit:0000000c $d
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:131    .text._getpid:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:138    .text._getpid:00000000 _getpid
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:153    .text.get_heap_end:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:160    .text.get_heap_end:00000000 get_heap_end
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:175    .text.get_heap_end:00000008 $d
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:180    .text.get_stack_top:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:187    .text.get_stack_top:00000000 get_stack_top
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:207    .text._sbrk:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:214    .text._sbrk:00000000 _sbrk
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:297    .text._sbrk:00000034 $d
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:305    .text._close:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:312    .text._close:00000000 _close
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:331    .text._fstat:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:338    .text._fstat:00000000 _fstat
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:362    .text._isatty:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:369    .text._isatty:00000000 _isatty
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:388    .text._lseek:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:395    .text._lseek:00000000 _lseek
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:416    .text._read:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:423    .text._read:00000000 _read
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:447    .text._write:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:454    .text._write:00000000 _write
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:507    .text._write:00000020 $d
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:512    .bss.heap_end:00000000 $d
+C:\Users\gowoo\AppData\Local\Temp\ccCfPgCP.s:516    .bss.heap_end:00000000 heap_end
 
 UNDEFINED SYMBOLS
 __errno

@@ -2635,16 +2635,16 @@
  1584              		.file 16 "<built-in>"
 DEFINED SYMBOLS
                             *ABS*:00000000 serial.c
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:16     .text.NVIC_SystemReset:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:23     .text.NVIC_SystemReset:00000000 NVIC_SystemReset
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:67     .text.NVIC_SystemReset:00000014 $d
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:73     .text.flash_read:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:80     .text.flash_read:00000000 flash_read
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:135    .text.flash_read:00000028 $d
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:16     .text.NVIC_SystemReset:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:23     .text.NVIC_SystemReset:00000000 NVIC_SystemReset
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:67     .text.NVIC_SystemReset:00000014 $d
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:73     .text.flash_read:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:80     .text.flash_read:00000000 flash_read
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:135    .text.flash_read:00000028 $d
                             *COM*:00000100 flash_para
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:140    .text.USART1_IRQHandler:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:147    .text.USART1_IRQHandler:00000000 USART1_IRQHandler
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:305    .text.USART1_IRQHandler:000000c8 $d
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:140    .text.USART1_IRQHandler:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:147    .text.USART1_IRQHandler:00000000 USART1_IRQHandler
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:305    .text.USART1_IRQHandler:000000c8 $d
                             *COM*:00000002 rxcnt1
                             *COM*:00000100 rxbuff1
                             *COM*:00000001 rxck1
@@ -2654,9 +2654,9 @@ C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:305    .text.USART1_IRQHandler:0000
                             *COM*:00000100 txbuff1
                             *COM*:00000001 tx_flag1
                             *COM*:00000001 txled
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:319    .text.USART2_IRQHandler:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:326    .text.USART2_IRQHandler:00000000 USART2_IRQHandler
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:484    .text.USART2_IRQHandler:000000c8 $d
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:319    .text.USART2_IRQHandler:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:326    .text.USART2_IRQHandler:00000000 USART2_IRQHandler
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:484    .text.USART2_IRQHandler:000000c8 $d
                             *COM*:00000002 rxcnt2
                             *COM*:00000100 rxbuff2
                             *COM*:00000001 rxck2
@@ -2664,29 +2664,29 @@ C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:484    .text.USART2_IRQHandler:0000
                             *COM*:00000002 maxtx2
                             *COM*:00000100 txbuff2
                             *COM*:00000001 tx_flag2
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:498    .text.uasrt_send:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:505    .text.uasrt_send:00000000 uasrt_send
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:669    .text.uasrt_send:00000094 $d
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:686    .text.uasrt_read:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:693    .text.uasrt_read:00000000 uasrt_read
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:804    .text.uasrt_read:00000058 $d
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:814    .text.usart_check:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:821    .text.usart_check:00000000 usart_check
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:864    .text.usart_check:0000001c $d
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:872    .text.s_printf:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:879    .text.s_printf:00000000 s_printf
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:947    .text.s_printf:00000030 $d
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:498    .text.uasrt_send:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:505    .text.uasrt_send:00000000 uasrt_send
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:669    .text.uasrt_send:00000094 $d
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:686    .text.uasrt_read:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:693    .text.uasrt_read:00000000 uasrt_read
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:804    .text.uasrt_read:00000058 $d
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:814    .text.usart_check:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:821    .text.usart_check:00000000 usart_check
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:864    .text.usart_check:0000001c $d
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:872    .text.s_printf:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:879    .text.s_printf:00000000 s_printf
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:947    .text.s_printf:00000030 $d
                             *COM*:00000100 sbuff
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:952    .text.receive_serial1:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:959    .text.receive_serial1:00000000 receive_serial1
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1104   .text.receive_serial1:00000070 $d
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:952    .text.receive_serial1:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:959    .text.receive_serial1:00000000 receive_serial1
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:1104   .text.receive_serial1:00000070 $d
                             *COM*:00000001 this_id
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1112   .text.receive_serial2:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1119   .text.receive_serial2:00000000 receive_serial2
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1264   .text.receive_serial2:00000070 $d
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1272   .text.serial_init:00000000 $t
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1279   .text.serial_init:00000000 serial_init
-C:\Users\gowoo\AppData\Local\Temp\ccU8Qe40.s:1530   .text.serial_init:00000124 $d
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:1112   .text.receive_serial2:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:1119   .text.receive_serial2:00000000 receive_serial2
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:1264   .text.receive_serial2:00000070 $d
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:1272   .text.serial_init:00000000 $t
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:1279   .text.serial_init:00000000 serial_init
+C:\Users\gowoo\AppData\Local\Temp\ccqJKOLH.s:1530   .text.serial_init:00000124 $d
                             *COM*:00000001 USART1_PORT
 
 UNDEFINED SYMBOLS

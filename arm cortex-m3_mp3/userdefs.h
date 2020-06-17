@@ -139,6 +139,7 @@ extern void led_control (unsigned short led, unsigned short ctl);
 extern void wait_ms (unsigned short delay);
 
 // lcd.c
+extern void draw_apple_logo(unsigned short x,unsigned short y);
 extern void lcd_init (void);
 extern void lcd_fill (unsigned char xsta,unsigned short ysta,unsigned char xend,unsigned short yend,unsigned short color);
 extern void lcd_draw_line (unsigned char x1, unsigned short y1, unsigned char x2, unsigned short y2);
@@ -159,6 +160,7 @@ extern void touch_process (unsigned short *x,unsigned short *y);
 extern void touch_init (void);
 
 // mp3.c
+extern void show_playlist(void);
 extern void mp3_displaylist(void);
 extern void mp3_displayinit (void);
 extern void display_id3v1_tag (void);
