@@ -24,30 +24,32 @@
 <br>
 :heavy_check_mark: 시간 측정 방법 :
   - time()함수 이용
-  - tms 구조체의 stime,utime,cstime,cutime을 이용<br>
+  - tms 구조체의 stime,utime,cstime,cutime을 이용
 :heavy_check_mark: 프로세스 :
   - 공유 메모리 : shmget을 이용
-  - 동기화 문제 : semaphore를 이용<br>
+  - 동기화 문제 : semaphore를 이용
 :heavy_check_mark: 스레드 :
   - 공유 메모리 : 전역변수를 이용
-  - 동기화 문제 : binary semaphore인 mutex 이용<br><br>
+  - 동기화 문제 : binary semaphore인 mutex 이용
 ### 실행 결과
 ------
-:heavy_check_mark: 멀티 프로세스<br>
-- 10번 실행 결과의 평균 값<br>
+:heavy_check_mark: 멀티 프로세스
+- 10번 실행 결과의 평균 값
+
 | 프로세스 | 1개 | 2개 | 4개 | 8개 | 16개 | 32개 | 64개 |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | **Real Time** | 0.63 | 3.959 | 7.266 | 7.719 | 7.28 | 7.368 | 7.501 |
 | **User Time** | 0.62 | 2.095 | 2.596 | 1.733 | 0.835 | 0.423 | 0.222 |
 | **Sys  Time** | 0 | 1.781 | 4.213 | 5.461 | 6.253 | 3.22 | 1.634 |
 
-:heavy_check_mark: 멀티 스레드<br>
-- 10번 실행 결과의 평균 값<br>
+:heavy_check_mark: 멀티 스레드
+- 10번 실행 결과의 평균 값
+
 | 스레드 | 1개 | 2개 | 4개 | 8개 | 16개 | 32개 | 64개 |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | **Real Time** | 0.331 | 1.339 | 2.142 | 2.1 | 2.041 | 1.938 | 1.949 |
 | **User Time** | 0.327 | 1.701 | 3.384 | 3.854 | 3.789 | 3.501 | 3.59 |
 | **Sys  Time** | 0 | 0.952 | 4.315 | 11.722 | 27.475 | 27.102 | 27.419 |
-![threadChart](C:\Users\gowoo\image01.png)
+
 
 
