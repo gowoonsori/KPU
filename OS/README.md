@@ -23,14 +23,14 @@
 프로세스 / 스레드를 1~64개를 생성 후 각 프로세스/스레드가 loop을 돌며 공유메모리 / 전역변수에 접근하는 데 동기화 문제를 해결하며 1000만의 약수를 구하는 프로그램
 <br>
 :heavy_check_mark: 시간 측정 방법 :
-  - time()함수 이용
-  - tms 구조체의 stime,utime,cstime,cutime을 이용
+- time()함수 이용
+- tms 구조체의 stime,utime,cstime,cutime을 이용<br>
 :heavy_check_mark: 프로세스 :
-  - 공유 메모리 : shmget을 이용
-  - 동기화 문제 : semaphore를 이용
+- 공유 메모리 : shmget을 이용
+- 동기화 문제 : semaphore를 이용<br>
 :heavy_check_mark: 스레드 :
-  - 공유 메모리 : 전역변수를 이용
-  - 동기화 문제 : binary semaphore인 mutex 이용
+- 공유 메모리 : 전역변수를 이용
+- 동기화 문제 : binary semaphore인 mutex 이용
 ### 실행 결과
 ------
 :heavy_check_mark: 멀티 프로세스
