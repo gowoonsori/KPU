@@ -23,18 +23,22 @@
 
 ### 프로그램 알고리즘
 ------
-프로세스 / 스레드를 1~64개를 생성 후 각 프로세스/스레드가 loop을 돌며 공유메모리 / 전역변수에 접근하는 데 동기화 문제를 해결하며 1000만의 약수를 구하는 프로그램<br>
- 
-**구현 방법**  <br>
+프로세스 / 스레드를 1~64개를 생성 후 각 프로세스/스레드가 loop을 돌며 공유메모리 / 전역변수에 접근하는 데 동기화 문제를 해결하며 1000만의 약수를 구하는 프로그램<br><br>
+
+**구현 환경**<br><br>
+:heavy_check_mark: 언어 : C<br>
+:heavy_check_mark: OS : Ubuntu Linux 18.04<br><br>
+
+**구현 방법**<br><br>
 :heavy_check_mark: 시간 측정 방법 :
 - time()함수 이용
 - tms 구조체의 stime,utime,cstime,cutime을 이용<br>  
 
-:heavy_check_mark: 프로세스 :
+:heavy_check_mark: [프로세스](https://github.com/gowoonsori/kpu_project/blob/master/OS/multi_process.c) :
 - 공유 메모리 : shmget을 이용
 - 동기화 문제 : semaphore를 이용<br>  
 
-:heavy_check_mark: 스레드 :
+:heavy_check_mark: [스레드](https://github.com/gowoonsori/kpu_project/blob/master/OS/multi_thread.c) :
 - 공유 메모리 : 전역변수를 이용
 - 동기화 문제 : binary semaphore인 mutex 이용<br><br><br>
 
@@ -69,7 +73,7 @@
 <br>
 멀티 스레드 방식의 경우 sytemtime과 usertime의 시간을 구할때 tms구조체의 ctime,utime 객체를 사용하게 되면 스레드 개수의 곱으로 시간이 나오게 된다.<br>
 그래서 오히려 real time보다 높게 나오는 일이 발생하게 된다. <br>
-따라서 user time과 system time을 스레드 개수로 나누어 보았다.<br>
+따라서 user time과 system time을 스레드 개수로 나누어 보았다.<br><br>
 
 
 | 스레드 | 1개 | 2개 | 4개 | 8개 | 16개 | 32개 | 64개 |
@@ -81,7 +85,7 @@
 
 <br>
 해당 실험환경조건이 한번에 동작가능한 스레드 개수가 16개이기 때문에 스레드 개수 32/64개의 time은 16으로 나누어 주었다.<br>
-나눈값의 그래프를 보니 systime이 위의 그래프와 비슷한 그림을 그리는 것을 볼 수 있다.<br>
+나눈값의 그래프를 보니 systime이 위의 그래프와 비슷한 그림을 그리는 것을 볼 수 있다.<br><br>
 
 
 ![4](https://user-images.githubusercontent.com/52964858/84995437-f9a07d00-b186-11ea-84e1-b1d15eca474e.png)
