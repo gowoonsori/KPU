@@ -1,5 +1,4 @@
-# ARM Coretex m-3를 이용한 mp3 만들기
-======
+# :iphone: ARM Coretex m-3를 이용한 mp3 만들기 
 ### 사용언어 : C
 
 -version 0.1 : <br>
