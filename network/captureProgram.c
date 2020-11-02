@@ -9,7 +9,12 @@
                             HTTP(80)
                             DNS (53)
                          두 종류의 프로토콜만 추출 가능
-                        -ip
+                        -ip :
+                            source / dest 구분 않고 입력
+                        -options :
+                            A : data ascii로 출력
+                            X : data Hex code로 출력
+                            S : summary data 출력
 */
 #include <arpa/inet.h>         //network 정보 변환
 #include <ctype.h>             // isdigit
@@ -21,7 +26,7 @@
 #include <pthread.h>           //thread
 #include <stdio.h>             //basic
 #include <stdlib.h>            //malloc 동적할당
-#include <string.h>            //strlen, strcmp, strcpy
+#include <string.h>            //strlen, strcmp, strcpy, memset
 #include <sys/socket.h>        //소켓의 주소 설정 (sockaddr 구조체)
 #include <time.h>              //저장한 file 이름을 현재 날짜로 하기 위해
 
@@ -29,32 +34,44 @@
 
 typedef enum { false, true } bool;  // bool 자료형 선언
 
-enum port { dns = 53, http = 80 };
+enum port { dns = 53, http = 80 };  //캡쳐할 port번호
+
+enum CaptureOptions {
+    A = 1,  // ascii
+    X,      // hex
+    S,      // summary (no detail)
+    F       // file
+};          // capture option
 
 void *PacketCapture_thread(void *arg);  //캡쳐 스레드
 
-void Capture_helper(FILE *captureFile, unsigned char *, int);           //캡쳐한 패킷 프로토콜 분류
-void Ethernet_header_capture(FILE *captureFile, unsigned char *, int);  // Ethernet 헤더 정보 fprint
-void Ip_header_capture(FILE *captureFile, struct iphdr *, struct sockaddr_in,
-                       struct sockaddr_in);                         // ip 헤더 정보 fprint
-void Tcp_header_capture(FILE *captureFile, unsigned char *, int);   // tcp 헤더 정보 fprint
-void Udp_header_capture(FILE *captureFile, unsigned char *, int);   // udp 헤더 정보 fprint
-void Icmp_header_capture(FILE *captureFile, unsigned char *, int);  // icmp 헤더 정보 fprint
-void Change_hex_to_ascii(FILE *captureFile, unsigned char *, int);  // payload hex값과 ascii 변환 후 fprint
+void Capture_helper(FILE *captureFile, unsigned char *, int);                                      //캡쳐한 패킷 프로토콜 분류
+void Ethernet_header_fprint(FILE *captureFile, struct iphdr *);                                    // Ethernet 헤더 정보 fprint
+void Ip_header_fprint(FILE *captureFile, struct iphdr *, struct sockaddr_in, struct sockaddr_in);  // ip 헤더 정보 fprint
+
+void Tcp_header_capture(FILE *captureFile, unsigned char *, int);  // tcp 헤더 정보 capture
+void Tcp_header_fprint(FILE *, unsigned char *, struct ethhdr *, struct iphdr *, struct tcphdr *, struct sockaddr_in, struct sockaddr_in,
+                       int);                                       // tcp 헤더 정보 fprint
+void Udp_header_capture(FILE *captureFile, unsigned char *, int);  // udp 헤더 정보 capture
+void Udp_header_fprint(FILE *, unsigned char *, struct ethhdr *, struct iphdr *, struct udphdr *, struct sockaddr_in, struct sockaddr_in,
+                       int);                                        // udp 헤더 정보 fprint
+void Icmp_header_capture(FILE *captureFile, unsigned char *, int);  // icmp 헤더 정보 capture
+void Icmp_header_fprint(FILE *, unsigned char *, struct ethhdr *, struct iphdr *, struct icmphdr *, struct sockaddr_in, struct sockaddr_in,
+                        int);                                            // icmp 헤더 정보 fprint
+void Change_hex_to_ascii(FILE *captureFile, unsigned char *, int, int);  // payload값 hex/ascii/file option에 맞게 출력
 
 void MenuBoard();           // menu board
-void Menu_helper();         // menu exception handling
-void StartMenuBoard();      // start menu board (filter 사용법 설명)
-bool start_helper(char *);  // start menu exception handling | 제대로 된 filter 형식 : ture, 아니면 false
+void Menu_helper();         // menu board exception handling
+void StartMenuBoard();      // start menu board
+bool start_helper(char *);  // start menu exception handling
+bool IsPort(char *);        //포트 형식 검사 | 맞으면 true
+bool IsIpAddress(char *);   // ip 형식 검사 | 맞으면 true
+bool IsDigit();             // string 이 숫자인지 검사 | 맞으면 true
+void buffer_flush();        //입력 버퍼 지우기
 
-bool IsPort(char *);       // port번호 형식에 맞는지 검사 | 맞으면 true, 틀리면 false
-bool IsIpAddress(char *);  // ip주소 형식에 맞는지 검사 | 맞으면 true, 틀리면 false
-bool IsDigit();            //문자열이 숫자인지 검사 | 맞으면 true, 틀리면 false
-void buffer_flush();       //입력 버퍼 지우기
-
-bool captureStart = false;                                 //캡쳐 스레드 시작flag 변수
-int total = 0, filter = 0, drop = 0;                       //캡쳐한 패킷 갯수
-char protocolOption[128], portOption[128], ipOption[128];  // filter 옵션 변수
+bool captureStart = false;                                                   //캡쳐 스레드 시작flag 변수
+int total = 0, filter = 0, drop = 0;                                         //캡쳐한 패킷 갯수
+char protocolOption[128], portOption[128], ipOption[128], printOption[128];  // filter option 변수
 
 int main() {
     Menu_helper();
@@ -67,7 +84,7 @@ void *PacketCapture_thread(void *arg) {
     int dataSize;                                                  //받은 데이터 정보 크기
     unsigned char *buffer = (unsigned char *)malloc(BUFFER_SIZE);  // buffer 공간 할당
 
-    /*파일 open 및 파일 이름 현재 날짜로 생성*/
+    /*filename 현재 날짜로 open*/
     char filename[40];
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
@@ -83,10 +100,10 @@ void *PacketCapture_thread(void *arg) {
         if ((dataSize = recvfrom(rawSocket, buffer, BUFFER_SIZE, 0, NULL, NULL)) == -1)  //패킷 recv
         {
             drop++;
-            printf("packet 받기 실패\n");  // packet drop시 drop count
+            printf("packet 받기 실패\n");  // packet drop시
             continue;
         }
-        Capture_helper(captureData, buffer, dataSize);  //받은 패킷을 filter규칙에 맞게 프로토콜 종류에따라 처리
+        Capture_helper(captureData, buffer, dataSize);  //받은 패킷을 filter에 따라 프로토콜 종류에따라 처리
     }
 
     free(buffer);         //버퍼 공간 해제
@@ -95,9 +112,9 @@ void *PacketCapture_thread(void *arg) {
 
 void Capture_helper(FILE *captureData, unsigned char *buffer, int size) {
     struct iphdr *ipHeader = (struct iphdr *)(buffer + ETH_HLEN);  //받은 패킷의 ip header 부분 get
-    total++;                                                       // recv한 패킷 총 갯수 증가
+    total++;
 
-    /*모든 프로토콜 검색*/
+    /*모든 프로토콜*/
     if (!strcmp(protocolOption, "*")) {
         switch (ipHeader->protocol)  // ip Header에 들어있는 프로토콜 종류 검사
         {
@@ -115,19 +132,17 @@ void Capture_helper(FILE *captureData, unsigned char *buffer, int size) {
             default:  // 그 외 프로토콜들은 무시
                 break;
         }
-    } else if (!strcmp(protocolOption, "tcp") && (ipHeader->protocol == 6)) {  // tcp 검색
+    } else if (!strcmp(protocolOption, "tcp") && (ipHeader->protocol == 6)) {  // tcp
         Tcp_header_capture(captureData, buffer, size);
-    } else if (!strcmp(protocolOption, "udp") && (ipHeader->protocol == 17)) {  // udp 검색
+    } else if (!strcmp(protocolOption, "udp") && (ipHeader->protocol == 17)) {  // udp
         Udp_header_capture(captureData, buffer, size);
-    } else if (!strcmp(protocolOption, "icmp") && (ipHeader->protocol == 1)) {  // icmp 검색
+    } else if (!strcmp(protocolOption, "icmp") && (ipHeader->protocol == 1)) {  // icmp
         Icmp_header_capture(captureData, buffer, size);
     }
 }
-void Ethrenet_header_capture(FILE *captureData, unsigned char *Buffer) {
-    filter++;  // tcp / udp /icmp 에서 필터로 걸러진후 이 함수 호출하므로 필터링한 패킷 갯수 증가
 
-    struct ethhdr *etherHeader = (struct ethhdr *)Buffer;  // 받아온 로우 데이터를 이더넷 헤더구조체 형태로 사용
-
+void Ethrenet_header_fprint(FILE *captureData, struct ethhdr *etherHeader) {
+    filter++;  // filter 거쳐 캡쳐한 패킷은 이 함수는 무조건 한번씩 거치기 때문에 filter 패킷 값 증가
     fprintf(captureData, "\n           --------------------------------------------------------\n");
     fprintf(captureData, "          |                     Ethernet Header                    |\n");
     fprintf(captureData, "           --------------------------------------------------------\n");
@@ -139,18 +154,18 @@ void Ethrenet_header_capture(FILE *captureData, unsigned char *Buffer) {
             etherHeader->h_source[4], etherHeader->h_source[5]);
     fprintf(captureData,
             "               Dst MAC Addr          |      [%02x:%02x:%02x:%02x:%02x:%02x]\n",  // 6 byte for dest
-            etherHeader->h_dest[0], etherHeader->h_dest[1], etherHeader->h_dest[2], etherHeader->h_dest[3],
-            etherHeader->h_dest[4], etherHeader->h_dest[5]);
+            etherHeader->h_dest[0], etherHeader->h_dest[1], etherHeader->h_dest[2], etherHeader->h_dest[3], etherHeader->h_dest[4],
+            etherHeader->h_dest[5]);
     fprintf(captureData, "           --------------------------------------------------------\n\n");
 }
 
-void Ip_header_capture(FILE *captureData, struct iphdr *ipHeader, struct sockaddr_in source, struct sockaddr_in dest) {
+void Ip_header_fprint(FILE *captureData, struct iphdr *ipHeader, struct sockaddr_in source, struct sockaddr_in dest) {
     fprintf(captureData, "\n           --------------------------------------------------------\n");
     fprintf(captureData, "          |                       IP Header                        |\n");
     fprintf(captureData, "           --------------------------------------------------------\n");
     fprintf(captureData, "                IP Version           |    IPv%d\n", (unsigned int)ipHeader->version);
-    fprintf(captureData, "                IP Header Length     |    %d DWORDS ( %d Bytes )\n",
-            (unsigned int)ipHeader->ihl, ((unsigned int)(ipHeader->ihl)) * 4);
+    fprintf(captureData, "                IP Header Length     |    %d DWORDS ( %d Bytes )\n", (unsigned int)ipHeader->ihl,
+            ((unsigned int)(ipHeader->ihl)) * 4);
     fprintf(captureData, "                Type Of Service      |    %d\n", (unsigned int)ipHeader->tos);
     fprintf(captureData, "                IP Total Length      |    %d Bytes\n", ntohs(ipHeader->tot_len));
     fprintf(captureData, "           --------------------------------------------------------\n");
@@ -166,199 +181,288 @@ void Ip_header_capture(FILE *captureData, struct iphdr *ipHeader, struct sockadd
 }
 
 void Tcp_header_capture(FILE *captureData, unsigned char *Buffer, int Size) {
+    struct ethhdr *etherHeader = (struct ethhdr *)Buffer;          //버퍼에서 이더넷 정보 get
     struct iphdr *ipHeader = (struct iphdr *)(Buffer + ETH_HLEN);  //버퍼(캡쳐한 패킷데이터) 에서 ip헤더 정보 get
-    struct tcphdr *tcph = (struct tcphdr *)(Buffer + (ipHeader->ihl * 4) + ETH_HLEN);  //버퍼에서 tcp 헤더 정보 get
-    struct sockaddr_in source, dest;  //출발, 목적지 주소 정보 저장
+    struct tcphdr *tcpHeader = (struct tcphdr *)(Buffer + (ipHeader->ihl * 4) + ETH_HLEN);  //버퍼에서 tcp 헤더 정보 get
+    struct sockaddr_in source, dest;  //출발, 목적지 주소 정보 저장할 변수
     source.sin_addr.s_addr = ipHeader->saddr;
     dest.sin_addr.s_addr = ipHeader->daddr;
 
     // filter ip 검사
     if (!strcmp(ipOption, "*") || !strcmp(inet_ntoa(source.sin_addr), ipOption) ||
-        !strcmp(inet_ntoa(dest.sin_addr), ipOption)) {
-        // filter port번호 검사
-        if (!strcmp(portOption, "*") || (atoi(portOption) == (int)ntohs(tcph->source)) ||
-            (atoi(portOption) == (int)ntohs(tcph->dest))) {
-            fprintf(captureData, "\n############################## TCP Packet #####################################\n");
-            Ethrenet_header_capture(captureData, Buffer);            // ethernet 정보 print
-            Ip_header_capture(captureData, ipHeader, source, dest);  // ip 정보 print
-
+        !strcmp(inet_ntoa(dest.sin_addr), ipOption)) {  // filter port번호 검사
+        if (!strcmp(portOption, "*") || (atoi(portOption) == (int)ntohs(tcpHeader->source)) ||
+            (atoi(portOption) == (int)ntohs(tcpHeader->dest))) {
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
             fprintf(stdout, "\n%d:%d:%06d IPv", tm.tm_hour, tm.tm_min, tm.tm_sec);
-            if (ntohs(tcph->source) == http) {
+            if (ntohs(tcpHeader->source) == http) {
                 fprintf(stdout, "%d %s:http > ", (unsigned int)ipHeader->version, inet_ntoa(source.sin_addr));
-                fprintf(stdout, "%s:%u = TCP Flags [", inet_ntoa(dest.sin_addr), ntohs(tcph->dest));
-            } else if (ntohs(tcph->dest) == http) {
-                fprintf(stdout, "%d %s:%u > ", (unsigned int)ipHeader->version, inet_ntoa(source.sin_addr),
-                        ntohs(tcph->source));
+                fprintf(stdout, "%s:%u = TCP Flags [", inet_ntoa(dest.sin_addr), ntohs(tcpHeader->dest));
+            } else if (ntohs(tcpHeader->dest) == http) {
+                fprintf(stdout, "%d %s:%u > ", (unsigned int)ipHeader->version, inet_ntoa(source.sin_addr), ntohs(tcpHeader->source));
                 fprintf(stdout, "%s:http = TCP Flags [", inet_ntoa(dest.sin_addr));
             } else {
-                fprintf(stdout, "%d %s:%u > ", (unsigned int)ipHeader->version, inet_ntoa(source.sin_addr),
-                        ntohs(tcph->source));
-                fprintf(stdout, "%s:%u = TCP Flags [", inet_ntoa(dest.sin_addr), ntohs(tcph->dest));
+                fprintf(stdout, "%d %s:%u > ", (unsigned int)ipHeader->version, inet_ntoa(source.sin_addr), ntohs(tcpHeader->source));
+                fprintf(stdout, "%s:%u = TCP Flags [", inet_ntoa(dest.sin_addr), ntohs(tcpHeader->dest));
             }
-            fprintf(captureData, "\n           --------------------------------------------------------\n");
-            fprintf(captureData, "          |                       TCP Header                       |\n");
-            fprintf(captureData, "           --------------------------------------------------------\n");
-            fprintf(captureData, "             Source Port             |   %u\n", ntohs(tcph->source));
-            fprintf(captureData, "             Dest Port               |   %u\n", ntohs(tcph->dest));
-            fprintf(captureData, "           --------------------------------------------------------\n");
-            fprintf(captureData, "             Sequence Number         |   %u\n", ntohl(tcph->seq));
-            fprintf(captureData, "             Acknowledge Number      |   %u\n", ntohl(tcph->ack_seq));
-            fprintf(captureData, "           --------------------------------------------------------\n");
-            fprintf(captureData, "             OFFSET(Header Length)   |   %d DWORDS (%d BYTES)\n",
-                    (unsigned int)tcph->doff, (unsigned int)tcph->doff * 4);
-            fprintf(captureData, "           -- FLAGS -----------------------------------------------\n");
-            fprintf(captureData, "              |-Urgent Flag          |   %d\n", (unsigned int)tcph->urg);
-            if ((unsigned int)tcph->urg == 1) fprintf(stdout, "U.");
-            fprintf(captureData, "              |-Ack Flag             |   %d\n", (unsigned int)tcph->ack);
-            if ((unsigned int)tcph->ack == 1) fprintf(stdout, "A.");
-            fprintf(captureData, "              |-Push Flag            |   %d\n", (unsigned int)tcph->psh);
-            if ((unsigned int)tcph->psh == 1) fprintf(stdout, "P.");
-            fprintf(captureData, "              |-Reset Flag           |   %d\n", (unsigned int)tcph->rst);
-            if ((unsigned int)tcph->rst == 1) fprintf(stdout, "R.");
-            fprintf(captureData, "              |-Synchronise Flag     |   %d\n", (unsigned int)tcph->syn);
-            if ((unsigned int)tcph->syn == 1) fprintf(stdout, "S.");
-            fprintf(captureData, "              |-Finish Flag          |   %d\n", (unsigned int)tcph->fin);
-            if ((unsigned int)tcph->fin == 1) fprintf(stdout, "F.");
-            fprintf(captureData, "             Window Size (rwnd)      |   %d\n", ntohs(tcph->window));
-            fprintf(captureData, "           --------------------------------------------------------\n");
-            fprintf(captureData, "             Checksum                |   0x%04x\n", ntohs(tcph->check));
-            fprintf(captureData, "             Urgent Pointer          |   %d\n", tcph->urg_ptr);
-            fprintf(captureData, "           --------------------------------------------------------\n");
-            fprintf(stdout, "], seq %u, ack %u, win %d, length %d", ntohl(tcph->seq), ntohl(tcph->ack_seq),
-                    ntohs(tcph->window), Size);
+            if ((unsigned int)tcpHeader->urg == 1) fprintf(stdout, "U.");
+            if ((unsigned int)tcpHeader->ack == 1) fprintf(stdout, "A.");
+            if ((unsigned int)tcpHeader->psh == 1) fprintf(stdout, "P.");
+            if ((unsigned int)tcpHeader->rst == 1) fprintf(stdout, "R.");
+            if ((unsigned int)tcpHeader->syn == 1) fprintf(stdout, "S.");
+            if ((unsigned int)tcpHeader->fin == 1) fprintf(stdout, "F.");
+            fprintf(stdout, "], seq %u, ack %u, win %d, length %d", ntohl(tcpHeader->seq), ntohl(tcpHeader->ack_seq),
+                    ntohs(tcpHeader->window), Size);
 
-            /* 패킷 정보 Hex dump 와 ASCII 변환 데이터 출력 */
-            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + tcph->doff * 4,
-                                (Size - tcph->doff * 4 - (ipHeader->ihl * 4) - ETH_HLEN));
-            fprintf(captureData, "\n===============================================================================\n");
+            /*print option에 따라 payload 부분 다르게 출력*/
+            /*ascill 출력*/
+            if (!strcmp(printOption, "a")) {
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, A, (ipHeader->ihl * 4));  // ip header
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), A,
+                                    tcpHeader->doff * 4);  // tcp header
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + tcpHeader->doff * 4, A,
+                                    (Size - tcpHeader->doff * 4 - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
+            }
+            /*hex 출력*/
+            else if (!strcmp(printOption, "x")) {
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, X, (ipHeader->ihl * 4));  // ip header
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), X,
+                                    tcpHeader->doff * 4);  // tcp header
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + tcpHeader->doff * 4, X,
+                                    (Size - tcpHeader->doff * 4 - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
+            }
+            Tcp_header_fprint(captureData, Buffer, etherHeader, ipHeader, tcpHeader, source, dest, Size);  // file에 출력
         }
     }
+}
+void Tcp_header_fprint(FILE *captureData, unsigned char *Buffer, struct ethhdr *etherHeader, struct iphdr *ipHeader,
+                       struct tcphdr *tcpHeader, struct sockaddr_in source, struct sockaddr_in dest, int Size) {
+    fprintf(captureData, "\n############################## TCP Packet #####################################\n");
+    Ethrenet_header_fprint(captureData, etherHeader);       // ethernet 정보 fprint
+    Ip_header_fprint(captureData, ipHeader, source, dest);  // ip 정보 fprint
+
+    fprintf(captureData, "\n           --------------------------------------------------------\n");
+    fprintf(captureData, "          |                       TCP Header                       |\n");
+    fprintf(captureData, "           --------------------------------------------------------\n");
+    fprintf(captureData, "             Source Port             |   %u\n", ntohs(tcpHeader->source));
+    fprintf(captureData, "             Dest Port               |   %u\n", ntohs(tcpHeader->dest));
+    fprintf(captureData, "           --------------------------------------------------------\n");
+    fprintf(captureData, "             Sequence Number         |   %u\n", ntohl(tcpHeader->seq));
+    fprintf(captureData, "             Acknowledge Number      |   %u\n", ntohl(tcpHeader->ack_seq));
+    fprintf(captureData, "           --------------------------------------------------------\n");
+    fprintf(captureData, "             OFFSET(Header Length)   |   %d DWORDS (%d BYTES)\n", (unsigned int)tcpHeader->doff,
+            (unsigned int)tcpHeader->doff * 4);
+    fprintf(captureData, "           -- FLAGS -----------------------------------------------\n");
+    fprintf(captureData, "              |-Urgent Flag          |   %d\n", (unsigned int)tcpHeader->urg);
+    fprintf(captureData, "              |-Ack Flag             |   %d\n", (unsigned int)tcpHeader->ack);
+    fprintf(captureData, "              |-Push Flag            |   %d\n", (unsigned int)tcpHeader->psh);
+    fprintf(captureData, "              |-Reset Flag           |   %d\n", (unsigned int)tcpHeader->rst);
+    fprintf(captureData, "              |-Synchronise Flag     |   %d\n", (unsigned int)tcpHeader->syn);
+    fprintf(captureData, "              |-Finish Flag          |   %d\n", (unsigned int)tcpHeader->fin);
+    fprintf(captureData, "             Window Size (rwnd)      |   %d\n", ntohs(tcpHeader->window));
+    fprintf(captureData, "           --------------------------------------------------------\n");
+    fprintf(captureData, "             Checksum                |   0x%04x\n", ntohs(tcpHeader->check));
+    fprintf(captureData, "             Urgent Pointer          |   %d\n", tcpHeader->urg_ptr);
+    fprintf(captureData, "           --------------------------------------------------------\n");
+
+    /* 패킷 정보 Hex dump 와 ASCII 변환 데이터 파일에 출력 */
+    Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + tcpHeader->doff * 4, F,
+                        (Size - tcpHeader->doff * 4 - (ipHeader->ihl * 4) - ETH_HLEN));
+    fprintf(captureData, "\n===============================================================================\n");
 }
 
 void Udp_header_capture(FILE *captureData, unsigned char *Buffer, int Size) {
+    struct ethhdr *etherHeader = (struct ethhdr *)Buffer;          //버퍼에서 이더넷 정보 get
     struct iphdr *ipHeader = (struct iphdr *)(Buffer + ETH_HLEN);  //버퍼(캡쳐한 패킷데이터) 에서 ip헤더 정보 get
-    struct udphdr *udph = (struct udphdr *)(Buffer + ipHeader->ihl * 4 + ETH_HLEN);  //버퍼에서 udp 헤더 정보 get
-    struct sockaddr_in source, dest;  //출발, 목적지 주소 정보 저장
+    struct udphdr *udpHeader = (struct udphdr *)(Buffer + ipHeader->ihl * 4 + ETH_HLEN);  //버퍼에서 udp 헤더 정보 get
+    struct sockaddr_in source, dest;                                                      //출발, 목적지 주소 정보 저장할 변수
     source.sin_addr.s_addr = ipHeader->saddr;
     dest.sin_addr.s_addr = ipHeader->daddr;
 
     // ip filter 검사
     if (!strcmp(ipOption, "*") || !strcmp(inet_ntoa(source.sin_addr), ipOption) ||
-        !strcmp(inet_ntoa(dest.sin_addr), ipOption)) {
-        // port 번호 filter 검사
-        if (!strcmp(portOption, "*") || (atoi(portOption) == (int)ntohs(udph->source)) ||
-            (atoi(portOption) == (int)ntohs(udph->dest))) {
-            fprintf(captureData, "\n############################## UDP Packet #####################################\n");
-            Ethrenet_header_capture(captureData, Buffer);            // ethernet 정보 print
-            Ip_header_capture(captureData, ipHeader, source, dest);  // ip 정보 print
-
+        !strcmp(inet_ntoa(dest.sin_addr), ipOption)) {  // port 번호 filter 검사
+        if (!strcmp(portOption, "*") || (atoi(portOption) == (int)ntohs(udpHeader->source)) ||
+            (atoi(portOption) == (int)ntohs(udpHeader->dest))) {
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
             fprintf(stdout, "\n%d:%d:%06d IPv", tm.tm_hour, tm.tm_min, tm.tm_sec);
-            if (ntohs(udph->source) == dns) {
+            if (ntohs(udpHeader->source) == dns) {
                 fprintf(stdout, "%d %s:dns > ", (unsigned int)ipHeader->version, inet_ntoa(source.sin_addr));
-                fprintf(stdout, "%s:%u = UDP ", inet_ntoa(dest.sin_addr), ntohs(udph->dest));
-            } else if (ntohs(udph->dest) == dns) {
-                fprintf(stdout, "%d %s:%u > ", (unsigned int)ipHeader->version, inet_ntoa(source.sin_addr),
-                        ntohs(udph->source));
+                fprintf(stdout, "%s:%u = UDP ", inet_ntoa(dest.sin_addr), ntohs(udpHeader->dest));
+            } else if (ntohs(udpHeader->dest) == dns) {
+                fprintf(stdout, "%d %s:%u > ", (unsigned int)ipHeader->version, inet_ntoa(source.sin_addr), ntohs(udpHeader->source));
                 fprintf(stdout, "%s:dns = UDP ", inet_ntoa(dest.sin_addr));
             } else {
-                fprintf(stdout, "%d %s:%u > ", (unsigned int)ipHeader->version, inet_ntoa(source.sin_addr),
-                        ntohs(udph->source));
-                fprintf(stdout, "%s:%u = UDP ", inet_ntoa(dest.sin_addr), ntohs(udph->dest));
+                fprintf(stdout, "%d %s:%u > ", (unsigned int)ipHeader->version, inet_ntoa(source.sin_addr), ntohs(udpHeader->source));
+                fprintf(stdout, "%s:%u = UDP ", inet_ntoa(dest.sin_addr), ntohs(udpHeader->dest));
             }
-            fprintf(captureData, "\n           --------------------------------------------------------\n");
-            fprintf(captureData, "          |                       UDP Header                       |\n");
-            fprintf(captureData, "           --------------------------------------------------------\n");
-            fprintf(captureData, "                Source Port          |   %u\n", ntohs(udph->source));
-            fprintf(captureData, "                Destination Port     |   %u\n", ntohs(udph->dest));
-            fprintf(captureData, "           --------------------------------------------------------\n");
-            fprintf(captureData, "                UDP Length           |   %d\n", ntohs(udph->len));
-            fprintf(captureData, "                UDP Checksum         |   0x%04x\n", ntohs(udph->check));
-            fprintf(captureData, "           --------------------------------------------------------\n");
             fprintf(stdout, "length %d", Size);
 
-            /* 패킷 정보 Hex dump 와 ASCII 변환 데이터 출력 */
-            Change_hex_to_ascii(captureData, Buffer + (ipHeader->ihl * 4) + sizeof udph,
-                                (Size - sizeof udph - (ipHeader->ihl * 4) - ETH_HLEN));
-            fprintf(captureData, "\n===============================================================================\n");
+            /*ascii 출력*/
+            if (!strcmp(printOption, "a")) {
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, A, (ipHeader->ihl * 4));  // ip header
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), A,
+                                    sizeof udpHeader);  // udp header
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + sizeof udpHeader, A,
+                                    (Size - sizeof udpHeader - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
+            }
+            /*hex 출력*/
+            else if (!strcmp(printOption, "x")) {
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, X, (ipHeader->ihl * 4));  // ip header
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), X,
+                                    sizeof udpHeader);  // udp header
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + sizeof udpHeader, X,
+                                    (Size - sizeof udpHeader - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
+            }
+            /*file 출력*/
+            Udp_header_fprint(captureData, Buffer, etherHeader, ipHeader, udpHeader, source, dest, Size);
         }
     }
 }
+void Udp_header_fprint(FILE *captureData, unsigned char *Buffer, struct ethhdr *etherHeader, struct iphdr *ipHeader,
+                       struct udphdr *udpHeader, struct sockaddr_in source, struct sockaddr_in dest, int Size) {
+    fprintf(captureData, "\n############################## UDP Packet #####################################\n");
+    Ethrenet_header_fprint(captureData, etherHeader);       // ethernet 정보 print
+    Ip_header_fprint(captureData, ipHeader, source, dest);  // ip 정보 print
+    fprintf(captureData, "\n           --------------------------------------------------------\n");
+    fprintf(captureData, "          |                       UDP Header                       |\n");
+    fprintf(captureData, "           --------------------------------------------------------\n");
+    fprintf(captureData, "                Source Port          |   %u\n", ntohs(udpHeader->source));
+    fprintf(captureData, "                Destination Port     |   %u\n", ntohs(udpHeader->dest));
+    fprintf(captureData, "           --------------------------------------------------------\n");
+    fprintf(captureData, "                UDP Length           |   %d\n", ntohs(udpHeader->len));
+    fprintf(captureData, "                UDP Checksum         |   0x%04x\n", ntohs(udpHeader->check));
+    fprintf(captureData, "           --------------------------------------------------------\n");
+
+    /* 패킷 정보 Hex dump 와 ASCII 변환 데이터 출력 */
+    Change_hex_to_ascii(captureData, Buffer + (ipHeader->ihl * 4) + sizeof udpHeader, F,
+                        (Size - sizeof udpHeader - (ipHeader->ihl * 4) - ETH_HLEN));
+    fprintf(captureData, "\n===============================================================================\n");
+}
 
 void Icmp_header_capture(FILE *captureData, unsigned char *Buffer, int Size) {
+    struct ethhdr *etherHeader = (struct ethhdr *)Buffer;          //버퍼에서 이더넷 정보 get
     struct iphdr *ipHeader = (struct iphdr *)(Buffer + ETH_HLEN);  //버퍼(캡쳐한 패킷데이터) 에서 ip헤더 정보 get
-    struct icmphdr *icmph = (struct icmphdr *)(Buffer + ipHeader->ihl * 4 + ETH_HLEN);  //버퍼에서 icp정보 get
-    struct sockaddr_in source, dest;  //출발, 목적지 주소 정보 저장
+    struct icmphdr *icmpHeader = (struct icmphdr *)(Buffer + ipHeader->ihl * 4 + ETH_HLEN);  //버퍼에서 icp정보 get
+    struct sockaddr_in source, dest;  //출발, 목적지 주소 정보 저장할 변수
     source.sin_addr.s_addr = ipHeader->saddr;
     dest.sin_addr.s_addr = ipHeader->daddr;
 
     // ip filter 검사
-    if (!strcmp(ipOption, "*") || !strcmp(inet_ntoa(source.sin_addr), ipOption) ||
-        !strcmp(inet_ntoa(dest.sin_addr), ipOption)) {
+    if (!strcmp(ipOption, "*") || !strcmp(inet_ntoa(source.sin_addr), ipOption) || !strcmp(inet_ntoa(dest.sin_addr), ipOption)) {
         fprintf(captureData, "\n############################## ICMP Packet ####################################\n");
-        Ethrenet_header_capture(captureData, Buffer);            // ethernet 정보 print
-        Ip_header_capture(captureData, ipHeader, source, dest);  // ip 정보 print
+        Ethrenet_header_fprint(captureData, etherHeader);       // ethernet 정보 print
+        Ip_header_fprint(captureData, ipHeader, source, dest);  // ip 정보 print
 
         time_t t = time(NULL);
         struct tm tm = *localtime(&t);
         fprintf(stdout, "\n%d:%d:%06d IPv%d %s > ", tm.tm_hour, tm.tm_min, tm.tm_sec, (unsigned int)ipHeader->version,
                 inet_ntoa(source.sin_addr));
         fprintf(stdout, "%s = ICMP ", inet_ntoa(dest.sin_addr));
-        fprintf(captureData, "\n           --------------------------------------------------------\n");
-        fprintf(captureData, "          |                      ICMP Header                       |\n");
-        fprintf(captureData, "           --------------------------------------------------------\n");
-        fprintf(captureData, "                  Type             |   %d", (unsigned int)(icmph->type));
-        fprintf(captureData, "           --------------------------------------------------------\n");
-        fprintf(captureData, "                  Code             |   %d\n", (unsigned int)(icmph->code));
-        fprintf(captureData, "                  Checksum         |   0x%04x\n", ntohs(icmph->checksum));
-        fprintf(captureData, "           --------------------------------------------------------\n");
         fprintf(stdout, "length %d", Size);
-        /* 패킷 정보 Hex dump 와 ASCII 변환 데이터 출력 */
-        Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + sizeof icmph,
-                            (Size - sizeof icmph - (ipHeader->ihl * 4) - ETH_HLEN));
-        fprintf(captureData, "\n===============================================================================\n");
-    }
-}
 
-void Change_hex_to_ascii(FILE *captureData, unsigned char *data, int Size) {
-    fprintf(captureData, "\n\nDATA (Payload)\n");
-    for (int i = 0; i < Size; i++) {
-        if (i != 0 && i % 16 == 0) {  // 16개 데이터 출력 했다면, ascii코드 출력후 개행후 이어서 출력
-            fprintf(captureData, "\t\t");     // 16진수 data랑 ascii data 구분
-            for (int j = i - 16; j < i; j++)  // 16진수 data를 ascii로 변환
-            {
-                if (data[j] >= 32 && data[j] < 128)
-                    fprintf(captureData, "%c", (unsigned char)data[j]);  // data가 ascii라면 출력
-
-                else
-                    fprintf(captureData, ".");  //그외 데이터는 . 으로 표현
-            }
-            fprintf(captureData, "\n");
+        /*ascii 출력*/
+        if (!strcmp(printOption, "a")) {
+            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, A, (ipHeader->ihl * 4));  // ip header
+            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), A,
+                                sizeof icmpHeader);  // icmp header
+            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + sizeof icmpHeader, A,
+                                (Size - sizeof icmpHeader - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
+        }
+        /*hex 출력*/
+        else if (!strcmp(printOption, "x")) {
+            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, X, (ipHeader->ihl * 4));  // ip header
+            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), X,
+                                sizeof icmpHeader);  // icmp header
+            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + sizeof icmpHeader, X,
+                                (Size - sizeof icmpHeader - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
         }
 
-        if (i % 16 == 0) fprintf(captureData, "\t");  //가시성을 위해 처음 오는 data는 tab
+        Icmp_header_fprint(captureData, Buffer, etherHeader, ipHeader, icmpHeader, source, dest, Size);
+    }
+}
+void Icmp_header_fprint(FILE *captureData, unsigned char *Buffer, struct ethhdr *etherHeader, struct iphdr *ipHeader,
+                        struct icmphdr *icmpHeader, struct sockaddr_in source, struct sockaddr_in dest, int Size) {
+    fprintf(captureData, "\n############################## ICMP Packet ####################################\n");
+    Ethrenet_header_fprint(captureData, etherHeader);       // ethernet 정보 print
+    Ip_header_fprint(captureData, ipHeader, source, dest);  // ip 정보 print
+    fprintf(captureData, "\n           --------------------------------------------------------\n");
+    fprintf(captureData, "          |                      ICMP Header                       |\n");
+    fprintf(captureData, "           --------------------------------------------------------\n");
+    fprintf(captureData, "                  Type             |   %d", (unsigned int)(icmpHeader->type));
+    fprintf(captureData, "           --------------------------------------------------------\n");
+    fprintf(captureData, "                  Code             |   %d\n", (unsigned int)(icmpHeader->code));
+    fprintf(captureData, "                  Checksum         |   0x%04x\n", ntohs(icmpHeader->checksum));
+    fprintf(captureData, "           --------------------------------------------------------\n");
+    /* 패킷 정보 Hex dump 와 ASCII 변환 데이터 파일 출력 */
+    Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + sizeof icmpHeader, F,
+                        (Size - sizeof icmpHeader - (ipHeader->ihl * 4) - ETH_HLEN));
+    fprintf(captureData, "\n===============================================================================\n");
+}
 
-        fprintf(captureData, " %02X", (unsigned int)data[i]);  //앞의 빈자리 0으로 초기화한 16진수로 데이터 출력
+void Change_hex_to_ascii(FILE *captureData, unsigned char *data, int op, int Size) {
+    /*cmd에 ascill로 출력 */
+    if (op == A) {
+        fprintf(stdout, "\n");
+        for (int i = 0; i < Size; i++) {
+            if (data[i] >= 32 && data[i] < 128)
+                fprintf(stdout, "%c", (unsigned char)data[i]);  // data가 ascii라면 출력
+            else if (data[i] == 13)                             // cr(carrige return)
+                continue;
+            else if (data[i] == 10)
+                fprintf(stdout, "\n");  // lf(\n)라면 개행문자 출력
+            else
+                fprintf(stdout, ".");  //그외 데이터는 . 으로 표현
+        }
+    }
+    /*cmd에 hex로 출력*/
+    else if (op == X) {
+        fprintf(stdout, "\n");
+        for (int i = 0; i < Size; i++) {
+            fprintf(stdout, " %02X", (unsigned int)data[i]);  //앞의 빈자리 0으로 초기화한 16진수로 데이터 출력
+        }
+    }
 
-        if (i == Size - 1)  //마지막 data
-        {
-            for (int j = 0; j < (15 - (i % 16)); j++)
-                fprintf(captureData,
-                        "   ");  //마지막 데이터는 16개 꽉 안채울 수 있으니 데이터 포맷을 위해 남은 공간만큼 space
+    /*file에 write하는 경우*/
+    else if (op == F) {
+        fprintf(captureData, "\n\nDATA (Payload)\n");
+        for (int i = 0; i < Size; i++) {
+            if (i != 0 && i % 16 == 0) {          // 16개 데이터 출력 했다면, ascii코드 출력후 개행후 이어서 출력
+                fprintf(captureData, "\t\t");     // 16진수 data랑 ascii data 구분
+                for (int j = i - 16; j < i; j++)  // 16진수 data를 ascii로 변환
+                {
+                    if (data[j] >= 32 && data[j] < 128)
+                        fprintf(captureData, "%c", (unsigned char)data[j]);  // data가 ascii라면 출력
 
-            fprintf(captureData, "\t\t");  // 16자리 까지 공백 채운후 ascii 출력 위해 구분
-
-            for (int j = (i - (i % 16)); j <= i; j++)  //남은 데이터 ascii로 변환
-            {
-                if (data[j] >= 32 && data[j] < 128)
-                    fprintf(captureData, "%c", (unsigned char)data[j]);
-                else
-                    fprintf(captureData, ".");
+                    else
+                        fprintf(captureData, ".");  //그외 데이터는 . 으로 표현
+                }
+                fprintf(captureData, "\n");
             }
-            fprintf(captureData, "\n");
+
+            if (i % 16 == 0) fprintf(captureData, "\t");  //가시성을 위해 처음 오는 data는 tab
+
+            fprintf(captureData, " %02X", (unsigned int)data[i]);  //앞의 빈자리 0으로 초기화한 16진수로 데이터 출력
+
+            if (i == Size - 1)  //마지막 data
+            {
+                for (int j = 0; j < (15 - (i % 16)); j++)
+                    fprintf(captureData,
+                            "   ");  //마지막 데이터는 16개 꽉 안채울 수 있으니 데이터 포맷을 위해 남은 공간만큼 space
+
+                fprintf(captureData, "\t\t");  // 16자리 까지 공백 채운후 ascii 출력 위해 구분
+
+                for (int j = (i - (i % 16)); j <= i; j++)  //남은 데이터 ascii로 변환
+                {
+                    if (data[j] >= 32 && data[j] < 128)
+                        fprintf(captureData, "%c", (unsigned char)data[j]);
+                    else
+                        fprintf(captureData, ".");
+                }
+                fprintf(captureData, "\n");
+            }
         }
     }
 }
@@ -377,15 +481,14 @@ void MenuBoard() {
 
 void StartMenuBoard() {
     system("clear");
-    fprintf(stdout, "\n********************** 캡쳐 가능 프로토콜 *******************\n\n");
-    fprintf(stdout, "                    *(all) | tcp | udp | icmp \n");
-    fprintf(stdout, "\n*********************** port 번호 rule **********************\n\n");
-    fprintf(stdout, "        *(all) | 0 ~ 65535 | [http(80) | dns(53) | icmp(*)]  \n");
-    fprintf(stdout, "\n********************** ip 주소 입력 rule ********************\n\n");
-    fprintf(stdout, "                 *(all) | 0.0.0.0 ~ 255.255.255.255 \n");
-    fprintf(stdout, "\n************************* Start Rule ************************\n\n");
-    fprintf(stdout, "                 입력 :  프로토콜 포트번호 ip주소  \n");
-    fprintf(stdout, "\n*************************************************************\n\n");
+    fprintf(stdout, "\n************************* 캡쳐 가능 프로토콜 **********************\n\n");
+    fprintf(stdout, "   protocol :      *(all) | tcp | udp | icmp \n");
+    fprintf(stdout, "   port     :  *(all) | 0 ~ 65535 | [http(80) | dns(53) | icmp(*)]  \n");
+    fprintf(stdout, "   ip       :      *(all) | 0.0.0.0 ~ 255.255.255.255 \n");
+    fprintf(stdout, "   options  :      a : Ascill | x : Hex | s : Summary  \n");
+    fprintf(stdout, "\n**************************** Start Rule ***************************\n\n");
+    fprintf(stdout, "                 입력 :  프로토콜 포트번호 ip주소 option \n");
+    fprintf(stdout, "\n*******************************************************************\n\n");
 }
 
 void Menu_helper() {
@@ -411,17 +514,15 @@ void Menu_helper() {
         {
             fprintf(stderr, "   !!! Good bye !!!");
             break;
-        } else if (menuItem == 1 && isDigit == 1)  // 캡쳐 시작
+        } else if (menuItem == 1 && isDigit == 1)  // TCP 캡쳐 시작
         {
-            //시작 중에 또 시작버튼 클릭시 error
             if (captureStart)
                 fprintf(stdout, "이미 시작 중입니다 !!\n");
             else {
                 StartMenuBoard();
                 fprintf(stdout, "\n   필터 입력 : ");
-                scanf("%[^\n]s", str);
-
-                if (start_helper(str)) {  // filter exception handling
+                scanf("%[^\n]s", str);  //메뉴판 번호 입력
+                if (start_helper(str)) {
                     captureStart = true;
                     pthread_create(&capture_thd, NULL, PacketCapture_thread,
                                    (void *)&rawSocket);  // TCP 캡쳐 스레드 생성
@@ -438,34 +539,40 @@ void Menu_helper() {
                 fprintf(stdout, "%d packets captured\n", total);
                 fprintf(stdout, "%d filtered packets captured\n", filter);
                 fprintf(stdout, "%d packets dropped\n", drop);
+
+                /*변수 초기화*/
                 total = 0, filter = 0, drop = 0;
+                protocolOption[0] = '\0', ipOption[0] = '\0', portOption[0] = '\0', printOption[0] = '\0';
             }
         } else if (menuItem == 3 && isDigit == 1)  // show Menu
         {
             MenuBoard();
-        } else {  //메뉴 번호 exception handling
+        } else {  // exception handling
             fprintf(stderr, "잘못 입력하셨습니다 !!\n\n");
         }
     }
     close(rawSocket);  // socket close
 }
 bool start_helper(char *str) {
-    char *option = strtok(str, " ");  //프로토콜 option
-    if (strcmp(option, "*") && strcmp(option, "tcp") && strcmp(option, "udp") && strcmp(option, "icmp") &&
-        strcmp(option, "http") && strcmp(option, "dns")) {
+    /*protocol*/
+    char *option = strtok(str, " ");
+    if (strcmp(option, "*") && strcmp(option, "tcp") && strcmp(option, "udp") && strcmp(option, "icmp") && strcmp(option, "http") &&
+        strcmp(option, "dns")) {
         fprintf(stderr, "* | tcp | udp | icmp | http | dns 만 캡쳐가능합니다.\n");
         return false;
     }
     strcpy(protocolOption, option);
 
-    option = strtok(NULL, " ");  // port번호 option
+    /*port 번호*/
+    option = strtok(NULL, " ");
     if (!IsPort(option)) {
         fprintf(stderr, "잘못된 port 입력입니다.\n");
         return false;
     }
     strcpy(portOption, option);
 
-    option = strtok(NULL, "\n");  // ip 주소 option
+    /*ip 주소*/
+    option = strtok(NULL, " ");
     char s[48];
     strcpy(s, option);
     if (!IsIpAddress(s)) {
@@ -474,13 +581,22 @@ bool start_helper(char *str) {
     }
     strcpy(ipOption, option);
 
+    /*출력 option*/
+    option = strtok(NULL, "\n");
+    if (strcmp(option, "a") && strcmp(option, "s") && strcmp(option, "x")) {
+        fprintf(stderr, "잘못된 Option 입니다.\n");
+        return false;
+    }
+    strcpy(printOption, option);
+
     return true;
 }
 
 bool IsPort(char *str) {
+    if (!strcmp(str, "*")) return true;
     if (!IsDigit(str))  //숫자가 아니라면 flase
         return false;
-    if (atoi(str) < 1 || atoi(str) > 65535 || !strcmp(str, "*"))  //없는 포트번호거나 *가 아니라면 false
+    if (atoi(str) < 1 || atoi(str) > 65535)  //없는 포트번호거나  false
         return false;
     return true;
 }
