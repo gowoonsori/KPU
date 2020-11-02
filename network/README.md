@@ -10,15 +10,15 @@ IPv4를 기반으로 2계층인 Ethernet 정보부터 패킷을 수집하여 앞
 
 start 시 protocol port ip options 순으로 입력하여 실행.
  - protocol : 
-   - * (all ) : tcp / udp / icmp  프로토콜 캡쳐
+   - \* (all ) : tcp / udp / icmp  프로토콜 캡쳐
    - tcp : tcp 프로토콜 캡쳐
    - udp : udp 프로토콜 캡쳐
    - icmp : icmp 프로토콜 캡쳐
  - port :
-   - * (all) : 0~65535 모든 포트번호 캡쳐
+   - \* (all) : 0~65535 모든 포트번호 캡쳐
    - 0~65535 입력 [ http : 80 / dns : 53 ]
  - ip : 
-   - * (all ) : 0.0.0.0 ~ 255.255.255.255 모든 ip주소 캡쳐
+   - \* (all ) : 0.0.0.0 ~ 255.255.255.255 모든 ip주소 캡쳐
    - 0.0.0.0 ~ 255.255.255.255 입력 [ localhost : 127.0.0.1 ]
  - options : 
    - s : 캡쳐 패킷 data 요약내용으로 출력
