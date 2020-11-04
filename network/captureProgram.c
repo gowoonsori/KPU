@@ -1,8 +1,10 @@
 /*
-    공통 수집 :   Ehternet header
-                 IP header
+    제작자 :      홍의성 (gowoonsori)
 
-    기본 start :  TCP / UDP / ICMP 3종류의 tcp/ip프로토콜만 수집
+    공통 수집 정보 :  Ehternet header
+                    IP header
+
+    start시 수집하는 패킷 :  TCP / UDP / ICMP 3종류의 tcp/ip프로토콜만 수집
 
     필터 입력 가능 정보 :  port와 ip로만 추출 가능
                         -port :
@@ -16,8 +18,9 @@
                             X : data Hex code로 출력
                             S : summary data 출력
 */
+
 #include <arpa/inet.h>         //network 정보 변환
-#include <ctype.h>             // isdigit
+#include <ctype.h>             //isdigit
 #include <netinet/if_ether.h>  //etherrnet 구조체
 #include <netinet/ip.h>        //ip header 구조체
 #include <netinet/ip_icmp.h>   //icmp header 구조체
@@ -26,7 +29,7 @@
 #include <pthread.h>           //thread
 #include <stdio.h>             //basic
 #include <stdlib.h>            //malloc 동적할당
-#include <string.h>            //strlen, strcmp, strcpy, memset
+#include <string.h>            //strlen, strcmp, strcpy
 #include <sys/socket.h>        //소켓의 주소 설정 (sockaddr 구조체)
 #include <time.h>              //저장한 file 이름을 현재 날짜로 하기 위해
 
@@ -107,7 +110,7 @@ void *PacketCapture_thread(void *arg) {
     }
 
     free(buffer);         //버퍼 공간 해제
-    fclose(captureData);  //소켓 close
+    fclose(captureData);  // file close
 }
 
 void Capture_helper(FILE *captureData, unsigned char *buffer, int size) {
@@ -193,6 +196,7 @@ void Tcp_header_capture(FILE *captureData, unsigned char *Buffer, int Size) {
         !strcmp(inet_ntoa(dest.sin_addr), ipOption)) {  // filter port번호 검사
         if (!strcmp(portOption, "*") || (atoi(portOption) == (int)ntohs(tcpHeader->source)) ||
             (atoi(portOption) == (int)ntohs(tcpHeader->dest))) {
+            /*현재 시간 get*/
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
             fprintf(stdout, "\n%d:%d:%06d IPv", tm.tm_hour, tm.tm_min, tm.tm_sec);
@@ -218,19 +222,11 @@ void Tcp_header_capture(FILE *captureData, unsigned char *Buffer, int Size) {
             /*print option에 따라 payload 부분 다르게 출력*/
             /*ascill 출력*/
             if (!strcmp(printOption, "a")) {
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, A, (ipHeader->ihl * 4));  // ip header
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), A,
-                                    tcpHeader->doff * 4);  // tcp header
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + tcpHeader->doff * 4, A,
-                                    (Size - tcpHeader->doff * 4 - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, A, (Size - ETH_HLEN));  // ip header + tcp header + payload
             }
             /*hex 출력*/
             else if (!strcmp(printOption, "x")) {
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, X, (ipHeader->ihl * 4));  // ip header
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), X,
-                                    tcpHeader->doff * 4);  // tcp header
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + tcpHeader->doff * 4, X,
-                                    (Size - tcpHeader->doff * 4 - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, X, (Size - ETH_HLEN));  // ip header + tcp header + payload
             }
             Tcp_header_fprint(captureData, Buffer, etherHeader, ipHeader, tcpHeader, source, dest, Size);  // file에 출력
         }
@@ -266,7 +262,7 @@ void Tcp_header_fprint(FILE *captureData, unsigned char *Buffer, struct ethhdr *
     fprintf(captureData, "             Urgent Pointer          |   %d\n", tcpHeader->urg_ptr);
     fprintf(captureData, "           --------------------------------------------------------\n");
 
-    /* 패킷 정보 Hex dump 와 ASCII 변환 데이터 파일에 출력 */
+    /* 패킷 정보(payload) Hex dump 와 ASCII 변환 데이터 파일에 출력 */
     Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + tcpHeader->doff * 4, F,
                         (Size - tcpHeader->doff * 4 - (ipHeader->ihl * 4) - ETH_HLEN));
     fprintf(captureData, "\n===============================================================================\n");
@@ -285,6 +281,7 @@ void Udp_header_capture(FILE *captureData, unsigned char *Buffer, int Size) {
         !strcmp(inet_ntoa(dest.sin_addr), ipOption)) {  // port 번호 filter 검사
         if (!strcmp(portOption, "*") || (atoi(portOption) == (int)ntohs(udpHeader->source)) ||
             (atoi(portOption) == (int)ntohs(udpHeader->dest))) {
+            /*현재 시간 get*/
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
             fprintf(stdout, "\n%d:%d:%06d IPv", tm.tm_hour, tm.tm_min, tm.tm_sec);
@@ -302,19 +299,11 @@ void Udp_header_capture(FILE *captureData, unsigned char *Buffer, int Size) {
 
             /*ascii 출력*/
             if (!strcmp(printOption, "a")) {
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, A, (ipHeader->ihl * 4));  // ip header
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), A,
-                                    sizeof udpHeader);  // udp header
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + sizeof udpHeader, A,
-                                    (Size - sizeof udpHeader - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, A, (Size - ETH_HLEN));  // ip header + udp header + payload
             }
             /*hex 출력*/
             else if (!strcmp(printOption, "x")) {
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, X, (ipHeader->ihl * 4));  // ip header
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), X,
-                                    sizeof udpHeader);  // udp header
-                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + sizeof udpHeader, X,
-                                    (Size - sizeof udpHeader - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
+                Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, X, (Size - ETH_HLEN));  // ip header + udp header + payload
             }
             /*file 출력*/
             Udp_header_fprint(captureData, Buffer, etherHeader, ipHeader, udpHeader, source, dest, Size);
@@ -352,10 +341,7 @@ void Icmp_header_capture(FILE *captureData, unsigned char *Buffer, int Size) {
 
     // ip filter 검사
     if (!strcmp(ipOption, "*") || !strcmp(inet_ntoa(source.sin_addr), ipOption) || !strcmp(inet_ntoa(dest.sin_addr), ipOption)) {
-        fprintf(captureData, "\n############################## ICMP Packet ####################################\n");
-        Ethrenet_header_fprint(captureData, etherHeader);       // ethernet 정보 print
-        Ip_header_fprint(captureData, ipHeader, source, dest);  // ip 정보 print
-
+        /*현재 시간 get*/
         time_t t = time(NULL);
         struct tm tm = *localtime(&t);
         fprintf(stdout, "\n%d:%d:%06d IPv%d %s > ", tm.tm_hour, tm.tm_min, tm.tm_sec, (unsigned int)ipHeader->version,
@@ -365,21 +351,13 @@ void Icmp_header_capture(FILE *captureData, unsigned char *Buffer, int Size) {
 
         /*ascii 출력*/
         if (!strcmp(printOption, "a")) {
-            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, A, (ipHeader->ihl * 4));  // ip header
-            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), A,
-                                sizeof icmpHeader);  // icmp header
-            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + sizeof icmpHeader, A,
-                                (Size - sizeof icmpHeader - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
+            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, A, (Size - ETH_HLEN));  // ip header + icmp header + payload
         }
         /*hex 출력*/
         else if (!strcmp(printOption, "x")) {
-            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, X, (ipHeader->ihl * 4));  // ip header
-            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4), X,
-                                sizeof icmpHeader);  // icmp header
-            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN + (ipHeader->ihl * 4) + sizeof icmpHeader, X,
-                                (Size - sizeof icmpHeader - (ipHeader->ihl * 4) - ETH_HLEN));  // payload
+            Change_hex_to_ascii(captureData, Buffer + ETH_HLEN, X, (Size - ETH_HLEN));  // ip header + icmp header + payload
         }
-
+        /*file 출력*/
         Icmp_header_fprint(captureData, Buffer, etherHeader, ipHeader, icmpHeader, source, dest, Size);
     }
 }
@@ -408,20 +386,20 @@ void Change_hex_to_ascii(FILE *captureData, unsigned char *data, int op, int Siz
         fprintf(stdout, "\n");
         for (int i = 0; i < Size; i++) {
             if (data[i] >= 32 && data[i] < 128)
-                fprintf(stdout, "%c", (unsigned char)data[i]);  // data가 ascii라면 출력
-            else if (data[i] == 13)                             // cr(carrige return)
+                fprintf(stdout, "%c[1;31m", (unsigned char)data[i]);  // data가 ascii라면 출력
+            else if (data[i] == 13)                                   // cr(carrige return) continue
                 continue;
             else if (data[i] == 10)
                 fprintf(stdout, "\n");  // lf(\n)라면 개행문자 출력
             else
-                fprintf(stdout, ".");  //그외 데이터는 . 으로 표현
+                fprintf(stdout, ".[1;31m");  //그외 데이터는 . 으로 표현
         }
     }
     /*cmd에 hex로 출력*/
     else if (op == X) {
         fprintf(stdout, "\n");
         for (int i = 0; i < Size; i++) {
-            fprintf(stdout, " %02X", (unsigned int)data[i]);  //앞의 빈자리 0으로 초기화한 16진수로 데이터 출력
+            fprintf(stdout, " %02X[1;31m", (unsigned int)data[i]);  //앞의 빈자리 0으로 초기화한 16진수로 데이터 출력
         }
     }
 
@@ -482,12 +460,13 @@ void MenuBoard() {
 void StartMenuBoard() {
     system("clear");
     fprintf(stdout, "\n************************* 캡쳐 가능 프로토콜 **********************\n\n");
-    fprintf(stdout, "   protocol :      *(all) | tcp | udp | icmp \n");
-    fprintf(stdout, "   port     :  *(all) | 0 ~ 65535 | [http(80) | dns(53) | icmp(*)]  \n");
-    fprintf(stdout, "   ip       :      *(all) | 0.0.0.0 ~ 255.255.255.255 \n");
-    fprintf(stdout, "   options  :      a : Ascill | x : Hex | s : Summary  \n");
+    fprintf(stdout, "   \033[100mprotocol\033[0m :      *(all) | tcp | udp | icmp \n");
+    fprintf(stdout, "   \033[100mport\033[0m     :  *(all) | 0 ~ 65535 | [http(80) | dns(53) | icmp(*)]  \n");
+    fprintf(stdout, "   \033[100mip\033[0m       :      *(all) | 0.0.0.0 ~ 255.255.255.255 \n");
+    fprintf(stdout, "   \033[100moptions\033[0m  :      a : Ascill | x : Hex | s : Summary  \n");
     fprintf(stdout, "\n**************************** Start Rule ***************************\n\n");
-    fprintf(stdout, "                 입력 :  프로토콜 포트번호 ip주소 option \n");
+    fprintf(stdout,
+            "                입력 순서 :  \033[100mprotocol\033[0m \033[100mport\033[0m \033[100mip\033[0m \033[100moption\033[0m \n");
     fprintf(stdout, "\n*******************************************************************\n\n");
 }
 
@@ -506,7 +485,7 @@ void Menu_helper() {
     //프로그램 종료시까지 반복
     MenuBoard();
     while (1) {
-        fprintf(stdout, "\n   메뉴 번호 입력 : ");
+        fprintf(stdout, "\n   \033[93m메뉴 번호 입력 :\033[0m ");
         isDigit = scanf("%d", &menuItem);  //메뉴판 번호 입력
         buffer_flush();                    //입력버퍼 flush
 
@@ -520,7 +499,7 @@ void Menu_helper() {
                 fprintf(stdout, "이미 시작 중입니다 !!\n");
             else {
                 StartMenuBoard();
-                fprintf(stdout, "\n   필터 입력 : ");
+                fprintf(stdout, "\n   \033[93m필터 입력 :\033[0m ");
                 scanf("%[^\n]s", str);  //메뉴판 번호 입력
                 if (start_helper(str)) {
                     captureStart = true;
