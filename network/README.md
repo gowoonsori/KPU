@@ -16,7 +16,9 @@ _그 외 프로토콜도 캡쳐가능하나 과제 조건대로 tcp/udp/icmp만 
 
 <br>
 
-사용방법 : Makefile 이용하여 `make`로 컴파일 후 프로그램을 `sudo`권한으로 실행시키면 된다.
+## 사용방법 
+-----
+Makefile 이용하여 `make`로 컴파일 후 프로그램을 `sudo`권한으로 실행시키면 된다.
 
 ```
 1. make로 compile
