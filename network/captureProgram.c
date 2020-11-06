@@ -49,18 +49,18 @@ enum CaptureOptions {
 void *PacketCapture_thread(void *arg);  //캡쳐 스레드
 
 void Capture_helper(FILE *captureFile, unsigned char *, int);                                      //캡쳐한 패킷 프로토콜 분류
-void Ethernet_header_fprint(FILE *captureFile, struct iphdr *);                                    // Ethernet 헤더 정보 fprint
-void Ip_header_fprint(FILE *captureFile, struct iphdr *, struct sockaddr_in, struct sockaddr_in);  // ip 헤더 정보 fprint
+void Ethernet_header_fprint(FILE *captureFile, struct iphdr *);                                    // Ethernet 헤더 정보 file에 print
+void Ip_header_fprint(FILE *captureFile, struct iphdr *, struct sockaddr_in, struct sockaddr_in);  // ip 헤더 정보 file에 print
 
 void Tcp_header_capture(FILE *captureFile, unsigned char *, int);  // tcp 헤더 정보 capture
 void Tcp_header_fprint(FILE *, unsigned char *, struct ethhdr *, struct iphdr *, struct tcphdr *, struct sockaddr_in, struct sockaddr_in,
-                       int);                                       // tcp 헤더 정보 fprint
+                       int);                                       // tcp 헤더 정보 file에 print
 void Udp_header_capture(FILE *captureFile, unsigned char *, int);  // udp 헤더 정보 capture
 void Udp_header_fprint(FILE *, unsigned char *, struct ethhdr *, struct iphdr *, struct udphdr *, struct sockaddr_in, struct sockaddr_in,
-                       int);                                        // udp 헤더 정보 fprint
+                       int);                                        // udp 헤더 정보 file에 print
 void Icmp_header_capture(FILE *captureFile, unsigned char *, int);  // icmp 헤더 정보 capture
 void Icmp_header_fprint(FILE *, unsigned char *, struct ethhdr *, struct iphdr *, struct icmphdr *, struct sockaddr_in, struct sockaddr_in,
-                        int);                                            // icmp 헤더 정보 fprint
+                        int);                                            // icmp 헤더 정보 file에 print
 void Change_hex_to_ascii(FILE *captureFile, unsigned char *, int, int);  // payload값 hex/ascii/file option에 맞게 출력
 
 void MenuBoard();           // menu board
